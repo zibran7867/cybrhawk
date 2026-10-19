@@ -1,0 +1,219 @@
+/* =====================================================================
+   WEI / HawkOps — "See it running" closing CTA styles
+   (markup injected by walkthrough-cta.js)
+   All rules are scoped under .walkthrough-cta.
+
+   Tokens and band treatment match related-cta.css, so the two closing
+   calls to action read as the same component across pages.
+   ===================================================================== */
+
+.walkthrough-cta {
+  /* Tweak to rebrand */
+  --wt-accent: #4130f0;
+  --wt-accent-hover: #2f20d8;
+  --wt-bg: #ffffff;
+  --wt-heading: #101638;                       /* near-black navy */
+  --wt-text: #656d8a;                          /* body grey */
+  --wt-muted: #7b8298;
+  --wt-band: #f1f2fb;                          /* tinted CTA band */
+  --wt-band-line: #e4e6f4;
+
+  /* Side gutter. The Elementor container carries no padding of its own,
+     so without this the band runs into the screen edge below the
+     measure. Same steps as the hero (24 / 22 / 18px). */
+  --wt-gutter: 24px;
+
+  background-color: var(--wt-bg);
+}
+
+/* ---- Shell ------------------------------------------------------------
+   The gutter is added on top of the 1320px measure, so wide screens
+   keep the same band width and only narrower ones gain the inset.
+   ---------------------------------------------------------------------- */
+.walkthrough-cta .wei-wt {
+  width: 100%;
+  max-width: calc(1320px + 2 * var(--wt-gutter));
+  margin: 0 auto;
+  padding: clamp(34px, 4vw, 56px) var(--wt-gutter);
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.walkthrough-cta .wei-wt * {
+  box-sizing: border-box;
+}
+
+/* ---- Band -------------------------------------------------------------- */
+.walkthrough-cta .wei-wt__band {
+  padding: clamp(28px, 3.4vw, 50px) clamp(24px, 3.4vw, 58px);
+  background: var(--wt-band);
+  border: 1px solid var(--wt-band-line);
+  border-radius: 26px;
+}
+
+.walkthrough-cta .wei-wt__band-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  gap: clamp(20px, 2.8vw, 46px);
+  align-items: center;
+}
+
+/* 700, not 800: the site only loads Figtree up to 700, and an 800 here
+   fell back to Helvetica. */
+.walkthrough-cta .wei-wt__title {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(26px, 3vw, 40px);
+  line-height: 1.14;
+  letter-spacing: -1.2px;
+  color: var(--wt-heading);
+}
+
+/* Set by [[double brackets]] in TITLE. */
+.walkthrough-cta .wei-wt__accent {
+  color: var(--wt-accent);
+}
+
+.walkthrough-cta .wei-wt__lead {
+  max-width: 640px;
+  margin: 0 0 clamp(18px, 2vw, 24px);
+  font-size: clamp(14.5px, 1.15vw, 16px);
+  line-height: 1.62;
+  color: var(--wt-text);
+}
+
+/* ---- Buttons ----------------------------------------------------------- */
+/* Primary and ghost sit on one line until the band stacks. */
+.walkthrough-cta .wei-wt__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(8px, 0.9vw, 12px);
+}
+
+.walkthrough-cta .wei-wt__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px;
+  border-radius: 10px;
+  background: var(--wt-accent);
+  border: 1px solid var(--wt-accent);
+  font-weight: 600;
+  font-size: clamp(13.5px, 1.05vw, 15px);
+  line-height: 1.2;
+  white-space: nowrap;
+  color: #ffffff;
+  text-decoration: none;
+  box-shadow: 0 10px 26px rgba(65, 48, 240, 0.26);
+  transition: transform 0.25s ease, background-color 0.25s ease,
+              border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.walkthrough-cta .wei-wt__btn:hover,
+.walkthrough-cta .wei-wt__btn:focus {
+  background: var(--wt-accent-hover);
+  border-color: var(--wt-accent-hover);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(65, 48, 240, 0.32);
+}
+
+/* Outlined twin of the primary button. */
+.walkthrough-cta .wei-wt__btn--ghost {
+  background: #ffffff;
+  border: 1px solid #cfd2ef;
+  color: var(--wt-accent);
+  box-shadow: none;
+}
+
+.walkthrough-cta .wei-wt__btn--ghost:hover,
+.walkthrough-cta .wei-wt__btn--ghost:focus {
+  background: #ffffff;
+  border-color: var(--wt-accent);
+  color: var(--wt-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(16, 22, 56, 0.08);
+}
+
+.walkthrough-cta .wei-wt__btn:focus-visible {
+  outline: 3px solid rgba(65, 48, 240, 0.4);
+  outline-offset: 3px;
+}
+
+.walkthrough-cta .wei-wt__btn svg {
+  flex: 0 0 auto;
+  display: block;
+  width: 17px;
+  height: 17px;
+}
+
+/* The summary sits under the button, quieter than the lead. */
+.walkthrough-cta .wei-wt__closer {
+  max-width: 640px;
+  margin: clamp(16px, 1.8vw, 22px) 0 0;
+  font-size: clamp(13px, 1.05vw, 14.5px);
+  line-height: 1.6;
+  color: var(--wt-muted);
+}
+
+/* ---- Scroll reveal ---------------------------------------------------- */
+.walkthrough-cta .wei-wt.is-animated .wei-wt__band {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.walkthrough-cta .wei-wt.is-animated.is-visible .wei-wt__band {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .walkthrough-cta .wei-wt.is-animated .wei-wt__band {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .walkthrough-cta .wei-wt__btn {
+    transition: none;
+  }
+  .walkthrough-cta .wei-wt__btn:hover {
+    transform: none;
+  }
+}
+
+/* ---- Responsive ------------------------------------------------------- */
+@media (max-width: 1040px) {
+  .walkthrough-cta .wei-wt__band-inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(18px, 3vw, 26px);
+  }
+  .walkthrough-cta .wei-wt__lead,
+  .walkthrough-cta .wei-wt__closer {
+    max-width: none;
+  }
+}
+
+@media (max-width: 980px) {
+  .walkthrough-cta {
+    --wt-gutter: 22px;
+  }
+}
+
+@media (max-width: 620px) {
+  .walkthrough-cta .wei-wt__band {
+    border-radius: 20px;
+  }
+  .walkthrough-cta .wei-wt__btn {
+    width: 100%;
+    justify-content: center;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 520px) {
+  .walkthrough-cta {
+    --wt-gutter: 18px;
+  }
+}
+

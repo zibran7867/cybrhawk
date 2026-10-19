@@ -1,0 +1,485 @@
+/* =====================================================================
+   WEI / HawkOps — "How it works" + "The whole path" styles
+   (markup injected by how-it-works.js)
+   All rules are scoped under .how-it-works.
+   ===================================================================== */
+
+.how-it-works {
+  /* Tweak to rebrand */
+  --hw-accent: #2f2bf5;
+  --hw-heading: #0d1330;                       /* near-black navy */
+  --hw-text: #5f6780;                          /* body grey */
+  --hw-bg: #fcfcfe;                            /* the layers block */
+  --hw-bg-path: #f4f5fc;                       /* the tinted path block */
+  --hw-num-bg: #eeefff;                        /* numeral chip fill */
+  --hw-card-bg: #ffffff;
+  --hw-card-line: #eceefa;
+  --hw-line: #c9cdf0;                          /* connector rule */
+
+  /* Geometry the pipeline connectors are derived from. */
+  --hw-gap: clamp(14px, 1.6vw, 26px);
+
+  /* Side gutter. The Elementor container carries no padding of its own,
+     so without this the content runs into the screen edge below the
+     measure. Same steps as the hero (24 / 22 / 18px). */
+  --hw-gutter: 24px;
+
+  background-color: var(--hw-bg);
+}
+
+/* ---- Shell -------------------------------------------------------------
+   The wrapper runs full width so the two blocks can carry different
+   backgrounds edge to edge; each holds its own centred measure, inset
+   from the screen edge by the gutter.
+   ----------------------------------------------------------------------- */
+.how-it-works .wei-hw {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.how-it-works .wei-hw * {
+  box-sizing: border-box;
+}
+
+.how-it-works .wei-hw__block {
+  width: 100%;
+  padding: clamp(46px, 5.4vw, 78px) var(--hw-gutter);
+}
+
+.how-it-works .wei-hw__block--layers {
+  background: var(--hw-bg);
+}
+
+.how-it-works .wei-hw__block--path {
+  background: var(--hw-bg-path);
+  background-image:
+    radial-gradient(60% 50% at 50% 0%, rgba(47, 43, 245, 0.04), transparent 70%);
+}
+
+.how-it-works .wei-hw__measure {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+/* ---- Headers ---------------------------------------------------------- */
+.how-it-works .wei-hw__head {
+  margin: 0 auto clamp(30px, 3.6vw, 48px);
+  text-align: center;
+}
+
+.how-it-works .wei-hw__eyebrow {
+  margin: 0 0 14px;
+  font-weight: 600;
+  font-size: 12.5px;
+  letter-spacing: 4.2px;
+  text-transform: uppercase;
+  color: var(--hw-accent);
+}
+
+.how-it-works .wei-hw__title {
+  margin: 0 0 18px;
+  font-weight: 700;
+  font-size: clamp(28px, 3.6vw, 46px);
+  line-height: 1.14;
+  letter-spacing: -1.3px;
+  color: var(--hw-heading);
+}
+
+/* Set by [[double brackets]] in either title. */
+.how-it-works .wei-hw__accent {
+  color: var(--hw-accent);
+}
+
+.how-it-works .wei-hw__sub {
+  max-width: 880px;
+  margin: 0 auto;
+  font-size: clamp(15px, 1.2vw, 17px);
+  line-height: 1.62;
+  color: var(--hw-text);
+}
+
+/* ---- Block 1: the three layers ---------------------------------------- */
+.how-it-works .wei-hw__layers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  justify-content: center;
+  column-gap: var(--hw-gap);
+  row-gap: clamp(30px, 4vw, 44px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each layer is centred in its own column. */
+.how-it-works .wei-hw__layer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.how-it-works .wei-hw__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 62px;
+  height: 54px;
+  margin-bottom: clamp(16px, 1.8vw, 24px);
+  padding: 0 14px;
+  border-radius: 14px;
+  background: var(--hw-num-bg);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.5px;
+  color: var(--hw-accent);
+}
+
+.how-it-works .wei-hw__layer-title {
+  margin: 0 0 10px;
+  font-weight: 700;
+  font-size: clamp(19px, 1.7vw, 23px);
+  line-height: 1.25;
+  letter-spacing: -0.4px;
+  color: var(--hw-heading);
+}
+
+.how-it-works .wei-hw__layer-text {
+  max-width: 300px;
+  margin: 0;
+  font-size: clamp(14.5px, 1.15vw, 16px);
+  line-height: 1.6;
+  color: var(--hw-text);
+}
+
+.how-it-works .wei-hw__note {
+  max-width: 880px;
+  margin: clamp(30px, 3.6vw, 46px) auto 0;
+  text-align: center;
+  font-size: clamp(14.5px, 1.15vw, 16px);
+  line-height: 1.6;
+  color: var(--hw-text);
+}
+
+/* ---- Sources line ------------------------------------------------------ */
+.how-it-works .wei-hw__sources {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px 0;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-size: clamp(14px, 1.15vw, 16px);
+  line-height: 1.6;
+  color: var(--hw-text);
+}
+
+.how-it-works .wei-hw__sources-label {
+  margin-right: 8px;
+  font-weight: 700;
+  color: var(--hw-heading);
+}
+
+/* Middots between the sources, generated rather than typed. */
+.how-it-works .wei-hw__source + .wei-hw__source::before {
+  content: "·";
+  margin: 0 8px;
+  color: var(--hw-line);
+}
+
+/* ---- Block 2: the pipeline -------------------------------------------- */
+.how-it-works .wei-hw__stages {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  justify-content: center;
+  column-gap: var(--hw-gap);
+  row-gap: clamp(28px, 3.4vw, 40px);
+  align-items: start;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.how-it-works .wei-hw__stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.how-it-works .wei-hw__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 132px;
+  margin-bottom: clamp(14px, 1.6vw, 20px);
+  padding: clamp(18px, 1.8vw, 24px) clamp(12px, 1.4vw, 20px);
+  background: var(--hw-card-bg);
+  border: 1px solid var(--hw-card-line);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(13, 19, 48, 0.02),
+              0 10px 28px rgba(13, 19, 48, 0.04);
+}
+
+/* Connector reaching back to the previous card. It spans the whole gap
+   and tucks 1px under each card so no hairline gap shows at the joins,
+   fading out of the card behind it and into the dot ahead. */
+.how-it-works .wei-hw__stage + .wei-hw__stage .wei-hw__card::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  width: calc(var(--hw-gap) + 2px);
+  height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(47, 43, 245, 0.18) 0%,
+    rgba(47, 43, 245, 0.55) 100%
+  );
+  transform: translateY(-50%);
+}
+
+/* The dot sits on the card's own edge, capping the line. */
+.how-it-works .wei-hw__stage + .wei-hw__stage .wei-hw__card::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: calc(100% - 4px);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--hw-accent);
+  box-shadow: 0 0 0 3px var(--hw-bg-path);
+  transform: translateY(-50%);
+}
+
+.how-it-works .wei-hw__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--hw-accent);
+}
+
+.how-it-works .wei-hw__icon svg {
+  display: block;
+  width: 28px;
+  height: 28px;
+}
+
+.how-it-works .wei-hw__stage-title {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(15px, 1.25vw, 17px);
+  line-height: 1.3;
+  letter-spacing: -0.2px;
+  color: var(--hw-heading);
+}
+
+.how-it-works .wei-hw__stage-text {
+  margin: 0;
+  padding: 0 clamp(2px, 0.6vw, 10px);
+  font-size: clamp(13.5px, 1.05vw, 15px);
+  line-height: 1.6;
+  color: var(--hw-text);
+}
+
+/* ---- Read more ---------------------------------------------------------
+   The extra copy is an inline continuation of the same paragraph. It is
+   taken out of flow while closed, so the paragraph shrinks to exactly
+   the sentence it is showing — a reserved max-height left dead space
+   under the shorter ones.
+
+   `display` cannot be transitioned, so the reveal is a keyframe fade on
+   the newly shown text rather than a two-state transition.
+   ----------------------------------------------------------------------- */
+.how-it-works .wei-hw__more {
+  display: none;
+}
+
+.how-it-works .wei-hw__more.is-open {
+  display: inline;
+  animation: wei-hw-fade 0.3s ease both;
+}
+
+@keyframes wei-hw-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .how-it-works .wei-hw__more.is-open {
+    animation: none;
+  }
+}
+
+/* Padded rather than spaced by margin, so the tap target is ~28px tall
+   with the text sitting where it did. */
+.how-it-works .wei-hw__toggle {
+  align-self: center;
+  margin-top: 0;
+  padding: 6px 4px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  font-size: clamp(12.5px, 1vw, 13.5px);
+  line-height: 1.2;
+  color: var(--hw-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.how-it-works .wei-hw__toggle:hover {
+  text-decoration-thickness: 2px;
+}
+
+.how-it-works .wei-hw__toggle:focus-visible {
+  outline: 3px solid rgba(47, 43, 245, 0.4);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---- Scroll reveal ---------------------------------------------------- */
+.how-it-works .wei-hw.is-animated .wei-hw__head,
+.how-it-works .wei-hw.is-animated .wei-hw__layer,
+.how-it-works .wei-hw.is-animated .wei-hw__note,
+.how-it-works .wei-hw.is-animated .wei-hw__stage {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.how-it-works .wei-hw.is-animated.is-visible .wei-hw__head,
+.how-it-works .wei-hw.is-animated.is-visible .wei-hw__layer,
+.how-it-works .wei-hw.is-animated.is-visible .wei-hw__note,
+.how-it-works .wei-hw.is-animated.is-visible .wei-hw__stage {
+  opacity: 1;
+  transform: none;
+}
+
+.how-it-works .wei-hw.is-animated .wei-hw__layer {
+  transition-delay: calc(0.12s + var(--hw-i) * 0.1s);
+}
+
+.how-it-works .wei-hw.is-animated .wei-hw__note {
+  transition-delay: 0.44s;
+}
+
+.how-it-works .wei-hw.is-animated .wei-hw__stage {
+  transition-delay: calc(0.12s + var(--hw-j) * 0.09s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .how-it-works .wei-hw.is-animated .wei-hw__head,
+  .how-it-works .wei-hw.is-animated .wei-hw__layer,
+  .how-it-works .wei-hw.is-animated .wei-hw__note,
+  .how-it-works .wei-hw.is-animated .wei-hw__stage {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---- Responsive -------------------------------------------------------
+   In two columns the connector is dropped on the item that starts the
+   second row, since it would otherwise point at the item above. In one
+   column it turns vertical instead, so the path still reads as a path.
+   ----------------------------------------------------------------------- */
+@media (max-width: 1080px) {
+  .how-it-works .wei-hw__stages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* The sources no longer fit on one line, and a wrapped line would
+     start on a middot, so they become chips under their label. */
+  .how-it-works .wei-hw__sources {
+    gap: 8px;
+  }
+  .how-it-works .wei-hw__sources-label {
+    flex-basis: 100%;
+    margin: 0 0 2px;
+    text-align: center;
+  }
+  .how-it-works .wei-hw__source {
+    padding: 4px 12px;
+    border: 1px solid var(--hw-card-line);
+    border-radius: 999px;
+    background: var(--hw-card-bg);
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  .how-it-works .wei-hw__source + .wei-hw__source::before {
+    content: none;
+  }
+}
+
+@media (min-width: 621px) and (max-width: 1080px) {
+  .how-it-works .wei-hw__stage:nth-child(3) .wei-hw__card::before,
+  .how-it-works .wei-hw__stage:nth-child(3) .wei-hw__card::after {
+    display: none;
+  }
+}
+
+@media (max-width: 980px) {
+  .how-it-works {
+    --hw-gutter: 22px;
+  }
+}
+
+@media (max-width: 900px) {
+  .how-it-works .wei-hw__layers {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .how-it-works .wei-hw__layer-text {
+    max-width: 460px;
+  }
+}
+
+@media (max-width: 620px) {
+  .how-it-works .wei-hw__stages {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 44px;
+  }
+  .how-it-works .wei-hw__card {
+    min-height: 0;
+  }
+
+  /* The line drops from the stage above into the top of this card,
+     leaving clear space under the previous stage's text. */
+  .how-it-works .wei-hw__stage + .wei-hw__stage .wei-hw__card::before {
+    top: auto;
+    right: auto;
+    bottom: 100%;
+    left: 50%;
+    width: 2px;
+    height: 26px;
+    background: linear-gradient(
+      180deg,
+      rgba(47, 43, 245, 0.18) 0%,
+      rgba(47, 43, 245, 0.55) 100%
+    );
+    transform: translateX(-50%);
+  }
+  .how-it-works .wei-hw__stage + .wei-hw__stage .wei-hw__card::after {
+    top: -4px;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 520px) {
+  .how-it-works {
+    --hw-gutter: 18px;
+  }
+}

@@ -1,0 +1,22 @@
+/* ============================================================
+   Footer Badges
+   Scope: .footer-badges (Elementor Social Icons widget)
+   Pairs with footer-badges.js, which adds the missing viewBox.
+   ============================================================ */
+
+/* The widget is styled like the social icons (18px icon in a 38px
+   tile), which is too small to read a badge. Tweak these two values
+   to resize. */
+.footer-badges .elementor-social-icon {
+  --icon-size: 56px !important;   /* badge artwork size */
+  --icon-padding: 6px !important; /* gap between badge and tile edge */
+}
+
+/* Badges aren't links: keep the tile white instead of the blue
+   social-icon hover, and drop the pointer cursor. */
+.footer-badges .elementor-social-icon,
+.footer-badges .elementor-social-icon:hover {
+  background-color: #ffffff !important;
+  opacity: 1 !important;
+  cursor: default;
+}

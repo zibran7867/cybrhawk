@@ -1,0 +1,346 @@
+/* =====================================================================
+   WEI / HawkOps — "The landscape, honestly" styles
+   (markup injected by landscape.js)
+   All rules are scoped under .landscape.
+   ===================================================================== */
+
+.landscape {
+  /* Tweak to rebrand */
+  --ls-accent: #4130e8;
+  --ls-accent-soft: #eeefff;                   /* icon badge fill */
+  --ls-bg: #fdfdff;
+  --ls-heading: #131a4a;                       /* near-black navy */
+  --ls-text: #5f6780;                          /* body grey */
+  --ls-card-bg: #fcfcff;
+  --ls-border: #eeeef8;
+  --ls-line: rgba(65, 48, 232, 0.26);          /* connectors + orbit */
+  --ls-shadow: 0 1px 2px rgba(19, 26, 74, 0.02),
+               0 12px 34px rgba(19, 26, 74, 0.045);
+
+  /* Side gutter. The Elementor container carries no padding of its own,
+     so without this the content runs into the screen edge below the
+     measure. Same steps as the hero (24 / 22 / 18px). */
+  --ls-gutter: 24px;
+
+  background-color: var(--ls-bg);
+  background-image:
+    radial-gradient(56% 44% at 50% 0%, rgba(65, 48, 232, 0.045), transparent 70%);
+}
+
+/* ---- Shell ------------------------------------------------------------
+   The gutter is added on top of the 1320px measure, so wide screens
+   keep the same content width and only narrower ones gain the inset.
+   ---------------------------------------------------------------------- */
+.landscape .wei-ls {
+  width: 100%;
+  max-width: calc(1320px + 2 * var(--ls-gutter));
+  margin: 0 auto;
+  padding: clamp(56px, 7vw, 92px) var(--ls-gutter);
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.landscape .wei-ls * {
+  box-sizing: border-box;
+}
+
+/* ---- Header ---------------------------------------------------------- */
+.landscape .wei-ls__head {
+  max-width: 900px;
+  margin: 0 auto clamp(36px, 4.4vw, 58px);
+  text-align: center;
+}
+
+.landscape .wei-ls__bar {
+  display: block;
+  width: 64px;
+  height: 4px;
+  margin: 0 auto 20px;
+  border-radius: 2px;
+  background: var(--ls-accent);
+}
+
+.landscape .wei-ls__eyebrow {
+  margin: 0 0 14px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--ls-accent);
+}
+
+.landscape .wei-ls__title {
+  margin: 0 0 18px;
+  font-weight: 700;
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1.16;
+  letter-spacing: -1.2px;
+  color: var(--ls-heading);
+}
+
+.landscape .wei-ls__sub {
+  margin: 0;
+  font-size: clamp(16px, 1.35vw, 18px);
+  line-height: 1.62;
+  color: var(--ls-text);
+}
+
+/* ---- Stage: cards left and right of the hub -------------------------- */
+.landscape .wei-ls__stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  gap: clamp(20px, 2.2vw, 30px);
+  align-items: center;
+}
+
+.landscape .wei-ls__card:nth-child(1) { grid-area: 1 / 1; }
+.landscape .wei-ls__card:nth-child(2) { grid-area: 1 / 3; }
+.landscape .wei-ls__card:nth-child(3) { grid-area: 2 / 1; }
+.landscape .wei-ls__card:nth-child(4) { grid-area: 2 / 3; }
+.landscape .wei-ls__hub            { grid-area: 1 / 2 / 3 / 3; }
+
+/* ---- Cards ------------------------------------------------------------ */
+.landscape .wei-ls__card {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(14px, 1.3vw, 20px);
+  padding: clamp(20px, 1.9vw, 28px);
+  background: var(--ls-card-bg);
+  border: 1px solid var(--ls-border);
+  border-radius: 20px;
+  box-shadow: var(--ls-shadow);
+}
+
+.landscape .wei-ls__badge {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  background: var(--ls-accent-soft);
+  color: var(--ls-accent);
+}
+
+.landscape .wei-ls__badge svg {
+  display: block;
+  width: 25px;
+  height: 25px;
+}
+
+.landscape .wei-ls__body {
+  min-width: 0;
+}
+
+.landscape .wei-ls__card-title {
+  margin: 0 0 3px;
+  font-weight: 700;
+  font-size: clamp(17px, 1.4vw, 20px);
+  line-height: 1.28;
+  letter-spacing: -0.3px;
+  color: var(--ls-heading);
+}
+
+.landscape .wei-ls__vendor {
+  margin: 0 0 12px;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--ls-heading);
+}
+
+.landscape .wei-ls__text {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.62;
+  color: var(--ls-text);
+}
+
+/* ---- Hub -------------------------------------------------------------- */
+.landscape .wei-ls__hub {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 420px;
+}
+
+/* Fixed box spanning the middle column plus both gutters, so the dots
+   land on the inner edge of the cards without any measuring. */
+.landscape .wei-ls__links {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 380px;
+  height: 420px;
+  margin: -210px 0 0 -190px;
+  color: var(--ls-line);
+  pointer-events: none;
+}
+
+.landscape .wei-ls__orb {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  height: 300px;
+}
+
+.landscape .wei-ls__ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--ls-line);
+}
+
+.landscape .wei-ls__core {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 208px;
+  height: 208px;
+  padding: 0 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid var(--ls-border);
+  box-shadow: 0 10px 40px rgba(19, 26, 74, 0.06);
+  text-align: center;
+}
+
+.landscape .wei-ls__core-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 78px;
+  height: 78px;
+  margin-bottom: 16px;
+  border-radius: 24px;
+  background: linear-gradient(160deg, #f1f2ff, #e5e8ff);
+  color: var(--ls-accent);
+}
+
+.landscape .wei-ls__core-icon svg {
+  display: block;
+  width: 34px;
+  height: 34px;
+}
+
+.landscape .wei-ls__caption {
+  margin: 0;
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1.7;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  color: var(--ls-heading);
+}
+
+/* ---- Scroll reveal ---------------------------------------------------- */
+.landscape .wei-ls.is-animated .wei-ls__head,
+.landscape .wei-ls.is-animated .wei-ls__card,
+.landscape .wei-ls.is-animated .wei-ls__hub {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.landscape .wei-ls.is-animated.is-visible .wei-ls__head,
+.landscape .wei-ls.is-animated.is-visible .wei-ls__card,
+.landscape .wei-ls.is-animated.is-visible .wei-ls__hub {
+  opacity: 1;
+  transform: none;
+}
+
+.landscape .wei-ls.is-animated .wei-ls__card {
+  transition-delay: calc(0.18s + var(--ls-i) * 0.1s);
+}
+
+.landscape .wei-ls.is-animated .wei-ls__hub {
+  transition-delay: 0.12s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landscape .wei-ls.is-animated .wei-ls__head,
+  .landscape .wei-ls.is-animated .wei-ls__card,
+  .landscape .wei-ls.is-animated .wei-ls__hub {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---- Responsive -------------------------------------------------------
+   Below the desktop layout the hub moves above the cards and the
+   connectors are dropped — they only make sense pointing sideways.
+   ----------------------------------------------------------------------- */
+@media (max-width: 1120px) {
+  .landscape .wei-ls__stage {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto auto auto;
+    align-items: stretch;
+  }
+  .landscape .wei-ls__hub            { grid-area: 1 / 1 / 2 / 3; }
+  .landscape .wei-ls__card:nth-child(1) { grid-area: 2 / 1; }
+  .landscape .wei-ls__card:nth-child(2) { grid-area: 2 / 2; }
+  .landscape .wei-ls__card:nth-child(3) { grid-area: 3 / 1; }
+  .landscape .wei-ls__card:nth-child(4) { grid-area: 3 / 2; }
+
+  .landscape .wei-ls__links {
+    display: none;
+  }
+  .landscape .wei-ls__hub {
+    min-height: 0;
+    margin-bottom: clamp(6px, 1vw, 14px);
+  }
+}
+
+@media (max-width: 980px) {
+  .landscape {
+    --ls-gutter: 22px;
+  }
+}
+
+@media (max-width: 680px) {
+  .landscape .wei-ls__stage {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+  .landscape .wei-ls__hub,
+  .landscape .wei-ls__card:nth-child(1),
+  .landscape .wei-ls__card:nth-child(2),
+  .landscape .wei-ls__card:nth-child(3),
+  .landscape .wei-ls__card:nth-child(4) {
+    grid-area: auto;
+  }
+  /* Auto placement follows source order, where the hub comes last;
+     keep it above the cards as in the two-column layout. */
+  .landscape .wei-ls__hub {
+    order: -1;
+  }
+  .landscape .wei-ls__orb {
+    width: 260px;
+    height: 260px;
+  }
+  .landscape .wei-ls__core {
+    width: 184px;
+    height: 184px;
+  }
+}
+
+@media (max-width: 520px) {
+  .landscape {
+    --ls-gutter: 18px;
+  }
+}
+
+@media (max-width: 440px) {
+  .landscape .wei-ls__card {
+    flex-direction: column;
+    gap: 14px;
+  }
+}

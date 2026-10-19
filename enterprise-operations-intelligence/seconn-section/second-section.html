@@ -1,0 +1,761 @@
+<!-- HawkOps architecture · second section of /enterprise-operations-intelligence/
+     Needs second-section.css and second-section.js on the same page. -->
+<section id="hawkops-arch" class="hawkops-arch" aria-labelledby="ho-title">
+    <div class="arch-main">
+        <div class="partner-note">Prepared for CybrHawk · reference cloud architecture · review copy</div>
+
+        <div class="toolbar">
+            <div class="views" aria-label="Infrastructure">
+                <button type="button" data-view="map" aria-pressed="true">Infrastructure</button>
+                <button type="button" data-view="costs" aria-pressed="false">Potential charges</button>
+                <button type="button" data-view="modules" aria-pressed="false">Modules</button>
+            </div>
+            <div class="tools">
+                <button type="button" id="ho-tour-start">Explain step by step →</button>
+                <button type="button" id="ho-motion" aria-pressed="true">Pause animation</button>
+                <button type="button" id="ho-fullscreen">Full screen</button>
+            </div>
+        </div>
+
+        <!-- View 1 · Infrastructure map -->
+        <div class="view" id="ho-map-view">
+            <div id="ho-tour" class="tour" hidden aria-live="polite">
+                <span class="step-number" id="ho-step-number"></span>
+                <div>
+                    <h2 id="ho-step-title"></h2>
+                    <p id="ho-step-text"></p>
+                </div>
+                <div class="tour-buttons">
+                    <button type="button" id="ho-previous">← Previous</button>
+                    <button type="button" id="ho-next">Next →</button>
+                    <button type="button" id="ho-tour-close">Back to the map</button>
+                </div>
+            </div>
+
+            <div class="canvas-wrap" id="ho-canvas-wrap">
+                <div class="stage" id="ho-stage" role="group" aria-label="Infrastructure">
+
+                    <button type="button" class="component brain" data-node="brain" aria-label="Enterprise brain">
+                        <canvas id="ho-brain-graph" width="840" height="850" role="img" aria-label="Illustrative map · no client data"></canvas>
+                        <div class="brain-top">
+                            <span class="eyebrow">PRIVATE KNOWLEDGE</span>
+                            <span class="logo-plate"><span class="vendor-logo logo-supabase" role="img" aria-label="Supabase"></span></span>
+                        </div>
+                        <div class="brain-copy">
+                            <h2>Enterprise brain</h2>
+                            <p>Knowledge, relationships and evidence. Access by role and permissions.</p>
+                            <span class="charge"><span aria-hidden="true">+</span> Supabase · plan and capacity</span>
+                            <small class="soc-badge">SOC monitoring available</small>
+                            <small class="illustration">Illustrative map · no client data</small>
+                        </div>
+                    </button>
+
+                    <div class="component agents" data-node-group="agents">
+                        <div class="card-heading">
+                            <h2>Company agents</h2>
+                            <span class="logo-plate"><span class="vendor-logo logo-cloudflare" role="img" aria-label="Cloudflare"></span></span>
+                        </div>
+                        <small class="agent-help">Illustrative agent roles · select to explore proposed permissions</small>
+                        <div class="role-gallery">
+                            <button type="button" class="role-card" data-role="oracle" data-kind="analysis" data-description="Queries the brain and explains sources." aria-pressed="true">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M22 24c1-6 5-9 10-9s9 3 10 9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <path d="M44 48c3.5-2 7-2 9.5 0v13c-2.5-2-6-2-9.5 0z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                                        <path d="M63 48c-3.5-2-7-2-9.5 0v13c2.5-2 6-2 9.5 0z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                                        <path d="M46.5 51.5c2-1 4-1 5.5 0M55 51.5c2-1 4-1 5.5 0M46.5 55.5c2-1 4-1 5.5 0M55 55.5c2-1 4-1 5.5 0" fill="none" stroke="currentColor" stroke-width="1" opacity=".7"/>
+                                    </g>
+                                </svg>
+                                <span>Oracle</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="growth" data-kind="analysis" data-description="Market and growth perspective." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M22 24c1-6 5-9 10-9s9 3 10 9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <path d="M45 47l6-2.5 6 2.5 6-2.5v13l-6 2.5-6-2.5-6 2.5z" fill="currentColor" fill-opacity=".2" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                                        <path d="M51 44.5v13M57 47v13" stroke="currentColor" stroke-width="1.2" stroke-opacity=".6"/>
+                                        <circle cx="54.5" cy="51" r="1.4" fill="currentColor"/>
+                                        <path d="M48 54c2-1.5 4-1.5 6.5-3" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="1.6 1.6"/>
+                                    </g>
+                                </svg>
+                                <span>Growth</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="people" data-kind="analysis" data-description="People and capability perspective." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M22 24c1-6 5-9 10-9s9 3 10 9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <rect x="45" y="43" width="15" height="19" rx="2" fill="currentColor" fill-opacity=".18" stroke="currentColor" stroke-width="1.6"/>
+                                        <rect x="49" y="40" width="7" height="5" rx="1.6" fill="currentColor" fill-opacity=".4" stroke="currentColor" stroke-width="1.4"/>
+                                        <path d="M48.5 50h8M48.5 54h8M48.5 58h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                                    </g>
+                                </svg>
+                                <span>People</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="operations" data-kind="analysis" data-description="Process and capacity perspective." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M22 24c1-6 5-9 10-9s9 3 10 9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <path d="M46 62l7-12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                                        <path d="M50 46l4-7 8 4.6-4 7z" fill="currentColor" fill-opacity=".35" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                    </g>
+                                </svg>
+                                <span>Operations</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="risk" data-kind="analysis" data-description="Obligations and risk perspective." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M22 24c1-6 5-9 10-9s9 3 10 9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <path d="M53 42l8 3v7c0 5.5-3.4 8.8-8 10.5-4.6-1.7-8-5-8-10.5v-7z" fill="currentColor" fill-opacity=".24" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                        <path d="M49.5 51.5l2.6 2.6 4.6-4.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </g>
+                                </svg>
+                                <span>Risk</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="finance" data-kind="analysis" data-description="Financial perspective." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M22 24c1-6 5-9 10-9s9 3 10 9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <rect x="45" y="43" width="15" height="19" rx="2.2" fill="currentColor" fill-opacity=".18" stroke="currentColor" stroke-width="1.6"/>
+                                        <path d="M48 48h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                        <circle cx="49" cy="53" r="1.2" fill="currentColor"/>
+                                        <circle cx="53" cy="53" r="1.2" fill="currentColor"/>
+                                        <circle cx="57" cy="53" r="1.2" fill="currentColor"/>
+                                        <circle cx="49" cy="58" r="1.2" fill="currentColor"/>
+                                        <circle cx="53" cy="58" r="1.2" fill="currentColor"/>
+                                        <circle cx="57" cy="58" r="1.2" fill="currentColor"/>
+                                    </g>
+                                </svg>
+                                <span>Finance</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="chronicler" data-kind="internal" data-description="Prepares periodic reports." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M22 24c1-6 5-9 10-9s9 3 10 9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <path d="M45 62c4-14 9-19 16-21-1 11-6 17-16 21z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                        <path d="M49 58c3-6 6-9 10-11" fill="none" stroke="currentColor" stroke-width="1.3"/>
+                                    </g>
+                                </svg>
+                                <span>Chronicler</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="tracker" data-kind="internal" data-description="Identifies gaps and pending work." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M21 23a11 11 0 0 1 22 0z" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                    <path d="M43 23h8a2 2 0 0 1 0 4H41" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <circle cx="52" cy="48" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                                        <path d="M56.8 52.8l4.6 4.6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                                    </g>
+                                </svg>
+                                <span>Tracker</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="herald" data-kind="channel" data-description="Prepares notices for approval." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M22 24c1-6 5-9 10-9s9 3 10 9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <path d="M46 56a7 9 0 0 1 14 0z" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                        <path d="M44 56h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                        <circle cx="53" cy="60" r="1.8" fill="currentColor"/>
+                                        <path d="M53 45v2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                    </g>
+                                </svg>
+                                <span>Herald</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="watchman" data-kind="analysis" data-description="Reviews regulatory updates." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M21 23a11 11 0 0 1 22 0z" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                    <path d="M43 23h8a2 2 0 0 1 0 4H41" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <path d="M44 58l6-3.5" stroke="currentColor" stroke-width="1.6"/>
+                                        <rect x="44" y="52" width="9" height="7" rx="2" transform="rotate(-28 44 52)" fill="currentColor" fill-opacity=".28" stroke="currentColor" stroke-width="1.5"/>
+                                        <rect x="52" y="47" width="11" height="8.5" rx="2.4" transform="rotate(-28 52 47)" fill="currentColor" fill-opacity=".2" stroke="currentColor" stroke-width="1.5"/>
+                                    </g>
+                                </svg>
+                                <span>Watchman</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="foreman" data-kind="internal" data-description="Analyzes production information." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M20 24a12 12 0 0 1 24 0z" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                    <path d="M15 24h34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M32 12v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <path d="M46 62l7-12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                                        <path d="M50 46l4-7 8 4.6-4 7z" fill="currentColor" fill-opacity=".35" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                    </g>
+                                </svg>
+                                <span>Foreman</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="customs" data-kind="analysis" data-description="Reviews foreign trade information." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M21 23a11 11 0 0 1 22 0z" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                    <path d="M43 23h8a2 2 0 0 1 0 4H41" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <path d="M53 42v6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+                                        <rect x="47" y="48" width="12" height="5" rx="1.6" fill="currentColor" fill-opacity=".35" stroke="currentColor" stroke-width="1.5"/>
+                                        <path d="M45 58h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                    </g>
+                                </svg>
+                                <span>Customs Clerk</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="trainer" data-kind="internal" data-description="Identifies training needs." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M21 23a11 11 0 0 1 22 0z" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                    <path d="M43 23h8a2 2 0 0 1 0 4H41" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <rect x="45" y="43" width="15" height="19" rx="2" fill="currentColor" fill-opacity=".18" stroke="currentColor" stroke-width="1.6"/>
+                                        <rect x="49" y="40" width="7" height="5" rx="1.6" fill="currentColor" fill-opacity=".4" stroke="currentColor" stroke-width="1.4"/>
+                                        <path d="M48.5 50h8M48.5 54h8M48.5 58h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                                    </g>
+                                </svg>
+                                <span>Trainer</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="bookkeeper" data-kind="analysis" data-description="Reviews tax information and calendar." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M20 22h24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M19 22h26a13 13 0 0 1-26 0z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1.4"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <rect x="45" y="43" width="15" height="19" rx="2.2" fill="currentColor" fill-opacity=".18" stroke="currentColor" stroke-width="1.6"/>
+                                        <path d="M48 48h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                        <circle cx="49" cy="53" r="1.2" fill="currentColor"/>
+                                        <circle cx="53" cy="53" r="1.2" fill="currentColor"/>
+                                        <circle cx="57" cy="53" r="1.2" fill="currentColor"/>
+                                        <circle cx="49" cy="58" r="1.2" fill="currentColor"/>
+                                        <circle cx="53" cy="58" r="1.2" fill="currentColor"/>
+                                        <circle cx="57" cy="58" r="1.2" fill="currentColor"/>
+                                    </g>
+                                </svg>
+                                <span>Bookkeeper</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="guardian" data-kind="internal" data-description="Organizes safety findings." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M20 24a12 12 0 0 1 24 0z" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                    <path d="M15 24h34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M32 12v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <rect x="46" y="50" width="7" height="12" rx="2" transform="rotate(-20 46 50)" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-width="1.5"/>
+                                        <path d="M52 47l4-5M55 50l6-3M53.5 44l1.5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".8"/>
+                                    </g>
+                                </svg>
+                                <span>Guardian</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="announcer" data-kind="channel" data-description="Prepares dashboards and summaries for approval." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M20 28a12 12 0 0 1 24 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                    <rect x="16" y="26" width="5" height="9" rx="2.2" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-width="1.4"/>
+                                    <rect x="43" y="26" width="5" height="9" rx="2.2" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-width="1.4"/>
+                                    <path d="M45.5 35v4a3 3 0 0 1-3 3h-4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <rect x="43" y="44" width="18" height="13" rx="2" fill="currentColor" fill-opacity=".18" stroke="currentColor" stroke-width="1.6"/>
+                                        <path d="M52 57v4M48 61h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                        <path d="M46.5 48h7M46.5 52h11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                                    </g>
+                                </svg>
+                                <span>Announcer</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="supervisor" data-kind="technical" data-description="Monitors technical agent execution." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M21 23a11 11 0 0 1 22 0z" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                    <path d="M43 23h8a2 2 0 0 1 0 4H41" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <path d="M47 62l8-9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+                                        <path d="M54 45a5.5 5.5 0 0 1 7.6-1.6l-3.4 3.7 1 3.7 3.7 1 3.4-3.7A5.5 5.5 0 0 1 60 55.5z" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                                    </g>
+                                </svg>
+                                <span>Supervisor</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="sentinel" data-kind="technical" data-description="Observes health and information freshness." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M20 24a12 12 0 0 1 24 0z" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                    <path d="M15 24h34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M32 12v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <path d="M53 42l8 3v7c0 5.5-3.4 8.8-8 10.5-4.6-1.7-8-5-8-10.5v-7z" fill="currentColor" fill-opacity=".24" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                        <path d="M49.5 51.5l2.6 2.6 4.6-4.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </g>
+                                </svg>
+                                <span>Sentinel</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="scout" data-kind="web" data-description="Reviews public catalogs and documents options." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M21 23a11 11 0 0 1 22 0z" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                    <path d="M43 23h8a2 2 0 0 1 0 4H41" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <path d="M45 47l6-2.5 6 2.5 6-2.5v13l-6 2.5-6-2.5-6 2.5z" fill="currentColor" fill-opacity=".2" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                                        <path d="M51 44.5v13M57 47v13" stroke="currentColor" stroke-width="1.2" stroke-opacity=".6"/>
+                                        <circle cx="54.5" cy="51" r="1.4" fill="currentColor"/>
+                                        <path d="M48 54c2-1.5 4-1.5 6.5-3" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="1.6 1.6"/>
+                                    </g>
+                                </svg>
+                                <span>Scout</span>
+                            </button>
+                            <button type="button" class="role-card" data-role="archivist" data-kind="archive" data-description="Processes authorized sources on a computer at an undisclosed location." aria-pressed="false">
+                                <svg viewBox="0 0 74 70" aria-hidden="true">
+                                    <path d="M13 64c0-10.5 8.5-17 19-17s19 6.5 19 17z" fill="currentColor" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M27 40v6h10v-6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <circle cx="32" cy="29" r="11" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.6"/>
+                                    <circle cx="28" cy="28" r="1.3" fill="currentColor"/>
+                                    <circle cx="36" cy="28" r="1.3" fill="currentColor"/>
+                                    <path d="M20 22h24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M19 22h26a13 13 0 0 1-26 0z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1.4"/>
+                                    <g transform="translate(53 52) scale(1.18) translate(-53 -52)">
+                                        <path d="M45 62c4-14 9-19 16-21-1 11-6 17-16 21z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                        <path d="M49 58c3-6 6-9 10-11" fill="none" stroke="currentColor" stroke-width="1.3"/>
+                                    </g>
+                                </svg>
+                                <span>Archivist</span>
+                            </button>
+                        </div>
+                        <div class="connection-inspector" aria-live="polite">
+                            <div class="selected-avatar" id="ho-selected-avatar"></div>
+                            <h3 id="ho-selected-name"></h3>
+                            <p id="ho-selected-description"></p>
+                            <div id="ho-permission-list"></div>
+                            <p class="permission-foot">The five council agents bring perspectives to the same brain. Isolation is between clients; tools are enabled by role and need.</p>
+                        </div>
+                        <small class="soc-badge">Cloudflare · paid infrastructure · SOC monitoring available</small>
+                    </div>
+
+                    <div class="component app" data-node-group="app">
+                        <h2>HawkOps platform</h2>
+                        <span class="hawkops-logo platform-hawkops" role="img" aria-label="HawkOps"></span>
+                        <p class="platform-explanation">The interface people use to consult their company’s information and review findings.</p>
+                        <div class="platform-functions">
+                            <span>Queries</span>
+                            <span>Dashboards</span>
+                            <span>Modules</span>
+                            <span>Evidence</span>
+                            <span>Human review</span>
+                        </div>
+                        <small>Role-based access · people approve actions</small>
+                    </div>
+
+                    <button type="button" class="component temis" data-node="temis" aria-label="Temis">
+                        <div class="card-heading">
+                            <h2>Temis</h2>
+                            <span class="logo-plate"><span class="vendor-logo logo-supabase" role="img" aria-label="Supabase"></span></span>
+                        </div>
+                        <p>Legal and regulatory library. Separate from the client's enterprise brain.</p>
+                        <span class="charge"><span aria-hidden="true">+</span> Knowledge subscription</span>
+                        <small class="soc-badge">Supabase · SOC monitoring available</small>
+                    </button>
+
+                    <button type="button" class="component archivist" data-node="archivist" aria-label="Archivist">
+                        <span class="eyebrow">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                            COMPUTER · LOCATION WITHHELD
+                        </span>
+                        <h2>Archivist</h2>
+                        <p>Reads, verifies and feeds the client's enterprise brain.</p>
+                        <span class="charge"><span aria-hidden="true">+</span> Processing and operations</span>
+                    </button>
+
+                    <div class="component sources" data-node-group="sources">
+                        <h2>Company systems and files</h2>
+                        <div class="source-grid">
+                            <article><span class="source-mark">S</span><h3>SharePoint / OneDrive</h3><p>Documents, libraries and folders</p></article>
+                            <article><span class="source-mark">@</span><h3>Corporate email</h3><p>Microsoft 365 / Google Workspace</p></article>
+                            <article><span class="source-mark">ERP</span><h3>ERP / MES</h3><p>Operations, purchasing, inventory and finance</p></article>
+                            <article><span class="source-mark">CRM</span><h3>CRM / HRIS</h3><p>Customer and workforce information</p></article>
+                            <article><span class="source-mark">▤</span><h3>Files and databases</h3><p>Files, SQL, APIs and access records</p></article>
+                        </div>
+                        <small>Authorized connectors · originals remain in their repositories · reading does not authorize changes</small>
+                    </div>
+
+                    <div class="component internet">
+                        <h2>◎ Internet</h2>
+                        <p>Public websites, catalogs and enabled APIs. Access depends on role, tools and permissions.</p>
+                    </div>
+
+                    <div class="component soc">
+                        <h2>CybrHawk SOC</h2>
+                        <p>Cloudflare + Supabase</p>
+                        <div class="soc-chain">Logs → SIEM → analysts</div>
+                        <p>Optional monitoring, detection and escalation. Requires configuration, plan and service.</p>
+                        <small>Telemetry only; no unrestricted document access. Additional cost.</small>
+                    </div>
+
+                    <!-- Connector lines between the cards. second-section.js redraws each path
+                         to fit the cards on screen; they are hidden below 1200px wide. -->
+                    <svg class="connections" viewBox="0 0 1800 1630" aria-hidden="true">
+                        <defs>
+                            <marker id="ho-arrow-violet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1 9 5 1 9" fill="none" stroke="var(--violet)" stroke-width="1.5"/></marker>
+                            <marker id="ho-arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1 9 5 1 9" fill="none" stroke="var(--green)" stroke-width="1.5"/></marker>
+                            <marker id="ho-arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1 9 5 1 9" fill="none" stroke="var(--amber)" stroke-width="1.5"/></marker>
+                        </defs>
+                        <g class="connection violet" data-connection="query">
+                            <path id="ho-query" class="edge" d="M680 310 H530" marker-end="url(#ho-arrow-violet)"/>
+                            <g class="flow"><circle r="8"/><path d="m-4 -4 4 4-4 4m5-8 4 4-4 4"/><animateMotion dur="3s" begin="-0s" repeatCount="indefinite" rotate="auto"><mpath href="#ho-query"/></animateMotion></g>
+                        </g>
+                        <g class="connection violet" data-connection="use">
+                            <path id="ho-use" class="edge" d="M600 820 H630 V615 H680" marker-end="url(#ho-arrow-violet)"/>
+                            <g class="flow"><circle r="8"/><path d="m-4 -4 4 4-4 4m5-8 4 4-4 4"/><animateMotion dur="3.6s" begin="-1s" repeatCount="indefinite" rotate="auto"><mpath href="#ho-use"/></animateMotion></g>
+                        </g>
+                        <g class="connection violet" data-connection="read">
+                            <path id="ho-read" class="edge" d="M290 650 V560" marker-end="url(#ho-arrow-violet)"/>
+                            <g class="flow"><circle r="8"/><path d="m-4 -4 4 4-4 4m5-8 4 4-4 4"/><animateMotion dur="4.2s" begin="-2s" repeatCount="indefinite" rotate="auto"><mpath href="#ho-read"/></animateMotion></g>
+                        </g>
+                        <g class="connection green" data-connection="law">
+                            <path id="ho-law" class="edge" d="M1320 190 H1420" marker-end="url(#ho-arrow-green)"/>
+                            <g class="flow"><circle r="8"/><path d="m-4 -4 4 4-4 4m5-8 4 4-4 4"/><animateMotion dur="4.8s" begin="-3s" repeatCount="indefinite" rotate="auto"><mpath href="#ho-law"/></animateMotion></g>
+                        </g>
+                        <g class="connection amber" data-connection="source">
+                            <path id="ho-source" class="edge" d="M1700 1140 H1790 V620 H1585 V590" marker-end="url(#ho-arrow-amber)"/>
+                            <g class="flow"><circle r="8"/><path d="m-4 -4 4 4-4 4m5-8 4 4-4 4"/><animateMotion dur="5.4s" begin="-4s" repeatCount="indefinite" rotate="auto"><mpath href="#ho-source"/></animateMotion></g>
+                        </g>
+                        <g class="connection amber" data-connection="publish">
+                            <path id="ho-publish" class="edge" d="M1420 485 H1370 V1090 H650 V490 H530" marker-end="url(#ho-arrow-amber)"/>
+                            <g class="flow"><circle r="8"/><path d="m-4 -4 4 4-4 4m5-8 4 4-4 4"/><animateMotion dur="6s" begin="-5s" repeatCount="indefinite" rotate="auto"><mpath href="#ho-publish"/></animateMotion></g>
+                        </g>
+                        <g class="connection green" data-connection="internet-link">
+                            <path id="ho-internet-link" class="edge" d="M1000 760 V660" marker-end="url(#ho-arrow-green)"/>
+                            <g class="flow"><circle r="8"/><path d="m-4 -4 4 4-4 4m5-8 4 4-4 4"/><animateMotion dur="6.6s" begin="-6s" repeatCount="indefinite" rotate="auto"><mpath href="#ho-internet-link"/></animateMotion></g>
+                        </g>
+                        <g class="connection green" data-connection="soc-cloud">
+                            <path id="ho-soc-cloud" class="edge" d="M1320 520 H1390 V840 H1420" marker-end="url(#ho-arrow-green)"/>
+                            <g class="flow"><circle r="8"/><path d="m-4 -4 4 4-4 4m5-8 4 4-4 4"/><animateMotion dur="7.2s" begin="-7s" repeatCount="indefinite" rotate="auto"><mpath href="#ho-soc-cloud"/></animateMotion></g>
+                        </g>
+                        <g class="connection green" data-connection="soc-data">
+                            <path id="ho-soc-data" class="edge" d="M530 110 H590 V40 H1775 V850 H1750" marker-end="url(#ho-arrow-green)"/>
+                            <g class="flow"><circle r="8"/><path d="m-4 -4 4 4-4 4m5-8 4 4-4 4"/><animateMotion dur="7.8s" begin="-8s" repeatCount="indefinite" rotate="auto"><mpath href="#ho-soc-data"/></animateMotion></g>
+                        </g>
+                    </svg>
+
+                    <button type="button" class="component ai" data-node="ai" aria-label="AI models">
+                        <span class="service-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="4" r="2"/><circle cx="20" cy="4" r="2"/><circle cx="4" cy="20" r="2"/><circle cx="20" cy="20" r="2"/><path d="m6 6 4 4m4 4 4 4M6 18l4-4m4-4 4-4"/></svg></span>
+                        <div>
+                            <span class="eyebrow">VARIABLE USAGE</span>
+                            <h2>AI models</h2>
+                            <p>Analysis · OCR · transcription · voice</p>
+                            <span class="charge"><span aria-hidden="true">+</span> Tokens, pages or minutes</span>
+                        </div>
+                    </button>
+
+                    <button type="button" class="component email" data-node="email" aria-label="Email delivery">
+                        <span class="service-icon resend"><span class="vendor-logo logo-resend" role="img" aria-label="Resend"></span></span>
+                        <div>
+                            <span class="eyebrow">OPTIONAL · RESEND</span>
+                            <h2>Email delivery</h2>
+                            <p>Approved messages from the application</p>
+                            <span class="charge"><span aria-hidden="true">+</span> Plan, volume and overages</span>
+                        </div>
+                    </button>
+
+                    <button type="button" class="component channels" data-node="channels" aria-label="Messaging and calls">
+                        <span class="service-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 3h3l2 5-3 2a16 16 0 0 0 6 6l2-3 5 2v3a3 3 0 0 1-3 3C9 21 3 15 3 6a3 3 0 0 1 3-3Z"/></svg></span>
+                        <div>
+                            <span class="eyebrow">OPTIONAL · PROVIDER TO BE SELECTED</span>
+                            <h2>Messaging and calls</h2>
+                            <p>SMS · WhatsApp · telephony</p>
+                            <span class="charge"><span aria-hidden="true">+</span> Messages, numbers and minutes</span>
+                        </div>
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="connection-key" aria-label="Connections">
+                <span><b>1</b>query the brain</span>
+                <span><b>2</b>uses · serves</span>
+                <span><b>3</b>reads with permissions</span>
+                <span><b>4</b>queries legal sources</span>
+                <span><b>5</b>authorized reading</span>
+                <span><b>6</b>verified knowledge</span>
+                <span><b>7</b>Internet · authorized tools</span>
+                <span><b>8</b>Telemetry</span>
+                <span><b>9</b>Supabase / Cloudflare logs → SOC</span>
+            </div>
+
+            <div class="legend">
+                <span><i class="violet"></i>Queries and knowledge</span>
+                <span><i class="green"></i>Specialized knowledge</span>
+                <span><i class="amber"></i>Verified ingestion</span>
+                <span class="cost-legend">+ Potential additional charge</span>
+                <small>Select a component to explore its role and potential charges.</small>
+            </div>
+
+            <div class="takeaway">
+                <b>People decide. HawkOps presents findings with supporting evidence.</b>
+                <span>Vision of the completed system. Availability and configuration must be validated for each project.</span>
+            </div>
+        </div>
+
+        <!-- View 2 · Potential charges -->
+        <div class="view" id="ho-costs-view" hidden>
+            <div class="section-heading">
+                <h2>Potential charges</h2>
+                <p>Charges depend on plans, usage and what the proposal includes. Not every service is required or billed separately.</p>
+            </div>
+            <div class="cost-grid">
+                <button type="button" class="cost-item" data-node="brain">
+                    <span class="cost-symbol">+</span>
+                    <h3>Enterprise brain</h3>
+                    <p>Plan, compute, storage, data transfer and backup add-ons according to configuration.</p>
+                    <small>Supabase · plan and capacity ↗</small>
+                </button>
+                <button type="button" class="cost-item" data-node="agents">
+                    <span class="cost-symbol">+</span>
+                    <h3>Company agents</h3>
+                    <p>Requests, compute and enabled services such as queues or storage. Model usage is counted where it runs, without double counting.</p>
+                    <small>Cloudflare · infrastructure and usage ↗</small>
+                </button>
+                <button type="button" class="cost-item" data-node="app">
+                    <span class="cost-symbol">+</span>
+                    <h3>Application and modules</h3>
+                    <p>Custom integrations, enterprise identity, support and operations when required by the agreed scope.</p>
+                    <small>Identity, support and integrations ↗</small>
+                </button>
+                <button type="button" class="cost-item" data-node="temis">
+                    <span class="cost-symbol">+</span>
+                    <h3>Temis</h3>
+                    <p>Access, coverage and updates under the subscription. This does not automatically mean a second Supabase bill for the client.</p>
+                    <small>Knowledge subscription ↗</small>
+                </button>
+                <button type="button" class="cost-item" data-node="archivist">
+                    <span class="cost-symbol">+</span>
+                    <h3>Archivist</h3>
+                    <p>Initial ingestion, updates, computer capacity and operations under contract. AI services may incur additional usage charges.</p>
+                    <small>Processing and operations ↗</small>
+                </button>
+                <button type="button" class="cost-item" data-node="sources">
+                    <span class="cost-symbol">+</span>
+                    <h3>Company information</h3>
+                    <p>Source-system licenses, API access, custom connectors, digitization and transcription when required.</p>
+                    <small>Connectors and licenses, if needed ↗</small>
+                </button>
+                <button type="button" class="cost-item" data-node="ai">
+                    <span class="cost-symbol">+</span>
+                    <h3>AI models</h3>
+                    <p>Volume, model choice, context and frequency. OCR, transcription and voice may be billed separately. Keeping originals at source does not prevent content processing by authorized services.</p>
+                    <small>Tokens, pages or minutes ↗</small>
+                </button>
+                <button type="button" class="cost-item" data-node="email">
+                    <span class="cost-symbol">+</span>
+                    <h3>Email delivery</h3>
+                    <p>Plan and sending volume under the provider's terms.</p>
+                    <small>Plan, volume and overages ↗</small>
+                </button>
+                <button type="button" class="cost-item" data-node="channels">
+                    <span class="cost-symbol">+</span>
+                    <h3>Messaging and calls</h3>
+                    <p>Messages, channel and destination fees, phone numbers and minutes. Recording, transcription and speech synthesis may incur separate charges.</p>
+                    <small>Messages, numbers and minutes ↗</small>
+                </button>
+            </div>
+            <div class="support">
+                <h3>Implementation and operations are separate cost categories</h3>
+                <p>Initial ingestion, connectors and customization are scoped per project. Operations may add infrastructure, AI, communications, support and specialized knowledge. Account ownership, payment responsibility, limits and spending alerts are agreed in advance.</p>
+            </div>
+        </div>
+
+        <!-- View 3 · Modules -->
+        <div class="view" id="ho-modules-view" hidden>
+            <div class="section-heading">
+                <h2>The full scope of HawkOps</h2>
+                <p>Modules are selected and tailored to each company. They organize work and also feed the enterprise brain. Industrial modules are replaced or adapted for each sector.</p>
+            </div>
+            <div class="modules-grid">
+                <article><span>01</span><h3>Enterprise brain and executive dashboard</h3></article>
+                <article><span>02</span><h3>Compliance and obligations</h3></article>
+                <article><span>03</span><h3>Document capture and digitization</h3></article>
+                <article><span>04</span><h3>Contracts and commitments</h3></article>
+                <article><span>05</span><h3>Finance and administration</h3></article>
+                <article><span>06</span><h3>Tax and filings</h3></article>
+                <article><span>07</span><h3>Human resources and training</h3></article>
+                <article><span>08</span><h3>Workforce and attendance</h3></article>
+                <article><span>09</span><h3>Production and OEE</h3></article>
+                <article><span>10</span><h3>Maintenance</h3></article>
+                <article><span>11</span><h3>Foreign trade and customs</h3></article>
+                <article><span>12</span><h3>Environmental health and safety · EHS</h3></article>
+                <article><span>13</span><h3>Environment and waste</h3></article>
+                <article><span>14</span><h3>Regulatory monitoring</h3></article>
+                <article><span>15</span><h3>Client and supplier portal</h3></article>
+            </div>
+            <div class="support">
+                <h3>Knowledge subscriptions</h3>
+                <p>Temis provides legal and regulatory knowledge. Tax, foreign trade and market-context libraries are added according to contracted coverage. They remain separate from the client's enterprise brain.</p>
+                <h3>Controls across the infrastructure</h3>
+                <p>Identity and permissions · activity logs and audit · monitoring · backups and recovery · usage controls · maintenance and updates.</p>
+            </div>
+        </div>
+
+        <!-- Cost summary (always visible, under every view) -->
+        <div class="expansion budget-summary">
+            <div class="section-heading">
+                <h2>Cost summary: what to budget for</h2>
+                <p>Supabase and Cloudflare carry costs in the planned architecture. Separate the cost of operating HawkOps from what the commercial fee includes: an existing cost is not always a separate additional charge.</p>
+            </div>
+            <div class="budget-key">
+                <span>● Planned baseline / required usage</span>
+                <span>◇ Optional / scope-dependent</span>
+            </div>
+            <div class="budget-grid">
+                <article class="budget-card base">
+                    <span>Platform and service</span>
+                    <h3>HawkOps</h3>
+                    <p>License, modules, implementation, support and maintenance as quoted.</p>
+                </article>
+                <article class="budget-card base">
+                    <span>Planned paid infrastructure</span>
+                    <h3>Supabase</h3>
+                    <p>Private brain: plan, compute, storage, traffic, backups and recovery depending on configuration. Temis also uses Supabase; clarify its inclusion in the service to avoid double charging.</p>
+                </article>
+                <article class="budget-card base">
+                    <span>Planned paid infrastructure</span>
+                    <h3>Cloudflare</h3>
+                    <p>Execution and delivery: plan and Workers usage, requests, CPU and enabled services. Budget for this infrastructure.</p>
+                </article>
+                <article class="budget-card base">
+                    <span>Expected usage charges</span>
+                    <h3>AI models</h3>
+                    <p>Queries, tokens, context and processing; varies by model and volume. Define included allowance and overages.</p>
+                </article>
+                <article class="budget-card base">
+                    <span>Operation to budget</span>
+                    <h3>Archivist and information</h3>
+                    <p>Hardware, operation, processing/OCR and maintenance; Temis library and licensed sources by scope. Clarify what the fee includes.</p>
+                </article>
+                <article class="budget-card optional">
+                    <span>Optional + volume</span>
+                    <h3>Resend / email</h3>
+                    <p>Sends, domain and plan capacity when transactional email is enabled. Sends require approval or an authorized policy.</p>
+                </article>
+                <article class="budget-card optional">
+                    <span>Optional + usage</span>
+                    <h3>Messaging and calls</h3>
+                    <p>WhatsApp/SMS, numbers, minutes, voice and telephony provider; channel and country rates.</p>
+                </article>
+                <article class="budget-card optional">
+                    <span>Existing or additional</span>
+                    <h3>Company systems</h3>
+                    <p>SharePoint/Microsoft 365, email, ERP, CRM, APIs and connectors; existing licenses, premium connectors and integration depending on provider.</p>
+                </article>
+                <article class="budget-card optional">
+                    <span>Optional + plan + volume</span>
+                    <h3>SOC monitoring</h3>
+                    <p>Enable and export logs, transfer, SIEM, retention, alerts and analyst service. Cloudflare and Supabase are monitorable; this does not mean a SOC service is contracted.</p>
+                </article>
+                <article class="budget-card optional">
+                    <span>Scope-dependent</span>
+                    <h3>Continuity and integrations</h3>
+                    <p>Extended backups, recovery, extra environments, domain, observability, new sources and custom development.</p>
+                </article>
+            </div>
+            <div class="budget-total">
+                Commercial proposal = platform + infrastructure + usage + contracted options
+                <small>For each item: payer, included allowance, limit, overage and billing cycle. Amounts and inclusions are confirmed in the proposal; this diagram is not a quote.</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details pop-up, filled in by second-section.js when a card is clicked -->
+    <dialog id="ho-details" aria-labelledby="ho-detail-title">
+        <button type="button" id="ho-close-details" aria-label="Close details">×</button>
+        <span class="eyebrow" id="ho-detail-tag"></span>
+        <h2 id="ho-detail-title"></h2>
+        <dl>
+            <dt>Where it runs</dt>
+            <dd id="ho-detail-where"></dd>
+            <dt>What it does</dt>
+            <dd id="ho-detail-function"></dd>
+            <dt>What may incur charges</dt>
+            <dd id="ho-detail-billing"></dd>
+        </dl>
+        <a id="ho-detail-url" target="_blank" rel="noopener noreferrer">Provider terms ↗</a>
+        <p class="fine">No fixed prices · subject to contract</p>
+    </dialog>
+
+</section>

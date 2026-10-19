@@ -1,0 +1,9 @@
+.home-five-solutions.elementor-widget-image img {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18), 0 4px 10px rgba(0, 0, 0, 0.10);
+}
+
+/* The widget prints an empty caption, and the theme gives it ~11px of
+   margin under the image. */
+.home-five-solutions .wp-caption-text:empty {
+    display: none;
+}

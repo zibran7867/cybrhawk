@@ -1,0 +1,367 @@
+/* =====================================================================
+   HawkINT — "How HawkINT Works" section styles
+   (/ai-powered-threat-intelligence-platform/, after "HawkINT in Numbers")
+   All rules are scoped under .hawk-int-4, the class on the Elementor
+   container. The section is the theme's About widget (about6 / heading6
+   markup on a Bootstrap row) and is restyled in place; the layout, type,
+   background and decoration all come from this file.
+
+   The shield image is never restyled beyond its box: no filters,
+   overlays, cropping or opacity. Its frame gets the same 1rem radius and
+   shadow as the About HawkINT dashboard, and a glow, a dot field and a
+   ring sit behind it.
+
+   Specificity: Elementor's page CSS styles this widget at up to (0,6,2)
+   (`.elementor-14098 .elementor-element.elementor-element-00398c8
+   .heading6 .about-list ul li .check`), so the label, list and check
+   rules also carry .e-con and .sp and win wherever this file loads.
+   ===================================================================== */
+
+.hawk-int-4.e-con {
+  /* Tweak to rebrand. The shared tokens match the two sections above. */
+  --hi-accent: #0c68ff;
+  --hi-accent-ink: #0a58d6;                    /* label text: the accent a shade deeper, over 5:1 on its tint */
+  --hi-heading: #0d0e10;
+  --hi-text: #535c74;
+  --hi-item: #1c2230;                          /* list labels, about 15:1 */
+  --hi-band-top: #f3f6fb;                      /* HawkINT in Numbers' bottom colour, so they meet without a seam */
+  --hi-band-mid: #f7f9fd;
+  --hi-band-bottom: #ffffff;                   /* the next section's background */
+  --hi-media-radius: 1rem;                     /* same as the About HawkINT dashboard; 0 for square corners */
+
+  /* Same measure and gutter as About HawkINT, so the image lines up with
+     the dashboard above it. */
+  --hi-measure: 1280px;
+  --hi-gutter: clamp(20px, 4vw, 56px);
+  --hi-gap: clamp(40px, 5.2vw, 96px);
+  --hi-copy-max: 540px;
+
+  position: relative;
+  /* Less on top: HawkINT in Numbers' bottom padding already separates
+     the two. The next section has no top padding of its own. */
+  padding: clamp(40px, 3.6vw, 56px) 0 clamp(64px, 7.2vw, 112px);
+  overflow: hidden;
+  overflow: clip;                              /* decoration never widens the page */
+  background-image:
+    radial-gradient(36% 58% at 26% 52%, rgba(12, 104, 255, 0.07), transparent 72%),
+    linear-gradient(180deg, var(--hi-band-top) 0%, var(--hi-band-mid) 55%, var(--hi-band-bottom) 100%);
+}
+
+/* The theme's 100px .sp padding is replaced by the container's. */
+.hawk-int-4 .about6.sp {
+  padding: 0;
+}
+
+/* ---- Layout -----------------------------------------------------------
+   The Bootstrap row the widget ships with, re-weighted: the image takes a
+   little more than half the measure, the copy the rest up to 540px, both
+   centred on one axis. Bootstrap's gutters are swapped for one gap.
+   ---------------------------------------------------------------------- */
+.hawk-int-4 .about6 .container {
+  width: 100%;
+  max-width: calc(var(--hi-measure) + 2 * var(--hi-gutter));
+  padding-inline: var(--hi-gutter);
+}
+
+.hawk-int-4 .about6 .row {
+  --bs-gutter-x: 0;
+  --bs-gutter-y: 0;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--hi-gap);
+  margin: 0;
+}
+
+/* Image column. It holds the image's decoration, so it is its own
+   stacking context and the shapes can sit just behind the image. */
+.hawk-int-4 .about6 .row > .col-lg-6:first-child {
+  position: relative;
+  isolation: isolate;
+  flex: 1.15 1 0%;
+  width: auto;
+  min-width: 0;
+  max-width: none;
+}
+
+/* Copy column */
+.hawk-int-4 .about6 .row > .col-lg-6:last-child {
+  flex: 1 1 0%;
+  width: auto;
+  min-width: 0;
+  max-width: var(--hi-copy-max);
+}
+
+/* ---- Image ------------------------------------------------------------
+   Shadow and glow sit on the frame around the image, never on the image.
+   The dark fill only shows while the file loads.
+   ---------------------------------------------------------------------- */
+.hawk-int-4 .about6 .image {
+  position: relative;
+  border-radius: var(--hi-media-radius);
+  background-color: #111214;
+  box-shadow:
+    0 1px 2px rgba(13, 19, 48, 0.06),
+    0 18px 40px -18px rgba(13, 25, 70, 0.38),
+    0 36px 80px -28px rgba(12, 104, 255, 0.30);
+}
+
+/* Soft blue haze behind the frame. */
+.hawk-int-4 .about6 .image::before {
+  content: "";
+  position: absolute;
+  inset: -14% -8%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(12, 104, 255, 0.14), transparent);
+  pointer-events: none;
+}
+
+/* Full column width at the file's own proportions. The image has no
+   width/height attributes, so the ratio is given here to reserve its
+   space while it loads; "auto" hands over to the file's real ratio as
+   soon as it arrives, so a different upload is never distorted. */
+.hawk-int-4 .about6 .image img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: auto 2560 / 1707;
+  margin: 0;
+  border-radius: inherit;
+}
+
+/* ---- Decoration -------------------------------------------------------
+   Pseudo-elements on the image column, behind the image: a dot field off
+   the bottom-left corner and a ring outline around the top-left corner,
+   the same shapes and blues as About HawkINT. Both point away from the
+   copy, so the gap between the columns stays clear.
+   ---------------------------------------------------------------------- */
+.hawk-int-4 .about6 .row > .col-lg-6:first-child::before,
+.hawk-int-4 .about6 .row > .col-lg-6:first-child::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Centred 24px inside the corner, so it never reaches past the section's
+   top padding or the page edge. */
+.hawk-int-4 .about6 .row > .col-lg-6:first-child::before {
+  top: -40px;
+  left: -40px;
+  width: 128px;
+  height: 128px;
+  border: 1px solid rgba(12, 104, 255, 0.2);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(12, 104, 255, 0.06), transparent 70%);
+}
+
+.hawk-int-4 .about6 .row > .col-lg-6:first-child::after {
+  left: -40px;
+  bottom: -40px;
+  width: 154px;                                /* 7 × 5 dots on a 22px grid */
+  height: 110px;
+  background-image: radial-gradient(circle, rgba(12, 104, 255, 0.42) 1.5px, transparent 2.1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: linear-gradient(45deg, #000 25%, transparent 88%);
+          mask-image: linear-gradient(45deg, #000 25%, transparent 88%);
+}
+
+/* ---- Copy -------------------------------------------------------------- */
+.hawk-int-4 .about6 .heading6 {
+  padding: 0;
+  font-family: "Figtree", sans-serif;
+  text-align: start;
+}
+
+/* Label. Kept in its own casing so "HawkINT" reads as the brand name. */
+.hawk-int-4.e-con .about6.sp .heading6 span.span {
+  display: inline-block;
+  margin: 0 0 clamp(16px, 1.6vw, 22px);
+  padding: 7px 12px;
+  border: 1px solid rgba(12, 104, 255, 0.16);
+  border-radius: 6px;
+  background-color: rgba(12, 104, 255, 0.07);
+  font-family: "Figtree", sans-serif;
+  font-weight: 600;
+  font-size: clamp(13px, 0.2vw + 12.2px, 15px);
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  color: var(--hi-accent-ink);
+}
+
+/* Same type as the About and Numbers headings. 700, not 800: the site
+   only loads Figtree up to 700. */
+.hawk-int-4 .about6 .heading6 h2.tg-element-title {
+  margin: 0;
+  font-family: "Figtree", sans-serif;
+  font-weight: 700;
+  font-size: clamp(30px, 1.72vw + 25px, 52px);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--hi-heading);
+  text-wrap: balance;
+}
+
+/* The widget leaves an empty highlight span at the end of the heading. */
+.hawk-int-4 .about6 .heading6 h2.tg-element-title > span:empty {
+  display: none;
+}
+
+/* Spacing comes from the margins below, not the fixed 16px spacer. */
+.hawk-int-4 .about6 .heading6 .space16 {
+  display: none;
+}
+
+.hawk-int-4 .about6 .heading6 p {
+  max-width: 34em;
+  margin: clamp(16px, 1.6vw, 22px) 0 0;
+  font-family: "Figtree", sans-serif;
+  font-weight: 400;
+  font-size: clamp(16px, 0.2vw + 15.2px, 18px);
+  line-height: 1.7;
+  color: var(--hi-text);
+  text-wrap: pretty;
+}
+
+/* ---- Coverage list ----------------------------------------------------- */
+.hawk-int-4 .about6 .heading6 .about-list {
+  margin-top: clamp(24px, 2.4vw, 32px);
+}
+
+.hawk-int-4 .about6 .heading6 .about-list ul {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hawk-int-4.e-con .about6.sp .heading6 .about-list ul li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0;
+  font-family: "Figtree", sans-serif;
+  font-weight: 500;
+  font-size: clamp(16px, 0.2vw + 15.2px, 18px);
+  line-height: 1.4;
+  letter-spacing: 0;
+  color: var(--hi-item);
+}
+
+/* Check badge: the brand blue in place of Elementor's violet, centred on
+   the label by flex rather than the theme's 2px nudge. */
+.hawk-int-4.e-con .about6.sp .heading6 .about-list ul li .check {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  border-radius: 50%;
+  background-color: var(--hi-accent);
+  box-shadow: 0 0 0 4px rgba(12, 104, 255, 0.10);
+  font-size: 11px;
+  line-height: 1;
+  color: #ffffff;
+  transform: none;
+}
+
+.hawk-int-4 .about6 .heading6 .about-list .check i {
+  line-height: 1;
+}
+
+/* The theme slides the label, paragraph and list in with AOS. Shown in
+   place for anyone who has asked for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .hawk-int-4 .about6 [data-aos][data-aos] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---- Laptop -----------------------------------------------------------
+   The columns even out so the heading keeps two lines.
+   ---------------------------------------------------------------------- */
+@media (max-width: 1199px) {
+  .hawk-int-4 .about6 .row > .col-lg-6:first-child {
+    flex-grow: 1;
+  }
+}
+
+/* ---- Tablet (the widget's own Bootstrap lg breakpoint) -----------------
+   Under 992px the copy column would drop below about 400px, so the
+   section stacks: image first, copy underneath on the same left edge,
+   on About HawkINT's tablet measure.
+   ---------------------------------------------------------------------- */
+@media (max-width: 991px) {
+  .hawk-int-4.e-con {
+    --hi-measure: 820px;
+    background-image:
+      radial-gradient(60% 34% at 50% 30%, rgba(12, 104, 255, 0.07), transparent 72%),
+      linear-gradient(180deg, var(--hi-band-top) 0%, var(--hi-band-mid) 55%, var(--hi-band-bottom) 100%);
+  }
+
+  .hawk-int-4 .about6 .row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: clamp(36px, 5.5vw, 52px);
+  }
+
+  .hawk-int-4 .about6 .row > .col-lg-6:first-child,
+  .hawk-int-4 .about6 .row > .col-lg-6:last-child {
+    flex: none;
+    width: 100%;
+    max-width: none;
+  }
+
+  /* The copy now starts just below the image's bottom-left corner, so
+     the dots move to the top-right one. */
+  .hawk-int-4 .about6 .row > .col-lg-6:first-child::after {
+    top: -28px;
+    right: -28px;
+    bottom: auto;
+    left: auto;
+    -webkit-mask-image: linear-gradient(225deg, #000 25%, transparent 88%);
+            mask-image: linear-gradient(225deg, #000 25%, transparent 88%);
+  }
+}
+
+/* ---- Mobile ------------------------------------------------------------ */
+@media (max-width: 767px) {
+  .hawk-int-4.e-con {
+    padding-block: 40px 64px;
+  }
+
+  .hawk-int-4 .about6 .image {
+    box-shadow:
+      0 1px 2px rgba(13, 19, 48, 0.06),
+      0 14px 30px -16px rgba(13, 25, 70, 0.36),
+      0 24px 50px -24px rgba(12, 104, 255, 0.28);
+  }
+
+  .hawk-int-4 .about6 .heading6 p {
+    line-height: 1.65;
+  }
+
+  .hawk-int-4.e-con .about6.sp .heading6 .about-list ul li .check {
+    width: 22px;
+    height: 22px;
+    font-size: 10px;
+  }
+
+  /* The gutter is too narrow for the ring; the dots tuck in closer. */
+  .hawk-int-4 .about6 .row > .col-lg-6:first-child::before {
+    display: none;
+  }
+
+  .hawk-int-4 .about6 .row > .col-lg-6:first-child::after {
+    top: -18px;
+    right: -14px;
+    width: 110px;
+    height: 88px;
+  }
+}

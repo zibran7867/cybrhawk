@@ -1,0 +1,94 @@
+<!doctype html>
+<!--
+  =====================================================================
+  CybrHawk — Unified Cyber Defense (UCD) page: local preview harness
+  ---------------------------------------------------------------------
+  For previewing udc.js + udc.css in a browser. This file is not
+  deployed; on the live site Elementor supplies the containers below.
+
+  Elementor setup
+  ---------------
+  1. Create 12 containers, in this order, each with Content Width set to
+     Full Width, padding 0 and no background, and its class typed into
+     Advanced → CSS Classes:
+
+       1  ucd-hero          Hero
+       2  ucd-trust         Trust bar
+       3  ucd-problem       The enterprise problem
+       4  ucd-capabilities  What's inside UCD (8 capabilities)
+       5  ucd-how           How UCD works
+       6  ucd-outcomes      What you get
+       7  ucd-soc-models    Choose your SOC model
+       8  ucd-nist          Mapped to NIST CSF 2.0
+       9  ucd-regulatory    Built for the regulatory clock
+      10  ucd-industries    Industries we serve
+      11  ucd-solutions     Part of CybrHawk's five solutions
+      12  ucd-faq           FAQ
+
+     Leave each one empty: udc.js builds the section inside it and adds
+     `ucd-section` to it, so nothing else needs typing.
+
+  2. Put the existing closing CTA container directly after the FAQ and
+     paste Appendix B of the brief into its CONTENT block (TITLE, LEAD,
+     CLOSER, CTA, CTA_SECONDARY in walkthrough-cta.js).
+
+  3. Load udc.css and udc.js the same way the other sections' files are
+     loaded.
+
+  Also check
+  ----------
+  - The hero holds the page's only <h1>. If the page template prints the
+    WordPress page title as another H1, hide it (Page Settings → Hide
+    Title).
+  - The hero is fitted to the site header, which overlays the page: on
+    desktop it paints a navy band behind the transparent header, and at
+    every width it clears the header's height before the eyebrow. Both
+    follow the live header's measured height (--ucd-hr-bar and
+    --ucd-hero-offset in the hero block of udc.css); if the header's
+    height changes, update them there. This preview has no header, so
+    the band shows empty at the top.
+  - Artwork: the capability cards and the SOC model cards each take an
+    image, set in the `image` field of that item in udc.js. Prompts and
+    export sizes are in capability-image-prompts.md and
+    soc-model-image-prompts.md. An empty field, or an image that fails
+    to load, shows the item's icon in the same panel instead.
+  - Open items are marked `// TODO:` in the CONTENT block of udc.js.
+  =====================================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UCD page preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400..700&display=swap">
+  <link rel="stylesheet" href="udc.css">
+  <!-- Preview only. None of the page's styles belong here. -->
+  <style>
+    body { margin: 0; font-family: "Figtree", sans-serif; }
+    .preview-cta { padding: 64px 24px; background: #e9ebf0; color: #3a4256; text-align: center; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <div class="e-con e-con-full ucd-hero"></div>
+  <!-- Boxed container: exercises the .e-con-inner host path. -->
+  <div class="e-con e-con-boxed ucd-trust"><div class="e-con-inner"></div></div>
+  <div class="e-con e-con-full ucd-problem"></div>
+  <div class="e-con e-con-full ucd-capabilities"></div>
+  <div class="e-con e-con-full ucd-how"></div>
+  <div class="e-con e-con-full ucd-outcomes"></div>
+  <div class="e-con e-con-full ucd-soc-models"></div>
+  <!-- Boxed container: exercises the .e-con-inner host path. -->
+  <div class="e-con e-con-boxed ucd-nist"><div class="e-con-inner"></div></div>
+  <div class="e-con e-con-full ucd-regulatory"></div>
+  <div class="e-con e-con-full ucd-industries"></div>
+  <div class="e-con e-con-full ucd-solutions"></div>
+  <div class="e-con e-con-full ucd-faq"></div>
+
+  <div class="preview-cta">Existing CTA component goes here</div>
+
+  <script src="udc.js"></script>
+</body>
+</html>

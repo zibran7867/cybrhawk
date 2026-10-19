@@ -1,0 +1,2556 @@
+/* =====================================================================
+   CybrHawk — Unified Cyber Defense (UCD) solution page styles
+   (markup injected by udc.js, sections 1–12)
+
+   Every rule is scoped under a section container. The shared tokens and
+   primitives sit on `.ucd-section`, which udc.js adds to each container
+   it builds into; the per-section blocks below also name the container's
+   own class (.ucd-hero, .ucd-trust, …), so nothing leaks onto the page.
+
+   Order: tokens, shared primitives (reset, shell, header, card, badge,
+   chip, button, reveal), then one block per section in page order, each
+   with its own responsive and reduced-motion rules.
+
+   Specificity: Elementor's page CSS writes selectors up to (0,4,0), but
+   it never targets the injected markup, which carries its own classes.
+   The only Elementor wrappers styled here are the container itself and
+   its .e-con-inner, and those rules carry an extra class to win. The
+   theme's own element rules (button, table, a:hover, p margins) are
+   beaten by the (0,2,0) class selectors below without !important.
+
+   Background images: Elementor's lazy-load blanks background-image on
+   containers below the fold until they near the viewport, so anything
+   drawn with a gradient also declares a solid background-color first.
+   ===================================================================== */
+
+.ucd-section {
+  /* Tweak to rebrand */
+  --ucd-accent: #0c68ff;                       /* site blue (HawkINT, and the Additional CSS step numbers) */
+  --ucd-accent-hover: #0a58d6;
+  --ucd-accent-ink: #0a58d6;                   /* small accent text on tints: #0c68ff is only ~4.4:1 on #f2f6ff */
+  --ucd-accent-soft: #eaf2ff;                  /* badge and chip fills */
+  --ucd-accent-light: #6aa8ff;                 /* far end of the eyebrow and bar gradients */
+  --ucd-accent-line: rgba(12, 104, 255, 0.30); /* connectors and orbits */
+  --ucd-heading: #0d1330;                      /* near-black navy */
+  --ucd-text: #5b6478;                         /* body grey: ~5.9:1 on white, ~5.6:1 on the tint */
+  --ucd-bg: #ffffff;
+  --ucd-bg-tint: #f8f9fd;                      /* plus a faint top radial: rgba(12,104,255,.045) */
+  --ucd-card-bg: #ffffff;
+  --ucd-border: #e6eaf2;
+  --ucd-border-hover: rgba(12, 104, 255, 0.28);
+  --ucd-rule: #edf0f6;
+  --ucd-shadow: 0 1px 2px rgba(13, 19, 48, 0.04),
+                0 8px 24px rgba(13, 19, 48, 0.05);
+  --ucd-shadow-hover: 0 2px 4px rgba(13, 19, 48, 0.05),
+                      0 16px 38px rgba(13, 19, 48, 0.10);
+  --ucd-focus: rgba(12, 104, 255, 0.4);
+  --ucd-radius: 16px;
+
+  /* Layout. The Elementor containers carry no padding of their own, so
+     the gutter is what keeps content off the screen edge below the
+     measure; it is added on top of the measure, so wide screens keep the
+     same content width. */
+  --ucd-measure: 1320px;
+  --ucd-gutter: 24px;                          /* 22px ≤980px, 18px ≤520px */
+  --ucd-pad-y: clamp(56px, 7vw, 92px);
+  --ucd-gap: clamp(16px, 1.6vw, 24px);
+
+  /* Clearance for a sticky site header when a capability is deep-linked
+     (#ucd-cap-itdr). */
+  --ucd-anchor-offset: 96px;
+
+  position: relative;
+  background-color: var(--ucd-bg);
+}
+
+@media (max-width: 980px) {
+  .ucd-section {
+    --ucd-gutter: 22px;
+  }
+}
+
+@media (max-width: 520px) {
+  .ucd-section {
+    --ucd-gutter: 18px;
+  }
+}
+
+/* The site's Additional CSS gives every .e-con-inner 0.5% side padding
+   and no max-width; both are reset so the shell alone sets the measure. */
+.ucd-section.e-con > .e-con-inner {
+  width: 100%;
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Tinted bands alternate with white, so no two neighbours match. */
+.ucd-section.ucd-problem,
+.ucd-section.ucd-how,
+.ucd-section.ucd-soc-models,
+.ucd-section.ucd-regulatory,
+.ucd-section.ucd-solutions {
+  background-color: var(--ucd-bg-tint);
+  background-image:
+    radial-gradient(60% 46% at 50% 0%, rgba(12, 104, 255, 0.045), transparent 70%);
+}
+
+/* ---- Reset -------------------------------------------------------------
+   The theme styles bare elements (p margins, list bullets, table borders
+   and stripes, heading fonts). :where() adds no weight, so this sits at
+   (0,2,0): above any element or kit rule, below every component rule
+   that follows it.
+   ----------------------------------------------------------------------- */
+.ucd-section .ucd-shell :where(h1, h2, h3, p, ul, ol, li, dl, dt, dd,
+                               figure, blockquote, table, th, td) {
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+}
+
+.ucd-section .ucd-shell :where(ul, ol) {
+  list-style: none;
+}
+
+/* ---- Shell ------------------------------------------------------------- */
+.ucd-section .ucd-shell {
+  width: 100%;
+  max-width: calc(var(--ucd-measure) + 2 * var(--ucd-gutter));
+  margin: 0 auto;
+  padding: var(--ucd-pad-y) var(--ucd-gutter);
+  box-sizing: border-box;
+  font-family: inherit;
+  text-align: left;
+}
+
+.ucd-section .ucd-shell *,
+.ucd-section .ucd-shell *::before,
+.ucd-section .ucd-shell *::after {
+  box-sizing: border-box;
+}
+
+/* Set by [[double brackets]] in any title. */
+.ucd-section .ucd-accent {
+  color: var(--ucd-accent);
+}
+
+.ucd-section .ucd-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- Section header ---------------------------------------------------- */
+.ucd-section .ucd-head {
+  max-width: 880px;
+  margin: 0 auto clamp(34px, 4vw, 54px);
+  text-align: center;
+}
+
+.ucd-section .ucd-head--start {
+  margin-left: 0;
+  text-align: left;
+}
+
+.ucd-section .ucd-head__bar {
+  display: block;
+  width: 64px;
+  height: 4px;
+  margin: 0 auto 20px;
+  border-radius: 2px;
+  background-color: var(--ucd-accent);
+  background-image: linear-gradient(90deg, var(--ucd-accent), var(--ucd-accent-light));
+}
+
+.ucd-section .ucd-head--start .ucd-head__bar {
+  margin-left: 0;
+}
+
+.ucd-section .ucd-head__eyebrow {
+  margin: 0 0 14px;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--ucd-accent-ink);
+}
+
+/* 700, not 800: the site only loads Figtree up to 700, and anything
+   heavier falls back to Helvetica. */
+.ucd-section .ucd-head__title {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1.14;
+  letter-spacing: -1.2px;
+  color: var(--ucd-heading);
+  text-wrap: balance;
+}
+
+.ucd-section .ucd-head__sub {
+  margin: 18px 0 0;
+  font-size: clamp(16px, 1.35vw, 18px);
+  line-height: 1.62;
+  color: var(--ucd-text);
+  text-wrap: pretty;
+}
+
+/* ---- Card ---------------------------------------------------------------
+   Static cards never move, so they never look clickable. Only a card
+   that is a link lifts, and only for a real hover: a tap on a phone
+   would otherwise leave it stuck in the raised state.
+   ----------------------------------------------------------------------- */
+.ucd-section .ucd-card {
+  background: var(--ucd-card-bg);
+  border: 1px solid var(--ucd-border);
+  border-radius: var(--ucd-radius);
+  box-shadow: var(--ucd-shadow);
+}
+
+.ucd-section .ucd-card--link {
+  position: relative;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease,
+              border-color 0.25s ease;
+}
+
+.ucd-section .ucd-card--link:hover,
+.ucd-section .ucd-card--link:focus {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  .ucd-section .ucd-card--link:hover {
+    transform: translateY(-4px);
+    border-color: var(--ucd-border-hover);
+    box-shadow: var(--ucd-shadow-hover);
+  }
+}
+
+.ucd-section .ucd-card--link:focus-visible {
+  outline: 3px solid var(--ucd-focus);
+  outline-offset: 3px;
+}
+
+/* ---- Badge (icon in a soft square) ------------------------------------- */
+.ucd-section .ucd-badge {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 13px;
+  background: var(--ucd-accent-soft);
+  color: var(--ucd-accent);
+}
+
+.ucd-section .ucd-badge svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+.ucd-section .ucd-badge--lg {
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+}
+
+.ucd-section .ucd-badge--lg svg {
+  width: 26px;
+  height: 26px;
+}
+
+/* White on #0c68ff is ~4.7:1. */
+.ucd-section .ucd-badge--solid {
+  background: var(--ucd-accent);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(12, 104, 255, 0.24);
+}
+
+/* ---- Chip --------------------------------------------------------------- */
+.ucd-section .ucd-chip {
+  display: inline-block;
+  padding: 5px 12px;
+  border: 1px solid var(--ucd-border);
+  border-radius: 999px;
+  background: var(--ucd-bg-tint);
+  font-weight: 500;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--ucd-heading);
+}
+
+/* ---- Buttons (walkthrough-cta) ----------------------------------------- */
+.ucd-section .ucd-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 26px;
+  border-radius: 10px;
+  background: var(--ucd-accent);
+  border: 1px solid var(--ucd-accent);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: clamp(14.5px, 1.1vw, 16px);
+  line-height: 1.2;
+  white-space: nowrap;
+  color: #ffffff;
+  text-decoration: none;
+  box-shadow: 0 10px 26px rgba(12, 104, 255, 0.26);
+  transition: transform 0.25s ease, background-color 0.25s ease,
+              border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.ucd-section .ucd-btn:hover,
+.ucd-section .ucd-btn:focus {
+  background: var(--ucd-accent-hover);
+  border-color: var(--ucd-accent-hover);
+  color: #ffffff;
+  text-decoration: none;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(12, 104, 255, 0.32);
+}
+
+/* Outlined twin of the primary button. */
+.ucd-section .ucd-btn--ghost {
+  background: #ffffff;
+  border-color: #c9dafc;
+  color: var(--ucd-accent-ink);
+  box-shadow: none;
+}
+
+.ucd-section .ucd-btn--ghost:hover,
+.ucd-section .ucd-btn--ghost:focus {
+  background: #ffffff;
+  border-color: var(--ucd-accent);
+  color: var(--ucd-accent-ink);
+  box-shadow: 0 12px 28px rgba(13, 19, 48, 0.08);
+}
+
+.ucd-section .ucd-btn:focus-visible {
+  outline: 3px solid var(--ucd-focus);
+  outline-offset: 3px;
+}
+
+.ucd-section .ucd-btn svg {
+  flex: 0 0 auto;
+  display: block;
+  width: 17px;
+  height: 17px;
+}
+
+/* ---- Scroll reveal ------------------------------------------------------
+   Builders mark what rises with .ucd-reveal and an inline --i for the
+   stagger. Cards that lift on hover are never the revealed element
+   themselves (their <li> is), so the hover never inherits the delay.
+   ----------------------------------------------------------------------- */
+.ucd-section .is-animated .ucd-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--i, 0) * 0.07s);
+}
+
+.ucd-section .is-animated.is-visible .ucd-reveal {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ucd-section .is-animated .ucd-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .ucd-section .ucd-card--link,
+  .ucd-section .ucd-btn {
+    transition: none;
+  }
+  .ucd-section .ucd-card--link:hover,
+  .ucd-section .ucd-btn:hover,
+  .ucd-section .ucd-btn:focus {
+    transform: none;
+  }
+}
+
+
+/* =====================================================================
+   1 · Hero (.ucd-hero → .ucd-hr)
+   ===================================================================== */
+
+/* ---- The site header ----------------------------------------------------
+   The theme header sits over the top of this section (it is positioned
+   absolutely), so the hero leaves room for it and, on desktop, paints a
+   dark band behind it.
+
+   Desktop (above 1024px): the header is transparent with a white logo
+   and light links, which vanish on this light band. The band takes the
+   colour the header turns once it sticks on scroll (rgba(8,11,26,.85)
+   over dark), so the bar looks the same at the top and scrolled. Its
+   height follows the header's, measured on cybrhawk.com at 114px (1025)
+   to 137px (2560) wide: 100px + 1.5vw lands within ~1.5px over at every
+   width. It is an inset shadow rather than a gradient, so Elementor's
+   background lazy-load can never blank it and leave the links unreadable.
+
+   Tablet and phone: a separate header with its own white background
+   and dark logo (102px tall to 768px, at most 90px below), so there is no
+   band, only the clearance.
+   ----------------------------------------------------------------------- */
+.ucd-section.ucd-hero {
+  --ucd-hr-band-top: #fbfcff;
+  --ucd-hr-band-mid: #f2f6ff;
+  --ucd-hr-bar: 0px;                           /* dark band height; desktop only */
+  --ucd-hr-bar-bg: #080b1a;                    /* the stuck header's navy */
+  --ucd-hero-offset: 90px;                     /* the header's height, cleared above the eyebrow */
+
+  overflow: hidden;
+  overflow: clip;                              /* decoration never widens the page */
+  background-color: var(--ucd-hr-band-mid);
+  /* Ends on white, the trust bar's ground, so they meet without a seam. */
+  background-image:
+    radial-gradient(42% 52% at 76% 44%, rgba(12, 104, 255, 0.07), transparent 72%),
+    linear-gradient(180deg, var(--ucd-hr-band-top) 0%, var(--ucd-hr-band-mid) 52%, #ffffff 100%);
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .ucd-section.ucd-hero {
+    --ucd-hero-offset: 102px;
+  }
+}
+
+/* The second shadow is one pixel deeper than the first, which covers all
+   but its last line: a faint indigo rule under the bar, the line the
+   mega menu draws on its panels. */
+@media (min-width: 1025px) {
+  .ucd-section.ucd-hero {
+    --ucd-hr-bar: calc(100px + 1.5vw);
+    --ucd-hero-offset: var(--ucd-hr-bar);
+    box-shadow:
+      inset 0 var(--ucd-hr-bar) 0 0 var(--ucd-hr-bar-bg),
+      inset 0 calc(var(--ucd-hr-bar) + 1px) 0 0 rgba(129, 140, 248, 0.45);
+  }
+}
+
+.ucd-hero .ucd-hr {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: center;
+  gap: clamp(32px, 4.4vw, 72px);
+  padding-top: calc(var(--ucd-hero-offset) + clamp(32px, 4vw, 56px));
+  padding-bottom: clamp(56px, 7vw, 104px);
+}
+
+/* ---- Decoration (aria-hidden) ------------------------------------------
+   Positioned against the full-width container, not the shell, so the orb
+   can sit off the corner of the screen. Faint enough to read as texture.
+   It starts under the header band, so the orb rises from beneath the bar
+   instead of tinting it behind the links.
+   ----------------------------------------------------------------------- */
+.ucd-hero .ucd-hr__decor {
+  position: absolute;
+  inset: var(--ucd-hr-bar) 0 0 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ucd-hero .ucd-hr__decor > span {
+  position: absolute;
+}
+
+.ucd-hero .ucd-hr__orb {
+  top: -220px;
+  right: -180px;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+              rgba(12, 104, 255, 0.11), rgba(12, 104, 255, 0.05) 62%, rgba(12, 104, 255, 0));
+}
+
+.ucd-hero .ucd-hr__dots {
+  width: 154px;                                /* 7 × 5 dots on a 22px grid */
+  height: 110px;
+  background-image: radial-gradient(circle, rgba(12, 104, 255, 0.36) 1.5px, transparent 2.1px);
+  background-size: 22px 22px;
+}
+
+.ucd-hero .ucd-hr__dots--tr {
+  top: clamp(24px, 3.4vw, 48px);
+  right: clamp(16px, 3vw, 48px);
+  -webkit-mask-image: linear-gradient(225deg, #000 25%, transparent 88%);
+          mask-image: linear-gradient(225deg, #000 25%, transparent 88%);
+}
+
+/* Under the drawing rather than the copy, where it would sit behind the
+   proof strip. */
+.ucd-hero .ucd-hr__dots--br {
+  bottom: clamp(12px, 2vw, 28px);
+  right: clamp(16px, 3vw, 48px);
+  -webkit-mask-image: linear-gradient(315deg, #000 25%, transparent 88%);
+          mask-image: linear-gradient(315deg, #000 25%, transparent 88%);
+}
+
+/* ---- Copy ----------------------------------------------------------------- */
+.ucd-hero .ucd-hr__copy,
+.ucd-hero .ucd-hr__visual {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.ucd-hero .ucd-hr__copy {
+  max-width: 600px;
+}
+
+/* The lead-in line is pinned to the first line of text, so it stays put
+   if the eyebrow wraps on a phone. */
+.ucd-hero .ucd-hr__eyebrow {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin: 0 0 clamp(16px, 1.6vw, 22px);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ucd-accent-ink);
+}
+
+.ucd-hero .ucd-hr__eyebrow::before {
+  content: "";
+  flex: none;
+  width: 40px;
+  height: 2px;
+  margin-top: calc(0.75em - 1px);
+  border-radius: 2px;
+  background-color: var(--ucd-accent);
+  background-image: linear-gradient(90deg, var(--ucd-accent), var(--ucd-accent-light));
+}
+
+.ucd-hero .ucd-hr__title {
+  margin: 0 0 clamp(18px, 1.8vw, 24px);
+  font-weight: 700;
+  font-size: clamp(36px, 4.4vw, 60px);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: var(--ucd-heading);
+  text-wrap: balance;
+}
+
+.ucd-hero .ucd-hr__lead {
+  margin: 0 0 14px;
+  font-size: clamp(18px, 1.45vw, 20px);
+  line-height: 1.55;
+  color: var(--ucd-heading);
+  text-wrap: pretty;
+}
+
+.ucd-hero .ucd-hr__body {
+  margin: 0 0 18px;
+  font-size: clamp(16px, 1.2vw, 17px);
+  line-height: 1.65;
+  color: var(--ucd-text);
+  text-wrap: pretty;
+}
+
+.ucd-hero .ucd-hr__tagline {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(16px, 1.2vw, 17px);
+  line-height: 1.5;
+  color: var(--ucd-heading);
+}
+
+.ucd-hero .ucd-hr__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: clamp(24px, 2.4vw, 32px);
+}
+
+.ucd-hero .ucd-hr__actions:empty {
+  display: none;
+}
+
+.ucd-hero .ucd-hr__proof {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 24px;
+  margin-top: clamp(26px, 2.6vw, 34px);
+  padding-top: clamp(20px, 2vw, 26px);
+  border-top: 1px solid #dfe5f0;
+}
+
+.ucd-hero .ucd-hr__proof-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ucd-heading);
+}
+
+.ucd-hero .ucd-hr__check {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--ucd-accent-soft);
+  color: var(--ucd-accent-ink);
+}
+
+.ucd-hero .ucd-hr__check svg {
+  display: block;
+  width: 15px;
+  height: 15px;
+  stroke-width: 2.4;
+}
+
+/* ---- Visual -------------------------------------------------------------
+   A square stage. The ring, connectors and signals share one 100×100
+   SVG; the core and node chips are HTML on top, so their labels never
+   shrink with the drawing. The stage is a size container, and type and
+   spacing scale off its width (cqw) between fixed limits; each cqw
+   declaration has a plain fallback before it.
+   ----------------------------------------------------------------------- */
+.ucd-hero .ucd-hr__visual {
+  display: flex;
+  justify-content: center;
+}
+
+.ucd-hero .ucd-hr__stage {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 1;
+  container-type: inline-size;
+}
+
+.ucd-hero .ucd-hr__links {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.ucd-hero .ucd-hr__ring {
+  fill: none;
+  stroke: var(--ucd-accent-line);
+  stroke-width: 0.55;
+  stroke-linecap: round;
+  stroke-dasharray: 0.01 2.2;                  /* round caps turn these into dots */
+}
+
+.ucd-hero .ucd-hr__ring--outer {
+  stroke: rgba(12, 104, 255, 0.12);
+  stroke-width: 0.25;
+  stroke-dasharray: none;
+}
+
+.ucd-hero .ucd-hr__lines line {
+  stroke: var(--ucd-accent-line);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.ucd-hero .ucd-hr__signal {
+  fill: var(--ucd-accent);
+  opacity: 0;
+}
+
+/* Core */
+.ucd-hero .ucd-hr__core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 112px;
+  width: clamp(100px, 30cqw, 168px);
+  aspect-ratio: 1;
+  padding: 0 10px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid var(--ucd-border);
+  box-shadow: 0 1px 2px rgba(13, 19, 48, 0.04),
+              0 14px 40px rgba(13, 25, 70, 0.10),
+              0 0 0 8px rgba(12, 104, 255, 0.05);
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+/* The pulse: a ring that swells out of the core and fades. */
+.ucd-hero .ucd-hr__core::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: 50%;
+  border: 1.5px solid rgba(12, 104, 255, 0.35);
+  opacity: 0;
+}
+
+.ucd-hero .ucd-hr__core-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  width: clamp(34px, 8.2cqw, 46px);
+  aspect-ratio: 1;
+  margin-bottom: 2px;
+  border-radius: 12px;
+  background-color: var(--ucd-accent-soft);
+  background-image: linear-gradient(160deg, #f1f6ff, #e1ecff);
+  color: var(--ucd-accent);
+}
+
+.ucd-hero .ucd-hr__core-icon svg {
+  display: block;
+  width: 56%;
+  height: 56%;
+}
+
+.ucd-hero .ucd-hr__core-name {
+  font-weight: 700;
+  font-size: 20px;
+  font-size: clamp(19px, 4.3cqw, 24px);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  color: var(--ucd-heading);
+}
+
+/* Shown only once the core is wide enough to hold it at 12px; below
+   that it would have to drop under the size the labels keep. The words
+   repeat the eyebrow, and the whole drawing is aria-hidden. */
+.ucd-hero .ucd-hr__core-caption {
+  display: none;
+  max-width: 100%;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 1.3;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ucd-text);
+  text-wrap: balance;
+}
+
+@container (min-width: 470px) {
+  .ucd-hero .ucd-hr__core-caption {
+    display: block;
+  }
+}
+
+/* Node chips, centred on their ring position. */
+.ucd-hero .ucd-hr__node {
+  position: absolute;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  gap: clamp(5px, 1.3cqw, 8px);
+  padding: 4px 9px 4px 4px;
+  padding: 4px clamp(9px, 2.3cqw, 14px) 4px 4px;
+  border: 1px solid var(--ucd-border);
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: var(--ucd-shadow);
+  font-weight: 600;
+  font-size: 12px;
+  font-size: clamp(12px, 2.5cqw, 14px);
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--ucd-heading);
+  transform: translate(-50%, -50%);
+}
+
+.ucd-hero .ucd-hr__node-icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  width: clamp(18px, 4.6cqw, 26px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--ucd-accent-soft);
+  color: var(--ucd-accent);
+}
+
+.ucd-hero .ucd-hr__node-icon svg {
+  display: block;
+  width: 62%;
+  height: 62%;
+}
+
+/* Editor-supplied image in place of the illustration. */
+.ucd-hero .ucd-hr__media {
+  width: 100%;
+  max-width: 560px;
+  margin: 0;
+}
+
+.ucd-hero .ucd-hr__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+}
+
+/* ---- Motion ---------------------------------------------------------------
+   Only transform and opacity animate. udc.js adds .is-moving when motion
+   is on and toggles .is-paused off screen or in a background tab; under
+   reduced motion none of this applies, and the drawing stays still.
+   ----------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .ucd-hero .ucd-hr__stage.is-moving .ucd-hr__signal {
+    animation: ucd-hr-signal var(--d, 3.2s) cubic-bezier(0.45, 0, 0.55, 1)
+               var(--delay, 0s) infinite;
+  }
+
+  .ucd-hero .ucd-hr__stage.is-moving .ucd-hr__core::before {
+    animation: ucd-hr-pulse 3.2s ease-out infinite;
+  }
+
+  .ucd-hero .ucd-hr__stage.is-paused .ucd-hr__signal,
+  .ucd-hero .ucd-hr__stage.is-paused .ucd-hr__core::before {
+    animation-play-state: paused;
+  }
+}
+
+/* The signal leaves from under its chip and fades as it reaches the
+   core, so it reads as arriving rather than stopping. */
+@keyframes ucd-hr-signal {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  12%  { opacity: 1; }
+  72%  { opacity: 1; }
+  92%  { opacity: 0; }
+  100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+}
+
+@keyframes ucd-hr-pulse {
+  0%   { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.32); opacity: 0; }
+}
+
+/* ---- Responsive ----------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .ucd-hero .ucd-hr {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(40px, 6vw, 56px);
+  }
+  .ucd-hero .ucd-hr__copy {
+    max-width: 680px;
+  }
+  .ucd-hero .ucd-hr__stage,
+  .ucd-hero .ucd-hr__media {
+    max-width: 520px;
+  }
+}
+
+/* Stacked, the copy runs the full width, so the dot fields would sit
+   behind the eyebrow and the drawing's chips; the orb is enough. */
+@media (max-width: 1024px) {
+  .ucd-hero .ucd-hr__dots {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .ucd-hero .ucd-hr__orb {
+    top: -170px;
+    right: -170px;
+    width: 340px;
+    height: 340px;
+  }
+}
+
+@media (max-width: 620px) {
+  .ucd-hero .ucd-hr__actions {
+    flex-direction: column;
+  }
+  .ucd-hero .ucd-btn {
+    width: 100%;
+    white-space: normal;
+  }
+  .ucd-hero .ucd-hr__eyebrow {
+    font-size: 12.5px;
+    letter-spacing: 0.16em;
+  }
+  .ucd-hero .ucd-hr__eyebrow::before {
+    width: 28px;
+  }
+}
+
+@media (max-width: 520px) {
+  .ucd-hero .ucd-hr__proof {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+
+/* =====================================================================
+   2 · Trust bar (.ucd-trust → .ucd-tb)
+   ===================================================================== */
+
+.ucd-section.ucd-trust {
+  border-top: 1px solid var(--ucd-rule);
+  border-bottom: 1px solid var(--ucd-rule);
+}
+
+.ucd-trust .ucd-tb {
+  padding-top: clamp(18px, 2vw, 26px);
+  padding-bottom: clamp(18px, 2vw, 26px);
+}
+
+/* Wrapping is only a safety net here: the row fits from 1081px up. */
+.ucd-trust .ucd-tb__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  row-gap: 10px;
+}
+
+.ucd-trust .ucd-tb__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 600;
+  font-size: clamp(14px, 1.05vw, 15px);
+  line-height: 1.3;
+  color: var(--ucd-heading);
+}
+
+/* Separators between items, generated rather than typed. */
+.ucd-trust .ucd-tb__item + .ucd-tb__item::before {
+  content: "";
+  flex: none;
+  width: 4px;
+  height: 4px;
+  margin: 0 clamp(12px, 1.7vw, 26px);
+  border-radius: 50%;
+  background: #b7c3d9;
+}
+
+.ucd-trust .ucd-tb__icon {
+  display: inline-flex;
+  color: var(--ucd-accent);
+}
+
+.ucd-trust .ucd-tb__icon svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.ucd-trust .ucd-tb__badge {
+  display: block;
+  width: auto;
+  height: 30px;
+}
+
+@media (max-width: 1080px) {
+  /* The row no longer fits, and a wrapped line would start on a
+     separator, so the items become chips. */
+  .ucd-trust .ucd-tb__list {
+    gap: 10px;
+  }
+  .ucd-trust .ucd-tb__item {
+    padding: 7px 14px 7px 11px;
+    border: 1px solid var(--ucd-border);
+    border-radius: 999px;
+    background: var(--ucd-card-bg);
+    font-size: 14px;
+  }
+  .ucd-trust .ucd-tb__item + .ucd-tb__item::before {
+    content: none;
+  }
+  .ucd-trust .ucd-tb__icon svg {
+    width: 18px;
+    height: 18px;
+  }
+  .ucd-trust .ucd-tb__badge {
+    height: 28px;
+  }
+}
+
+
+/* =====================================================================
+   3 · The enterprise problem (.ucd-problem → .ucd-pb)
+   ===================================================================== */
+
+.ucd-problem .ucd-pb__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 80px);
+}
+
+.ucd-problem .ucd-head {
+  margin-bottom: clamp(20px, 2vw, 26px);
+}
+
+.ucd-problem .ucd-pb__intro {
+  max-width: 36em;
+  margin: 0;
+  font-size: clamp(16px, 1.2vw, 17px);
+  line-height: 1.7;
+  color: var(--ucd-text);
+  text-wrap: pretty;
+}
+
+.ucd-problem .ucd-pb__points {
+  display: grid;
+  gap: var(--ucd-gap);
+}
+
+.ucd-problem .ucd-pb__point {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(14px, 1.4vw, 20px);
+  padding: clamp(20px, 2vw, 26px);
+}
+
+.ucd-problem .ucd-pb__point-text {
+  margin: 0;
+  padding-top: 2px;
+  font-size: clamp(15.5px, 1.15vw, 17px);
+  line-height: 1.6;
+  color: var(--ucd-text);
+}
+
+.ucd-problem .ucd-pb__point-text strong,
+.ucd-problem .ucd-pb__resolution-text strong {
+  font-weight: 700;
+  color: var(--ucd-heading);
+}
+
+/* The pivot of the page: the one statement the cards above lead to. */
+.ucd-problem .ucd-pb__resolution {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2vw, 26px);
+  margin-top: clamp(32px, 4vw, 56px);
+  padding: clamp(24px, 2.8vw, 36px) clamp(24px, 3.4vw, 44px);
+  padding-left: calc(clamp(24px, 3.4vw, 44px) + 4px);
+  overflow: hidden;
+  background: var(--ucd-card-bg);
+  border: 1px solid var(--ucd-border);
+  border-radius: var(--ucd-radius);
+  box-shadow: var(--ucd-shadow);
+}
+
+.ucd-problem .ucd-pb__resolution::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 4px;
+  background-color: var(--ucd-accent);
+  background-image: linear-gradient(180deg, var(--ucd-accent), var(--ucd-accent-light));
+}
+
+.ucd-problem .ucd-pb__resolution-text {
+  max-width: 54em;
+  margin: 0;
+  font-size: clamp(17px, 1.45vw, 19px);
+  line-height: 1.6;
+  color: var(--ucd-text);
+  text-wrap: balance;
+}
+
+@media (max-width: 1024px) {
+  .ucd-problem .ucd-pb__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(28px, 4vw, 40px);
+  }
+  .ucd-problem .ucd-pb__intro {
+    max-width: 44em;
+  }
+}
+
+@media (max-width: 560px) {
+  .ucd-problem .ucd-pb__resolution {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+
+/* =====================================================================
+   4 · Eight capabilities (.ucd-capabilities → .ucd-cp)
+   ---------------------------------------------------------------------
+   Each card leads with a square artwork tile beside its number and
+   title; the paragraph runs the card's full width beneath, so the long
+   copy keeps its measure even in two narrow columns. The tile holds the
+   image once CONTENT sets one, and the icon until then.
+   ===================================================================== */
+
+.ucd-capabilities .ucd-cp {
+  --ucd-cp-media: clamp(96px, 9.4vw, 136px);  /* artwork tile; the images are detailed scenes, so they get room to read */
+}
+
+.ucd-capabilities .ucd-cp__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ucd-gap);
+}
+
+/* The <li> stretches to its row; the card fills it, so every card in a
+   row is one height. */
+.ucd-capabilities .ucd-cp__item {
+  display: flex;
+  min-width: 0;
+}
+
+.ucd-capabilities .ucd-cp__card {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 1.6vw, 22px);
+  width: 100%;
+  padding: clamp(22px, 2.2vw, 32px);
+  scroll-margin-top: var(--ucd-anchor-offset);
+}
+
+.ucd-capabilities .ucd-cp__head {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 1.6vw, 22px);
+}
+
+/* The same soft tile whether it holds the image or the icon, so a card
+   keeps its shape before and after the artwork arrives. */
+.ucd-capabilities .ucd-cp__media {
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ucd-cp-media);
+  height: var(--ucd-cp-media);
+  overflow: hidden;
+  border-radius: 18px;
+  background-color: var(--ucd-accent-soft);
+  background-image: linear-gradient(160deg, #f3f7ff, #e1ecff);
+  color: var(--ucd-accent);
+}
+
+/* A hairline drawn over the top, so a pale image still has a crisp edge
+   on the white card. */
+.ucd-capabilities .ucd-cp__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(13, 19, 48, 0.06);
+  pointer-events: none;
+}
+
+/* The icon is drawn larger here than in a badge, so its stroke is
+   lightened to keep the same weight. */
+.ucd-capabilities .ucd-cp__media svg {
+  display: block;
+  width: 40%;
+  height: 40%;
+  stroke-width: 1.4;
+}
+
+.ucd-capabilities .ucd-cp__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ucd-capabilities .ucd-cp__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.ucd-capabilities .ucd-cp__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 26px;
+  margin-bottom: 10px;
+  padding: 0 8px;
+  border-radius: 8px;
+  background: var(--ucd-accent-soft);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ucd-accent-ink);
+}
+
+.ucd-capabilities .ucd-cp__title {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(19px, 1.6vw, 22px);
+  line-height: 1.25;
+  letter-spacing: -0.3px;
+  color: var(--ucd-heading);
+}
+
+.ucd-capabilities .ucd-cp__full {
+  margin: 4px 0 0;
+  font-weight: 600;
+  font-size: 14.5px;
+  line-height: 1.4;
+  color: var(--ucd-accent-ink);
+}
+
+.ucd-capabilities .ucd-cp__text {
+  max-width: 68ch;
+  margin: 0;
+  font-size: clamp(15px, 1.1vw, 16px);
+  line-height: 1.65;
+  color: var(--ucd-text);
+  text-wrap: pretty;
+}
+
+@media (max-width: 899px) {
+  .ucd-capabilities .ucd-cp__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 440px) {
+  .ucd-capabilities .ucd-cp {
+    --ucd-cp-media: 84px;
+  }
+  .ucd-capabilities .ucd-cp__media {
+    border-radius: 14px;
+  }
+  .ucd-capabilities .ucd-cp__head {
+    gap: 14px;
+  }
+}
+
+
+/* =====================================================================
+   5 · How UCD works (.ucd-how → .ucd-hw)
+   ---------------------------------------------------------------------
+   The how-it-works pipeline. Every connector is derived from the gap
+   and the column count, so nothing is measured: the step-to-step lines
+   span the gap, and the return line runs between the centres of the
+   first and last columns, (100% − 4 gaps) / 10 in from each side.
+   ===================================================================== */
+
+.ucd-how .ucd-hw {
+  --ucd-hw-loop: 46px;                         /* height of the return line above the row */
+}
+
+.ucd-how .ucd-hw__steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  column-gap: var(--ucd-gap);
+  align-items: start;
+  padding-top: var(--ucd-hw-loop);
+}
+
+/* The return line: Prove back to Sense. A dashed bracket whose sides
+   come down onto the centres of the two cards. Generated content with
+   no text, so assistive tech never sees it; the heading already says
+   it is a loop. */
+.ucd-how .ucd-hw__steps::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: calc((100% - 4 * var(--ucd-gap)) / 10 - 1px);
+  right: calc((100% - 4 * var(--ucd-gap)) / 10 - 1px);
+  height: calc(var(--ucd-hw-loop) - 6px);
+  border: 2px dashed rgba(12, 104, 255, 0.42);
+  border-bottom: 0;
+  border-radius: 18px 18px 0 0;
+  pointer-events: none;
+}
+
+/* Arrowhead pointing down into Sense, its tip on the card's top edge. */
+.ucd-how .ucd-hw__steps::after {
+  content: "";
+  position: absolute;
+  top: calc(var(--ucd-hw-loop) - 11px);
+  left: calc((100% - 4 * var(--ucd-gap)) / 10);
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--ucd-accent);
+  border-bottom: 2px solid var(--ucd-accent);
+  transform: translateX(-50%) rotate(45deg);
+  pointer-events: none;
+}
+
+.ucd-how .ucd-hw__step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  text-align: center;
+}
+
+.ucd-how .ucd-hw__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: clamp(14px, 1.6vw, 20px);
+  padding: clamp(20px, 1.9vw, 26px) clamp(10px, 1.2vw, 18px);
+  background: var(--ucd-card-bg);
+  border: 1px solid var(--ucd-border);
+  border-radius: var(--ucd-radius);
+  box-shadow: var(--ucd-shadow);
+}
+
+/* Connector reaching back to the previous card. It spans the whole gap
+   and tucks 1px under each card so no hairline gap shows at the joins. */
+.ucd-how .ucd-hw__step + .ucd-hw__step .ucd-hw__card::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  width: calc(var(--ucd-gap) + 2px);
+  height: 2px;
+  border-radius: 1px;
+  background-color: rgba(12, 104, 255, 0.4);
+  background-image: linear-gradient(90deg, rgba(12, 104, 255, 0.18), rgba(12, 104, 255, 0.55));
+  transform: translateY(-50%);
+}
+
+/* The dot sits on the card's own edge, capping the line. */
+.ucd-how .ucd-hw__step + .ucd-hw__step .ucd-hw__card::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: calc(100% - 4px);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ucd-accent);
+  box-shadow: 0 0 0 3px var(--ucd-bg-tint);
+  transform: translateY(-50%);
+}
+
+.ucd-how .ucd-hw__icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  background: var(--ucd-accent-soft);
+  color: var(--ucd-accent);
+}
+
+.ucd-how .ucd-hw__icon svg {
+  display: block;
+  width: 26px;
+  height: 26px;
+}
+
+.ucd-how .ucd-hw__name {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(17px, 1.35vw, 19px);
+  line-height: 1.3;
+  letter-spacing: -0.2px;
+  color: var(--ucd-heading);
+}
+
+.ucd-how .ucd-hw__text {
+  margin: 0;
+  padding: 0 clamp(0px, 0.4vw, 6px);
+  font-size: clamp(14px, 1.05vw, 15px);
+  line-height: 1.6;
+  color: var(--ucd-text);
+}
+
+/* The return line fades in with the row rather than ahead of it. */
+.ucd-how .ucd-hw.is-animated .ucd-hw__steps::before,
+.ucd-how .ucd-hw.is-animated .ucd-hw__steps::after {
+  opacity: 0;
+  transition: opacity 0.6s ease 0.5s;
+}
+
+.ucd-how .ucd-hw.is-animated.is-visible .ucd-hw__steps::before,
+.ucd-how .ucd-hw.is-animated.is-visible .ucd-hw__steps::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ucd-how .ucd-hw.is-animated .ucd-hw__steps::before,
+  .ucd-how .ucd-hw.is-animated .ucd-hw__steps::after {
+    opacity: 1;
+    transition: none;
+  }
+}
+
+/* ---- Below 1024px: a vertical timeline -----------------------------------
+   Each step becomes a row: the icon on its own card at the left, name
+   and text beside it. The desktop card steps aside (display: contents),
+   so its icon and name join the row's grid directly. The line down to
+   the next step hangs off the step itself, top of its icon to the next
+   step's top, so it follows each step's height without measuring.
+   ----------------------------------------------------------------------- */
+@media (max-width: 1023px) {
+  .ucd-how .ucd-hw {
+    --ucd-hw-icon: 60px;
+    --ucd-hw-row-gap: 30px;
+  }
+
+  .ucd-how .ucd-hw__steps {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--ucd-hw-row-gap);
+    max-width: 680px;
+    margin: 0 auto;
+    padding-top: 0;
+  }
+
+  .ucd-how .ucd-hw__steps::before,
+  .ucd-how .ucd-hw__steps::after {
+    content: none;
+  }
+
+  .ucd-how .ucd-hw__step {
+    display: grid;
+    grid-template-columns: var(--ucd-hw-icon) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(16px, 3vw, 24px);
+    text-align: left;
+  }
+
+  .ucd-how .ucd-hw__card {
+    display: contents;
+  }
+
+  .ucd-how .ucd-hw__step + .ucd-hw__step .ucd-hw__card::before,
+  .ucd-how .ucd-hw__step + .ucd-hw__step .ucd-hw__card::after {
+    content: none;
+  }
+
+  .ucd-how .ucd-hw__icon {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: start;
+    width: var(--ucd-hw-icon);
+    height: var(--ucd-hw-icon);
+    border-radius: var(--ucd-radius);
+    background: var(--ucd-card-bg);
+    border: 1px solid var(--ucd-border);
+    box-shadow: var(--ucd-shadow);
+  }
+
+  .ucd-how .ucd-hw__name {
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 6px;
+  }
+
+  .ucd-how .ucd-hw__text {
+    grid-column: 2;
+    grid-row: 2;
+    margin-top: 4px;
+    padding: 0;
+  }
+
+  .ucd-how .ucd-hw__step:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    top: var(--ucd-hw-icon);
+    bottom: calc(-1 * var(--ucd-hw-row-gap));
+    left: calc(var(--ucd-hw-icon) / 2 - 1px);
+    width: 2px;
+    background-color: rgba(12, 104, 255, 0.4);
+    background-image: linear-gradient(180deg, rgba(12, 104, 255, 0.18), rgba(12, 104, 255, 0.55));
+  }
+
+  .ucd-how .ucd-hw__step + .ucd-hw__step .ucd-hw__icon::after {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--ucd-accent);
+    box-shadow: 0 0 0 3px var(--ucd-bg-tint);
+    transform: translateX(-50%);
+  }
+}
+
+
+/* =====================================================================
+   6 · What you get (.ucd-outcomes → .ucd-oc)
+   ===================================================================== */
+
+.ucd-outcomes .ucd-oc {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "head  cards"
+    "quote cards";
+  column-gap: clamp(32px, 5vw, 80px);
+  row-gap: clamp(26px, 3vw, 38px);
+}
+
+.ucd-outcomes .ucd-head {
+  grid-area: head;
+  margin: 0;
+}
+
+.ucd-outcomes .ucd-oc__cards {
+  grid-area: cards;
+  align-self: center;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ucd-gap);
+}
+
+.ucd-outcomes .ucd-oc__card {
+  padding: clamp(22px, 2vw, 28px);
+}
+
+.ucd-outcomes .ucd-oc__title {
+  margin: 18px 0 0;
+  font-weight: 700;
+  font-size: clamp(18px, 1.45vw, 20px);
+  line-height: 1.3;
+  letter-spacing: -0.2px;
+  color: var(--ucd-heading);
+}
+
+.ucd-outcomes .ucd-oc__text {
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 1.62;
+  color: var(--ucd-text);
+}
+
+.ucd-outcomes .ucd-oc__quote {
+  grid-area: quote;
+  align-self: start;
+  position: relative;
+  margin: 0;
+  padding: 2px 0 2px 26px;
+  border: 0;
+  background: none;
+  font-style: normal;
+  quotes: none;
+}
+
+.ucd-outcomes .ucd-oc__quote::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 4px;
+  border-radius: 2px;
+  background-color: var(--ucd-accent);
+  background-image: linear-gradient(180deg, var(--ucd-accent), var(--ucd-accent-light));
+}
+
+.ucd-outcomes .ucd-oc__quote p {
+  max-width: 22em;
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(20px, 1.9vw, 24px);
+  line-height: 1.35;
+  letter-spacing: -0.3px;
+  color: var(--ucd-heading);
+  text-wrap: balance;
+}
+
+@media (max-width: 1024px) {
+  .ucd-outcomes .ucd-oc {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-template-areas:
+      "head"
+      "cards"
+      "quote";
+  }
+}
+
+@media (max-width: 560px) {
+  .ucd-outcomes .ucd-oc__cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+
+/* =====================================================================
+   7 · Choose your SOC model (.ucd-soc-models → .ucd-sm)
+   ---------------------------------------------------------------------
+   Flex rather than grid, so a short last row centres instead of hanging
+   left: five across, then three (3 + 2), then two (2 + 2 + 1), then one.
+   Each basis is computed from the gap, keeping cards at about 220px or
+   wider at every step.
+
+   Each card opens with a 3:2 artwork panel, edge to edge across the top.
+   On one column it crops to 16:9, so five stacked cards stay short on a
+   phone. That trims about 8% off the top and bottom, which every image
+   clears (the Co-managed sun comes closest, at 9%).
+   ===================================================================== */
+
+.ucd-soc-models .ucd-sm {
+  --ucd-sm-pad: clamp(20px, 1.8vw, 26px);
+  --ucd-sm-ratio: 3 / 2;
+}
+
+.ucd-soc-models .ucd-sm__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--ucd-gap);
+}
+
+.ucd-soc-models .ucd-sm__item {
+  display: flex;
+  flex: 0 1 calc((100% - 4 * var(--ucd-gap)) / 5);
+  min-width: 0;
+}
+
+.ucd-soc-models .ucd-sm__card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: var(--ucd-sm-pad);
+}
+
+/* Pulled out over the card's padding to its inner edge, with the card's
+   top corners less its 1px border. The same soft panel whether it holds
+   the image or the icon, so a card keeps its shape before and after the
+   artwork arrives. */
+.ucd-soc-models .ucd-sm__media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: var(--ucd-sm-ratio);
+  margin: calc(-1 * var(--ucd-sm-pad)) calc(-1 * var(--ucd-sm-pad)) var(--ucd-sm-pad);
+  overflow: hidden;
+  border-radius: calc(var(--ucd-radius) - 1px) calc(var(--ucd-radius) - 1px) 0 0;
+  background-color: var(--ucd-accent-soft);
+  background-image: linear-gradient(160deg, #f3f7ff, #e1ecff);
+  color: var(--ucd-accent);
+}
+
+/* A hairline under the panel, drawn over the image so a pale one still
+   meets the white card with a crisp edge. */
+.ucd-soc-models .ucd-sm__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 -1px 0 0 var(--ucd-rule);
+  pointer-events: none;
+}
+
+/* Lighter stroke for the larger drawing, as on the capability tiles. */
+.ucd-soc-models .ucd-sm__media svg {
+  display: block;
+  width: clamp(48px, 4.4vw, 64px);
+  height: clamp(48px, 4.4vw, 64px);
+  stroke-width: 1.4;
+}
+
+.ucd-soc-models .ucd-sm__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ucd-soc-models .ucd-sm__head {
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ucd-rule);
+}
+
+.ucd-soc-models .ucd-sm__name {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(17px, 1.35vw, 19px);
+  line-height: 1.3;
+  letter-spacing: -0.2px;
+  color: var(--ucd-heading);
+}
+
+/* #0a58d6 on #eaf2ff is ~5.5:1. */
+.ucd-soc-models .ucd-sm__coverage {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 12px 0 0;
+  padding: 4px 11px 4px 8px;
+  border-radius: 999px;
+  background: var(--ucd-accent-soft);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--ucd-accent-ink);
+}
+
+.ucd-soc-models .ucd-sm__coverage svg {
+  flex: 0 0 auto;
+  display: block;
+  width: 15px;
+  height: 15px;
+}
+
+.ucd-soc-models .ucd-sm__facts {
+  display: grid;
+  gap: 16px;
+  margin: 18px 0 0;
+}
+
+.ucd-soc-models .ucd-sm__fact dt {
+  margin: 0 0 5px;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--ucd-heading);
+}
+
+.ucd-soc-models .ucd-sm__fact dd {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ucd-text);
+}
+
+@media (max-width: 1199px) {
+  .ucd-soc-models .ucd-sm__item {
+    flex-basis: calc((100% - 2 * var(--ucd-gap)) / 3);
+  }
+}
+
+@media (max-width: 760px) {
+  .ucd-soc-models .ucd-sm__item {
+    flex-basis: calc((100% - var(--ucd-gap)) / 2);
+  }
+}
+
+@media (max-width: 600px) {
+  .ucd-soc-models .ucd-sm {
+    --ucd-sm-ratio: 16 / 9;
+  }
+  .ucd-soc-models .ucd-sm__item {
+    flex-basis: 100%;
+  }
+}
+
+
+/* =====================================================================
+   8 · Mapped to NIST CSF 2.0 (.ucd-nist → .ucd-ns)
+   ===================================================================== */
+
+.ucd-nist .ucd-ns__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--ucd-gap);
+}
+
+.ucd-nist .ucd-ns__tile {
+  padding: clamp(22px, 2vw, 28px);
+}
+
+.ucd-nist .ucd-ns__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ucd-nist .ucd-ns__code {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--ucd-accent-soft);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  color: var(--ucd-accent-ink);
+}
+
+.ucd-nist .ucd-ns__name {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(19px, 1.5vw, 21px);
+  line-height: 1.25;
+  letter-spacing: -0.3px;
+  color: var(--ucd-heading);
+}
+
+.ucd-nist .ucd-ns__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+/* Some chips start lower-case in the copy. The source text stays as
+   written; only the display capitalises the first letter. */
+.ucd-nist .ucd-ns__chips .ucd-chip::first-letter {
+  text-transform: uppercase;
+}
+
+@media (max-width: 899px) {
+  .ucd-nist .ucd-ns__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 559px) {
+  .ucd-nist .ucd-ns__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+
+/* =====================================================================
+   9 · Built for the regulatory clock (.ucd-regulatory → .ucd-rg)
+   ===================================================================== */
+
+/* The frame holds the radius and clip; a table's own overflow is not
+   reliably honoured across browsers. */
+.ucd-regulatory .ucd-rg__frame {
+  overflow: hidden;
+  background: var(--ucd-card-bg);
+  border: 1px solid var(--ucd-border);
+  border-radius: var(--ucd-radius);
+  box-shadow: var(--ucd-shadow);
+}
+
+.ucd-regulatory .ucd-rg__table {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+  background: transparent;
+  font-size: inherit;
+}
+
+.ucd-regulatory .ucd-rg__table thead th {
+  padding: 16px clamp(18px, 2vw, 28px);
+  border: 0;
+  background: var(--ucd-heading);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.4;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-align: left;
+  color: #ffffff;
+}
+
+/* Beats the theme's zebra stripes and hover tint as well as its borders. */
+.ucd-regulatory .ucd-rg__table tbody th,
+.ucd-regulatory .ucd-rg__table tbody td {
+  padding: clamp(18px, 1.8vw, 24px) clamp(18px, 2vw, 28px);
+  border: 0;
+  background: var(--ucd-card-bg);
+  font-size: clamp(15px, 1.15vw, 16px);
+  line-height: 1.6;
+  text-align: left;
+  vertical-align: top;
+  color: var(--ucd-text);
+}
+
+.ucd-regulatory .ucd-rg__table tbody tr + tr > * {
+  border-top: 1px solid var(--ucd-rule);
+}
+
+.ucd-regulatory .ucd-rg__table tbody th {
+  width: 26%;
+  font-weight: 700;
+  color: var(--ucd-heading);
+}
+
+.ucd-regulatory .ucd-rg__table tbody td:nth-child(2) {
+  width: 24%;
+}
+
+/* The durations, set by [[…]] in the timelines. #0a58d6 on white is
+   ~6.2:1. Each is kept on one line: "one / month" split across a break
+   reads as two separate facts. */
+.ucd-regulatory .ucd-rg__table .ucd-accent {
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--ucd-accent-ink);
+}
+
+/* A disclaimer, so it is set at reading size, not in small print. */
+.ucd-regulatory .ucd-rg__note {
+  max-width: 760px;
+  margin: clamp(24px, 3vw, 36px) auto 0;
+  font-size: clamp(15px, 1.15vw, 16px);
+  line-height: 1.65;
+  text-align: center;
+  color: var(--ucd-text);
+  text-wrap: pretty;
+}
+
+.ucd-regulatory .ucd-rg__note strong {
+  font-weight: 700;
+  color: var(--ucd-heading);
+}
+
+/* ---- ≤760px: each row becomes a card --------------------------------------
+   Nothing scrolls sideways. The column headings are hidden visually but
+   stay in the table, and each cell shows its own label from data-label.
+   The `/ ""` gives that label empty alt text, so screen readers, which
+   already hear the column header, do not hear it twice; browsers that
+   do not know the syntax keep the line before it.
+   ----------------------------------------------------------------------- */
+@media (max-width: 760px) {
+  .ucd-regulatory .ucd-rg__frame {
+    overflow: visible;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .ucd-regulatory .ucd-rg__table,
+  .ucd-regulatory .ucd-rg__table tbody,
+  .ucd-regulatory .ucd-rg__table tr,
+  .ucd-regulatory .ucd-rg__table tbody th,
+  .ucd-regulatory .ucd-rg__table tbody td,
+  .ucd-regulatory .ucd-rg__table tbody td:nth-child(2) {
+    display: block;
+    width: 100%;
+  }
+
+  .ucd-regulatory .ucd-rg__table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .ucd-regulatory .ucd-rg__table tbody tr {
+    padding: 20px;
+    background: var(--ucd-card-bg);
+    border: 1px solid var(--ucd-border);
+    border-radius: var(--ucd-radius);
+    box-shadow: var(--ucd-shadow);
+  }
+
+  .ucd-regulatory .ucd-rg__table tbody tr + tr {
+    margin-top: 14px;
+  }
+
+  .ucd-regulatory .ucd-rg__table tbody tr + tr > th {
+    border-top: 0;
+  }
+
+  .ucd-regulatory .ucd-rg__table tbody th {
+    padding: 0 0 14px;
+    font-size: 18px;
+    line-height: 1.35;
+  }
+
+  .ucd-regulatory .ucd-rg__table tbody td {
+    padding: 14px 0 0;
+    border-top: 1px solid var(--ucd-rule);
+  }
+
+  .ucd-regulatory .ucd-rg__table tbody td + td {
+    margin-top: 14px;
+  }
+
+  .ucd-regulatory .ucd-rg__table tbody td::before {
+    content: attr(data-label);
+    content: attr(data-label) / "";
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 1.4;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--ucd-heading);
+  }
+}
+
+
+/* =====================================================================
+   10 · Industries we serve (.ucd-industries → .ucd-in)
+   ---------------------------------------------------------------------
+   The tiles are not links, so they do not move on hover.
+   ===================================================================== */
+
+.ucd-industries .ucd-in__grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--ucd-gap);
+}
+
+.ucd-industries .ucd-in__tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: clamp(20px, 2vw, 26px) 12px clamp(18px, 1.8vw, 22px);
+  text-align: center;
+}
+
+.ucd-industries .ucd-in__name {
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.3;
+  color: var(--ucd-heading);
+  overflow-wrap: anywhere;
+}
+
+/* "And more": an open, dashed tile, quieter than the named ones. */
+.ucd-industries .ucd-in__tile--more {
+  background: transparent;
+  border: 1.5px dashed #c6d0e2;
+  border-radius: var(--ucd-radius);
+  box-shadow: none;
+}
+
+.ucd-industries .ucd-in__tile--more .ucd-in__name {
+  color: var(--ucd-text);
+}
+
+.ucd-industries .ucd-in__plus {
+  background: transparent;
+  border: 1.5px dashed #c6d0e2;
+  color: var(--ucd-text);
+}
+
+@media (max-width: 1179px) {
+  .ucd-industries .ucd-in__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 899px) {
+  .ucd-industries .ucd-in__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 599px) {
+  .ucd-industries .ucd-in__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ucd-industries .ucd-in__tile {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+
+/* =====================================================================
+   11 · Part of CybrHawk's five solutions (.ucd-solutions → .ucd-sl)
+   ---------------------------------------------------------------------
+   The landscape layout. The column gap is fixed at 30px, so the 380px
+   connector SVG spans exactly the 320px hub column and both gaps.
+   ===================================================================== */
+
+.ucd-solutions .ucd-sl__stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: 30px;
+  row-gap: clamp(20px, 2.2vw, 30px);
+}
+
+/* Hub first in source (it is solution 01); the four cards fill
+   clockwise from the top left. */
+.ucd-solutions .ucd-sl__hub              { grid-area: 1 / 2 / 3 / 3; }
+.ucd-solutions .ucd-sl__item:nth-child(2) { grid-area: 1 / 1; }
+.ucd-solutions .ucd-sl__item:nth-child(3) { grid-area: 1 / 3; }
+.ucd-solutions .ucd-sl__item:nth-child(4) { grid-area: 2 / 1; }
+.ucd-solutions .ucd-sl__item:nth-child(5) { grid-area: 2 / 3; }
+
+.ucd-solutions .ucd-sl__item {
+  display: flex;
+  min-width: 0;
+}
+
+/* Shared by the link and the plain card. */
+.ucd-solutions .ucd-sl__card {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(14px, 1.3vw, 20px);
+  width: 100%;
+  padding: clamp(20px, 1.9vw, 28px);
+}
+
+.ucd-solutions .ucd-sl__body {
+  min-width: 0;
+}
+
+.ucd-solutions .ucd-card--link .ucd-sl__body {
+  padding-right: 30px;                         /* clear of the arrow */
+}
+
+.ucd-solutions .ucd-sl__name {
+  margin: 0 0 8px;
+  font-weight: 700;
+  font-size: clamp(17px, 1.4vw, 20px);
+  line-height: 1.28;
+  letter-spacing: -0.3px;
+  color: var(--ucd-heading);
+}
+
+.ucd-solutions .ucd-sl__num {
+  color: var(--ucd-accent-ink);
+}
+
+.ucd-solutions .ucd-sl__focus {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ucd-text);
+}
+
+.ucd-solutions .ucd-sl__tagline {
+  margin: 10px 0 0;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ucd-accent-ink);
+}
+
+.ucd-solutions .ucd-sl__go {
+  position: absolute;
+  top: clamp(18px, 1.8vw, 24px);
+  right: clamp(18px, 1.8vw, 24px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--ucd-accent-soft);
+  color: var(--ucd-accent-ink);
+  transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+}
+
+.ucd-solutions .ucd-sl__go svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+@media (hover: hover) {
+  .ucd-solutions .ucd-card--link:hover .ucd-sl__go {
+    background: var(--ucd-accent);
+    color: #ffffff;
+    transform: translateX(3px);
+  }
+}
+
+/* ---- Hub ---------------------------------------------------------------- */
+.ucd-solutions .ucd-sl__hub {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 420px;
+}
+
+.ucd-solutions .ucd-sl__links {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 380px;
+  height: 420px;
+  margin: -210px 0 0 -190px;
+  color: var(--ucd-accent-line);
+  pointer-events: none;
+}
+
+.ucd-solutions .ucd-sl__orb {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  height: 300px;
+}
+
+.ucd-solutions .ucd-sl__ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--ucd-accent-line);
+}
+
+.ucd-solutions .ucd-sl__core {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 208px;
+  height: 208px;
+  padding: 0 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid var(--ucd-border);
+  box-shadow: 0 10px 40px rgba(13, 25, 70, 0.08);
+  text-align: center;
+}
+
+.ucd-solutions .ucd-sl__core-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 12px;
+  border-radius: 20px;
+  background-color: var(--ucd-accent-soft);
+  background-image: linear-gradient(160deg, #f1f6ff, #e1ecff);
+  color: var(--ucd-accent);
+}
+
+.ucd-solutions .ucd-sl__core-icon svg {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+
+.ucd-solutions .ucd-sl__hub-name {
+  margin: 0 0 4px;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.25;
+  letter-spacing: -0.2px;
+  color: var(--ucd-heading);
+}
+
+.ucd-solutions .ucd-sl__caption {
+  margin: 0;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--ucd-text);
+}
+
+/* ---- Explore link --------------------------------------------------------- */
+.ucd-solutions .ucd-sl__more {
+  margin: clamp(28px, 3.4vw, 44px) 0 0;
+  text-align: center;
+}
+
+.ucd-solutions .ucd-sl__more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 2px;
+  font-weight: 600;
+  font-size: clamp(15px, 1.15vw, 16px);
+  line-height: 1.4;
+  color: var(--ucd-accent-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.ucd-solutions .ucd-sl__more-link:hover,
+.ucd-solutions .ucd-sl__more-link:focus {
+  color: var(--ucd-accent-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+.ucd-solutions .ucd-sl__more-link:focus-visible {
+  outline: 3px solid var(--ucd-focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.ucd-solutions .ucd-sl__more-link svg {
+  display: block;
+  width: 17px;
+  height: 17px;
+  transition: transform 0.25s ease;
+}
+
+@media (hover: hover) {
+  .ucd-solutions .ucd-sl__more-link:hover svg {
+    transform: translateX(3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ucd-solutions .ucd-sl__go,
+  .ucd-solutions .ucd-sl__more-link svg {
+    transition: none;
+  }
+  .ucd-solutions .ucd-card--link:hover .ucd-sl__go,
+  .ucd-solutions .ucd-sl__more-link:hover svg {
+    transform: none;
+  }
+}
+
+/* ---- Responsive ------------------------------------------------------------
+   Below the desktop layout the hub moves above the cards and the
+   connectors are dropped: they only make sense pointing sideways.
+   ----------------------------------------------------------------------- */
+@media (max-width: 1120px) {
+  .ucd-solutions .ucd-sl__stage {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto auto auto;
+    column-gap: var(--ucd-gap);
+    row-gap: var(--ucd-gap);
+  }
+  .ucd-solutions .ucd-sl__hub               { grid-area: 1 / 1 / 2 / 3; }
+  .ucd-solutions .ucd-sl__item:nth-child(2) { grid-area: 2 / 1; }
+  .ucd-solutions .ucd-sl__item:nth-child(3) { grid-area: 2 / 2; }
+  .ucd-solutions .ucd-sl__item:nth-child(4) { grid-area: 3 / 1; }
+  .ucd-solutions .ucd-sl__item:nth-child(5) { grid-area: 3 / 2; }
+
+  .ucd-solutions .ucd-sl__links {
+    display: none;
+  }
+  .ucd-solutions .ucd-sl__hub {
+    min-height: 0;
+    margin-bottom: clamp(6px, 1vw, 14px);
+  }
+}
+
+/* Source order already puts the hub first, so auto placement keeps it
+   above the cards. */
+@media (max-width: 680px) {
+  .ucd-solutions .ucd-sl__stage {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+  .ucd-solutions .ucd-sl__hub,
+  .ucd-solutions .ucd-sl__item:nth-child(2),
+  .ucd-solutions .ucd-sl__item:nth-child(3),
+  .ucd-solutions .ucd-sl__item:nth-child(4),
+  .ucd-solutions .ucd-sl__item:nth-child(5) {
+    grid-area: auto;
+  }
+  .ucd-solutions .ucd-sl__orb {
+    width: 260px;
+    height: 260px;
+  }
+  .ucd-solutions .ucd-sl__core {
+    width: 188px;
+    height: 188px;
+  }
+}
+
+@media (max-width: 440px) {
+  .ucd-solutions .ucd-sl__card {
+    flex-direction: column;
+    gap: 14px;
+  }
+  .ucd-solutions .ucd-card--link .ucd-sl__body {
+    padding-right: 0;
+  }
+}
+
+
+/* =====================================================================
+   12 · FAQ (.ucd-faq → .ucd-fq)
+   ---------------------------------------------------------------------
+   Ends on white with its normal bottom padding: the site's closing CTA
+   component follows directly.
+   ===================================================================== */
+
+.ucd-faq .ucd-fq {
+  max-width: calc(880px + 2 * var(--ucd-gutter));
+}
+
+.ucd-faq .ucd-fq__list {
+  border-top: 1px solid var(--ucd-rule);
+}
+
+.ucd-faq .ucd-fq__item {
+  border-bottom: 1px solid var(--ucd-rule);
+}
+
+.ucd-faq .ucd-fq__q {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* A full reset: the theme gives every <button> a coloured border, a
+   filled hover and focus, centred nowrap text and its own font size. */
+.ucd-faq .ucd-fq__btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  margin: 0;
+  padding: 22px 4px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  box-shadow: none;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: clamp(17px, 1.3vw, 18px);
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-align: left;
+  text-transform: none;
+  white-space: normal;
+  color: var(--ucd-heading);
+  cursor: pointer;
+  transition: none;
+  -webkit-appearance: none;
+          appearance: none;
+}
+
+.ucd-faq .ucd-fq__btn:hover,
+.ucd-faq .ucd-fq__btn:focus,
+.ucd-faq .ucd-fq__btn:active {
+  background: transparent;
+  color: var(--ucd-heading);
+  text-decoration: none;
+}
+
+.ucd-faq .ucd-fq__btn:focus-visible {
+  outline: 3px solid var(--ucd-focus);
+  outline-offset: 3px;
+}
+
+.ucd-faq .ucd-fq__q-text {
+  min-width: 0;
+}
+
+.ucd-faq .ucd-fq__icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--ucd-border);
+  color: var(--ucd-accent);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.ucd-faq .ucd-fq__icon svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+@media (hover: hover) {
+  .ucd-faq .ucd-fq__btn:hover .ucd-fq__icon {
+    border-color: var(--ucd-border-hover);
+  }
+}
+
+.ucd-faq .ucd-fq__btn[aria-expanded="true"] .ucd-fq__icon {
+  background: var(--ucd-accent-soft);
+  border-color: transparent;
+}
+
+/* Plus to minus: the vertical stroke folds flat. */
+.ucd-faq .ucd-fq__v {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+
+.ucd-faq .ucd-fq__btn[aria-expanded="true"] .ucd-fq__v {
+  transform: scaleY(0);
+}
+
+/* No display here: the `hidden` attribute has to keep hiding it. */
+.ucd-faq .ucd-fq__a {
+  padding: 0 58px 24px 4px;
+}
+
+.ucd-faq .ucd-fq__a p {
+  max-width: 68ch;
+  margin: 0;
+  font-size: clamp(15.5px, 1.2vw, 17px);
+  line-height: 1.7;
+  color: var(--ucd-text);
+}
+
+/* `display` cannot be transitioned, so opening is a keyframe fade on the
+   newly shown answer rather than a two-state transition. */
+.ucd-faq .ucd-fq__a:not([hidden]) {
+  animation: ucd-fq-fade 0.3s ease both;
+}
+
+@keyframes ucd-fq-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ucd-faq .ucd-fq__a:not([hidden]) {
+    animation: none;
+  }
+  .ucd-faq .ucd-fq__v,
+  .ucd-faq .ucd-fq__icon {
+    transition: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .ucd-faq .ucd-fq__btn {
+    gap: 14px;
+    padding: 18px 2px;
+  }
+  .ucd-faq .ucd-fq__a {
+    padding: 0 2px 20px;
+  }
+}

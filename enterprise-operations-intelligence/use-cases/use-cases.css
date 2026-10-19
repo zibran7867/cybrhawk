@@ -1,0 +1,621 @@
+/* =====================================================================
+   WEI / HawkOps — "Use cases by segment" styles
+   (markup injected by use-cases.js)
+   All rules are scoped under .use-cases.
+   ===================================================================== */
+
+.use-cases {
+  /* Tweak to rebrand */
+  --uc-accent: #3b52f6;
+  --uc-accent-soft: #eef1ff;                   /* icon badge fill */
+  --uc-bg: #f8f9fd;
+  --uc-heading: #0d1330;                       /* near-black navy */
+  --uc-text: #5b6478;                          /* body grey */
+  --uc-card-bg: #ffffff;
+  --uc-border: #e8ebf3;
+  --uc-rule: #edf0f6;                          /* divider above frameworks */
+  --uc-thumb-a: #f1f5ff;                       /* thumbnail gradient */
+  --uc-thumb-b: #e3eaff;
+  --uc-shadow: 0 1px 2px rgba(13, 19, 48, 0.03),
+               0 10px 30px rgba(13, 19, 48, 0.04);
+  --uc-shadow-hover: 0 2px 4px rgba(13, 19, 48, 0.05),
+                     0 22px 46px rgba(13, 19, 48, 0.11);
+
+  /* Side gutter. The Elementor container carries no padding of its own,
+     so without this the content runs into the screen edge below the
+     measure. Same steps as the hero (24 / 22 / 18px). */
+  --uc-gutter: 24px;
+
+  background-color: var(--uc-bg);
+  background-image:
+    radial-gradient(60% 46% at 50% 0%, rgba(59, 82, 246, 0.05), transparent 70%);
+}
+
+/* ---- Shell ------------------------------------------------------------
+   The gutter is added on top of the 1320px measure, so wide screens
+   keep the same content width and only narrower ones gain the inset.
+   ---------------------------------------------------------------------- */
+.use-cases .wei-uc {
+  width: 100%;
+  max-width: calc(1320px + 2 * var(--uc-gutter));
+  margin: 0 auto;
+  padding: clamp(56px, 7vw, 92px) var(--uc-gutter);
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.use-cases .wei-uc * {
+  box-sizing: border-box;
+}
+
+/* Gradient library referenced by the thumbnail artwork. */
+.use-cases .wei-uc__defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ---- Header ---------------------------------------------------------- */
+.use-cases .wei-uc__head-block {
+  max-width: 900px;
+  margin: 0 auto clamp(34px, 4vw, 52px);
+  text-align: center;
+}
+
+.use-cases .wei-uc__bar {
+  display: block;
+  width: 64px;
+  height: 4px;
+  margin: 0 auto 20px;
+  border-radius: 2px;
+  background: var(--uc-accent);
+}
+
+.use-cases .wei-uc__eyebrow {
+  margin: 0 0 14px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--uc-accent);
+}
+
+.use-cases .wei-uc__title {
+  margin: 0 0 18px;
+  font-weight: 700;
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1.12;
+  letter-spacing: -1.2px;
+  color: var(--uc-heading);
+}
+
+.use-cases .wei-uc__sub {
+  margin: 0;
+  font-size: clamp(16px, 1.35vw, 18px);
+  line-height: 1.62;
+  color: var(--uc-text);
+}
+
+/* ---- Grid ------------------------------------------------------------ */
+.use-cases .wei-uc__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 1.6vw, 24px);
+}
+
+/* ---- Card (a real <button>, so it resets browser chrome) -------------- */
+.use-cases .wei-uc__card {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.1vw, 15px);
+  margin: 0;
+  padding: clamp(18px, 1.6vw, 24px);
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  background: var(--uc-card-bg);
+  border: 1px solid var(--uc-border);
+  border-radius: 16px;
+  box-shadow: var(--uc-shadow);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease,
+              border-color 0.25s ease;
+}
+
+.use-cases .wei-uc__card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(59, 82, 246, 0.26);
+  box-shadow: var(--uc-shadow-hover);
+}
+
+.use-cases .wei-uc__card:focus-visible {
+  outline: 3px solid rgba(59, 82, 246, 0.45);
+  outline-offset: 3px;
+}
+
+/* ---- Card head: badge + copy ----------------------------------------- */
+.use-cases .wei-uc__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.use-cases .wei-uc__badge {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 13px;
+  background: var(--uc-accent-soft);
+  color: var(--uc-accent);
+}
+
+.use-cases .wei-uc__badge svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+.use-cases .wei-uc__copy {
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.use-cases .wei-uc__card-title {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 700;
+  font-size: clamp(17px, 1.35vw, 19px);
+  line-height: 1.25;
+  letter-spacing: -0.3px;
+  color: var(--uc-heading);
+}
+
+/* The line after the em dash — the promise, not the description. */
+.use-cases .wei-uc__card-tagline {
+  display: block;
+  font-weight: 600;
+  font-size: 14.5px;
+  line-height: 1.4;
+  color: var(--uc-accent);
+}
+
+.use-cases .wei-uc__card-text {
+  display: block;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--uc-text);
+}
+
+/* ---- Frameworks line -------------------------------------------------- */
+.use-cases .wei-uc__frameworks {
+  display: block;
+  padding-top: clamp(12px, 1.1vw, 15px);
+  border-top: 1px solid var(--uc-rule);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--uc-text);
+}
+
+.use-cases .wei-uc__frameworks-label {
+  font-weight: 700;
+  color: var(--uc-heading);
+}
+
+/* ---- Thumbnail ------------------------------------------------------- */
+.use-cases .wei-uc__thumb {
+  position: relative;
+  display: block;
+  margin-top: auto;
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(150deg, var(--uc-thumb-a), var(--uc-thumb-b));
+}
+
+/* Fallback for browsers without aspect-ratio. */
+@supports not (aspect-ratio: 16 / 10) {
+  .use-cases .wei-uc__thumb {
+    height: 0;
+    padding-bottom: 62.5%;
+  }
+}
+
+.use-cases .wei-uc__art,
+.use-cases .wei-uc__poster,
+.use-cases .wei-uc__still {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.use-cases .wei-uc__poster,
+.use-cases .wei-uc__still {
+  object-fit: cover;
+  /* Shows through while the first frame is still being fetched. */
+  background: #0d1330;
+  pointer-events: none;
+}
+
+/* A scrim over real footage only — the built-in artwork is light enough
+   for the play button to read against on its own. */
+.use-cases .wei-uc__thumb:has(.wei-uc__still)::after,
+.use-cases .wei-uc__thumb:has(.wei-uc__poster)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(13, 19, 48, 0.1) 0%,
+    rgba(13, 19, 48, 0.32) 100%
+  );
+}
+
+.use-cases .wei-uc__play {
+  position: absolute;
+  z-index: 2;                    /* above the scrim */
+  top: 50%;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--uc-accent);
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(59, 82, 246, 0.4);
+  transform: translate(-50%, -50%);
+  transition: transform 0.25s ease, background-color 0.25s ease;
+}
+
+.use-cases .wei-uc__play svg {
+  display: block;
+  width: 26px;
+  height: 26px;
+}
+
+.use-cases .wei-uc__card:hover .wei-uc__play {
+  transform: translate(-50%, -50%) scale(1.1);
+  background: #2b40e0;
+}
+
+.use-cases .wei-uc__time {
+  position: absolute;
+  z-index: 2;                    /* above the scrim */
+  right: 10px;
+  bottom: 10px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(13, 19, 48, 0.82);
+  font-weight: 600;
+  font-size: 12.5px;
+  line-height: 1.4;
+  letter-spacing: 0.2px;
+  color: #ffffff;
+}
+
+/* ---- Call to action --------------------------------------------------- */
+.use-cases .wei-uc__cta-row {
+  margin-top: clamp(30px, 3.4vw, 46px);
+  text-align: center;
+}
+
+.use-cases .wei-uc__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 30px;
+  border-radius: 999px;
+  background: var(--uc-accent);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.2;
+  color: #ffffff;
+  text-decoration: none;
+  box-shadow: 0 10px 26px rgba(59, 82, 246, 0.28);
+  transition: transform 0.25s ease, background-color 0.25s ease,
+              box-shadow 0.25s ease;
+}
+
+.use-cases .wei-uc__cta:hover,
+.use-cases .wei-uc__cta:focus {
+  background: #2b40e0;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(59, 82, 246, 0.36);
+}
+
+.use-cases .wei-uc__cta:focus-visible {
+  outline: 3px solid rgba(59, 82, 246, 0.45);
+  outline-offset: 3px;
+}
+
+.use-cases .wei-uc__cta svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.25s ease;
+}
+
+.use-cases .wei-uc__cta:hover svg {
+  transform: translateX(3px);
+}
+
+/* ---- Modal ----------------------------------------------------------- */
+
+/* The modal is portalled to <body> inside a .use-cases wrapper so the
+   scoped rules and custom properties above still reach it. The wrapper
+   itself must not paint or take up space. */
+.use-cases.wei-uc__portal {
+  display: contents;
+  background: none;
+}
+
+.use-cases .wei-uc__modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(14px, 3vw, 40px);
+}
+
+.use-cases .wei-uc__modal[hidden] {
+  display: none;
+}
+
+.use-cases .wei-uc__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(9, 13, 35, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+.use-cases .wei-uc__modal.is-open .wei-uc__backdrop {
+  opacity: 1;
+}
+
+.use-cases .wei-uc__dialog {
+  position: relative;
+  width: min(880px, 100%);
+  max-height: calc(100vh - clamp(28px, 6vw, 80px));
+  overflow-y: auto;
+  padding: clamp(16px, 1.6vw, 22px);
+  background: var(--uc-card-bg);
+  border-radius: 16px;
+  box-shadow: 0 30px 80px rgba(9, 13, 35, 0.38);
+  opacity: 0;
+  transform: translateY(18px) scale(0.985);
+  transition: opacity 0.22s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.use-cases .wei-uc__modal.is-open .wei-uc__dialog {
+  opacity: 1;
+  transform: none;
+}
+
+.use-cases .wei-uc__dialog-head {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: clamp(12px, 1.2vw, 16px);
+  padding-right: 40px;
+}
+
+.use-cases .wei-uc__badge--lg {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+}
+
+.use-cases .wei-uc__badge--lg svg {
+  width: 24px;
+  height: 24px;
+}
+
+.use-cases .wei-uc__dialog-copy {
+  min-width: 0;
+}
+
+.use-cases .wei-uc__dialog-title {
+  margin: 0 0 3px;
+  font-weight: 700;
+  font-size: clamp(18px, 1.5vw, 20px);
+  line-height: 1.25;
+  letter-spacing: -0.4px;
+  color: var(--uc-heading);
+}
+
+.use-cases .wei-uc__dialog-text {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--uc-text);
+}
+
+.use-cases .wei-uc__close {
+  position: absolute;
+  top: clamp(14px, 1.4vw, 20px);
+  right: clamp(14px, 1.4vw, 20px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--uc-heading);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.use-cases .wei-uc__close:hover {
+  background: var(--uc-accent-soft);
+  color: var(--uc-accent);
+}
+
+.use-cases .wei-uc__close:focus-visible {
+  outline: 3px solid rgba(59, 82, 246, 0.45);
+  outline-offset: 2px;
+}
+
+.use-cases .wei-uc__close svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+/* ---- Player ---------------------------------------------------------- */
+.use-cases .wei-uc__player {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0d1330;
+}
+
+@supports not (aspect-ratio: 16 / 9) {
+  .use-cases .wei-uc__player {
+    height: 0;
+    padding-bottom: 56.25%;
+  }
+}
+
+.use-cases .wei-uc__frame,
+.use-cases .wei-uc__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #0d1330;
+}
+
+.use-cases .wei-uc__empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.use-cases .wei-uc__empty span {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.use-cases .wei-uc__empty small {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.use-cases .wei-uc__empty code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12.5px;
+}
+
+/* ---- Scroll reveal ---------------------------------------------------- */
+.use-cases .wei-uc.is-animated .wei-uc__head-block,
+.use-cases .wei-uc.is-animated .wei-uc__card,
+.use-cases .wei-uc.is-animated .wei-uc__cta-row {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.use-cases .wei-uc.is-animated.is-visible .wei-uc__head-block,
+.use-cases .wei-uc.is-animated.is-visible .wei-uc__card,
+.use-cases .wei-uc.is-animated.is-visible .wei-uc__cta-row {
+  opacity: 1;
+  transform: none;
+}
+
+.use-cases .wei-uc.is-animated .wei-uc__card,
+.use-cases .wei-uc.is-animated .wei-uc__cta-row {
+  transition-delay: calc(0.12s + var(--uc-i) * 0.08s);
+}
+
+/* Once revealed, hover must win over the reveal transform. */
+.use-cases .wei-uc.is-visible .wei-uc__card:hover {
+  transform: translateY(-4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .use-cases .wei-uc.is-animated .wei-uc__head-block,
+  .use-cases .wei-uc.is-animated .wei-uc__card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .use-cases .wei-uc__card:hover,
+  .use-cases .wei-uc.is-visible .wei-uc__card:hover {
+    transform: none;
+  }
+  .use-cases .wei-uc__card:hover .wei-uc__play {
+    transform: translate(-50%, -50%);
+  }
+  .use-cases .wei-uc__dialog,
+  .use-cases .wei-uc__backdrop,
+  .use-cases .wei-uc__cta,
+  .use-cases .wei-uc__cta svg {
+    transition: none;
+  }
+  .use-cases .wei-uc__cta:hover {
+    transform: none;
+  }
+}
+
+/* ---- Responsive ------------------------------------------------------- */
+@media (max-width: 1080px) {
+  .use-cases .wei-uc__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 980px) {
+  .use-cases {
+    --uc-gutter: 22px;
+  }
+}
+
+@media (max-width: 620px) {
+  .use-cases .wei-uc__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .use-cases .wei-uc__dialog-head {
+    padding-right: 40px;
+  }
+  .use-cases .wei-uc__badge--lg {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 520px) {
+  .use-cases {
+    --uc-gutter: 18px;
+  }
+}

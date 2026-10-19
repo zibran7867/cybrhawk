@@ -1,0 +1,321 @@
+/* =====================================================================
+   HawkINT — "About HawkINT" section styles
+   (/ai-powered-threat-intelligence-platform/, under the hero)
+   All rules are scoped under .hawk-int-2, the class on the Elementor
+   container. The eyebrow and the decoration layer are injected by
+   second-section.js; everything else styles the existing markup.
+
+   The dashboard image is never restyled beyond its box: no filters,
+   overlays, cropping or opacity. It keeps the 1rem radius the site
+   already gives it, and only its fixed 308px height is undone, which
+   was squashing the screenshot out of its 1280 × 483 proportions.
+
+   Specificity: Elementor's page CSS writes real properties at up to
+   (0,4,0) (`.elementor-14098 .elementor-element.elementor-element-…`),
+   so rules that override those carry an extra .elementor-element and
+   still win wherever this file loads.
+   ===================================================================== */
+
+.hawk-int-2.e-con {
+  /* Tweak to rebrand */
+  --hi-accent: #0c68ff;                        /* site blue, as in "HawkINT in Numbers" */
+  --hi-accent-soft: #6aa8ff;
+  --hi-heading: #0d0e10;                       /* the page's heading near-black */
+  --hi-text: #535c74;                          /* slate body grey, over 6:1 on the band */
+  --hi-band-top: #fbfcff;
+  --hi-band-mid: #f2f6ff;
+  --hi-band-bottom: #f5f6f9;                   /* the next section's background, so they meet without a seam */
+  --hi-media-radius: 1rem;                     /* the site's .elementor-widget-image img radius */
+
+  /* Content is held to 1280px, which puts its left edge on the hero
+     copy's at 1440px; the gutter is added on top. */
+  --hi-measure: 1280px;
+  --hi-gutter: clamp(20px, 4vw, 56px);
+  --hi-gap: clamp(40px, 5.2vw, 96px);
+
+  position: relative;
+  padding-block: clamp(64px, 7.2vw, 112px);
+  overflow: hidden;
+  overflow: clip;                              /* decoration never widens the page */
+  background-image:
+    radial-gradient(38% 60% at 30% 52%, rgba(12, 104, 255, 0.07), transparent 72%),
+    linear-gradient(180deg, var(--hi-band-top) 0%, var(--hi-band-mid) 52%, var(--hi-band-bottom) 100%);
+}
+
+/* Elementor's flat #F2F3F3 overlay would grey the gradient out. */
+.hawk-int-2.e-con::before {
+  content: none;
+}
+
+/* Content sits above the decoration layer. */
+.hawk-int-2.e-con > .e-con {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- Decoration (injected, aria-hidden) ------------------------------
+   Kept faint enough to read as texture: an orb off the top-left corner,
+   two dot fields that fade toward the content, and two ring outlines
+   centred just past the bottom-right corner, small enough that their
+   arcs stay below the copy.
+   ---------------------------------------------------------------------- */
+.hawk-int-2 .hi-about__decor {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hawk-int-2 .hi-about__decor > span {
+  position: absolute;
+}
+
+.hawk-int-2 .hi-about__orb {
+  top: -210px;
+  left: -170px;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+              rgba(12, 104, 255, 0.12), rgba(12, 104, 255, 0.06) 62%, rgba(12, 104, 255, 0.02));
+}
+
+.hawk-int-2 .hi-about__dots {
+  width: 154px;                                /* 7 × 5 dots on a 22px grid */
+  height: 110px;
+  background-image: radial-gradient(circle, rgba(12, 104, 255, 0.42) 1.5px, transparent 2.1px);
+  background-size: 22px 22px;
+}
+
+.hawk-int-2 .hi-about__dots--tr {
+  top: clamp(28px, 3.6vw, 52px);
+  right: clamp(20px, 3.4vw, 52px);
+  -webkit-mask-image: linear-gradient(225deg, #000 25%, transparent 88%);
+          mask-image: linear-gradient(225deg, #000 25%, transparent 88%);
+}
+
+.hawk-int-2 .hi-about__dots--bl {
+  bottom: clamp(16px, 2.2vw, 32px);
+  left: clamp(12px, 2vw, 32px);
+  -webkit-mask-image: linear-gradient(45deg, #000 25%, transparent 88%);
+          mask-image: linear-gradient(45deg, #000 25%, transparent 88%);
+}
+
+.hawk-int-2 .hi-about__ring {
+  right: -220px;                               /* centre 40px right of and 60px below the corner */
+  bottom: -240px;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  border: 1px solid rgba(12, 104, 255, 0.13);
+  background: radial-gradient(circle, rgba(12, 104, 255, 0.05), transparent 68%);
+}
+
+.hawk-int-2 .hi-about__ring--outer {
+  right: -280px;
+  bottom: -300px;
+  width: 480px;
+  height: 480px;
+  border-color: rgba(12, 104, 255, 0.08);
+  background: none;
+}
+
+/* ---- Layout -----------------------------------------------------------
+   Same flex row Elementor builds, re-weighted: the dashboard takes about
+   58% of the measure, the copy the rest, both centred on one axis.
+   ---------------------------------------------------------------------- */
+.hawk-int-2 .e-con-inner > .e-con {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--hi-gap);
+  width: 100%;
+  max-width: calc(var(--hi-measure) + 2 * var(--hi-gutter));
+  margin-inline: auto;
+  padding-inline: var(--hi-gutter);
+}
+
+/* Dashboard column */
+.hawk-int-2 .e-con-inner > .e-con > .e-con:first-child {
+  flex: 1.4 1 0%;
+  width: auto;
+  min-width: 0;
+}
+
+/* Copy column */
+.hawk-int-2 .e-con-inner > .e-con > .e-con:last-child {
+  flex: 1 1 0%;
+  width: auto;
+  min-width: 0;
+  max-width: 560px;
+  gap: 0;
+  justify-content: center;
+}
+
+/* ---- Dashboard image --------------------------------------------------
+   The shadow and glow sit on the widget box around the image, never on
+   the image itself.
+   ---------------------------------------------------------------------- */
+.hawk-int-2.e-con .elementor-widget-image.elementor-element {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  margin: 0;
+  border-radius: var(--hi-media-radius);
+  box-shadow:
+    0 1px 2px rgba(13, 19, 48, 0.06),
+    0 18px 40px -18px rgba(13, 25, 70, 0.38),
+    0 36px 80px -28px rgba(12, 104, 255, 0.30);
+}
+
+/* Soft blue haze behind the frame. */
+.hawk-int-2.e-con .elementor-widget-image.elementor-element::before {
+  content: "";
+  position: absolute;
+  inset: -14% -8%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(12, 104, 255, 0.14), transparent);
+  pointer-events: none;
+}
+
+/* Full column width at the file's own proportions. The width/height
+   attributes give the browser the ratio up front, so nothing shifts
+   while it loads. */
+.hawk-int-2.e-con .elementor-widget-image.elementor-element img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+/* ---- Copy -------------------------------------------------------------- */
+.hawk-int-2 .hi-about__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 clamp(14px, 1.4vw, 20px);
+  font-family: "Figtree", sans-serif;
+  font-weight: 600;
+  font-size: clamp(12px, 0.2vw + 11.2px, 14px);
+  line-height: 1.2;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--hi-accent);
+}
+
+.hawk-int-2 .hi-about__eyebrow::before {
+  content: "";
+  flex: none;
+  width: 40px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--hi-accent), var(--hi-accent-soft));
+}
+
+.hawk-int-2.e-con .elementor-widget-heading.elementor-element,
+.hawk-int-2.e-con .elementor-widget-text-editor.elementor-element {
+  margin: 0;
+  text-align: start;
+}
+
+/* 700, not 800: the site only loads Figtree up to 700. */
+.hawk-int-2.e-con .elementor-widget-heading.elementor-element .elementor-heading-title {
+  margin: 0 0 clamp(16px, 1.6vw, 22px);
+  font-family: "Figtree", sans-serif;
+  font-weight: 700;
+  font-size: clamp(30px, 1.72vw + 25px, 52px);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--hi-heading);
+}
+
+.hawk-int-2.e-con .elementor-widget-text-editor.elementor-element {
+  font-family: "Figtree", sans-serif;
+  color: var(--hi-text);
+}
+
+.hawk-int-2.e-con .elementor-widget-text-editor.elementor-element p {
+  max-width: 36em;
+  margin: 0;
+  font-size: clamp(16px, 0.2vw + 15.2px, 18px);
+  line-height: 1.7;
+  color: inherit;
+  text-wrap: pretty;
+}
+
+/* ---- Laptop -----------------------------------------------------------
+   Copy column narrows before the dashboard does.
+   ---------------------------------------------------------------------- */
+@media (max-width: 1200px) {
+  .hawk-int-2 .e-con-inner > .e-con > .e-con:last-child {
+    max-width: 480px;
+  }
+}
+
+/* ---- Tablet (Elementor's breakpoint) ----------------------------------
+   Under ~1024px the copy column drops below 400px, so the section
+   stacks: dashboard first, copy underneath on the same left edge.
+   ---------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .hawk-int-2.e-con {
+    --hi-measure: 820px;
+  }
+
+  .hawk-int-2 .e-con-inner > .e-con {
+    flex-direction: column;
+    align-items: stretch;
+    gap: clamp(36px, 5.5vw, 52px);
+  }
+
+  .hawk-int-2 .e-con-inner > .e-con > .e-con:first-child,
+  .hawk-int-2 .e-con-inner > .e-con > .e-con:last-child {
+    flex: none;
+    width: 100%;
+    max-width: none;
+  }
+
+  /* The copy now runs along the bottom-left, where these dots sit. */
+  .hawk-int-2 .hi-about__dots--bl {
+    display: none;
+  }
+}
+
+/* ---- Mobile ------------------------------------------------------------ */
+@media (max-width: 767px) {
+  .hawk-int-2.e-con {
+    padding-block: 56px 64px;
+  }
+
+  .hawk-int-2.e-con .elementor-widget-image.elementor-element {
+    box-shadow:
+      0 1px 2px rgba(13, 19, 48, 0.06),
+      0 14px 30px -16px rgba(13, 25, 70, 0.36),
+      0 24px 50px -24px rgba(12, 104, 255, 0.28);
+  }
+
+  .hawk-int-2.e-con .elementor-widget-text-editor.elementor-element p {
+    line-height: 1.65;
+  }
+
+  /* One small dot field and the orb are enough at this width. */
+  .hawk-int-2 .hi-about__ring {
+    display: none;
+  }
+
+  .hawk-int-2 .hi-about__dots--tr {
+    top: 18px;
+    right: 14px;
+    width: 88px;
+    height: 66px;
+  }
+
+  .hawk-int-2 .hi-about__orb {
+    top: -170px;
+    left: -170px;
+    width: 340px;
+    height: 340px;
+  }
+}

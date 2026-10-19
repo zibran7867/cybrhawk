@@ -1,0 +1,271 @@
+/* =====================================================================
+   "Proof points" styles
+   (markup injected by proof-points.js)
+   All rules are scoped under .proof-points.
+   Light theme: near-white ground, indigo eyebrow, navy headings.
+   ===================================================================== */
+
+.proof-points {
+  /* Tweak to rebrand */
+  --pp-accent: #4f46e5;                        /* indigo — eyebrow + numbers */
+  --pp-accent-soft: rgba(79, 70, 229, 0.09);   /* number chip fill */
+  --pp-bg: #ffffff;
+  --pp-bg-tint: #f6f8fc;                       /* faint panel wash */
+  --pp-heading: #0d1330;                       /* near-black navy */
+  --pp-text: #5b6478;                          /* body grey */
+  --pp-card-bg: #ffffff;
+  --pp-border: #e6eaf2;
+  --pp-shadow: 0 1px 2px rgba(13, 19, 48, 0.04),
+               0 8px 24px rgba(13, 19, 48, 0.05);
+  --pp-shadow-hover: 0 2px 4px rgba(13, 19, 48, 0.05),
+                     0 16px 38px rgba(13, 19, 48, 0.10);
+
+  /* Side gutter. The Elementor container carries no padding of its own,
+     so without this the content runs into the screen edge below the
+     measure. Same steps as the hero (24 / 22 / 18px). */
+  --pp-gutter: 24px;
+
+  background-color: var(--pp-bg);
+  background-image:
+    radial-gradient(70% 60% at 78% 20%, rgba(79, 70, 229, 0.055), transparent 70%),
+    radial-gradient(50% 50% at 8% 90%, rgba(37, 99, 235, 0.045), transparent 70%);
+}
+
+/* ---- Shell ----------------------------------------------------------
+   The gutter is added on top of the 1280px measure, so wide screens
+   keep the same content width and only narrower ones gain the inset.
+   --------------------------------------------------------------------- */
+.proof-points .wei-pp {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+
+  width: 100%;
+  max-width: calc(1280px + 2 * var(--pp-gutter));
+  margin: 0 auto;
+  padding: clamp(56px, 7vw, 92px) var(--pp-gutter);
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.proof-points .wei-pp * {
+  box-sizing: border-box;
+}
+
+/* Media column order — flip with MEDIA_SIDE in proof-points.js */
+.proof-points .wei-pp--media-left .wei-pp__media { order: 1; }
+.proof-points .wei-pp--media-left .wei-pp__content { order: 2; }
+.proof-points .wei-pp--media-right .wei-pp__media { order: 2; }
+.proof-points .wei-pp--media-right .wei-pp__content { order: 1; }
+
+/* ---- Media column --------------------------------------------------- */
+.proof-points .wei-pp__frame {
+  margin: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.proof-points .wei-pp__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+}
+
+/* Shown when the render isn't on disk yet */
+.proof-points .wei-pp__frame.is-empty {
+  aspect-ratio: 4 / 3;
+  border: 1px dashed var(--pp-border);
+  background:
+    radial-gradient(60% 60% at 50% 45%, rgba(79, 70, 229, 0.10), transparent 70%),
+    var(--pp-bg-tint);
+}
+
+/* ---- Content column ------------------------------------------------- */
+.proof-points .wei-pp__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 18px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 3.4px;
+  text-transform: uppercase;
+  color: var(--pp-accent);
+}
+
+.proof-points .wei-pp__eyebrow-line {
+  width: 34px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--pp-accent);
+}
+
+.proof-points .wei-pp__title {
+  margin: 0 0 clamp(26px, 3.4vw, 42px);
+  font-weight: 700;
+  font-size: clamp(32px, 4.2vw, 52px);
+  line-height: 1.08;
+  letter-spacing: -1.2px;
+  color: var(--pp-heading);
+}
+
+.proof-points .wei-pp__title-accent {
+  display: block; /* second line breaks like the design */
+  color: var(--pp-heading);
+}
+
+/* ---- Cards ---------------------------------------------------------- */
+.proof-points .wei-pp__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 1.7vw, 24px);
+}
+
+.proof-points .wei-pp__card {
+  padding: clamp(20px, 2vw, 26px);
+  background: var(--pp-card-bg);
+  border: 1px solid var(--pp-border);
+  border-radius: 14px;
+  box-shadow: var(--pp-shadow);
+  transition: transform 0.25s ease, box-shadow 0.25s ease,
+              border-color 0.25s ease;
+}
+
+.proof-points .wei-pp__card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(79, 70, 229, 0.28);
+  box-shadow: var(--pp-shadow-hover);
+}
+
+.proof-points .wei-pp__card-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: clamp(28px, 3.6vw, 46px);
+}
+
+.proof-points .wei-pp__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 7px;
+  background: var(--pp-accent-soft);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  color: var(--pp-accent);
+}
+
+.proof-points .wei-pp__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.proof-points .wei-pp__icon svg {
+  width: 40px;
+  height: 40px;
+  filter: drop-shadow(0 6px 12px rgba(37, 99, 235, 0.22));
+}
+
+.proof-points .wei-pp__card-title {
+  margin: 0 0 10px;
+  font-weight: 700;
+  font-size: clamp(16px, 1.35vw, 18px);
+  line-height: 1.3;
+  letter-spacing: -0.2px;
+  color: var(--pp-heading);
+}
+
+.proof-points .wei-pp__card-text {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.62;
+  color: var(--pp-text);
+}
+
+/* ---- Scroll reveal --------------------------------------------------- */
+.proof-points .wei-pp.is-animated .wei-pp__media,
+.proof-points .wei-pp.is-animated .wei-pp__eyebrow,
+.proof-points .wei-pp.is-animated .wei-pp__title,
+.proof-points .wei-pp.is-animated .wei-pp__card {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.proof-points .wei-pp.is-animated.is-visible .wei-pp__media,
+.proof-points .wei-pp.is-animated.is-visible .wei-pp__eyebrow,
+.proof-points .wei-pp.is-animated.is-visible .wei-pp__title,
+.proof-points .wei-pp.is-animated.is-visible .wei-pp__card {
+  opacity: 1;
+  transform: none;
+}
+
+.proof-points .wei-pp.is-animated .wei-pp__title { transition-delay: 0.07s; }
+.proof-points .wei-pp.is-animated .wei-pp__card {
+  transition-delay: calc(0.14s + var(--pp-i) * 0.09s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proof-points .wei-pp.is-animated .wei-pp__media,
+  .proof-points .wei-pp.is-animated .wei-pp__eyebrow,
+  .proof-points .wei-pp.is-animated .wei-pp__title,
+  .proof-points .wei-pp.is-animated .wei-pp__card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .proof-points .wei-pp__card:hover { transform: none; }
+}
+
+/* ---- Responsive ------------------------------------------------------ */
+@media (max-width: 1024px) {
+  .proof-points .wei-pp {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* Copy first, visual under it, on both flip settings */
+  .proof-points .wei-pp--media-left .wei-pp__media,
+  .proof-points .wei-pp--media-right .wei-pp__media { order: 2; }
+  .proof-points .wei-pp--media-left .wei-pp__content,
+  .proof-points .wei-pp--media-right .wei-pp__content { order: 1; }
+
+  /* Stacked, the visual would otherwise grow to the full width — about
+     850px tall on a tablet. */
+  .proof-points .wei-pp__media {
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .proof-points .wei-pp__card-head {
+    margin-bottom: 22px;
+  }
+}
+
+@media (max-width: 980px) {
+  .proof-points {
+    --pp-gutter: 22px;
+  }
+}
+
+@media (max-width: 560px) {
+  .proof-points .wei-pp__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .proof-points .wei-pp__title-accent {
+    display: inline;
+  }
+}
+
+@media (max-width: 520px) {
+  .proof-points {
+    --pp-gutter: 18px;
+  }
+}
