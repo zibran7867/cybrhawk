@@ -1,12 +1,12 @@
 /* =====================================================================
-   HawkINT / CybrHawk — page script (single bundle)
+   HawkINT / CybrHawk - page script (single bundle)
    =====================================================================
-   "HawkINT Operations Console" — a dark threat-intelligence operator
+   "HawkINT Operations Console" - a dark threat-intelligence operator
    surface. The Elementor containers are fixed, so each section below
    injects its own markup into the container matched by its SECTION
    selector and pairs with hawk-int.css.
 
-   The file is a set of independent IIFEs — one per section — sharing a
+   The file is a set of independent IIFEs - one per section - sharing a
    few helpers (esc, markup, reveal, waitForSection, countUp, icon) and
    one modal controller used by the two clickable card grids
    (Industries + Features).
@@ -21,7 +21,7 @@
   "use strict";
 
   /* ===================================================================
-     Shared helpers  (design-agnostic — kept across the rebuild)
+     Shared helpers  (design-agnostic - kept across the rebuild)
      =================================================================== */
   function esc(s) {
     return String(s).replace(/[&<>"]/g, function (c) {
@@ -493,7 +493,7 @@
   })();
 
   /* ===================================================================
-     0. Hero  —  container .hawk-hero  —  prefix hk-hero
+     0. Hero  -  container .hawk-hero  -  prefix hk-hero
      The page's only <h1>. Copy on the left; a coded "surface / deep /
      dark web" monitoring console on the right (no image required).
      =================================================================== */
@@ -501,30 +501,29 @@
     var SECTION = ".hawk-hero";
 
     /* ---- Content (edit freely) ---- */
-    var MOD = "MOD 00 / THREAT INTELLIGENCE";
+    var MOD = "THREAT INTELLIGENCE";
     // TODO: confirm the eyebrow label with marketing.
-    var EYEBROW = "Solution 02 · AI-Powered Threat Intelligence";
+    var EYEBROW = "HawkINT · AI-Powered Threat Intelligence by CybrHawk";
 
     // The bracketed phrase renders in the accent. Wording is fixed.
-    var TITLE = "Proactive Protection. Real Intelligence. [[Zero Blind Spots]]";
+    var TITLE =
+      "Intelligence that sees threats coming and [[stops them before they land]]";
 
     var LEAD =
-      "Let HawkINT monitor, scan, and classify the cyber threats affecting " +
-      "your business—across the surface web, deep web, and dark web.";
+      "HawkINT combines applied AI with CybrHawk's analyst expertise to watch " +
+      "the surface, deep and dark web for you. Spot leaked credentials, " +
+      "phishing, brand abuse, ransomware chatter and executive exposure early " +
+      "then act with evidence, context and takedowns.";
 
     var BODY =
-      "Leverage over 12,000 bots and 380+ data sources to detect attacks, " +
-      "leaks, scams, fraud, and emerging cyber threats before they impact " +
-      "your organization.";
-
-    // TODO: confirm tagline (reused from the approved UCD solutions copy).
-    var TAGLINE = "Know the threat before it reaches you.";
+      "Protecting your operations, data, reputation, supply chain and " +
+      "leadership - 24/7.";
 
     var CTA  = { label: "Request a Demo", href: "https://cybrhawk.com/request-for-demo/" };
     // TODO: confirm the secondary button target.
-    var CTA2 = { label: "Talk to an Intel Analyst", href: "https://cybrhawk.com/contact/" };
+    var CTA2 = { label: "Get a Free Exposure Check", href: "https://cybrhawk.com/contact/" };
 
-    // Each is a fact stated elsewhere on the page — no new claims. The
+    // Each is a fact stated elsewhere on the page - no new claims. The
     // mono label is the telemetry readout; the plain text is the proof.
     var PROOF = [
       { label: "COVERAGE", text: "Surface, deep & dark web" },
@@ -579,7 +578,7 @@
     // The coded console: three web-layer bands feeding one core. The
     // connectors and the travelling dots share a single 0–100 viewBox;
     // the bands and core are HTML on top, so their labels never shrink
-    // with the drawing. The whole stage is aria-hidden — the copy carries
+    // with the drawing. The whole stage is aria-hidden - the copy carries
     // the meaning.
     function heroStage(v) {
       var layers = v.layers || [];
@@ -589,7 +588,7 @@
 
       layers.forEach(function (l, i) {
         var y = BAND_Y[i] != null ? BAND_Y[i] : 50;
-        var dur = 2.8 + i * 0.4;        // 2.8 / 3.2 / 3.6s — none in step
+        var dur = 2.8 + i * 0.4;        // 2.8 / 3.2 / 3.6s - none in step
 
         // A gently sagging quadratic curve from the band into the core, so
         // no connector reads as a stark straight line (the middle one
@@ -604,7 +603,7 @@
 
         // The dot rides the same curve via offset-path (cx/cy are 0 so the
         // offset positions it). Where offset-path is unsupported the dot
-        // stays hidden — the curves still carry the connection.
+        // stays hidden - the curves still carry the connection.
         signals +=
           '<circle class="hk-hero__signal" cx="0" cy="0" r="1.1" ' +
             "style=\"offset-path:path('" + d + "');--d:" + round(dur) +
@@ -719,8 +718,7 @@
             '<h1 class="hk-hero__title" style="--i:2">' + markup(TITLE) + "</h1>" +
             '<p class="hk-hero__lead" style="--i:3">' + esc(LEAD) + "</p>" +
             '<p class="hk-hero__body" style="--i:4">' + esc(BODY) + "</p>" +
-            '<p class="hk-hero__tagline" style="--i:5">' + esc(TAGLINE) + "</p>" +
-            '<div class="hk-hero__buttons" style="--i:6">' +
+            '<div class="hk-hero__buttons" style="--i:5">' +
               button(CTA, false) + button(CTA2, true) +
             "</div>" +
             '<ul class="hk-hero__proof">' + proof + "</ul>" +
@@ -753,23 +751,57 @@
   })();
 
   /* ===================================================================
-     1. About HawkINT  —  container .hawk-about  —  prefix hk-about
+     1. About HawkINT  -  container .hawk-about  -  prefix hk-about
      =================================================================== */
   (function () {
     var SECTION = ".hawk-about";
 
     /* ---- Content (edit freely) ---- */
-    var MOD = "MOD 01 / ABOUT";
-    var EYEBROW = "About HawkINT";
-    var TITLE = "Full visibility of your external risk";
-    var BODY =
-      "HawkINT is an OSINT and CTI platform designed to track, analyze, and " +
-      "respond to diverse threats. Our SaaS platform continuously monitors " +
-      "open sources, deep web forums, dark web markets, and high-risk " +
-      "digital environments to bring full visibility of external risks.";
-    var PLEDGE =
-      "One platform across the surface, deep, and dark web — so nothing " +
-      "about your exposure stays out of view.";
+    var MOD = "OVERVIEW";
+    var EYEBROW = "Overview";
+    var TITLE =
+      "One platform for every external threat you can't see from inside the " +
+      "perimeter";
+    // RAW by design - this BODY paragraph contains an intentional, author-
+    // controlled <strong> (same documented esc() exception as the wires
+    // section above). Keep any new wording here plain text - no user input
+    // reaches it.
+    var BODY = [
+  "Most attacks start long before they hit your network: a password sold on a forum, a lookalike domain registered overnight, a fake executive profile, a ransomware group naming your supplier. HawkINT continuously collects and analyzes these signals, so your team learns about them first.",
+  "Built as a SaaS OSINT and CTI platform, HawkINT turns millions of raw posts, files and conversations into prioritized alerts called <strong>wires</strong> each with evidence, context and a recommended action."
+];
+    // "What You Get" rendered as a console OUTPUTS readout: each benefit is
+    // an output line with a mono index + a one-word value tag (the kind of
+    // value), so the block reads like the section's intel panels rather than
+    // a plain bullet list. Wording of label/text is fixed (brief §2).
+    var BENEFITS_TITLE = "What You Get";
+    var BENEFITS = [
+      {
+        tag: "SIGNAL",
+        label: "Earlier Warning",
+        text: "Detect leaks, fraud and attack planning before they become incidents."
+      },
+      {
+        tag: "PRECISION",
+        label: "Fewer False Positives",
+        text: "AI ranks every event by severity and relevance to your assets."
+      },
+      {
+        tag: "EVIDENCE",
+        label: "Evidence You Can Act On",
+        text: "See exactly where, when and in which file your data appeared."
+      },
+      {
+        tag: "ACTION",
+        label: "Action, Not Just Alerts",
+        text: "Analyst-led takedowns of phishing sites, fake profiles and rogue apps."
+      },
+      {
+        tag: "COMPLIANCE",
+        label: "Audit-Ready Reporting",
+        text: "Intelligence mapped to regulatory and board-level requirements."
+      }
+    ];
 
     // Supply a real image here; leave "" to show the branded fallback.
     var IMAGE = {
@@ -781,7 +813,7 @@
 
     // Chrome shown around the image to make it read as a platform view.
     var CONSOLE_TITLE = "HawkINT · Platform";
-    var CONSOLE_CAPTION = "Surface · Deep · Dark web — monitored in real time";
+    var CONSOLE_CAPTION = "Surface · Deep · Dark web - monitored in real time";
 
     var ANIMATE = true;
     /* -------------------------------- */
@@ -825,6 +857,46 @@
       );
     }
 
+    // The "What You Get" OUTPUTS panel: a full-width band under the grid with
+    // a console readout header (mono title, live dot, output counter) over a
+    // row of output cards. Each card carries a zero-padded index, a check node,
+    // a mono value tag, the bold label and the body, with a hover glow that
+    // lights it (same idiom as the How-it-works strata). All text via esc();
+    // the glyph reuses the shared icon set. The reveal/motion is CSS-only and
+    // already respects prefers-reduced-motion.
+    function benefitsHTML() {
+      var count = ("0" + BENEFITS.length).slice(-2);
+      var rows = BENEFITS.map(function (b, i) {
+        var idx = ("0" + (i + 1)).slice(-2);
+        return (
+          '<li class="hk-about__out" style="--i:' + i + '">' +
+            '<span class="hk-about__out-glow" aria-hidden="true"></span>' +
+            '<span class="hk-about__out-rail" aria-hidden="true">' +
+              '<span class="hk-about__out-node">' + icon("check") + "</span>" +
+            "</span>" +
+            '<span class="hk-about__out-idx" aria-hidden="true">' + idx + "</span>" +
+            '<span class="hk-about__out-copy">' +
+              '<span class="hk-about__out-head">' +
+                '<strong class="hk-about__out-label">' + esc(b.label) + "</strong>" +
+                '<span class="hk-about__out-tag">' + esc(b.tag) + "</span>" +
+              "</span>" +
+              '<span class="hk-about__out-text">' + esc(b.text) + "</span>" +
+            "</span>" +
+          "</li>"
+        );
+      }).join("");
+      return (
+        '<div class="hk-about__outputs">' +
+          '<div class="hk-about__outputs-bar">' +
+            '<span class="hk-about__outputs-dot" aria-hidden="true"></span>' +
+            '<span class="hk-about__outputs-title">' + esc(BENEFITS_TITLE) + "</span>" +
+            '<span class="hk-about__outputs-count">OUTPUTS · ' + esc(count) + "</span>" +
+          "</div>" +
+          '<ul class="hk-about__out-list">' + rows + "</ul>" +
+        "</div>"
+      );
+    }
+
     function build() {
       var host = hostFor(SECTION);
       if (!host) return false;
@@ -841,12 +913,15 @@
               "</p>" +
               '<p class="hk-about__eyebrow">' + esc(EYEBROW) + "</p>" +
               '<h2 class="hk-about__title">' + esc(TITLE) + "</h2>" +
-              '<p class="hk-about__body">' + esc(BODY) + "</p>" +
-              '<p class="hk-about__pledge">' + icon("shield") +
-                "<span>" + esc(PLEDGE) + "</span></p>" +
+              BODY.map(function (p) {
+                // RAW by design - see the BODY comment above.
+                return '<p class="hk-about__body">' + p + "</p>";
+              }).join("") +
             "</div>" +
             '<div class="hk-about__media">' + consoleHTML() + "</div>" +
           "</div>" +
+          // Full-width outputs band under the two-column grid.
+          benefitsHTML() +
         "</div>"
       );
       var root = host.querySelector(".hk-about");
@@ -873,7 +948,139 @@
   })();
 
   /* ===================================================================
-     2. HawkINT in Numbers  —  container .hawk-numbers  —  prefix hk-numbers
+     1.5 Product Modules  -  container .hawk-modules  -  prefix hk-modules
+     Three module cards (CTI, Leak Intelligence, Compliance Guard) in one
+     row; each is a full-height column so the CTAs align at the bottom.
+     Sits between Overview (MOD 01) and In Numbers (MOD 02) in reading
+     order; labelled MOD 01.5 to place it without renumbering the others.
+     =================================================================== */
+  (function () {
+    var SECTION = ".hawk-modules";
+
+    /* ---- Content (edit freely) ---- */
+    var MOD = "MODULES";
+    var TITLE = "Three Modules. One Intelligence Engine.";
+    var SUB =
+      "Start with the protection you need today and add more as your " +
+      "program grows. Every module shares the same data lake, AI models " +
+      "and analyst team.";
+
+    // Each module: small tag label, icon (shared ICONS), H3 title, a
+    // description and a bullet list.
+    var MODULES = [
+      {
+        tag: "Cyber Threat Intelligence Platform",
+        icon: "search",
+        title: "HawkINT CTI",
+        desc:
+          "Full-spectrum visibility across the surface, deep and dark web. " +
+          "HawkINT CTI uncovers leaked credentials, exposed payment cards, " +
+          "phishing campaigns and brand impersonation across underground " +
+          "forums, ransomware leak sites, Telegram channels and criminal " +
+          "marketplaces. React fast - or stay ahead of attacks, fraud and " +
+          "hacktivism.",
+        bullets: [
+          "Credential and payment card leak detection",
+          "Phishing and brand impersonation alerts",
+          "Deep and dark web surveillance, including closed groups",
+          "Ransomware group and leak-site tracking",
+          "Proactive threat reports and actor profiles"
+        ]
+      },
+      {
+        tag: "Intelligent Leak Monitoring",
+        icon: "evidence",
+        title: "HawkINT Leak Intelligence",
+        desc:
+          "Know exactly what leaked, and where. Leak Intelligence gives you " +
+          "early, evidence-grade visibility into exposed sensitive data - " +
+          "pinpointing where, and in which file, your compromised " +
+          "information was found, with secure access to the evidence. Your " +
+          "team gets structured, reliable data to make fast, defensible " +
+          "decisions.",
+        bullets: [
+          "Executive and VIP data exposure monitoring",
+          "Source code, document and intellectual property leak detection",
+          "Infostealer log and combolist analysis",
+          "Corporate reputation monitoring",
+          "Real-time exposure alerts with file-level evidence"
+        ]
+      },
+      {
+        tag: "Compliance Platform",
+        icon: "shield",
+        title: "HawkINT Compliance Guard",
+        desc:
+          "Regulators now expect cyber intelligence, not just controls. " +
+          "Compliance Guard gives financial institutions, healthcare " +
+          "providers and critical infrastructure operators documented " +
+          "monitoring of the open web, deep web, dark web and private " +
+          "groups - with reporting built for auditors.",
+        bullets: [
+          "Deep and dark web mention monitoring for your entities",
+          "Compromised credential and third-party exposure tracking",
+          "Audit-ready evidence logs and periodic attestation reports",
+          "Supports frameworks such as DORA, NIS2, PCI DSS 4.0, HIPAA, " +
+            "SEC cyber disclosure rules and RBI/SEBI cyber resilience " +
+            "guidelines"
+        ]
+      }
+    ];
+    var ANIMATE = true;
+    /* -------------------------------- */
+
+    function bulletHTML(t) {
+      return (
+        '<li class="hk-modules__li">' +
+          '<span class="hk-modules__li-ico" aria-hidden="true">' +
+            icon("check") +
+          "</span>" +
+          "<span>" + esc(t) + "</span>" +
+        "</li>"
+      );
+    }
+
+    function cardHTML(m, i) {
+      return (
+        '<li class="hk-modules__card" style="--i:' + i + '">' +
+          '<span class="hk-modules__tag">' + esc(m.tag) + "</span>" +
+          '<span class="hk-modules__badge" aria-hidden="true">' +
+            icon(m.icon) +
+          "</span>" +
+          '<h3 class="hk-modules__card-title">' + esc(m.title) + "</h3>" +
+          '<p class="hk-modules__desc">' + esc(m.desc) + "</p>" +
+          '<ul class="hk-modules__list">' +
+            m.bullets.map(bulletHTML).join("") +
+          "</ul>" +
+        "</li>"
+      );
+    }
+
+    function build() {
+      var host = hostFor(SECTION);
+      if (!host) return false;
+      if (host.querySelector(".hk-modules")) return true;
+
+      host.insertAdjacentHTML(
+        "beforeend",
+        '<div class="hk-modules' + (ANIMATE ? " is-animated" : "") + '">' +
+          moduleHead("hk-modules", MOD, TITLE, SUB) +
+          '<ul class="hk-modules__grid">' +
+            MODULES.map(cardHTML).join("") +
+          "</ul>" +
+        "</div>"
+      );
+
+      var root = host.querySelector(".hk-modules");
+      if (ANIMATE) reveal(root);
+      return true;
+    }
+
+    onReady(function () { waitForSection(build); });
+  })();
+
+  /* ===================================================================
+     2. HawkINT in Numbers  -  container .hawk-numbers  -  prefix hk-numbers
      A premium orbital infographic: a glowing 3-D shield rising off a
      layered circuit platform, inside faint elliptical orbit rings with a
      travelling signal arc. Eight figures ring the orbit, each wired to an
@@ -886,11 +1093,9 @@
     var SECTION = ".hawk-numbers";
 
     /* ---- Content (edit freely) ---- */
-    var MOD = "MOD 02 / IN NUMBERS";
-    var TITLE = "HawkINT [[in Numbers]]";   // bracketed phrase → accent
-    var SUB =
-      "Real scale. Real intelligence. Real impact. See how HawkINT helps " +
-      "organizations stay ahead of emerging threats, every day.";
+    var MOD = "IN NUMBERS";
+    var TITLE = "Visibility at [[Internet Scale]]";   // bracketed phrase → accent
+    var SUB = "Our collection engine never sleeps, so your team doesn't have to.";
 
     // Each figure: icon (shared ICONS), value + unit, caption, its place on
     // the stage, and which side it sits on.
@@ -901,24 +1106,24 @@
     //          "right"/"bottom" → icon-left (x is the icon's LEFT edge)
     //   long = narrower figure · pulse = the node breathes
     // The ring node + connector are COMPUTED from x/y (see geom), so to move
-    // a figure you only edit x/y — the wiring follows. The mobile grid
+    // a figure you only edit x/y - the wiring follows. The mobile grid
     // ignores x/y/side. Left and right are kept symmetric about x = 50.
     var STATS = [
-      { icon: "bot",     value: "12,000",  unit: "+", text: "specialized bots",       side: "left",   x: 31.5, y: 25, pulse: true  },
-      { icon: "sources", value: "380",     unit: "+", text: "data sources",           side: "left",   x: 28,   y: 43, pulse: false },
-      { icon: "pulse",   value: "20M",     unit: "+", text: "new events / day",       side: "left",   x: 26,   y: 60, pulse: false },
-      { icon: "wire",    value: "410,000", unit: "+", text: "open wires", long: true,  side: "right",  x: 68.5, y: 25, pulse: true  },
-      { icon: "actor",   value: "80M",     unit: "+", text: "tracked actors / day",   side: "right",  x: 72,   y: 43, pulse: true  },
-      { icon: "report",  value: "8,000",   unit: "+", text: "reports",                side: "right",  x: 74,   y: 60, pulse: false },
-      { icon: "card",    value: "64M",     unit: "+", text: "recovered credit cards", side: "right",  x: 65.5,   y: 76, pulse: false },
-      { icon: "key",     value: "100B",    unit: "+", text: "recovered credentials",  side: "bottom", x: 36,   y: 85, pulse: true  }
+      { icon: "bot",     value: "12,000",  unit: "+", text: "Collection bots",         side: "left",   x: 31.5, y: 25, pulse: true  },
+      { icon: "sources", value: "380",     unit: "+", text: "Data sources",            side: "left",   x: 28,   y: 43, pulse: false },
+      { icon: "pulse",   value: "20M",     unit: "+", text: "New Events Processed Daily",        side: "left",   x: 26,   y: 60, pulse: false },
+      { icon: "wire",    value: "410,000", unit: "+", text: "Intelligence Wires Issued", long: true, side: "right", x: 68.5, y: 25, pulse: true },
+      { icon: "actor",   value: "80M",     unit: "+", text: "Threat Actors Tracked Daily",     side: "right",  x: 72,   y: 43, pulse: true  },
+      { icon: "report",  value: "8,000",   unit: "+", text: "Threat Reports Published",          side: "right",  x: 74,   y: 60, pulse: false },
+      { icon: "card",    value: "64M",     unit: "+", text: "Recovered payment cards", side: "right",  x: 65.5,   y: 76, pulse: false },
+      { icon: "key",     value: "100B",    unit: "+", text: "Recovered credentials",   side: "bottom", x: 36,   y: 85, pulse: true  }
     ];
     var ANIMATE = true;
     /* -------------------------------- */
 
     // ---- Orbit geometry (computed from each figure's x/y) ----
     var CX = 50, CY = 47;      // stage centre (matches the orbit rings)
-    var IRX = 18, IRY = 21;    // inner-ring radii — where the nodes sit
+    var IRX = 18, IRY = 21;    // inner-ring radii - where the nodes sit
     var ICON_HW = 2.9;         // icon half-width, % of stage width
     var ICON_VC = 6;           // icon centre below the metric top, % of height
 
@@ -1017,7 +1222,7 @@
     }
 
     // The centrepiece: a glowing shield rising off a layered circuit
-    // platform. Purely decorative (aria-hidden) — the figures carry the
+    // platform. Purely decorative (aria-hidden) - the figures carry the
     // meaning. Drawn in CSS/SVG; no image required. The float lives on the
     // inner stage so the core's own centring transform is never disturbed.
     function coreHTML() {
@@ -1132,73 +1337,81 @@
   })();
 
   /* ===================================================================
-     3. How HawkINT Works  —  container .hawk-how  —  prefix hk-how
-     A depth scope on the left; description rows cross-highlight it.
+     3. How HawkINT Works  -  container .hawk-how  -  prefix hk-how
+     A vertical process pipeline: five numbered steps on a single spine,
+     reading top-to-bottom as one signal from raw data to resolved threat
+     (Collect -> Enrich -> Analyze -> Alert -> Act).
      =================================================================== */
   (function () {
     var SECTION = ".hawk-how";
 
-    var MOD = "MOD 03 / HOW IT WORKS";
-    var TITLE = "Massive, continuous data collection";
-    var SUB =
-      "Thousands of specialized bots scan millions of posts, files, pages, " +
-      "and conversations across:";
-    var LAYERS = [
+    var MOD = "HOW IT WORKS";
+    var TITLE = "From Raw Signal to Resolved Threat in Five Steps";
+    // No lead in the PDF for this section - omit it (empty SUB).
+    var SUB = "";
+
+    // Each step is a node on the spine. Icons are drawn from the shared
+    // ICONS set and kept visually distinct across the five stages.
+    var STEPS = [
       {
-        icon: "surface",
-        tier: "Surface web",
-        depth: "Layer 01",
-        chip: "~4% of the web",
-        scan: "Indexed & public",
-        text: "Indexed sites, public pages, news, and social platforms."
+        num: "01",
+        icon: "bot",
+        title: "Collect",
+        text:
+          "Thousands of specialized bots scan millions of posts, files, " +
+          "pages, images and conversations across the surface, deep and " +
+          "dark web, around the clock."
       },
       {
-        icon: "deep",
-        tier: "Deep web",
-        depth: "Layer 02",
-        chip: "Behind logins",
-        scan: "Gated & private",
-        text: "Gated forums, paste sites, and marketplaces behind logins."
+        num: "02",
+        icon: "ocr",
+        title: "Enrich",
+        text:
+          "OCR pulls text from images, audio and video are transcribed " +
+          "automatically, and entities such as emails, domains, IPs and " +
+          "card numbers are recognized and classified."
       },
       {
-        icon: "dark",
-        tier: "Dark web",
-        depth: "Layer 03",
-        chip: "Tor · I2P",
-        scan: "Anonymised networks",
-        text: "Tor markets, breach dumps, and private actor channels."
+        num: "03",
+        icon: "rank",
+        title: "Analyze",
+        text:
+          "Machine learning ranks every event by severity and relevance " +
+          "to your assets, while LLM-powered models profile the actors " +
+          "behind it."
+      },
+      {
+        num: "04",
+        icon: "bell",
+        title: "Alert",
+        text:
+          "Confirmed threats become wires: targeted alerts with evidence, " +
+          "context and recommended next steps, delivered to the platform, " +
+          "email, your SIEM or ticketing tools."
+      },
+      {
+        num: "05",
+        icon: "shield",
+        title: "Act",
+        text:
+          "CybrHawk analysts validate, hunt deeper, engage threat actors " +
+          "where appropriate and execute takedowns - closing the loop."
       }
     ];
     var ANIMATE = true;
 
-    // A stratum in the left-hand depth scope, carrying real content so it
-    // never reads as an empty box. Hovering/focusing a row lights it.
-    function strataHTML(l, i) {
+    // One step row: a numbered node sitting on the spine, with a content
+    // card to its right carrying the title and body.
+    function stepHTML(s, i) {
       return (
-        '<div class="hk-how__stratum" data-tier="' + i + '" ' +
-          'style="--i:' + i + '">' +
-          '<span class="hk-how__stratum-glow"></span>' +
-          '<span class="hk-how__stratum-ico">' + icon(l.icon) + "</span>" +
-          '<span class="hk-how__stratum-copy">' +
-            '<span class="hk-how__stratum-label">' + esc(l.tier) + "</span>" +
-            '<span class="hk-how__stratum-scan">' + esc(l.scan) + "</span>" +
+        '<li class="hk-how__step" style="--i:' + i + '">' +
+          '<span class="hk-how__node">' +
+            '<span class="hk-how__node-ico">' + icon(s.icon) + "</span>" +
           "</span>" +
-          '<span class="hk-how__stratum-chip">' + esc(l.chip) + "</span>" +
-        "</div>"
-      );
-    }
-
-    // A description row on the right, keyed to its stratum. Keyboard
-    // reachable so the cross-highlight works without a mouse.
-    function rowHTML(l, i) {
-      return (
-        '<li class="hk-how__row" data-tier="' + i + '" tabindex="0" ' +
-          'style="--i:' + i + '">' +
-          '<span class="hk-how__row-icon">' + icon(l.icon) + "</span>" +
-          '<div class="hk-how__row-copy">' +
-            '<span class="hk-how__row-depth">' + esc(l.depth) + "</span>" +
-            '<h3 class="hk-how__row-title">' + esc(l.tier) + "</h3>" +
-            '<p class="hk-how__row-text">' + esc(l.text) + "</p>" +
+          '<div class="hk-how__step-card">' +
+            '<span class="hk-how__num" aria-hidden="true">' + esc(s.num) + "</span>" +
+            '<h3 class="hk-how__step-title">' + esc(s.title) + "</h3>" +
+            '<p class="hk-how__step-text">' + esc(s.text) + "</p>" +
           "</div>" +
         "</li>"
       );
@@ -1214,33 +1427,15 @@
         '<div class="hk-how' + (ANIMATE ? " is-animated" : "") + '">' +
           '<div class="hk-how__measure">' +
             moduleHead("hk-how", MOD, TITLE, SUB) +
-            '<div class="hk-how__diagram">' +
-              '<div class="hk-how__scope" aria-hidden="true">' +
-                '<span class="hk-how__axis">Depth</span>' +
-                '<div class="hk-how__stack">' +
-                  '<span class="hk-how__scan"></span>' +
-                  LAYERS.map(strataHTML).join("") +
-                "</div>" +
-              "</div>" +
-              '<ul class="hk-how__rows">' + LAYERS.map(rowHTML).join("") + "</ul>" +
-            "</div>" +
+            '<ol class="hk-how__steps">' +
+              STEPS.map(stepHTML).join("") +
+            "</ol>" +
           "</div>" +
         "</div>"
       );
 
       var root = host.querySelector(".hk-how");
       if (ANIMATE) reveal(root);
-
-      // Cross-highlight: hovering/focusing a row lights its stratum.
-      var scope = root.querySelector(".hk-how__scope");
-      root.querySelectorAll(".hk-how__row").forEach(function (row) {
-        function on() { scope.setAttribute("data-active", row.getAttribute("data-tier")); }
-        function off() { scope.removeAttribute("data-active"); }
-        row.addEventListener("mouseenter", on);
-        row.addEventListener("mouseleave", off);
-        row.addEventListener("focus", on);
-        row.addEventListener("blur", off);
-      });
       return true;
     }
 
@@ -1248,56 +1443,56 @@
   })();
 
   /* ===================================================================
-     4. Industries We Protect  —  container .hawk-industries  —  prefix hk-ind
+     4. Industries We Protect  -  container .hawk-industries  -  prefix hk-ind
      Clickable cards -> shared modal.
      =================================================================== */
   (function () {
     var SECTION = ".hawk-industries";
 
-    var MOD = "MOD 04 / INDUSTRIES";
-    var TITLE = "Built for the threats your sector actually faces";
+    var MOD = "INDUSTRIES";
+    var TITLE = "Intelligence tuned to your sector's threats";
     var SUB = "Select an industry to see how HawkINT is applied.";
     var CARDS = [
       {
         icon: "bank",
-        title: "Financial Services",
+        title: "Banking & Financial Services",
         text:
-          "Prevent fraud, monitor card leaks, intercept phishing campaigns, " +
-          "and track threat actor groups targeting banks."
+          "Stop card fraud, account takeover and phishing; track groups " +
+          "targeting banks and meet regulatory intelligence requirements."
       },
       {
         icon: "health",
-        title: "Healthcare",
+        title: "Healthcare & Life Sciences",
         text:
-          "Protect patient data, comply with HIPAA, and detect unauthorized " +
-          "access or data marketplace activity."
+          "Protect patient data, support HIPAA obligations and detect " +
+          "records for sale on dark web markets."
       },
       {
         icon: "gov",
         title: "Government & Public Sector",
         text:
-          "Monitor hacktivist groups, geopolitical threats, and critical " +
-          "infrastructure risks."
+          "Monitor hacktivists, geopolitical threats, disinformation and " +
+          "risks to citizen services."
       },
       {
         icon: "cart",
         title: "Retail & E-Commerce",
         text:
-          "Identify account takeovers, credential leaks, and fake store " +
-          "domains."
+          "Catch fake stores, credential stuffing, loyalty fraud and " +
+          "customer-targeted scams."
       },
       {
         icon: "energy",
-        title: "Energy & Utilities",
+        title: "Energy, Utilities & Manufacturing",
         text:
-          "Track nation-state actors, ransomware groups, and critical " +
-          "infrastructure threats."
+          "Track nation-state actors, ransomware groups and OT/ICS-focused " +
+          "threats to critical infrastructure."
       },
       {
         icon: "chip",
-        title: "Technology & Startups",
+        title: "Technology & SaaS",
         text:
-          "Monitor intellectual property, source code leaks, and brand " +
+          "Detect source code leaks, exposed API keys, IP theft and brand " +
           "impersonation."
       }
     ];
@@ -1337,31 +1532,141 @@
   })();
 
   /* ===================================================================
-     5. Targeted Alerts & Incident Wires  —  container .hawk-wires
-        prefix hk-wires  —  the page's signature "live wires console".
+     4.5 Core Capabilities  -  container .hawk-caps  -  prefix hk-caps
+     "Built for the Modern Threat Landscape" (PDF §5). A STATIC capability
+     grid - no modal, no click, no streaming - deliberately distinct from
+     the clickable Industries/Features dossier cards: each card carries a
+     zero-padded index chip + accent badge and a thin top accent rule, so
+     the grid reads as its own panel while using only the shared tokens and
+     helpers. Placed after Industries ("what the platform can do" right
+     after the sectors it serves) and before Alerts & Wires. Labelled with
+     an unnumbered MOD tag so the existing MOD 02–09 numbering is untouched.
+     =================================================================== */
+  (function () {
+    var SECTION = ".hawk-caps";
+
+    var MOD = "MOD · CAPABILITIES";
+    var TITLE = "Built for the Modern Threat Landscape";
+    var SUB =
+      "Every capability is designed to keep you one step ahead of attackers.";
+
+    // Six capabilities (icon, title, text) - wording fixed (PDF §5). Each
+    // icon name resolves through the shared ICONS set.
+    var CAPS = [
+      {
+        icon: "mask",
+        title: "Brand Protection",
+        text:
+          "Find and shut down impersonation, lookalike domains, phishing " +
+          "kits and fraudulent use of your brand across web, social and " +
+          "app stores."
+      },
+      {
+        icon: "dark",
+        title: "Deep & Dark Web Monitoring",
+        text:
+          "Continuous surveillance of underground forums, marketplaces, " +
+          "paste sites, Telegram and closed groups for threats naming your " +
+          "organization."
+      },
+      {
+        icon: "evidence",
+        title: "Data Leakage Detection",
+        text:
+          "Catch exposed credentials, sensitive documents, source code and " +
+          "proprietary data before threat actors can exploit them."
+      },
+      {
+        icon: "vip",
+        title: "VIP & Executive Protection",
+        text:
+          "Dedicated monitoring of leaders and key staff for personal data " +
+          "exposure, doxxing, deepfakes and targeted social engineering."
+      },
+      {
+        icon: "sources",
+        title: "External Attack Surface Management (EASM)",
+        text:
+          "Discover, map and monitor every internet-facing asset - domains, " +
+          "subdomains, certificates, cloud services and exposed ports - and " +
+          "flag the vulnerabilities attackers see first."
+      },
+      {
+        icon: "search",
+        title: "Threat Hunting",
+        text:
+          "Proactive, analyst-led searches for advanced threats that slip " +
+          "past traditional controls, guided by live adversary intelligence."
+      }
+    ];
+    var ANIMATE = true;
+
+    // Index chip + badge pairing is the signature that sets this grid apart
+    // from Industries/Features (which have no numbering). The chip is purely
+    // decorative - zero-padded ("01".."06") and aria-hidden.
+    function cardHTML(c, i) {
+      var idx = ("0" + (i + 1)).slice(-2);
+      return (
+        '<li>' +
+          '<div class="hk-caps__card" style="--i:' + i + '">' +
+            '<span class="hk-caps__index" aria-hidden="true">' + idx + "</span>" +
+            '<span class="hk-caps__badge">' + icon(c.icon) + "</span>" +
+            '<h3 class="hk-caps__card-title">' + esc(c.title) + "</h3>" +
+            '<p class="hk-caps__card-text">' + esc(c.text) + "</p>" +
+          "</div>" +
+        "</li>"
+      );
+    }
+
+    function build() {
+      var host = hostFor(SECTION);
+      if (!host) return false;
+      if (host.querySelector(".hk-caps")) return true;
+
+      host.insertAdjacentHTML(
+        "beforeend",
+        '<div class="hk-caps' + (ANIMATE ? " is-animated" : "") + '">' +
+          moduleHead("hk-caps", MOD, TITLE, SUB) +
+          '<ul class="hk-caps__grid">' + CAPS.map(cardHTML).join("") + "</ul>" +
+        "</div>"
+      );
+
+      var root = host.querySelector(".hk-caps");
+      if (ANIMATE) reveal(root);
+      return true;
+    }
+
+    onReady(function () { waitForSection(build); });
+  })();
+
+  /* ===================================================================
+     5. Targeted Alerts & Incident Wires  -  container .hawk-wires
+        prefix hk-wires  -  the page's signature "live wires console".
      =================================================================== */
   (function () {
     var SECTION = ".hawk-wires";
 
-    var MOD = "MOD 05 / ALERTS & WIRES";
+    var MOD = "ALERTS & WIRES";
     var TITLE = "Targeted alerts & incident wires";
     // Paragraph 1 contains an intentional, author-controlled <strong>; it
     // is injected RAW (the one documented exception to esc() in this file).
-    // Keep any new wording here plain text — no user input reaches it.
+    // Keep any new wording here plain text - no user input reaches it.
     var BODY = [
-      "When HawkINT detects threats — phishing pages, leaked " +
-        "credentials, fraud schemes, hacktivist planning, or illegal data " +
-        "marketplaces — the system creates <strong>wires</strong> with " +
-        "solid evidence, context, and recommendations.",
-      "Security teams can also configure custom alerts for threats related " +
-        "to VIPs, vulnerabilities, brand impersonation, or domain abuse."
+      "When HawkINT confirms a threat - phishing pages, leaked credentials, " +
+        "brand abuse, ransomware chatter or illegal data marketplaces - it " +
+        "creates <strong>wires</strong>: targeted alerts with evidence, " +
+        "context and a recommended next step, delivered to the platform, " +
+        "email, your SIEM or ticketing tools.",
+      "Set recurring searches and smart watchlists for your domains, brands, " +
+        "VIPs, BINs, IP ranges and technologies - and get notified the " +
+        "moment they surface."
     ];
 
     // The expanded "lead" wire pinned at the top of the console (editable).
     var WIRE = {
       severity: "High",
       ref: "WIRE-4821",
-      title: "Leaked credentials — acme-corp.com",
+      title: "Leaked credentials - acme-corp.com",
       rows: [
         {
           icon: "evidence",
@@ -1382,7 +1687,7 @@
     };
 
     // Compact wires that stream into the feed on a timer. sev drives the
-    // chip colour (high | med | low) — these are status, not brand.
+    // chip colour (high | med | low) - these are status, not brand.
     var FEED = [
       { sev: "high", tag: "Phishing", text: "Spoofed login page cloning your SSO portal." },
       { sev: "med", tag: "Brand abuse", text: "Lookalike domain registered: acme-support[.]co." },
@@ -1454,7 +1759,7 @@
               "</p>" +
               '<h2 class="hk-wires__title">' + esc(TITLE) + "</h2>" +
               BODY.map(function (p) {
-                // RAW by design — see the BODY comment above.
+                // RAW by design - see the BODY comment above.
                 return '<p class="hk-wires__body">' + p + "</p>";
               }).join("") +
             "</div>" +
@@ -1499,14 +1804,15 @@
   })();
 
   /* ===================================================================
-     6. Advanced Processing & Enrichment  —  container .hawk-enrich
-        prefix hk-enrich  —  framed image tiles, icon fallback.
+     6. Advanced Processing & Enrichment  -  container .hawk-enrich
+        prefix hk-enrich  -  framed image tiles, icon fallback.
      =================================================================== */
   (function () {
     var SECTION = ".hawk-enrich";
 
-    var MOD = "MOD 06 / ENRICHMENT";
+    var MOD = "ENRICHMENT";
     var TITLE = "Advanced processing & enrichment";
+    // Each tile pairs an image with a one-line enrichment step (PDF §6 Enrich).
     /* Each tile shows an image. Drop the image URL into `img` (and a short
        `alt`); while `img` is "" the icon named in `icon` is drawn instead,
        so the section still renders before the artwork is ready. */
@@ -1517,7 +1823,7 @@
           "AI-Powered-Security-Report-Scanning.webp",
         alt: "AI-powered scanning of a security report",
         icon: "ocr",
-        text: "OCR extracts text from images."
+        text: "OCR pulls text from images."
       },
       {
         img:
@@ -1525,7 +1831,7 @@
           "Minimalist-Audio-Transcription-Dashboard.webp",
         alt: "Audio transcription dashboard",
         icon: "media",
-        text: "Audio and video are automatically transcribed."
+        text: "Audio and video are transcribed automatically."
       },
       {
         img:
@@ -1533,7 +1839,7 @@
           "Modern-Security-Events-Dashboard.webp",
         alt: "Security events ranked by severity",
         icon: "rank",
-        text: "Machine learning models rank events by severity."
+        text: "Machine learning ranks events by severity and relevance."
       },
       {
         img:
@@ -1542,7 +1848,7 @@
         alt: "Data triage dashboard classifying formats",
         icon: "classify",
         text:
-          "Data formats — emails, domains, card numbers — are " +
+          "Entities - emails, domains, IPs and card numbers - are " +
           "recognized and classified."
       }
     ];
@@ -1602,71 +1908,71 @@
   })();
 
   /* ===================================================================
-     7. Platform Features  —  container .hawk-features  —  prefix hk-features
+     7. Platform Features  -  container .hawk-features  -  prefix hk-features
      Clickable cards -> shared modal.
      =================================================================== */
   (function () {
     var SECTION = ".hawk-features";
 
-    var MOD = "MOD 07 / FEATURES";
-    var TITLE = "Everything a threat-intel team needs, in one platform";
+    var MOD = "FEATURES";
+    var TITLE = "Everything your analysts need in one console";
     var SUB = "Select a feature to see what it does.";
     var CARDS = [
       {
         icon: "search",
-        title: "Search Engine",
+        title: "Intelligence Search Engine",
         text:
-          "Query billions of records with Lucene or Regex, filtering by " +
-          "date, source, file type, actor, or keyword."
+          "Query billions of records in seconds with Lucene or Regex, " +
+          "filtered by date, source, file type, actor or keyword."
       },
       {
-        icon: "profiles",
-        title: "Access Profiles",
+        icon: "bell",
+        title: "Smart Alerts & Watchlists",
         text:
-          "Create teams, roles, and project-based access to align the " +
-          "platform with your internal workflows."
+          "Set recurring searches for your domains, brands, VIPs, BINs, IP " +
+          "ranges and technologies - and get notified the moment they surface."
       },
       {
         icon: "bot",
-        title: "Customizable Bots",
+        title: "No-Code Custom Bots",
         text:
-          "Design and deploy your own bots directly from the interface — " +
-          "no coding required."
+          "Design and deploy your own collection bots from the interface to " +
+          "watch the sources that matter to you."
+      },
+      {
+        icon: "evidence",
+        title: "Leak Evidence Viewer",
+        text:
+          "Open the exact file, post or log where your data appeared, with " +
+          "secure, sandboxed access."
+      },
+      {
+        icon: "link-alert",
+        title: "Malicious URL & Phishing Monitoring",
+        text:
+          "AI scanning spots phishing pages, malware hosts and fraudulent " +
+          "landing pages, and alerts your team instantly."
       },
       {
         icon: "mask",
         title: "Fake Profile Detection",
         text:
-          "Identify and help remove impersonations on social networks and " +
-          "digital platforms."
+          "Identify impersonation accounts across social networks and " +
+          "digital platforms, ready for takedown."
       },
       {
-        icon: "link-alert",
-        title: "Malicious URL Monitoring",
+        icon: "actor",
+        title: "Threat Actor Profiles",
         text:
-          "AI-powered scanning detects phishing sites, malware hosts, and " +
-          "fraudulent landing pages — alerting your team immediately."
+          "See aliases, tactics, targets and history for the groups and " +
+          "individuals behind each threat."
       },
       {
-        icon: "bell",
-        title: "Alerts",
+        icon: "report",
+        title: "Executive Dashboards & Reports",
         text:
-          "Set up recurring searches and automated monitoring for " +
-          "vulnerabilities, VIP mentions, leaks, and more."
-      },
-      {
-        icon: "ransom",
-        title: "Ransomware Intelligence",
-        text:
-          "Track ransomware groups, leak sites, chatter, attack " +
-          "disclosures, and activity trends."
-      },
-      {
-        icon: "vip",
-        title: "VIP Monitoring",
-        text:
-          "Monitor exposure of executives and sensitive individuals across " +
-          "the surface, deep, and dark web."
+          "Share exposure trends, risk scores and takedown results with " +
+          "leadership and auditors."
       }
     ];
     var ANIMATE = true;
@@ -1705,34 +2011,37 @@
   })();
 
   /* ===================================================================
-     8. AI & Associated Services  —  container .hawk-ai  —  prefix hk-ai
+     8. AI & Associated Services  -  container .hawk-ai  -  prefix hk-ai
      =================================================================== */
   (function () {
     var SECTION = ".hawk-ai";
 
-    var MOD = "MOD 08 / AI & SERVICES";
-    var TITLE = "From raw data to actionable intelligence";
+    var MOD = "AI & SERVICES";
+    var TITLE = "Human expertise, amplified by applied AI";
     var SUB =
-      "HawkINT uses cutting-edge AI to transform raw data into actionable " +
-      "intelligence.";
+      "HawkINT's AI turns overwhelming volumes of raw data into a short list " +
+      "of threats that matter - and our analysts train, tune and validate " +
+      "every model.";
 
     var CAPABILITIES = [
-      "Fake profile detection via behavioral ML models",
-      "Image similarity analysis via neural networks",
-      "Personalized recommendations based on user behavior",
-      "Machine-learning event ranking",
+      "ML event ranking by severity and relevance",
       "LLM-powered threat-actor profiling",
+      "AI threat summaries for faster triage",
       "Automated phishing classification",
-      "Anomaly detection in digital environments",
-      "Facial recognition to flag impersonation and inappropriate content"
+      "Image similarity & logo detection for brand abuse",
+      "Facial recognition to spot impersonation and deepfakes",
+      "Behavioral fake-profile detection",
+      "Anomaly detection in the environments we monitor"
     ];
     var SERVICES = [
-      "API integration",
       "Active threat hunting",
-      "Direct engagement with threat actors",
+      "Threat actor engagement",
+      "Incident response",
+      "Digital forensics",
       "Phishing website takedowns",
       "Fake profile takedowns",
-      "Removal of fraudulent mobile apps"
+      "Fraudulent mobile app removal",
+      "API & integrations (REST, STIX/TAXII)"
     ];
     var ANIMATE = true;
 
@@ -1783,17 +2092,17 @@
   })();
 
   /* ===================================================================
-     9. Takedown Services  —  container .hawk-takedown  —  prefix hk-takedown
+     9. Takedown Services  -  container .hawk-takedown  -  prefix hk-takedown
      Framed image tiles with a "neutralized" tick, icon fallback.
      =================================================================== */
   (function () {
     var SECTION = ".hawk-takedown";
 
-    var MOD = "MOD 09 / TAKEDOWN";
-    var TITLE = "We don't just detect — we remove";
+    var MOD = "TAKEDOWN";
+    var TITLE = "Intelligence backed by a team that acts";
     var SUB =
-      "HawkINT pairs intelligence with direct action to take hostile assets " +
-      "down.";
+      "HawkINT doesn't stop at the alert - CybrHawk's experts help you " +
+      "investigate, respond and remove threats.";
     /* Each tile shows an image. Drop the image URL into `img` (and a short
        `alt`); while `img` is "" the icon named in `icon` is drawn instead,
        so the section still renders before the artwork is ready. */
@@ -1804,7 +2113,7 @@
           "Phishing-Site-Removal-Illustration.webp",
         alt: "Phishing site being removed",
         icon: "page",
-        label: "Phishing pages"
+        label: "Phishing sites & lookalike domains"
       },
       {
         img:
@@ -1812,7 +2121,7 @@
           "Removing-Fake-Social-Profiles.webp",
         alt: "Fake social profiles being removed",
         icon: "mask",
-        label: "Fake profiles"
+        label: "Fake profiles & impersonation accounts"
       },
       {
         img:
@@ -1820,7 +2129,7 @@
           "Malicious-App-Removed-Successfully.webp",
         alt: "Malicious mobile app removed",
         icon: "app",
-        label: "Fraudulent mobile apps"
+        label: "Fraudulent & cloned mobile apps"
       },
       {
         img:
@@ -1828,7 +2137,7 @@
           "Malicious-Domain-Blocked-Network-Secured.webp",
         alt: "Malicious domain blocked, network secured",
         icon: "malware",
-        label: "Malicious domains & content"
+        label: "Malicious ads, scam pages & URLs"
       }
     ];
     var ANIMATE = true;

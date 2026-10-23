@@ -93,9 +93,11 @@
 /* Box-sizing + font floor for every section and its injected content. */
 .hawk-hero, .hawk-hero *,
 .hawk-about, .hawk-about *,
+.hawk-modules, .hawk-modules *,
 .hawk-numbers, .hawk-numbers *,
 .hawk-how, .hawk-how *,
 .hawk-industries, .hawk-industries *,
+.hawk-caps, .hawk-caps *,
 .hawk-wires, .hawk-wires *,
 .hawk-enrich, .hawk-enrich *,
 .hawk-features, .hawk-features *,
@@ -110,9 +112,11 @@
    !important beats that site-level rule (the one documented exception). */
 .hawk-hero > .e-con-inner,
 .hawk-about > .e-con-inner,
+.hawk-modules > .e-con-inner,
 .hawk-numbers > .e-con-inner,
 .hawk-how > .e-con-inner,
 .hawk-industries > .e-con-inner,
+.hawk-caps > .e-con-inner,
 .hawk-wires > .e-con-inner,
 .hawk-enrich > .e-con-inner,
 .hawk-features > .e-con-inner,
@@ -127,9 +131,11 @@
    alternating white / tint keeps neighbours distinct. */
 .hawk-hero,
 .hawk-about,
+.hawk-modules,
 .hawk-numbers,
 .hawk-how,
 .hawk-industries,
+.hawk-caps,
 .hawk-wires,
 .hawk-enrich,
 .hawk-features,
@@ -145,6 +151,7 @@
 
 /* White bands and tinted bands alternate so no two neighbours match. */
 .hawk-hero,
+.hawk-modules,
 .hawk-numbers,
 .hawk-industries,
 .hawk-enrich,
@@ -153,6 +160,7 @@
 }
 .hawk-about,
 .hawk-how,
+.hawk-caps,
 .hawk-wires,
 .hawk-features,
 .hawk-takedown {
@@ -164,6 +172,7 @@
    set above so Elementor's lazy-load never blanks the band. */
 .hawk-about,
 .hawk-how,
+.hawk-caps,
 .hawk-wires,
 .hawk-features,
 .hawk-takedown {
@@ -172,14 +181,16 @@
 }
 
 @media (max-width: 980px) {
-  .hawk-hero, .hawk-about, .hawk-numbers, .hawk-how, .hawk-industries,
-  .hawk-wires, .hawk-enrich, .hawk-features, .hawk-ai, .hawk-takedown {
+  .hawk-hero, .hawk-about, .hawk-modules, .hawk-numbers, .hawk-how,
+  .hawk-industries, .hawk-caps, .hawk-wires, .hawk-enrich, .hawk-features,
+  .hawk-ai, .hawk-takedown {
     --hk-gutter: 22px;
   }
 }
 @media (max-width: 520px) {
-  .hawk-hero, .hawk-about, .hawk-numbers, .hawk-how, .hawk-industries,
-  .hawk-wires, .hawk-enrich, .hawk-features, .hawk-ai, .hawk-takedown {
+  .hawk-hero, .hawk-about, .hawk-modules, .hawk-numbers, .hawk-how,
+  .hawk-industries, .hawk-caps, .hawk-wires, .hawk-enrich, .hawk-features,
+  .hawk-ai, .hawk-takedown {
     --hk-gutter: 18px;
   }
 }
@@ -187,9 +198,11 @@
 /* Centered measure for every section's injected wrapper. */
 .hawk-hero .hk-hero,
 .hawk-about .hk-about,
+.hawk-modules .hk-modules,
 .hawk-numbers .hk-numbers,
 .hawk-how .hk-how,
 .hawk-industries .hk-ind,
+.hawk-caps .hk-caps,
 .hawk-wires .hk-wires,
 .hawk-enrich .hk-enrich,
 .hawk-features .hk-features,
@@ -207,9 +220,11 @@
    an optional lead. Shared look across every section. */
 .hawk-hero .hk-hero__mod,
 .hawk-about .hk-about__mod,
+.hawk-modules .hk-modules__mod,
 .hawk-numbers .hk-numbers__mod,
 .hawk-how .hk-how__mod,
 .hawk-industries .hk-ind__mod,
+.hawk-caps .hk-caps__mod,
 .hawk-wires .hk-wires__mod,
 .hawk-enrich .hk-enrich__mod,
 .hawk-features .hk-features__mod,
@@ -229,9 +244,11 @@
 
 .hawk-hero .hk-hero__tick,
 .hawk-about .hk-about__tick,
+.hawk-modules .hk-modules__tick,
 .hawk-numbers .hk-numbers__tick,
 .hawk-how .hk-how__tick,
 .hawk-industries .hk-ind__tick,
+.hawk-caps .hk-caps__tick,
 .hawk-wires .hk-wires__tick,
 .hawk-enrich .hk-enrich__tick,
 .hawk-features .hk-features__tick,
@@ -247,8 +264,10 @@
 
 /* Section H2. */
 .hawk-about .hk-about__title,
+.hawk-modules .hk-modules__title,
 .hawk-how .hk-how__title,
 .hawk-industries .hk-ind__title,
+.hawk-caps .hk-caps__title,
 .hawk-wires .hk-wires__title,
 .hawk-enrich .hk-enrich__title,
 .hawk-features .hk-features__title,
@@ -263,8 +282,10 @@
 }
 
 /* Section lead / sub. */
+.hawk-modules .hk-modules__lead,
 .hawk-how .hk-how__lead,
 .hawk-industries .hk-ind__lead,
+.hawk-caps .hk-caps__lead,
 .hawk-enrich .hk-enrich__lead,
 .hawk-features .hk-features__lead,
 .hawk-ai .hk-ai__lead,
@@ -277,8 +298,10 @@
 }
 
 /* A faint rule sealing the header on the centered-column sections. */
+.hawk-modules .hk-modules__head,
 .hawk-how .hk-how__head,
 .hawk-industries .hk-ind__head,
+.hawk-caps .hk-caps__head,
 .hawk-enrich .hk-enrich__head,
 .hawk-features .hk-features__head,
 .hawk-ai .hk-ai__head,
@@ -291,9 +314,11 @@
 /* Focus — always visible, dark-tuned (brief §6.6). */
 .hawk-hero :focus-visible,
 .hawk-about :focus-visible,
+.hawk-modules :focus-visible,
 .hawk-numbers :focus-visible,
 .hawk-how :focus-visible,
 .hawk-industries :focus-visible,
+.hawk-caps :focus-visible,
 .hawk-wires :focus-visible,
 .hawk-enrich :focus-visible,
 .hawk-features :focus-visible,
@@ -444,13 +469,6 @@
   line-height: 1.62;
   color: var(--hk-ink-2);
 }
-.hawk-hero .hk-hero__tagline {
-  margin: 22px 0 0;
-  font-size: clamp(17px, 1.6vw, 19px);
-  font-weight: 700;
-  color: var(--hk-ink);
-}
-
 /* Buttons (brief §6.5). */
 .hawk-hero .hk-hero__buttons {
   display: flex;
@@ -752,7 +770,6 @@
   .hawk-hero .hk-hero.is-animated .hk-hero__title,
   .hawk-hero .hk-hero.is-animated .hk-hero__lead,
   .hawk-hero .hk-hero.is-animated .hk-hero__body,
-  .hawk-hero .hk-hero.is-animated .hk-hero__tagline,
   .hawk-hero .hk-hero.is-animated .hk-hero__buttons,
   .hawk-hero .hk-hero.is-animated .hk-hero__proof-item,
   .hawk-hero .hk-hero.is-animated .hk-hero__visual {
@@ -766,7 +783,6 @@
   .hawk-hero .hk-hero.is-animated.is-visible .hk-hero__title,
   .hawk-hero .hk-hero.is-animated.is-visible .hk-hero__lead,
   .hawk-hero .hk-hero.is-animated.is-visible .hk-hero__body,
-  .hawk-hero .hk-hero.is-animated.is-visible .hk-hero__tagline,
   .hawk-hero .hk-hero.is-animated.is-visible .hk-hero__buttons,
   .hawk-hero .hk-hero.is-animated.is-visible .hk-hero__proof-item,
   .hawk-hero .hk-hero.is-animated.is-visible .hk-hero__visual {
@@ -838,21 +854,6 @@
   line-height: 1.64;
   color: var(--hk-ink-2);
 }
-.hawk-about .hk-about__pledge {
-  display: flex;
-  align-items: flex-start;
-  gap: 13px;
-  margin: 26px 0 0;
-  padding: 16px 18px;
-  border-radius: 12px;
-  border: 1px solid var(--hk-accent-line);
-  background: var(--hk-accent-soft);
-  color: var(--hk-ink);
-  font-size: 15px;
-  line-height: 1.5;
-}
-.hawk-about .hk-about__pledge svg { flex: none; width: 22px; height: 22px; color: var(--hk-accent-text); margin-top: 1px; }
-
 .hawk-about .hk-about__media { min-width: 0; }
 
 /* console frame (brief §6.4) */
@@ -912,9 +913,201 @@
 }
 .hawk-about .hk-about__caption svg { flex: none; width: 16px; height: 16px; color: var(--hk-accent-text); }
 
+/* "What You Get" — a console OUTPUTS readout (echoes the media console:
+   chrome bar, mono telemetry, a signal rail lighting each line on hover). */
+.hawk-about .hk-about__outputs {
+  margin: 28px 0 0;
+  border: 1px solid var(--hk-border);
+  border-radius: 14px;
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+  overflow: hidden;
+}
+/* readout chrome bar: live dot · title · output counter */
+.hawk-about .hk-about__outputs-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  background: var(--hk-panel-top);
+  border-bottom: 1px solid var(--hk-border);
+}
+.hawk-about .hk-about__outputs-dot {
+  flex: none;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--hk-live);
+  box-shadow: 0 0 0 3px rgba(11, 143, 87, .14);
+}
+.hawk-about .hk-about__outputs-title {
+  font-family: var(--hk-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--hk-ink);
+}
+.hawk-about .hk-about__outputs-count {
+  margin-left: auto;
+  font-family: var(--hk-mono);
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  color: var(--hk-ink-mono);
+}
+
+/* a row of output cards, split by hairlines, with a shared signal line
+   running across the node band at the top */
+.hawk-about .hk-about__out-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+/* each output card */
+.hawk-about .hk-about__out {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 18px 20px;
+  border-left: 1px solid var(--hk-rule);
+  isolation: isolate;
+}
+.hawk-about .hk-about__out:first-child { border-left: 0; }
+
+/* soft accent wash that lights the hovered card (How-it-works idiom) */
+.hawk-about .hk-about__out-glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, var(--hk-accent-soft), transparent 72%);
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+.hawk-about .hk-about__out:hover .hk-about__out-glow,
+.hawk-about .hk-about__out:focus-within .hk-about__out-glow { opacity: 1; }
+
+/* top band: index on the left, check node on the right, with a hairline
+   "signal line" running between them and on across the cards */
+.hawk-about .hk-about__out-rail {
+  position: relative;
+  order: -1;
+  display: flex;
+  align-items: center;
+  height: 24px;
+}
+.hawk-about .hk-about__out-rail::before {
+  content: "";
+  position: absolute;
+  left: -18px; right: -18px;   /* bleed across the card padding + divider */
+  top: 50%;
+  height: 1px;
+  background: var(--hk-accent-line);
+}
+.hawk-about .hk-about__out:first-child .hk-about__out-rail::before { left: 0; }
+.hawk-about .hk-about__out:last-child .hk-about__out-rail::before { right: 0; }
+.hawk-about .hk-about__out-node {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--hk-accent-soft);
+  color: var(--hk-accent-text);
+  box-shadow: 0 0 0 4px var(--hk-panel);
+  transition: box-shadow .3s ease;
+}
+.hawk-about .hk-about__out-node svg { width: 13px; height: 13px; }
+.hawk-about .hk-about__out:hover .hk-about__out-node,
+.hawk-about .hk-about__out:focus-within .hk-about__out-node {
+  box-shadow: 0 0 0 4px var(--hk-panel), 0 0 0 7px var(--hk-accent-soft);
+}
+
+/* zero-padded index — sits at the far right of the node band */
+.hawk-about .hk-about__out-idx {
+  margin-left: auto;
+  position: relative;
+  padding-left: 8px;
+  background: var(--hk-panel);
+  font-family: var(--hk-mono);
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: var(--hk-ink-mono);
+}
+
+.hawk-about .hk-about__out-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.hawk-about .hk-about__out-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+}
+.hawk-about .hk-about__out-label {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--hk-ink);
+  letter-spacing: -.005em;
+}
+.hawk-about .hk-about__out-tag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--hk-accent-line);
+  background: var(--hk-accent-soft);
+  font-family: var(--hk-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  color: var(--hk-accent-text);
+}
+.hawk-about .hk-about__out-text {
+  display: block;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--hk-ink-2);
+}
+
+/* staggered reveal, keyed off the section's existing is-visible flag */
+@media (prefers-reduced-motion: no-preference) {
+  .hawk-about .hk-about.is-animated .hk-about__out {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .5s ease, transform .5s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i) * 70ms);
+  }
+  .hawk-about .hk-about.is-animated.is-visible .hk-about__out {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (max-width: 920px) {
   .hawk-about .hk-about__grid { grid-template-columns: minmax(0, 1fr); }
   .hawk-about .hk-about__media { max-width: 620px; }
+  .hawk-about .hk-about__outputs { margin-top: 24px; }
+  /* 5-across is too tight on tablets → wrap to a two-row grid */
+  .hawk-about .hk-about__out-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .hawk-about .hk-about__out:nth-child(3n + 1) { border-left: 0; }
+  .hawk-about .hk-about__out:nth-child(n + 4) { border-top: 1px solid var(--hk-rule); }
+  /* the horizontal signal line only reads in a single row — hide when wrapped */
+  .hawk-about .hk-about__out-rail::before { display: none; }
+}
+@media (max-width: 620px) {
+  .hawk-about .hk-about__out-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hawk-about .hk-about__out { border-left: 0; border-top: 1px solid var(--hk-rule); }
+  .hawk-about .hk-about__out:nth-child(2n) { border-left: 1px solid var(--hk-rule); }
+  .hawk-about .hk-about__out:nth-child(-n + 2) { border-top: 0; }
+}
+@media (max-width: 420px) {
+  .hawk-about .hk-about__out-list { grid-template-columns: minmax(0, 1fr); }
+  .hawk-about .hk-about__out { border-left: 0; }
+  .hawk-about .hk-about__out:nth-child(n + 2) { border-top: 1px solid var(--hk-rule); }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -928,6 +1121,130 @@
   .hawk-about .hk-about.is-animated.is-visible .hk-about__copy,
   .hawk-about .hk-about.is-animated.is-visible .hk-about__media {
     opacity: 1; transform: none;
+  }
+}
+
+/* =====================================================================
+   1.5 Product Modules  —  .hawk-modules  (prefix hk-modules)
+   Three module cards in one row, each a full-height flex column so the
+   CTAs align at the bottom (margin-top:auto on the button). Panel
+   surface + border + --hk-shadow, lifting on hover to --hk-shadow-hover
+   and --hk-border-2 — the same elevation idiom and timing as the hero
+   button, gated behind the file's single prefers-reduced-motion handling.
+   ===================================================================== */
+.hawk-modules .hk-modules__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 1.8vw, 22px);
+  margin: 0; padding: 0; list-style: none;
+}
+.hawk-modules .hk-modules__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  height: 100%;
+  padding: clamp(24px, 2.6vw, 32px);
+  border-radius: 16px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+  text-align: left;
+  font-family: var(--hk-font);
+}
+.hawk-modules .hk-modules__card:hover {
+  border-color: var(--hk-border-2);
+  box-shadow: var(--hk-shadow-hover);
+}
+
+/* Small uppercase accent label above the badge. */
+.hawk-modules .hk-modules__tag {
+  font-family: var(--hk-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--hk-accent-text);
+}
+
+/* Rounded accent chip holding the module icon. */
+.hawk-modules .hk-modules__badge {
+  display: grid; place-items: center;
+  width: 46px; height: 46px;
+  border-radius: 11px;
+  background: var(--hk-accent-soft);
+  color: var(--hk-accent-text);
+}
+.hawk-modules .hk-modules__badge svg { width: 25px; height: 25px; }
+
+.hawk-modules .hk-modules__card-title {
+  margin: 2px 0 0;
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--hk-ink);
+}
+.hawk-modules .hk-modules__desc {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--hk-ink-2);
+}
+
+/* Bullet list: check glyph inline with each item. */
+.hawk-modules .hk-modules__list {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+.hawk-modules .hk-modules__li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--hk-ink-2);
+}
+.hawk-modules .hk-modules__li-ico {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 20px; height: 20px;
+  margin-top: 1px;
+  color: var(--hk-accent-text);
+}
+.hawk-modules .hk-modules__li-ico svg { width: 15px; height: 15px; }
+
+@media (max-width: 920px) {
+  .hawk-modules .hk-modules__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .hawk-modules .hk-modules__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Reveal/stagger — same opacity+rise, easing and --i delay as the other
+     card grids. */
+  .hawk-modules .hk-modules.is-animated .hk-modules__card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .55s ease,
+                transform .55s cubic-bezier(.22, 1, .36, 1),
+                border-color .2s ease, box-shadow .25s ease;
+    transition-delay: calc(var(--i, 0) * 60ms);
+  }
+  .hawk-modules .hk-modules.is-animated.is-visible .hk-modules__card {
+    opacity: 1; transform: none;
+  }
+  /* Subtle hover lift, mirroring the hero button's -2px translate. The
+     reveal transition above already carries this card's border/shadow
+     timing, so hover reuses it. */
+  .hawk-modules .hk-modules.is-animated.is-visible .hk-modules__card:hover {
+    transform: translateY(-4px);
   }
 }
 
@@ -1388,157 +1705,156 @@
 /* =====================================================================
    3. How HawkINT Works  —  .hawk-how  (prefix hk-how)
    ===================================================================== */
-.hawk-how .hk-how__measure { max-width: 1120px; margin: 0 auto; }
-.hawk-how .hk-how__diagram {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  align-items: center;
-  gap: clamp(28px, 4vw, 56px);
+.hawk-how .hk-how__measure { max-width: 880px; margin: 0 auto; }
+
+/* The pipeline: a single vertical list. Node column is fixed; the card
+   takes the rest. --node and --gap drive both the layout and the spine
+   geometry so the line always threads the centre of every node. */
+.hawk-how .hk-how__steps {
+  --node: 52px;             /* node diameter */
+  --col-gap: clamp(18px, 2.4vw, 28px);  /* node -> card gap */
+  --row-gap: clamp(26px, 3.4vw, 44px);  /* flow between stages */
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--row-gap);
 }
 
-/* left: the depth scope */
-.hawk-how .hk-how__scope {
+/* The continuous spine is built from a per-step connector rather than one
+   absolute line, so it can never protrude past the end nodes no matter how
+   tall the first or last card is. Each step draws a segment from its own
+   node centre down into the next node's centre; the last step draws none,
+   so the line caps exactly on node #05. Together the segments read as a
+   single unbroken line threading all five nodes. */
+.hawk-how .hk-how__step {
   position: relative;
-  padding: 22px 22px 22px 46px;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: var(--node) minmax(0, 1fr);
+  column-gap: var(--col-gap);
+  align-items: start;
+}
+.hawk-how .hk-how__step::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--node) / 2);
+  top: calc(var(--node) / 2);
+  /* from this node's centre, across the row gap, to the next node's centre */
+  height: calc(100% - var(--node) / 2 + var(--row-gap));
+  width: 2px;
+  transform: translateX(-50%);
+  background: var(--hk-accent-line);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 0;
+}
+.hawk-how .hk-how__step:last-child::before { display: none; }
+
+/* Node: a circular badge sitting on the spine, carrying the step icon. */
+.hawk-how .hk-how__node {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--node);
+  height: var(--node);
+  border-radius: 50%;
+  border: 1px solid var(--hk-border-2);
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow), 0 0 0 5px var(--hk-panel);
+  color: var(--hk-accent-text);
+}
+.hawk-how .hk-how__node-ico { display: grid; place-items: center; }
+.hawk-how .hk-how__node-ico svg { width: 24px; height: 24px; }
+
+/* Card: the console-panel idiom shared with the other sections. */
+.hawk-how .hk-how__step-card {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(18px, 2.2vw, 24px) clamp(18px, 2.4vw, 26px);
   border-radius: 16px;
   border: 1px solid var(--hk-border);
   background: var(--hk-panel);
   box-shadow: var(--hk-shadow);
-  overflow: hidden;
 }
-.hawk-how .hk-how__axis {
-  position: absolute;
-  left: 16px; top: 50%;
-  transform: translateY(-50%) rotate(180deg);
-  writing-mode: vertical-rl;
-  font-family: var(--hk-mono);
-  font-size: 10.5px;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--hk-ink-mono);
+@media (prefers-reduced-motion: no-preference) {
+  .hawk-how .hk-how__step-card {
+    transition: border-color .2s ease, box-shadow .25s ease, transform .25s ease;
+  }
 }
-.hawk-how .hk-how__stack { position: relative; display: flex; flex-direction: column; gap: 12px; }
-.hawk-how .hk-how__scan {
-  position: absolute;
-  left: 0; right: 0; top: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--hk-accent), transparent);
-  opacity: 0;
-  pointer-events: none;
-}
-.hawk-how .hk-how__stratum {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  padding: 15px 16px;
-  border-radius: 12px;
-  border: 1px solid var(--hk-border);
-  overflow: hidden;
-}
-.hawk-how .hk-how__stratum[data-tier="0"] { background: linear-gradient(120deg, var(--hk-depth-surface), var(--hk-panel)); }
-.hawk-how .hk-how__stratum[data-tier="1"] { background: linear-gradient(120deg, var(--hk-depth-deep), var(--hk-panel)); }
-.hawk-how .hk-how__stratum[data-tier="2"] { background: linear-gradient(120deg, var(--hk-depth-dark), var(--hk-panel)); }
-.hawk-how .hk-how__stratum-glow {
-  position: absolute; inset: 0;
-  background: radial-gradient(60% 120% at 20% 50%, rgba(12, 104, 255, .28), transparent 70%);
-  opacity: 0;
-  transition: opacity .3s ease;
-  pointer-events: none;
-}
-.hawk-how .hk-how__stratum-ico {
-  position: relative;
-  flex: none;
-  display: grid; place-items: center;
-  width: 38px; height: 38px;
-  border-radius: 9px;
-  background: rgba(12, 104, 255, .18);
-  color: var(--hk-accent-text);
-}
-.hawk-how .hk-how__stratum-ico svg { width: 21px; height: 21px; }
-.hawk-how .hk-how__stratum-copy { position: relative; display: flex; flex-direction: column; min-width: 0; }
-.hawk-how .hk-how__stratum-label { font-size: 15px; font-weight: 600; color: var(--hk-ink); }
-.hawk-how .hk-how__stratum-scan {
-  font-family: var(--hk-mono); font-size: 10.5px; letter-spacing: .1em; color: var(--hk-ink-mono);
-}
-.hawk-how .hk-how__stratum-chip {
-  position: relative;
-  margin-left: auto;
-  padding: 5px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--hk-border);
-  background: #ffffff;
-  font-family: var(--hk-mono); font-size: 10.5px; letter-spacing: .06em; color: var(--hk-accent-text);
-  white-space: nowrap;
-}
-/* cross-highlight from the rows */
-.hawk-how .hk-how__scope[data-active="0"] .hk-how__stratum[data-tier="0"] .hk-how__stratum-glow,
-.hawk-how .hk-how__scope[data-active="1"] .hk-how__stratum[data-tier="1"] .hk-how__stratum-glow,
-.hawk-how .hk-how__scope[data-active="2"] .hk-how__stratum[data-tier="2"] .hk-how__stratum-glow {
-  opacity: 1;
-}
-.hawk-how .hk-how__scope[data-active="0"] .hk-how__stratum[data-tier="0"],
-.hawk-how .hk-how__scope[data-active="1"] .hk-how__stratum[data-tier="1"],
-.hawk-how .hk-how__scope[data-active="2"] .hk-how__stratum[data-tier="2"] {
-  border-color: var(--hk-accent-line);
-}
-
-/* right: description rows */
-.hawk-how .hk-how__rows { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
-.hawk-how .hk-how__row {
-  display: flex;
-  gap: 15px;
-  padding: 18px 18px;
-  border-radius: 14px;
-  border: 1px solid var(--hk-border);
-  background: var(--hk-panel);
-  cursor: default;
-}
-.hawk-how .hk-how__row:hover,
-.hawk-how .hk-how__row:focus-visible {
+.hawk-how .hk-how__step:hover .hk-how__step-card,
+.hawk-how .hk-how__step:focus-within .hk-how__step-card {
   border-color: var(--hk-border-2);
-  background: var(--hk-panel-2);
+  box-shadow: var(--hk-shadow-hover), 0 0 0 1px var(--hk-glow);
 }
-.hawk-how .hk-how__row-icon {
-  flex: none;
-  display: grid; place-items: center;
-  width: 42px; height: 42px;
-  border-radius: 10px;
-  background: var(--hk-accent-soft);
-  color: var(--hk-accent-text);
-}
-.hawk-how .hk-how__row-icon svg { width: 23px; height: 23px; }
-.hawk-how .hk-how__row-copy { min-width: 0; }
-.hawk-how .hk-how__row-depth {
-  font-family: var(--hk-mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--hk-ink-mono);
-}
-.hawk-how .hk-how__row-title { margin: 3px 0 5px; font-size: 18px; font-weight: 700; color: var(--hk-ink); }
-.hawk-how .hk-how__row-text { margin: 0; font-size: 15px; line-height: 1.55; color: var(--hk-ink-2); }
 
-@media (max-width: 860px) {
-  .hawk-how .hk-how__diagram { grid-template-columns: minmax(0, 1fr); }
+/* The large ghosted numeral — the signature of this redesign. Pinned
+   top-right of the card, kept out of the copy's way via title padding. */
+.hawk-how .hk-how__num {
+  position: absolute;
+  top: clamp(6px, 1.2vw, 12px);
+  right: clamp(12px, 1.8vw, 20px);
+  font-family: var(--hk-mono);
+  font-size: clamp(38px, 6vw, 56px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.02em;
+  color: var(--hk-accent);
+  opacity: .12;
+  pointer-events: none;
+}
+.hawk-how .hk-how__step-title {
+  margin: 0;
+  padding-right: clamp(48px, 9vw, 72px);  /* clear the ghost numeral */
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--hk-ink);
+}
+.hawk-how .hk-how__step-text {
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--hk-ink-2);
+}
+
+/* Narrow widths: keep the pipeline vertical, shrink the node column and
+   gaps so icons/numbers never collide with copy inside a 16px gutter. */
+@media (max-width: 560px) {
+  .hawk-how .hk-how__steps {
+    --node: 44px;
+    --col-gap: 14px;
+    --row-gap: 22px;
+  }
+  .hawk-how .hk-how__node-ico svg { width: 21px; height: 21px; }
+  .hawk-how .hk-how__num { font-size: clamp(32px, 11vw, 44px); }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .hawk-how .hk-how.is-animated .hk-how__scope,
-  .hawk-how .hk-how.is-animated .hk-how__row {
+  /* Steps rise/fade in sequence, Collect first -> Act last. */
+  .hawk-how .hk-how.is-animated .hk-how__step {
     opacity: 0;
     transform: translateY(20px);
     transition: opacity .55s ease, transform .55s cubic-bezier(.22, 1, .36, 1);
-    transition-delay: calc(var(--i, 0) * 80ms);
+    transition-delay: calc(var(--i, 0) * 90ms);
   }
-  .hawk-how .hk-how.is-animated.is-visible .hk-how__scope,
-  .hawk-how .hk-how.is-animated.is-visible .hk-how__row {
+  .hawk-how .hk-how.is-animated.is-visible .hk-how__step {
     opacity: 1; transform: none;
   }
-  .hawk-how .hk-how__row { transition: opacity .55s ease, transform .55s cubic-bezier(.22,1,.36,1), border-color .2s ease, background .2s ease; }
-  .hawk-how .hk-how.is-visible .hk-how__scan { animation: hk-how-scan 7s ease-in-out infinite; }
-}
-@keyframes hk-how-scan {
-  0%   { top: 2%; opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 1; }
-  100% { top: 98%; opacity: 0; }
+  /* The spine draws in once on reveal, then holds (no perpetual loop).
+     Each connector grows from its node downward, staggered with its step. */
+  .hawk-how .hk-how.is-animated .hk-how__step::before {
+    transform: translateX(-50%) scaleY(0);
+    transform-origin: top;
+    transition: transform .6s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i, 0) * 90ms + 180ms);
+  }
+  .hawk-how .hk-how.is-animated.is-visible .hk-how__step::before {
+    transform: translateX(-50%) scaleY(1);
+  }
 }
 
 /* =====================================================================
@@ -1591,6 +1907,107 @@
     transition-delay: calc(var(--i, 0) * 60ms);
   }
   .hawk-industries .hk-ind.is-animated.is-visible .hk-ind__card { opacity: 1; transform: none; }
+}
+
+/* =====================================================================
+   4.5 Core Capabilities  —  .hawk-caps  (prefix hk-caps)
+   ---------------------------------------------------------------------
+   A STATIC 3-up capability grid. Its signature — a thin top accent rule
+   plus a mono zero-padded index chip paired with the accent badge — sets
+   it apart from the clickable Industries/Features dossier cards while
+   using only the shared tokens. Hover timing/easing is copied from the
+   module cards (the file's established card hover), not re-invented.
+   ===================================================================== */
+.hawk-caps .hk-caps__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2vw, 26px);
+  margin: 0; padding: 0; list-style: none;
+}
+.hawk-caps .hk-caps__grid > li { display: flex; }
+.hawk-caps .hk-caps__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 13px;
+  width: 100%;
+  padding: clamp(24px, 2.6vw, 30px);
+  border-radius: 18px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+  text-align: left;
+  font-family: var(--hk-font);
+}
+.hawk-caps .hk-caps__card:hover {
+  border-color: var(--hk-border-2);
+  box-shadow: var(--hk-shadow-hover), 0 0 0 1px var(--hk-glow);
+}
+
+/* Decorative zero-padded index chip, pinned top-right (paired with the
+   badge — the thing that makes this grid read as numbered capabilities). */
+.hawk-caps .hk-caps__index {
+  position: absolute;
+  top: clamp(16px, 2vw, 22px);
+  right: clamp(18px, 2.2vw, 24px);
+  font-family: var(--hk-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  color: var(--hk-ink-mono);
+}
+/* Accent badge — same chip language and icon sizing as the other sections'
+   badges (see .hk-ind__badge / .hk-features__badge). */
+.hawk-caps .hk-caps__badge {
+  display: grid; place-items: center;
+  width: 46px; height: 46px;
+  border-radius: 11px;
+  background: var(--hk-accent-soft);
+  color: var(--hk-accent-text);
+}
+.hawk-caps .hk-caps__badge svg { width: 25px; height: 25px; }
+.hawk-caps .hk-caps__card-title {
+  margin: 2px 0 0;
+  /* leave room for the index chip so a long title never runs under it */
+  padding-right: 34px;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--hk-ink);
+}
+.hawk-caps .hk-caps__card-text {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--hk-ink-2);
+}
+
+@media (max-width: 900px) {
+  .hawk-caps .hk-caps__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .hawk-caps .hk-caps__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Reveal/stagger — same opacity+rise, easing and --i delay as the other
+     card grids; hover border/shadow timing folded into the same transition
+     (as the module cards do) so no new motion curve is introduced. */
+  .hawk-caps .hk-caps.is-animated .hk-caps__card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .55s ease,
+                transform .55s cubic-bezier(.22, 1, .36, 1),
+                border-color .2s ease, box-shadow .25s ease;
+    transition-delay: calc(var(--i, 0) * 60ms);
+  }
+  .hawk-caps .hk-caps.is-animated.is-visible .hk-caps__card {
+    opacity: 1; transform: none;
+  }
+  .hawk-caps .hk-caps.is-animated.is-visible .hk-caps__card:hover {
+    transform: translateY(-4px);
+  }
 }
 
 /* =====================================================================
