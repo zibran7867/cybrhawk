@@ -161,8 +161,7 @@
 .hawk-industries,
 .hawk-enrich,
 .hawk-ai,
-.hawk-services,
-.hawk-why {
+.hawk-services {
   background-color: var(--hk-canvas);
 }
 .hawk-about,
@@ -171,7 +170,8 @@
 .hawk-wires,
 .hawk-features,
 .hawk-takedown,
-.hawk-integrations {
+.hawk-integrations,
+.hawk-why {
   background-color: var(--hk-canvas-2);
 }
 
@@ -184,7 +184,8 @@
 .hawk-wires,
 .hawk-features,
 .hawk-takedown,
-.hawk-integrations {
+.hawk-integrations,
+.hawk-why {
   background-image:
     radial-gradient(60% 46% at 50% 0%, rgba(12, 104, 255, .045), transparent 70%);
 }
