@@ -79,8 +79,8 @@
                      0 16px 38px rgba(13, 19, 48, .10);
 
   /* Type */
-  --hk-font:  "Figtree", system-ui, sans-serif;
-  --hk-mono:  ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+  --hk-font:  "Figtree", sans-serif;
+  --hk-mono:  "Figtree", sans-serif;
 }
 
 /* =====================================================================
@@ -140,7 +140,9 @@
 .hawk-enrich,
 .hawk-features,
 .hawk-ai,
-.hawk-takedown {
+.hawk-takedown,
+.hawk-services,
+.hawk-integrations {
   --hk-gutter: 24px;
   position: relative;
   width: 100%;
@@ -155,7 +157,8 @@
 .hawk-numbers,
 .hawk-industries,
 .hawk-enrich,
-.hawk-ai {
+.hawk-ai,
+.hawk-services {
   background-color: var(--hk-canvas);
 }
 .hawk-about,
@@ -163,7 +166,8 @@
 .hawk-caps,
 .hawk-wires,
 .hawk-features,
-.hawk-takedown {
+.hawk-takedown,
+.hawk-integrations {
   background-color: var(--hk-canvas-2);
 }
 
@@ -175,7 +179,8 @@
 .hawk-caps,
 .hawk-wires,
 .hawk-features,
-.hawk-takedown {
+.hawk-takedown,
+.hawk-integrations {
   background-image:
     radial-gradient(60% 46% at 50% 0%, rgba(12, 104, 255, .045), transparent 70%);
 }
@@ -183,14 +188,14 @@
 @media (max-width: 980px) {
   .hawk-hero, .hawk-about, .hawk-modules, .hawk-numbers, .hawk-how,
   .hawk-industries, .hawk-caps, .hawk-wires, .hawk-enrich, .hawk-features,
-  .hawk-ai, .hawk-takedown {
+  .hawk-ai, .hawk-takedown, .hawk-services, .hawk-integrations {
     --hk-gutter: 22px;
   }
 }
 @media (max-width: 520px) {
   .hawk-hero, .hawk-about, .hawk-modules, .hawk-numbers, .hawk-how,
   .hawk-industries, .hawk-caps, .hawk-wires, .hawk-enrich, .hawk-features,
-  .hawk-ai, .hawk-takedown {
+  .hawk-ai, .hawk-takedown, .hawk-services, .hawk-integrations {
     --hk-gutter: 18px;
   }
 }
@@ -207,7 +212,9 @@
 .hawk-enrich .hk-enrich,
 .hawk-features .hk-features,
 .hawk-ai .hk-ai,
-.hawk-takedown .hk-takedown {
+.hawk-takedown .hk-takedown,
+.hawk-services .hk-svc,
+.hawk-integrations .hk-int {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -229,10 +236,13 @@
 .hawk-enrich .hk-enrich__mod,
 .hawk-features .hk-features__mod,
 .hawk-ai .hk-ai__mod,
-.hawk-takedown .hk-takedown__mod {
-  display: inline-flex;
+.hawk-takedown .hk-takedown__mod,
+.hawk-services .hk-svc__mod,
+.hawk-integrations .hk-int__mod {
+  display: flex;               /* flex (not inline-flex) so it can wrap in its box */
   align-items: center;
-  gap: 10px;
+  flex-wrap: wrap;             /* long tags wrap instead of overflowing on mobile */
+  gap: 6px 10px;
   margin: 0 0 18px;
   font-family: var(--hk-mono);
   font-size: 12px;
@@ -240,6 +250,28 @@
   letter-spacing: .16em;
   text-transform: uppercase;
   color: var(--hk-accent-text);
+  overflow-wrap: anywhere;     /* break a very long single token if it must */
+}
+/* Tighten the mono tag on small screens so the letter-spacing never pushes
+   it past the gutter. */
+@media (max-width: 520px) {
+  .hawk-hero .hk-hero__mod,
+  .hawk-about .hk-about__mod,
+  .hawk-modules .hk-modules__mod,
+  .hawk-numbers .hk-numbers__mod,
+  .hawk-how .hk-how__mod,
+  .hawk-industries .hk-ind__mod,
+  .hawk-caps .hk-caps__mod,
+  .hawk-wires .hk-wires__mod,
+  .hawk-enrich .hk-enrich__mod,
+  .hawk-features .hk-features__mod,
+  .hawk-ai .hk-ai__mod,
+  .hawk-takedown .hk-takedown__mod,
+  .hawk-services .hk-svc__mod,
+  .hawk-integrations .hk-int__mod {
+    font-size: 11px;
+    letter-spacing: .12em;
+  }
 }
 
 .hawk-hero .hk-hero__tick,
@@ -253,7 +285,9 @@
 .hawk-enrich .hk-enrich__tick,
 .hawk-features .hk-features__tick,
 .hawk-ai .hk-ai__tick,
-.hawk-takedown .hk-takedown__tick {
+.hawk-takedown .hk-takedown__tick,
+.hawk-services .hk-svc__tick,
+.hawk-integrations .hk-int__tick {
   flex: none;
   width: 16px;
   height: 2px;
@@ -272,13 +306,17 @@
 .hawk-enrich .hk-enrich__title,
 .hawk-features .hk-features__title,
 .hawk-ai .hk-ai__title,
-.hawk-takedown .hk-takedown__title {
+.hawk-takedown .hk-takedown__title,
+.hawk-services .hk-svc__title,
+.hawk-integrations .hk-int__title {
   margin: 0;
-  font-size: clamp(28px, 3.6vw, 46px);
+  /* lower floor + a vw term so the title scales down smoothly on phones */
+  font-size: clamp(24px, 6vw, 46px);
   font-weight: 700;
-  line-height: 1.12;
+  line-height: 1.16;
   letter-spacing: -.018em;
   color: var(--hk-ink);
+  overflow-wrap: break-word;   /* a long word never forces horizontal scroll */
 }
 
 /* Section lead / sub. */
@@ -289,7 +327,9 @@
 .hawk-enrich .hk-enrich__lead,
 .hawk-features .hk-features__lead,
 .hawk-ai .hk-ai__lead,
-.hawk-takedown .hk-takedown__lead {
+.hawk-takedown .hk-takedown__lead,
+.hawk-services .hk-svc__lead,
+.hawk-integrations .hk-int__lead {
   margin: 16px 0 0;
   max-width: 62ch;
   font-size: clamp(16px, 1.5vw, 18px);
@@ -305,7 +345,8 @@
 .hawk-enrich .hk-enrich__head,
 .hawk-features .hk-features__head,
 .hawk-ai .hk-ai__head,
-.hawk-takedown .hk-takedown__head {
+.hawk-takedown .hk-takedown__head,
+.hawk-integrations .hk-int__head {
   margin: 0 0 clamp(32px, 4vw, 52px);
   padding: 0 0 clamp(20px, 2.6vw, 30px);
   border-bottom: 1px solid var(--hk-rule);
@@ -324,32 +365,32 @@
 .hawk-features :focus-visible,
 .hawk-ai :focus-visible,
 .hawk-takedown :focus-visible,
-.hawk-industries .hk-modal :focus-visible,
-.hawk-features .hk-modal :focus-visible {
+.hawk-services :focus-visible,
+.hawk-integrations :focus-visible {
   outline: 3px solid rgba(12, 104, 255, .6);
   outline-offset: 3px;
   border-radius: 4px;
 }
 
 /* Console traffic-dots — macOS-style red / amber / green, left to right.
-   Shared across every chrome bar (hero, About, Wires, modal). */
+   Shared across every chrome bar (hero, About, Wires, Features). */
 .hawk-hero .hk-hero__chrome-dots i:nth-child(1),
 .hawk-about .hk-about__dots i:nth-child(1),
 .hawk-wires .hk-wires__console-dots i:nth-child(1),
-.hawk-industries .hk-modal__dots i:nth-child(1),
-.hawk-features .hk-modal__dots i:nth-child(1) { background: #ff5f57; }
+.hawk-features .hk-features__dots i:nth-child(1),
+.hawk-services .hk-svc__desk-dots i:nth-child(1) { background: #ff5f57; }
 
 .hawk-hero .hk-hero__chrome-dots i:nth-child(2),
 .hawk-about .hk-about__dots i:nth-child(2),
 .hawk-wires .hk-wires__console-dots i:nth-child(2),
-.hawk-industries .hk-modal__dots i:nth-child(2),
-.hawk-features .hk-modal__dots i:nth-child(2) { background: #febc2e; }
+.hawk-features .hk-features__dots i:nth-child(2),
+.hawk-services .hk-svc__desk-dots i:nth-child(2) { background: #febc2e; }
 
 .hawk-hero .hk-hero__chrome-dots i:nth-child(3),
 .hawk-about .hk-about__dots i:nth-child(3),
 .hawk-wires .hk-wires__console-dots i:nth-child(3),
-.hawk-industries .hk-modal__dots i:nth-child(3),
-.hawk-features .hk-modal__dots i:nth-child(3) { background: #28c840; }
+.hawk-features .hk-features__dots i:nth-child(3),
+.hawk-services .hk-svc__desk-dots i:nth-child(3) { background: #28c840; }
 
 /* =====================================================================
    0. Hero  —  .hawk-hero  (prefix hk-hero)
@@ -1860,159 +1901,369 @@
 /* =====================================================================
    4. Industries We Protect  —  .hawk-industries  (prefix hk-ind)
    ===================================================================== */
-.hawk-industries .hk-ind__grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(16px, 1.8vw, 22px);
-  margin: 0; padding: 0; list-style: none;
+/* Selector: an interleaved [tab][panel] list. On desktop a two-column
+   grid collects every tab into the left rail column and every panel into
+   the right stage column; the panel rows are pulled up to overlap the
+   rail so one large panel faces the whole rail. On mobile it falls back to
+   natural source order (tab, then its panel) for an accordion. */
+/* The selector is a positioning context whose height is set by the rail of
+   tabs (left column). Each panel is taken out of flow (absolute) and pinned
+   over the right column, so it can NEVER stretch a tab row or push the next
+   tab down — that overlap was the cause of the gap after the active tab.
+   The rail is always taller than a single panel (7 tabs vs ~4 lines), so
+   nothing clips; a safety min-height guards the rare tall panel. */
+.hawk-industries .hk-ind__selector {
+  position: relative;
+  /* One source of truth for the rail width + gap, reused by the rail column
+     and the absolute panel's left edge so they always line up exactly. */
+  --hk-ind-rail: clamp(250px, 30vw, 330px);
+  --hk-ind-gap: clamp(20px, 2.4vw, 34px);
+  min-height: 360px;   /* ≥ tallest panel, so an absolute panel never clips */
 }
-.hawk-industries .hk-ind__grid > li { display: flex; }
-.hawk-industries .hk-ind__card {
+/* Tabs flow down the fixed-width rail, each on its own line, small gap. */
+.hawk-industries .hk-ind__selector > .hk-ind__tab {
+  width: var(--hk-ind-rail);
+  margin-bottom: 8px;
+}
+.hawk-industries .hk-ind__selector > .hk-ind__tab:last-of-type {
+  margin-bottom: 0;
+}
+/* Panels are pinned over the content area to the right of the rail + gap,
+   out of the rail's flow so they can't stretch a tab row. Only the visible
+   one shows (rest are [hidden] → none). */
+.hawk-industries .hk-ind__selector > .hk-ind__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: calc(var(--hk-ind-rail) + var(--hk-ind-gap));
+}
+.hawk-industries .hk-ind__tab {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
+  align-items: center;
+  gap: 13px;
   width: 100%;
-  padding: clamp(22px, 2.4vw, 28px);
-  border-radius: 16px;
+  padding: 14px 16px;
   border: 1px solid var(--hk-border);
+  border-radius: 13px;
   background: var(--hk-panel);
   box-shadow: var(--hk-shadow);
   text-align: left;
   font-family: var(--hk-font);
+  cursor: pointer;
+  color: var(--hk-ink);
 }
-.hawk-industries .hk-ind__badge {
+.hawk-industries .hk-ind__tab-ico {
   display: grid; place-items: center;
-  width: 46px; height: 46px;
-  border-radius: 11px;
+  flex: none;
+  width: 38px; height: 38px;
+  border-radius: 10px;
   background: var(--hk-accent-soft);
   color: var(--hk-accent-text);
 }
-.hawk-industries .hk-ind__badge svg { width: 25px; height: 25px; }
-.hawk-industries .hk-ind__card-title { margin: 2px 0 0; font-size: 19px; font-weight: 700; color: var(--hk-ink); }
-.hawk-industries .hk-ind__card-text { margin: 0; font-size: 15px; line-height: 1.55; color: var(--hk-ink-2); }
-
-@media (max-width: 900px) {
-  .hawk-industries .hk-ind__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.hawk-industries .hk-ind__tab-ico svg { width: 21px; height: 21px; }
+.hawk-industries .hk-ind__tab-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
 }
-@media (max-width: 560px) {
-  .hawk-industries .hk-ind__grid { grid-template-columns: minmax(0, 1fr); }
+.hawk-industries .hk-ind__tab-caret {
+  flex: none;
+  display: grid; place-items: center;
+  width: 18px; height: 18px;
+  color: var(--hk-ink-faint);
+  opacity: 0;
+  transform: translateX(-4px);
+}
+.hawk-industries .hk-ind__tab-caret svg { width: 18px; height: 18px; }
+.hawk-industries .hk-ind__tab:hover {
+  border-color: var(--hk-border-2);
+  box-shadow: var(--hk-shadow-hover);
+}
+/* Active tab: accent fill, white ink, a left signal bar, caret shown. */
+.hawk-industries .hk-ind__tab[aria-selected="true"] {
+  position: relative;
+  border-color: transparent;
+  background: var(--hk-accent);
+  color: #fff;
+  box-shadow: var(--hk-shadow-hover), 0 0 0 1px var(--hk-glow);
+}
+.hawk-industries .hk-ind__tab[aria-selected="true"] .hk-ind__tab-ico {
+  background: rgba(255, 255, 255, .18);
+  color: #fff;
+}
+.hawk-industries .hk-ind__tab[aria-selected="true"] .hk-ind__tab-caret {
+  opacity: 1;
+  transform: none;
+  color: rgba(255, 255, 255, .9);
+}
+
+/* ---- Panels (tabpanels) ---- */
+.hawk-industries .hk-ind__panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: clamp(26px, 3vw, 40px);
+  border: 1px solid var(--hk-border);
+  border-radius: 20px;
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+  /* a faint signal wash so the big panel never reads flat */
+  background-image:
+    radial-gradient(120% 90% at 100% 0%, rgba(12, 104, 255, .05), transparent 60%);
+}
+.hawk-industries .hk-ind__panel[hidden] { display: none; }
+.hawk-industries .hk-ind__panel-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.hawk-industries .hk-ind__panel-badge {
+  display: grid; place-items: center;
+  flex: none;
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  background: var(--hk-accent-soft);
+  color: var(--hk-accent-text);
+}
+.hawk-industries .hk-ind__panel-badge svg { width: 30px; height: 30px; }
+.hawk-industries .hk-ind__panel-eyebrow {
+  font-family: var(--hk-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--hk-ink-mono);
+}
+.hawk-industries .hk-ind__panel-title {
+  margin: 0;
+  font-size: clamp(22px, 2.6vw, 30px);
+  font-weight: 700;
+  line-height: 1.18;
+  color: var(--hk-ink);
+}
+.hawk-industries .hk-ind__panel-text {
+  margin: 0;
+  max-width: 60ch;
+  font-size: clamp(15px, 1.5vw, 17px);
+  line-height: 1.62;
+  color: var(--hk-ink-2);
+}
+
+/* ---- Accordion below 860px: each tab sits directly above its panel. ----
+   The selector returns to normal block flow; because tabs and panels are
+   interleaved in source order, dropping the desktop absolute/rail-width
+   rules lets each panel fall right under the tab it belongs to. */
+@media (max-width: 860px) {
+  .hawk-industries .hk-ind__selector {
+    min-height: 0;
+  }
+  /* full-width tabs, back in normal flow */
+  .hawk-industries .hk-ind__selector > .hk-ind__tab {
+    width: 100%;
+    margin: 0 0 8px;
+    border-radius: 12px;
+  }
+  /* panels back in flow, directly under their tab */
+  .hawk-industries .hk-ind__selector > .hk-ind__panel {
+    position: static;
+    left: auto;
+    right: auto;
+    margin: 0 0 12px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  /* active tab joins seamlessly to its open panel */
+  .hawk-industries .hk-ind__selector > .hk-ind__tab[aria-selected="true"] {
+    margin-bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .hawk-industries .hk-ind__tab-caret { display: none; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .hawk-industries .hk-ind.is-animated .hk-ind__card {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity .55s ease, transform .55s cubic-bezier(.22, 1, .36, 1);
-    transition-delay: calc(var(--i, 0) * 60ms);
+  .hawk-industries .hk-ind__tab,
+  .hawk-industries .hk-ind__tab-ico,
+  .hawk-industries .hk-ind__tab-caret {
+    transition: background .2s ease, color .2s ease, border-color .2s ease,
+                box-shadow .25s ease, transform .2s ease, opacity .2s ease;
   }
-  .hawk-industries .hk-ind.is-animated.is-visible .hk-ind__card { opacity: 1; transform: none; }
+  .hawk-industries .hk-ind.is-animated .hk-ind__tab {
+    opacity: 0;
+    transform: translateX(-14px);
+    transition: background .2s ease, color .2s ease, border-color .2s ease,
+                box-shadow .25s ease,
+                opacity .5s ease, transform .5s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i, 0) * 55ms);
+  }
+  .hawk-industries .hk-ind.is-animated.is-visible .hk-ind__tab {
+    opacity: 1; transform: none;
+    transition-delay: 0s;
+  }
+  /* the selected panel fades its contents in on switch */
+  .hawk-industries .hk-ind__panel:not([hidden]) {
+    animation: hk-ind-panel-in .32s cubic-bezier(.22, 1, .36, 1) both;
+  }
+  @keyframes hk-ind-panel-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: none; }
+  }
 }
 
 /* =====================================================================
    4.5 Core Capabilities  —  .hawk-caps  (prefix hk-caps)
    ---------------------------------------------------------------------
-   A STATIC 3-up capability grid. Its signature — a thin top accent rule
-   plus a mono zero-padded index chip paired with the accent badge — sets
-   it apart from the clickable Industries/Features dossier cards while
-   using only the shared tokens. Hover timing/easing is copied from the
-   module cards (the file's established card hover), not re-invented.
+   A technical DATASHEET / capability matrix. Deliberately flatter and more
+   "engineered" than the Industries selector and the Features console: one
+   framed sheet divided by hairline rules into 3×3 cells (no floating
+   rounded cards). Each cell is led by a large ghosted index numeral and a
+   mono micro-label, with an inline icon + title and the body below. Only
+   the hovered cell lifts out of the flat grid. Uses shared tokens only.
    ===================================================================== */
-.hawk-caps .hk-caps__grid {
+.hawk-caps .hk-caps__sheet {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(18px, 2vw, 26px);
-  margin: 0; padding: 0; list-style: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--hk-border);
+  border-radius: 18px;
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+  overflow: hidden;   /* clip cell hairlines to the rounded frame */
 }
-.hawk-caps .hk-caps__grid > li { display: flex; }
-.hawk-caps .hk-caps__card {
+/* Hairline dividers come from each cell's own top/left border; the sheet's
+   outer border supplies the frame, so inner rules read as a clean grid. */
+.hawk-caps .hk-caps__cell {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 13px;
-  width: 100%;
-  padding: clamp(24px, 2.6vw, 30px);
-  border-radius: 18px;
-  border: 1px solid var(--hk-border);
-  background: var(--hk-panel);
-  box-shadow: var(--hk-shadow);
-  text-align: left;
+  gap: 10px;
+  padding: clamp(22px, 2.4vw, 30px);
+  border-top: 1px solid var(--hk-rule);
+  border-left: 1px solid var(--hk-rule);
   font-family: var(--hk-font);
+  background: var(--hk-panel);
 }
-.hawk-caps .hk-caps__card:hover {
-  border-color: var(--hk-border-2);
-  box-shadow: var(--hk-shadow-hover), 0 0 0 1px var(--hk-glow);
-}
+/* Top row has no rule above it; first column none to its left. */
+.hawk-caps .hk-caps__cell:nth-child(-n + 3) { border-top: 0; }
+.hawk-caps .hk-caps__cell:nth-child(3n + 1) { border-left: 0; }
 
-/* Decorative zero-padded index chip, pinned top-right (paired with the
-   badge — the thing that makes this grid read as numbered capabilities). */
+/* Large ghosted index numeral, pinned top-right — the datasheet signature. */
 .hawk-caps .hk-caps__index {
   position: absolute;
-  top: clamp(16px, 2vw, 22px);
-  right: clamp(18px, 2.2vw, 24px);
+  top: clamp(10px, 1.4vw, 16px);
+  right: clamp(14px, 1.8vw, 20px);
   font-family: var(--hk-mono);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: .12em;
-  color: var(--hk-ink-mono);
+  font-size: clamp(34px, 4vw, 48px);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--hk-ink);
+  opacity: .06;
+  pointer-events: none;
 }
-/* Accent badge — same chip language and icon sizing as the other sections'
-   badges (see .hk-ind__badge / .hk-features__badge). */
-.hawk-caps .hk-caps__badge {
+.hawk-caps .hk-caps__kind {
+  font-family: var(--hk-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--hk-accent-text);
+}
+.hawk-caps .hk-caps__cellhead {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.hawk-caps .hk-caps__ico {
   display: grid; place-items: center;
-  width: 46px; height: 46px;
-  border-radius: 11px;
+  flex: none;
+  width: 34px; height: 34px;
+  border-radius: 9px;
   background: var(--hk-accent-soft);
   color: var(--hk-accent-text);
 }
-.hawk-caps .hk-caps__badge svg { width: 25px; height: 25px; }
-.hawk-caps .hk-caps__card-title {
-  margin: 2px 0 0;
-  /* leave room for the index chip so a long title never runs under it */
-  padding-right: 34px;
-  font-size: 19px;
+.hawk-caps .hk-caps__ico svg { width: 20px; height: 20px; }
+.hawk-caps .hk-caps__cell-title {
+  margin: 0;
+  padding-right: 30px;   /* clear the ghosted index */
+  font-size: 17px;
   font-weight: 700;
   line-height: 1.25;
   color: var(--hk-ink);
 }
-.hawk-caps .hk-caps__card-text {
+.hawk-caps .hk-caps__cell-text {
   margin: 0;
-  font-size: 15px;
+  font-size: 14.5px;
   line-height: 1.55;
   color: var(--hk-ink-2);
 }
+/* Hover: the one cell lifts above the flat sheet via an accent wash + a
+   lit left edge, without changing the grid geometry. */
+.hawk-caps .hk-caps__cell::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 3px;
+  background: var(--hk-accent);
+  opacity: 0;
+}
+.hawk-caps .hk-caps__cell:hover {
+  background: var(--hk-panel-2);
+  z-index: 1;
+}
+.hawk-caps .hk-caps__cell:hover::after { opacity: 1; }
+.hawk-caps .hk-caps__cell:hover .hk-caps__index { opacity: .12; }
 
 @media (max-width: 900px) {
-  .hawk-caps .hk-caps__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hawk-caps .hk-caps__sheet { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hawk-caps .hk-caps__cell:nth-child(-n + 3) { border-top: 1px solid var(--hk-rule); }
+  .hawk-caps .hk-caps__cell:nth-child(3n + 1) { border-left: 1px solid var(--hk-rule); }
+  .hawk-caps .hk-caps__cell:nth-child(-n + 2) { border-top: 0; }
+  .hawk-caps .hk-caps__cell:nth-child(2n + 1) { border-left: 0; }
 }
 @media (max-width: 560px) {
-  .hawk-caps .hk-caps__grid { grid-template-columns: minmax(0, 1fr); }
+  .hawk-caps .hk-caps__sheet { grid-template-columns: minmax(0, 1fr); }
+  .hawk-caps .hk-caps__cell { border-left: 0; border-top: 1px solid var(--hk-rule); }
+  .hawk-caps .hk-caps__cell:first-child { border-top: 0; }
+  .hawk-caps .hk-caps__cell:nth-child(-n + 2) { border-top: 1px solid var(--hk-rule); }
+  .hawk-caps .hk-caps__cell:first-child { border-top: 0; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* Reveal/stagger — same opacity+rise, easing and --i delay as the other
-     card grids; hover border/shadow timing folded into the same transition
-     (as the module cards do) so no new motion curve is introduced. */
-  .hawk-caps .hk-caps.is-animated .hk-caps__card {
+  .hawk-caps .hk-caps__cell::after,
+  .hawk-caps .hk-caps__index {
+    transition: background .2s ease, opacity .2s ease;
+  }
+  /* One transition declaration carries both the hover wash and the reveal,
+     so neither overrides the other. */
+  .hawk-caps .hk-caps.is-animated .hk-caps__cell {
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity .55s ease,
-                transform .55s cubic-bezier(.22, 1, .36, 1),
-                border-color .2s ease, box-shadow .25s ease;
-    transition-delay: calc(var(--i, 0) * 60ms);
+    transform: translateY(16px);
+    transition: background .2s ease,
+                opacity .5s ease,
+                transform .5s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i, 0) * 45ms);
   }
-  .hawk-caps .hk-caps.is-animated.is-visible .hk-caps__card {
+  .hawk-caps .hk-caps.is-animated.is-visible .hk-caps__cell {
     opacity: 1; transform: none;
-  }
-  .hawk-caps .hk-caps.is-animated.is-visible .hk-caps__card:hover {
-    transform: translateY(-4px);
+    transition-delay: 0s;   /* hover should react instantly after reveal */
   }
 }
 
 /* =====================================================================
    5. Targeted Alerts & Incident Wires  —  .hawk-wires  (prefix hk-wires)
+   ---------------------------------------------------------------------
+   TEMPORARILY DISABLED: all .hawk-wires rules below are commented out so
+   the section does not render (its JS builder is likewise commented out).
+   The inner section-comment delimiters were broken (/ * … * /) only so
+   this single wrapper can enclose them; restore them when re-enabling.
    ===================================================================== */
+/* COMMENTED-OUT-WIRES-START
 .hawk-wires .hk-wires__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
@@ -2029,7 +2280,7 @@
 }
 .hawk-wires .hk-wires__body strong { color: var(--hk-ink); font-weight: 700; }
 
-/* the live wires console */
+/ * the live wires console * /
 .hawk-wires .hk-wires__console {
   min-width: 0;
   border-radius: 16px;
@@ -2059,7 +2310,7 @@
 }
 .hawk-wires .hk-wires__screen { padding: 18px; }
 
-/* pinned lead wire */
+/ * pinned lead wire * /
 .hawk-wires .hk-wires__card {
   padding: 18px;
   border-radius: 13px;
@@ -2089,7 +2340,7 @@
 .hawk-wires .hk-wires__label svg { width: 14px; height: 14px; }
 .hawk-wires .hk-wires__val { font-size: 14px; line-height: 1.45; color: var(--hk-ink-2); }
 
-/* streaming feed */
+/ * streaming feed * /
 .hawk-wires .hk-wires__feed-label {
   display: flex; align-items: center; gap: 12px;
   margin: 18px 0 10px;
@@ -2137,7 +2388,7 @@
   .hawk-wires .hk-wires.is-animated.is-visible .hk-wires__copy,
   .hawk-wires .hk-wires.is-animated.is-visible .hk-wires__console { opacity: 1; transform: none; }
 
-  /* feed rows animate in on insert (JS toggles .is-in next frame) */
+  / * feed rows animate in on insert (JS toggles .is-in next frame) * /
   .hawk-wires .hk-wires__feed-item {
     opacity: 0;
     transform: translateY(-8px);
@@ -2145,10 +2396,15 @@
   }
   .hawk-wires .hk-wires__feed-item.is-in { opacity: 1; transform: none; }
 }
+COMMENTED-OUT-WIRES-END */
 
 /* =====================================================================
    6. Advanced Processing & Enrichment  —  .hawk-enrich  (prefix hk-enrich)
+   ---------------------------------------------------------------------
+   TEMPORARILY DISABLED: all .hawk-enrich rules below are commented out so
+   the section does not render (its JS builder is likewise commented out).
    ===================================================================== */
+/* COMMENTED-OUT-ENRICH-START
 .hawk-enrich .hk-enrich__grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -2211,122 +2467,340 @@
   }
   .hawk-enrich .hk-enrich.is-animated.is-visible .hk-enrich__item { opacity: 1; transform: none; }
 }
+COMMENTED-OUT-ENRICH-END */
 
 /* =====================================================================
    7. Platform Features  —  .hawk-features  (prefix hk-features)
+   ---------------------------------------------------------------------
+   One framed console panel (chrome bar + list) whose ten features are
+   horizontal rows split by hairline rules — a product "inspector" look,
+   distinct from the Industries selector and the Capabilities datasheet.
    ===================================================================== */
-.hawk-features .hk-features__grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(16px, 1.6vw, 20px);
-  margin: 0; padding: 0; list-style: none;
-}
-.hawk-features .hk-features__grid > li { display: flex; }
-.hawk-features .hk-features__card {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 11px;
-  width: 100%;
-  padding: clamp(20px, 2vw, 24px);
-  border-radius: 16px;
+.hawk-features .hk-features__console {
   border: 1px solid var(--hk-border);
+  border-radius: 18px;
   background: var(--hk-panel);
   box-shadow: var(--hk-shadow);
-  text-align: left;
+  overflow: hidden;
+}
+/* Chrome bar: traffic dots, title, a mono module counter. */
+.hawk-features .hk-features__bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--hk-border);
+  background: var(--hk-panel-top);
+}
+.hawk-features .hk-features__dots { display: inline-flex; gap: 6px; }
+.hawk-features .hk-features__dots i { width: 9px; height: 9px; border-radius: 50%; background: #cfd6e4; }
+.hawk-features .hk-features__bar-title {
+  font-family: var(--hk-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  color: var(--hk-ink-mono);
+}
+.hawk-features .hk-features__count {
+  margin-left: auto;
+  font-family: var(--hk-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  color: var(--hk-accent-text);
+}
+
+/* Feature list: rows split by hairline rules. */
+.hawk-features .hk-features__list {
+  margin: 0; padding: 0; list-style: none;
+}
+.hawk-features .hk-features__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: clamp(16px, 1.8vw, 20px) clamp(16px, 2vw, 24px);
+  border-top: 1px solid var(--hk-rule);
   font-family: var(--hk-font);
 }
-.hawk-features .hk-features__badge {
+.hawk-features .hk-features__row:first-child { border-top: 0; }
+.hawk-features .hk-features__idx {
+  font-family: var(--hk-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  color: var(--hk-ink-faint);
+}
+.hawk-features .hk-features__ico {
   display: grid; place-items: center;
-  width: 44px; height: 44px;
+  flex: none;
+  width: 42px; height: 42px;
   border-radius: 11px;
   background: var(--hk-accent-soft);
   color: var(--hk-accent-text);
 }
-.hawk-features .hk-features__badge svg { width: 24px; height: 24px; }
-.hawk-features .hk-features__card-title { margin: 2px 0 0; font-size: 17px; font-weight: 700; color: var(--hk-ink); }
-.hawk-features .hk-features__card-text { margin: 0; font-size: 14px; line-height: 1.5; color: var(--hk-ink-2); }
-
-@media (max-width: 900px) {
-  .hawk-features .hk-features__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.hawk-features .hk-features__ico svg { width: 23px; height: 23px; }
+/* Title + text share one inner grid so descriptions align down the list. */
+.hawk-features .hk-features__row-copy {
+  display: grid;
+  grid-template-columns: minmax(200px, 300px) minmax(0, 1fr);
+  align-items: baseline;
+  gap: 4px 24px;
+  min-width: 0;
 }
-@media (max-width: 520px) {
-  .hawk-features .hk-features__grid { grid-template-columns: minmax(0, 1fr); }
+.hawk-features .hk-features__row-title {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--hk-ink);
+}
+.hawk-features .hk-features__row-text {
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--hk-ink-2);
+}
+.hawk-features .hk-features__row-caret {
+  display: grid; place-items: center;
+  width: 20px; height: 20px;
+  color: var(--hk-ink-faint);
+  opacity: 0;
+  transform: translateX(-6px);
+}
+.hawk-features .hk-features__row-caret svg { width: 18px; height: 18px; }
+/* Row hover: accent wash + lit left edge + caret, like selecting a line. */
+.hawk-features .hk-features__row::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 3px;
+  background: var(--hk-accent);
+  opacity: 0;
+}
+.hawk-features .hk-features__row:hover {
+  background: var(--hk-panel-2);
+}
+.hawk-features .hk-features__row:hover::before { opacity: 1; }
+.hawk-features .hk-features__row:hover .hk-features__row-caret {
+  opacity: 1;
+  transform: none;
+  color: var(--hk-accent-text);
+}
+
+/* Stack the title above the text when the row gets narrow. */
+@media (max-width: 760px) {
+  .hawk-features .hk-features__row {
+    grid-template-columns: auto auto minmax(0, 1fr);
+    gap: 12px;
+  }
+  .hawk-features .hk-features__row-copy { grid-template-columns: minmax(0, 1fr); }
+  .hawk-features .hk-features__row-caret { display: none; }
+}
+@media (max-width: 440px) {
+  .hawk-features .hk-features__idx { display: none; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .hawk-features .hk-features.is-animated .hk-features__card {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity .5s ease, transform .5s cubic-bezier(.22, 1, .36, 1);
-    transition-delay: calc(var(--i, 0) * 55ms);
+  .hawk-features .hk-features__row::before,
+  .hawk-features .hk-features__row-caret {
+    transition: background .2s ease, opacity .2s ease, transform .2s ease, color .2s ease;
   }
-  .hawk-features .hk-features.is-animated.is-visible .hk-features__card { opacity: 1; transform: none; }
+  /* One transition carries both the hover wash and the reveal rise. */
+  .hawk-features .hk-features.is-animated .hk-features__row {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: background .2s ease,
+                opacity .45s ease,
+                transform .45s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i, 0) * 45ms);
+  }
+  .hawk-features .hk-features.is-animated.is-visible .hk-features__row {
+    opacity: 1; transform: none;
+    transition-delay: 0s;
+  }
 }
 
 /* =====================================================================
-   8. AI & Associated Services  —  .hawk-ai  (prefix hk-ai)
+   8. AI at the Core  —  .hawk-ai  (prefix hk-ai)
+   A "core diagram" split: a left aside (living AI core node + a note) feeds
+   a right column of nine capability pills. Deliberately unlike the
+   Industries selector / Capabilities datasheet / Features console so the
+   four neighbouring sections never read alike.
    ===================================================================== */
-.hawk-ai .hk-ai__blocks {
+.hawk-ai .hk-ai__diagram {
   display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-  gap: clamp(18px, 2.2vw, 28px);
+  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+  gap: clamp(26px, 3.4vw, 54px);
+  align-items: start;
 }
-.hawk-ai .hk-ai__block {
-  padding: clamp(24px, 2.6vw, 32px);
-  border-radius: 16px;
+
+/* ---- Left aside: the living AI core ---- */
+.hawk-ai .hk-ai__aside {
+  position: sticky;
+  top: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  text-align: center;
+}
+.hawk-ai .hk-ai__core {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(200px, 20vw, 248px);
+  aspect-ratio: 1;
+}
+.hawk-ai .hk-ai__core-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid var(--hk-accent-line);
+  opacity: .7;
+}
+.hawk-ai .hk-ai__core-ring--1 { inset: 0; }
+.hawk-ai .hk-ai__core-ring--2 { inset: 17%; border-style: dashed; }
+.hawk-ai .hk-ai__core-pulse {
+  position: absolute;
+  inset: 32%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--hk-glow), transparent 70%);
+}
+.hawk-ai .hk-ai__core-badge {
+  position: relative;
+  z-index: 1;
+  display: grid; place-items: center;
+  width: 32%; height: 32%;
+  border-radius: 22px;
+  background: var(--hk-accent);
+  color: #fff;
+  box-shadow: 0 10px 30px var(--hk-glow);
+}
+.hawk-ai .hk-ai__core-badge svg { width: 54%; height: 54%; }
+.hawk-ai .hk-ai__core-label {
+  position: absolute;
+  bottom: 3%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 12px;
+  border-radius: 999px;
   border: 1px solid var(--hk-border);
   background: var(--hk-panel);
   box-shadow: var(--hk-shadow);
+  font-family: var(--hk-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  color: var(--hk-ink);
+  white-space: nowrap;
 }
-.hawk-ai .hk-ai__block--svc { background: linear-gradient(170deg, var(--hk-panel-2), var(--hk-panel)); }
-.hawk-ai .hk-ai__block-title {
-  display: flex; align-items: center; gap: 11px;
-  margin: 0 0 20px;
-  font-size: 19px; font-weight: 700; color: var(--hk-ink);
+.hawk-ai .hk-ai__note {
+  margin: 0;
+  max-width: 34ch;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--hk-ink-2);
 }
-.hawk-ai .hk-ai__block-ico {
+
+/* ---- Right column: capability pills ---- */
+.hawk-ai .hk-ai__pills {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 1.4vw, 16px);
+  margin: 0; padding: 0; list-style: none;
+}
+.hawk-ai .hk-ai__pill {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 16px 18px;
+  border: 1px solid var(--hk-border);
+  border-radius: 14px;
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+}
+.hawk-ai .hk-ai__pill-ico {
   display: grid; place-items: center;
-  width: 36px; height: 36px;
-  border-radius: 9px;
+  flex: none;
+  width: 40px; height: 40px;
+  border-radius: 10px;
   background: var(--hk-accent-soft);
   color: var(--hk-accent-text);
 }
-.hawk-ai .hk-ai__block-ico svg { width: 20px; height: 20px; }
-.hawk-ai .hk-ai__list { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; }
-.hawk-ai .hk-ai__cap { display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; line-height: 1.45; color: var(--hk-ink-2); }
-.hawk-ai .hk-ai__cap-ico {
-  flex: none; display: grid; place-items: center;
-  width: 20px; height: 20px; margin-top: 1px;
-  border-radius: 6px; background: var(--hk-accent-soft); color: var(--hk-accent-text);
+.hawk-ai .hk-ai__pill-ico svg { width: 22px; height: 22px; }
+.hawk-ai .hk-ai__pill-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
 }
-.hawk-ai .hk-ai__cap-ico svg { width: 13px; height: 13px; }
-.hawk-ai .hk-ai__pills { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
-.hawk-ai .hk-ai__pill {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid var(--hk-border);
-  background: var(--hk-canvas-2);
-  font-family: var(--hk-mono); font-size: 13px; letter-spacing: .02em; color: var(--hk-ink);
+.hawk-ai .hk-ai__pill-title {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.28;
+  color: var(--hk-ink);
 }
-.hawk-ai .hk-ai__pill svg { flex: none; width: 15px; height: 15px; color: var(--hk-accent-text); }
+.hawk-ai .hk-ai__pill-text {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--hk-ink-2);
+}
+.hawk-ai .hk-ai__pill:hover {
+  border-color: var(--hk-border-2);
+  box-shadow: var(--hk-shadow-hover), 0 0 0 1px var(--hk-glow);
+}
 
-@media (max-width: 860px) {
-  .hawk-ai .hk-ai__blocks { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 980px) {
+  .hawk-ai .hk-ai__diagram { grid-template-columns: minmax(0, 1fr); }
+  .hawk-ai .hk-ai__aside {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 18px 28px;
+    text-align: left;
+  }
+  .hawk-ai .hk-ai__core { width: 168px; }
+  .hawk-ai .hk-ai__note { max-width: 40ch; align-self: center; }
 }
-@media (max-width: 480px) {
-  .hawk-ai .hk-ai__list { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 560px) {
+  .hawk-ai .hk-ai__pills { grid-template-columns: minmax(0, 1fr); }
+  .hawk-ai .hk-ai__aside { flex-direction: column; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .hawk-ai .hk-ai.is-animated .hk-ai__block {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity .55s ease, transform .55s cubic-bezier(.22, 1, .36, 1);
-    transition-delay: calc(var(--i, 0) * 90ms);
+  /* The core breathes; rings rotate slowly. Calm, continuous, low-key. */
+  .hawk-ai .hk-ai__core-pulse { animation: hk-ai-pulse 3.4s ease-in-out infinite; }
+  .hawk-ai .hk-ai__core-ring--1 { animation: hk-ai-spin 26s linear infinite; }
+  .hawk-ai .hk-ai__core-ring--2 { animation: hk-ai-spin 18s linear infinite reverse; }
+  @keyframes hk-ai-pulse {
+    0%, 100% { opacity: .55; transform: scale(.94); }
+    50%      { opacity: 1;   transform: scale(1.06); }
   }
-  .hawk-ai .hk-ai.is-animated.is-visible .hk-ai__block { opacity: 1; transform: none; }
+  @keyframes hk-ai-spin {
+    to { transform: rotate(360deg); }
+  }
+  .hawk-ai .hk-ai.is-animated .hk-ai__pill {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: border-color .2s ease, box-shadow .25s ease,
+                opacity .5s ease, transform .5s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i, 0) * 50ms);
+  }
+  .hawk-ai .hk-ai.is-animated.is-visible .hk-ai__pill {
+    opacity: 1; transform: none;
+    transition-delay: 0s;
+  }
+  .hawk-ai .hk-ai.is-animated .hk-ai__core,
+  .hawk-ai .hk-ai.is-animated .hk-ai__note {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity .6s ease, transform .6s cubic-bezier(.22, 1, .36, 1);
+  }
+  .hawk-ai .hk-ai.is-animated.is-visible .hk-ai__core,
+  .hawk-ai .hk-ai.is-animated.is-visible .hk-ai__note {
+    opacity: 1; transform: none;
+  }
 }
 
 /* =====================================================================
@@ -2414,113 +2888,412 @@
 }
 
 /* =====================================================================
-   Shared modal (Industries + Features) — dark dossier
-   The portal carries both container classes so these scoped rules and
-   the :root tokens reach it.
+   10. Professional Services  —  .hawk-services  (prefix hk-svc)
+   The "response desk": a sticky console aside (header + on-call card) on
+   the left, a numbered service ledger on the right. The ledger reads as
+   one spine from S-01 down, so it sits apart from the card grids above.
    ===================================================================== */
-
-/* The portal wrapper inherits the two container classes only so the
-   scoped rules above reach the dialog — it must not itself become a dark
-   band. Undo the full-width-band styling on the wrapper element. */
-.hawk-industries.hk-modal-portal,
-.hawk-features.hk-modal-portal {
-  background: none;
-  min-height: 0;
-  padding: 0;
-  overflow: visible;
+.hawk-services .hk-svc__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.84fr) minmax(0, 1.16fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: start;
 }
 
-.hawk-industries .hk-modal,
-.hawk-features .hk-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 2147483000;
+/* --- Left: aside -------------------------------------------------- */
+.hawk-services .hk-svc__aside { position: sticky; top: 96px; }
+/* The aside's header drops the shared bottom rule (it is not a full-width
+   centered header), so override the __head margin to sit above the card. */
+.hawk-services .hk-svc__head {
+  margin: 0 0 clamp(24px, 3vw, 34px);
+}
+
+/* Console "desk" card — mirrors the chrome-bar motif used elsewhere. */
+.hawk-services .hk-svc__desk {
+  border: 1px solid var(--hk-border);
+  border-radius: 16px;
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+  overflow: hidden;
+}
+.hawk-services .hk-svc__desk-chrome {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hk-border);
+  background: var(--hk-panel-top);
+}
+.hawk-services .hk-svc__desk-dots { display: inline-flex; gap: 6px; }
+.hawk-services .hk-svc__desk-dots i {
+  width: 9px; height: 9px; border-radius: 50%; display: block;
+}
+.hawk-services .hk-svc__desk-chrome-label {
+  font-family: var(--hk-mono);
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: var(--hk-ink-mono);
+}
+.hawk-services .hk-svc__desk-body { padding: 18px 18px 20px; }
+.hawk-services .hk-svc__desk-status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--hk-ink);
+}
+.hawk-services .hk-svc__desk-dot {
+  flex: none;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--hk-live);
+  box-shadow: 0 0 0 3px rgba(11, 143, 87, .16);
+}
+.hawk-services .hk-svc__desk-note {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--hk-ink-2);
+}
+
+/* --- Right: the ledger -------------------------------------------- */
+.hawk-services .hk-svc__ledger {
+  margin: 0; padding: 0; list-style: none;
+  border-top: 1px solid var(--hk-rule);
+}
+.hawk-services .hk-svc__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 56px 44px minmax(0, 1fr);
+  align-items: start;
+  gap: 18px;
+  padding: clamp(18px, 2.2vw, 24px) 0;
+  border-bottom: 1px solid var(--hk-rule);
+}
+/* Accent rail that fills on hover/focus, left of the row. */
+.hawk-services .hk-svc__row::before {
+  content: "";
+  position: absolute;
+  left: -14px; top: 50%;
+  transform: translateY(-50%) scaleY(0);
+  width: 3px; height: 62%;
+  border-radius: 3px;
+  background: var(--hk-accent);
+  box-shadow: 0 0 10px var(--hk-glow);
+  transition: transform .3s cubic-bezier(.22, 1, .36, 1);
+}
+.hawk-services .hk-svc__row:hover,
+.hawk-services .hk-svc__row:focus-within {
+  background:
+    linear-gradient(90deg, var(--hk-accent-soft), transparent 68%);
+}
+.hawk-services .hk-svc__row:hover::before,
+.hawk-services .hk-svc__row:focus-within::before {
+  transform: translateY(-50%) scaleY(1);
+}
+
+.hawk-services .hk-svc__index {
+  font-family: var(--hk-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  color: var(--hk-ink-mono);
+  padding-top: 11px;
+}
+.hawk-services .hk-svc__ico {
   display: grid;
   place-items: center;
-  padding: 24px;
-  font-family: var(--hk-font);
-}
-.hawk-industries .hk-modal[hidden],
-.hawk-features .hk-modal[hidden] { display: none; }
-.hawk-industries .hk-modal__backdrop,
-.hawk-features .hk-modal__backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(13, 19, 48, .5);
-  opacity: 0;
-  transition: opacity .25s ease;
-}
-.hawk-industries .hk-modal.is-open .hk-modal__backdrop,
-.hawk-features .hk-modal.is-open .hk-modal__backdrop { opacity: 1; }
-.hawk-industries .hk-modal__dialog,
-.hawk-features .hk-modal__dialog {
-  position: relative;
-  width: min(480px, 100%);
-  border-radius: 16px;
-  border: 1px solid var(--hk-border);
-  background: var(--hk-panel);
-  box-shadow: 0 30px 80px rgba(13, 19, 48, .22), 0 0 0 1px var(--hk-border);
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(12px) scale(.98);
-  transition: opacity .28s ease, transform .28s cubic-bezier(.22, 1, .36, 1);
-}
-.hawk-industries .hk-modal.is-open .hk-modal__dialog,
-.hawk-features .hk-modal.is-open .hk-modal__dialog { opacity: 1; transform: none; }
-.hawk-industries .hk-modal__bar,
-.hawk-features .hk-modal__bar {
-  display: flex; align-items: center; gap: 12px;
-  padding: 11px 14px;
-  background: var(--hk-panel-top);
-  border-bottom: 1px solid var(--hk-border);
-}
-.hawk-industries .hk-modal__dots,
-.hawk-features .hk-modal__dots { display: inline-flex; gap: 6px; }
-.hawk-industries .hk-modal__dots i,
-.hawk-features .hk-modal__dots i { width: 9px; height: 9px; border-radius: 50%; background: #cfd6e4; }
-.hawk-industries .hk-modal__bar-title,
-.hawk-features .hk-modal__bar-title {
-  font-family: var(--hk-mono); font-size: 11px; letter-spacing: .14em; color: var(--hk-ink-mono);
-}
-.hawk-industries .hk-modal__close,
-.hawk-features .hk-modal__close {
-  display: grid; place-items: center;
-  width: 32px; height: 32px;
-  margin-left: auto;
-  border: 1px solid var(--hk-border);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--hk-ink-2);
-  cursor: pointer;
-}
-.hawk-industries .hk-modal__close:hover,
-.hawk-features .hk-modal__close:hover { color: var(--hk-ink); border-color: var(--hk-border-2); background: var(--hk-panel-2); }
-.hawk-industries .hk-modal__close svg,
-.hawk-features .hk-modal__close svg { width: 18px; height: 18px; }
-.hawk-industries .hk-modal__body,
-.hawk-features .hk-modal__body { padding: clamp(24px, 3vw, 32px); }
-.hawk-industries .hk-modal__badge,
-.hawk-features .hk-modal__badge {
-  display: grid; place-items: center;
-  width: 52px; height: 52px;
+  width: 44px; height: 44px;
   border-radius: 12px;
-  background: var(--hk-accent-soft);
+  border: 1px solid var(--hk-border);
+  background: linear-gradient(160deg, var(--hk-panel-2), var(--hk-canvas));
   color: var(--hk-accent-text);
+  transition: border-color .25s ease, color .25s ease, background .25s ease;
 }
-.hawk-industries .hk-modal__badge svg,
-.hawk-features .hk-modal__badge svg { width: 28px; height: 28px; }
-.hawk-industries .hk-modal__title,
-.hawk-features .hk-modal__title {
-  margin: 18px 0 10px; font-size: 22px; font-weight: 700; color: var(--hk-ink);
+.hawk-services .hk-svc__ico svg { width: 22px; height: 22px; }
+.hawk-services .hk-svc__row:hover .hk-svc__ico,
+.hawk-services .hk-svc__row:focus-within .hk-svc__ico {
+  border-color: var(--hk-border-2);
+  background: var(--hk-accent);
+  color: #fff;
 }
-.hawk-industries .hk-modal__text,
-.hawk-features .hk-modal__text {
-  margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--hk-ink-2);
+.hawk-services .hk-svc__text {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-top: 3px;
+}
+.hawk-services .hk-svc__row-title {
+  font-size: clamp(16px, 1.5vw, 18px);
+  font-weight: 650;
+  line-height: 1.3;
+  color: var(--hk-ink);
+}
+.hawk-services .hk-svc__row-desc {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--hk-ink-2);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .hawk-industries .hk-modal__backdrop,
-  .hawk-features .hk-modal__backdrop,
-  .hawk-industries .hk-modal__dialog,
-  .hawk-features .hk-modal__dialog { transition: none; }
+/* Stack the aside above the ledger on narrow screens. */
+@media (max-width: 860px) {
+  .hawk-services .hk-svc__layout { grid-template-columns: minmax(0, 1fr); }
+  .hawk-services .hk-svc__aside { position: static; }
+  .hawk-services .hk-svc__row::before { left: -10px; }
 }
+@media (max-width: 440px) {
+  .hawk-services .hk-svc__row {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 10px 14px;
+  }
+  /* Index moves onto the text column's row so the icon keeps its place. */
+  .hawk-services .hk-svc__index {
+    grid-column: 2;
+    grid-row: 1;
+    padding-top: 0;
+  }
+  .hawk-services .hk-svc__ico { grid-row: 1 / span 2; }
+  .hawk-services .hk-svc__text { grid-column: 2; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hawk-services .hk-svc.is-animated .hk-svc__row {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity .5s ease, transform .5s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i, 0) * 60ms);
+  }
+  .hawk-services .hk-svc.is-animated.is-visible .hk-svc__row {
+    opacity: 1; transform: none;
+  }
+  .hawk-services .hk-svc.is-animated .hk-svc__aside {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity .5s ease, transform .5s cubic-bezier(.22, 1, .36, 1);
+  }
+  .hawk-services .hk-svc.is-animated.is-visible .hk-svc__aside {
+    opacity: 1; transform: none;
+  }
+}
+
+/* =====================================================================
+   11. Integrations  —  .hawk-integrations  (prefix hk-int)
+   A patch-bay / wiring board. A signal bus carries HawkINT's output into
+   the CybrHawk platform; six connector "port" cards plug into it, each
+   with a mono jack label that lights when wired. The wiring motif sets it
+   apart from the AI core+pills above.
+   ===================================================================== */
+
+/* --- Signal bus: source chip → flow line → platform chip ---------- */
+.hawk-integrations .hk-int__bus {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.6vw, 18px);
+  margin: 0 0 clamp(28px, 3.6vw, 44px);
+  font-family: var(--hk-mono);
+  font-size: 12px;
+  letter-spacing: .08em;
+}
+.hawk-integrations .hk-int__bus-end {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+  color: var(--hk-ink);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.hawk-integrations .hk-int__bus-end--src { color: var(--hk-accent-text); }
+.hawk-integrations .hk-int__bus-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--hk-accent);
+  box-shadow: 0 0 0 3px var(--hk-accent-soft);
+}
+.hawk-integrations .hk-int__bus-end--dst .hk-int__bus-dot {
+  background: var(--hk-live);
+  box-shadow: 0 0 0 3px rgba(11, 143, 87, .16);
+}
+/* The flow line stretches between the two chips; a faint dashed rail with
+   a moving accent pulse travelling source → destination. */
+.hawk-integrations .hk-int__bus-line {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 40px;
+  height: 2px;
+  background:
+    repeating-linear-gradient(90deg, var(--hk-accent-line) 0 6px, transparent 6px 12px);
+  border-radius: 2px;
+}
+.hawk-integrations .hk-int__bus-line::before {
+  content: "";
+  position: absolute; top: 50%; left: 0;
+  width: 26px; height: 2px;
+  transform: translateY(-50%);
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--hk-accent));
+  box-shadow: 0 0 8px var(--hk-glow);
+}
+.hawk-integrations .hk-int__bus-flow {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--hk-canvas-2);
+  color: var(--hk-ink-mono);
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* --- Port grid ---------------------------------------------------- */
+.hawk-integrations .hk-int__ports {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(14px, 1.6vw, 20px);
+  margin: 0; padding: 0; list-style: none;
+}
+.hawk-integrations .hk-int__port {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--hk-border);
+  border-radius: 16px;
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+  transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
+}
+.hawk-integrations .hk-int__port-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--hk-rule);
+}
+/* The jack: a small ringed port that fills with accent when "wired". */
+.hawk-integrations .hk-int__jack {
+  flex: none;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  border: 2px solid var(--hk-accent-line);
+  background: var(--hk-canvas);
+  transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.hawk-integrations .hk-int__port-tag {
+  font-family: var(--hk-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  color: var(--hk-ink-mono);
+  overflow-wrap: anywhere;
+}
+.hawk-integrations .hk-int__port-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+}
+.hawk-integrations .hk-int__port-ico {
+  display: grid; place-items: center;
+  flex: none;
+  width: 42px; height: 42px;
+  border-radius: 11px;
+  background: var(--hk-accent-soft);
+  color: var(--hk-accent-text);
+  transition: background .25s ease, color .25s ease;
+}
+.hawk-integrations .hk-int__port-ico svg { width: 22px; height: 22px; }
+.hawk-integrations .hk-int__port-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.hawk-integrations .hk-int__port-title {
+  font-size: 15.5px;
+  font-weight: 700;
+  line-height: 1.28;
+  color: var(--hk-ink);
+}
+.hawk-integrations .hk-int__port-text {
+  font-size: 13.5px;
+  line-height: 1.52;
+  color: var(--hk-ink-2);
+}
+
+/* Wired state: the jack lights up, the card lifts. */
+.hawk-integrations .hk-int__port:hover,
+.hawk-integrations .hk-int__port:focus-within {
+  border-color: var(--hk-border-2);
+  box-shadow: var(--hk-shadow-hover), 0 0 0 1px var(--hk-glow);
+  transform: translateY(-2px);
+}
+.hawk-integrations .hk-int__port:hover .hk-int__jack,
+.hawk-integrations .hk-int__port:focus-within .hk-int__jack {
+  background: var(--hk-accent);
+  border-color: var(--hk-accent);
+  box-shadow: 0 0 8px var(--hk-glow);
+}
+.hawk-integrations .hk-int__port:hover .hk-int__port-ico,
+.hawk-integrations .hk-int__port:focus-within .hk-int__port-ico {
+  background: var(--hk-accent);
+  color: #fff;
+}
+
+@media (max-width: 880px) {
+  .hawk-integrations .hk-int__ports { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .hawk-integrations .hk-int__ports { grid-template-columns: minmax(0, 1fr); }
+  /* Stack the bus so the flow line never squeezes to nothing. */
+  .hawk-integrations .hk-int__bus { flex-direction: column; align-items: stretch; gap: 10px; }
+  .hawk-integrations .hk-int__bus-end { justify-content: center; }
+  .hawk-integrations .hk-int__bus-end--dst { flex-direction: row-reverse; }
+  .hawk-integrations .hk-int__bus-line {
+    height: 28px; width: 2px; align-self: center;
+    background:
+      repeating-linear-gradient(180deg, var(--hk-accent-line) 0 6px, transparent 6px 12px);
+  }
+  .hawk-integrations .hk-int__bus-line::before {
+    width: 2px; height: 20px;
+    background: linear-gradient(180deg, transparent, var(--hk-accent));
+  }
+  .hawk-integrations .hk-int__bus-flow { position: static; transform: none; display: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hawk-integrations .hk-int.is-animated .hk-int__bus,
+  .hawk-integrations .hk-int.is-animated .hk-int__port {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity .5s ease, transform .5s cubic-bezier(.22, 1, .36, 1);
+  }
+  .hawk-integrations .hk-int.is-animated .hk-int__port {
+    transition-delay: calc(var(--i, 0) * 60ms);
+  }
+  .hawk-integrations .hk-int.is-animated.is-visible .hk-int__bus,
+  .hawk-integrations .hk-int.is-animated.is-visible .hk-int__port {
+    opacity: 1; transform: none;
+  }
+  /* The accent pulse travelling the bus line, source → destination. */
+  .hawk-integrations .hk-int__bus-line::before {
+    animation: hk-int-flow 2.6s linear infinite;
+  }
+}
+@keyframes hk-int-flow {
+  0%   { left: 0;    opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+

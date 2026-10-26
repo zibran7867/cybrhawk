@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HawkINT — Preview</title>
+
+  <!-- The real page stylesheet. Design is unchanged; this file only
+       recreates the Elementor containers so hawk-int.js has somewhere
+       to inject each section. -->
+  <link rel="stylesheet" href="hawk-int.css">
+
+  <style>
+    /* Preview-only scaffolding. Nothing here affects the HawkINT design —
+       it just gives the standalone page a sane baseline and labels each
+       Elementor container so the sections stack like they do live. */
+    html, body { margin: 0; padding: 0; }
+    body { background: #fff; }
+
+    /* A thin divider + caption above each section so you can tell the
+       modules apart while reviewing. Remove freely — purely a preview aid. */
+    .pv-label {
+      font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #6b7a90;
+      background: #eef2f7;
+      border-top: 1px solid #d7dee8;
+      border-bottom: 1px solid #d7dee8;
+      padding: 8px 16px;
+    }
+
+    /* Elementor normally supplies .e-con-inner width + padding; give the
+       preview a comparable centered column so sections aren't edge-to-edge. */
+    .e-con-inner {
+      max-width: 1200px;
+      margin-inline: auto;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Each block mirrors Elementor's markup: an outer section carrying the
+       .hawk-* class the script targets, with a .e-con-inner the script
+       injects into. Order follows the module numbering (MOD 00 → MOD 09). -->
+
+  <p class="pv-label">MOD 00 · Hero</p>
+  <section class="hawk-hero"><div class="e-con-inner"></div></section>
+
+  <p class="pv-label">MOD 01 · Overview</p>
+  <section class="hawk-about"><div class="e-con-inner"></div></section>
+
+  <p class="pv-label">MOD · Product Modules</p>
+  <section class="hawk-modules"><div class="e-con-inner"></div></section>
+
+  <p class="pv-label">MOD 02 · In Numbers</p>
+  <section class="hawk-numbers"><div class="e-con-inner"></div></section>
+
+  <p class="pv-label">MOD 03 · How It Works</p>
+  <section class="hawk-how"><div class="e-con-inner"></div></section>
+
+  <p class="pv-label">MOD 04 · Industries</p>
+  <section class="hawk-industries"><div class="e-con-inner"></div></section>
+
+  <p class="pv-label">MOD · Core Capabilities</p>
+  <section class="hawk-caps"><div class="e-con-inner"></div></section>
+
+  <p class="pv-label">MOD 05 · Alerts &amp; Wires</p>
+  <section class="hawk-wires"><div class="e-con-inner"></div></section>
+
+  <p class="pv-label">MOD 06 · Enrichment</p>
+  <section class="hawk-enrich"><div class="e-con-inner"></div></section>
+
+  <p class="pv-label">MOD 07 · Features</p>
+  <section class="hawk-features"><div class="e-con-inner"></div></section>
+
+  <p class="pv-label">MOD 08 · AI &amp; Services</p>
+  <section class="hawk-ai"><div class="e-con-inner"></div></section>
+
+  <p class="pv-label">MOD 09 · Takedown</p>
+  <section class="hawk-takedown"><div class="e-con-inner"></div></section>
+
+  <p class="pv-label">MOD 10 · Professional Services</p>
+  <section class="hawk-services"><div class="e-con-inner"></div></section>
+
+  <p class="pv-label">MOD 11 · Integrations</p>
+  <section class="hawk-integrations"><div class="e-con-inner"></div></section>
+
+  <!-- The real page script. It waits for each container and builds the
+       section markup into it, exactly as it does on the live site. -->
+  <script src="hawk-int.js"></script>
+</body>
+</html>

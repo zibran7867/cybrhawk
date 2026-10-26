@@ -1,0 +1,2526 @@
+/* =====================================================================
+   HawkINT / CybrHawk — page styles (single bundle)
+   =====================================================================
+   "HawkINT Operations Console" — a light threat-intelligence operator
+   surface matched to the CybrHawk site (the UCD page palette), built on
+   the brand blue (#0c68ff). One stylesheet for the whole HawkINT body.
+   Every rule is scoped under its section's
+   fixed Elementor container class so the blocks stay independent and can
+   be lifted into separate files later:
+
+     .hawk-hero         Hero                     (prefix hk-hero)
+     .hawk-about        About HawkINT            (prefix hk-about)
+     .hawk-numbers      HawkINT in Numbers       (prefix hk-numbers)
+     .hawk-how          How HawkINT Works        (prefix hk-how)
+     .hawk-industries   Industries We Protect    (prefix hk-ind)
+     .hawk-wires        Alerts & Incident Wires  (prefix hk-wires)
+     .hawk-enrich       Processing & Enrichment  (prefix hk-enrich)
+     .hawk-features     Platform Features        (prefix hk-features)
+     .hawk-ai           AI & Associated Services (prefix hk-ai)
+     .hawk-takedown     Takedown Services        (prefix hk-takedown)
+
+   Markup for every section is injected by hawk-int.js. Bands alternate
+   --hk-canvas / --hk-canvas-2 down the page so no two neighbours share a
+   flat background (white / tint), matching the UCD page. Motion lives
+   inside @media (prefers-reduced-motion: no-preference) blocks, so a
+   visitor who asks for reduced motion gets a static, fully visible page.
+   ===================================================================== */
+
+/* =====================================================================
+   Shared design tokens — the dark console palette
+   =====================================================================
+   The only :root block in the file. Chosen for the contrast table in
+   the brief; don't drift off these without re-checking contrast. Small
+   accent TEXT uses --hk-accent-text (#5a9bff ≈4.8:1); #0c68ff is for
+   fills / glows / large display only (it is ~4.3:1 as small text).
+   ===================================================================== */
+:root {
+  /* Canvas & panels (white / tint, matched to the UCD page) */
+  --hk-canvas:       #ffffff;   /* white band / page floor */
+  --hk-canvas-2:     #f8f9fd;   /* tinted alternating band */
+  --hk-panel:        #ffffff;   /* card / panel surface */
+  --hk-panel-2:      #f4f7fe;   /* faint elevated / inset surface */
+  --hk-panel-top:    #f3f5fb;   /* console chrome bars */
+
+  /* Brand blue (signal) — the UCD/site blue */
+  --hk-accent:       #0c68ff;   /* fills, button bg, large display */
+  --hk-accent-hover: #0a58d6;   /* hover / pressed */
+  --hk-accent-text:  #0a58d6;   /* accent used AS TEXT on light (≥4.5:1) */
+  --hk-accent-soft:  #eaf2ff;   /* badge / chip fill */
+  --hk-accent-line:  rgba(12, 104, 255, .30);  /* connectors / hairlines */
+  --hk-glow:         rgba(12, 104, 255, .22);   /* restrained accent glow */
+
+  /* Ink */
+  --hk-ink:          #0d1330;   /* headings / primary (near-black navy) */
+  --hk-ink-2:        #5b6478;   /* body copy (~5.9:1 on white) */
+  --hk-ink-mono:     #6b7390;   /* telemetry / mono labels */
+  --hk-ink-faint:    #aab2c8;   /* decorative only — NOT real copy */
+
+  /* Hairlines & borders */
+  --hk-border:       #e6eaf2;                   /* standard panel border */
+  --hk-border-2:     rgba(12, 104, 255, .28);   /* hover / emphasised border */
+  --hk-rule:         #edf0f6;                   /* faint divider rules */
+
+  /* Status (mean the same thing everywhere; tuned to read on white) */
+  --hk-live:         #0b8f57;   /* live dot / "monitoring" green */
+  --hk-sev-high:     #d92d2d;
+  --hk-sev-med:      #b96c00;
+  --hk-sev-low:      #1763d6;
+
+  /* Web-depth ramp (Surface → Deep → Dark) — subtle blue tints on light */
+  --hk-depth-surface:#eef4ff;
+  --hk-depth-deep:   #e5edff;
+  --hk-depth-dark:   #dbe6ff;
+
+  /* Shadows (soft, matched to the UCD page) */
+  --hk-shadow:       0 1px 2px rgba(13, 19, 48, .04),
+                     0 8px 24px rgba(13, 19, 48, .05);
+  --hk-shadow-hover: 0 2px 4px rgba(13, 19, 48, .05),
+                     0 16px 38px rgba(13, 19, 48, .10);
+
+  /* Type */
+  --hk-font:  "Figtree", system-ui, sans-serif;
+  --hk-mono:  ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+/* =====================================================================
+   Cross-section shared rules
+   ---------------------------------------------------------------------
+   Each still carries its container class, so nothing leaks onto the rest
+   of the WordPress page. Grouped only to keep the declarations DRY.
+   ===================================================================== */
+
+/* Box-sizing + font floor for every section and its injected content. */
+.hawk-hero, .hawk-hero *,
+.hawk-about, .hawk-about *,
+.hawk-modules, .hawk-modules *,
+.hawk-numbers, .hawk-numbers *,
+.hawk-how, .hawk-how *,
+.hawk-industries, .hawk-industries *,
+.hawk-caps, .hawk-caps *,
+.hawk-wires, .hawk-wires *,
+.hawk-enrich, .hawk-enrich *,
+.hawk-features, .hawk-features *,
+.hawk-ai, .hawk-ai *,
+.hawk-takedown, .hawk-takedown * {
+  box-sizing: border-box;
+}
+
+/* Elementor's Additional CSS gives every .e-con-inner side padding and
+   no max-width; a boxed HawkINT container would then inset our own
+   full-bleed bands twice. Reset it so each section owns its padding.
+   !important beats that site-level rule (the one documented exception). */
+.hawk-hero > .e-con-inner,
+.hawk-about > .e-con-inner,
+.hawk-modules > .e-con-inner,
+.hawk-numbers > .e-con-inner,
+.hawk-how > .e-con-inner,
+.hawk-industries > .e-con-inner,
+.hawk-caps > .e-con-inner,
+.hawk-wires > .e-con-inner,
+.hawk-enrich > .e-con-inner,
+.hawk-features > .e-con-inner,
+.hawk-ai > .e-con-inner,
+.hawk-takedown > .e-con-inner {
+  padding: 0 !important;
+  max-width: none !important;
+  width: 100%;
+}
+
+/* Full-width bands. Side gutter 24 → 22 → 18px set per container below;
+   alternating white / tint keeps neighbours distinct. */
+.hawk-hero,
+.hawk-about,
+.hawk-modules,
+.hawk-numbers,
+.hawk-how,
+.hawk-industries,
+.hawk-caps,
+.hawk-wires,
+.hawk-enrich,
+.hawk-features,
+.hawk-ai,
+.hawk-takedown {
+  --hk-gutter: 24px;
+  position: relative;
+  width: 100%;
+  overflow: clip;                 /* decoration never widens the page */
+  font-family: var(--hk-font);
+  color: var(--hk-ink-2);
+}
+
+/* White bands and tinted bands alternate so no two neighbours match. */
+.hawk-hero,
+.hawk-modules,
+.hawk-numbers,
+.hawk-industries,
+.hawk-enrich,
+.hawk-ai {
+  background-color: var(--hk-canvas);
+}
+.hawk-about,
+.hawk-how,
+.hawk-caps,
+.hawk-wires,
+.hawk-features,
+.hawk-takedown {
+  background-color: var(--hk-canvas-2);
+}
+
+/* Tinted bands carry a faint top radial of the site blue, matching the
+   UCD page; white bands stay clean. A solid background-color is already
+   set above so Elementor's lazy-load never blanks the band. */
+.hawk-about,
+.hawk-how,
+.hawk-caps,
+.hawk-wires,
+.hawk-features,
+.hawk-takedown {
+  background-image:
+    radial-gradient(60% 46% at 50% 0%, rgba(12, 104, 255, .045), transparent 70%);
+}
+
+@media (max-width: 980px) {
+  .hawk-hero, .hawk-about, .hawk-modules, .hawk-numbers, .hawk-how,
+  .hawk-industries, .hawk-caps, .hawk-wires, .hawk-enrich, .hawk-features,
+  .hawk-ai, .hawk-takedown {
+    --hk-gutter: 22px;
+  }
+}
+@media (max-width: 520px) {
+  .hawk-hero, .hawk-about, .hawk-modules, .hawk-numbers, .hawk-how,
+  .hawk-industries, .hawk-caps, .hawk-wires, .hawk-enrich, .hawk-features,
+  .hawk-ai, .hawk-takedown {
+    --hk-gutter: 18px;
+  }
+}
+
+/* Centered measure for every section's injected wrapper. */
+.hawk-hero .hk-hero,
+.hawk-about .hk-about,
+.hawk-modules .hk-modules,
+.hawk-numbers .hk-numbers,
+.hawk-how .hk-how,
+.hawk-industries .hk-ind,
+.hawk-caps .hk-caps,
+.hawk-wires .hk-wires,
+.hawk-enrich .hk-enrich,
+.hawk-features .hk-features,
+.hawk-ai .hk-ai,
+.hawk-takedown .hk-takedown {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: calc(1240px + 2 * var(--hk-gutter));
+  margin: 0 auto;
+  padding: clamp(60px, 7vw, 104px) var(--hk-gutter);
+}
+
+/* Module header (brief §6.1): a mono MOD tag with a blue tick, the H2,
+   an optional lead. Shared look across every section. */
+.hawk-hero .hk-hero__mod,
+.hawk-about .hk-about__mod,
+.hawk-modules .hk-modules__mod,
+.hawk-numbers .hk-numbers__mod,
+.hawk-how .hk-how__mod,
+.hawk-industries .hk-ind__mod,
+.hawk-caps .hk-caps__mod,
+.hawk-wires .hk-wires__mod,
+.hawk-enrich .hk-enrich__mod,
+.hawk-features .hk-features__mod,
+.hawk-ai .hk-ai__mod,
+.hawk-takedown .hk-takedown__mod {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  font-family: var(--hk-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--hk-accent-text);
+}
+
+.hawk-hero .hk-hero__tick,
+.hawk-about .hk-about__tick,
+.hawk-modules .hk-modules__tick,
+.hawk-numbers .hk-numbers__tick,
+.hawk-how .hk-how__tick,
+.hawk-industries .hk-ind__tick,
+.hawk-caps .hk-caps__tick,
+.hawk-wires .hk-wires__tick,
+.hawk-enrich .hk-enrich__tick,
+.hawk-features .hk-features__tick,
+.hawk-ai .hk-ai__tick,
+.hawk-takedown .hk-takedown__tick {
+  flex: none;
+  width: 16px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--hk-accent);
+  box-shadow: 0 0 10px var(--hk-glow);
+}
+
+/* Section H2. */
+.hawk-about .hk-about__title,
+.hawk-modules .hk-modules__title,
+.hawk-how .hk-how__title,
+.hawk-industries .hk-ind__title,
+.hawk-caps .hk-caps__title,
+.hawk-wires .hk-wires__title,
+.hawk-enrich .hk-enrich__title,
+.hawk-features .hk-features__title,
+.hawk-ai .hk-ai__title,
+.hawk-takedown .hk-takedown__title {
+  margin: 0;
+  font-size: clamp(28px, 3.6vw, 46px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -.018em;
+  color: var(--hk-ink);
+}
+
+/* Section lead / sub. */
+.hawk-modules .hk-modules__lead,
+.hawk-how .hk-how__lead,
+.hawk-industries .hk-ind__lead,
+.hawk-caps .hk-caps__lead,
+.hawk-enrich .hk-enrich__lead,
+.hawk-features .hk-features__lead,
+.hawk-ai .hk-ai__lead,
+.hawk-takedown .hk-takedown__lead {
+  margin: 16px 0 0;
+  max-width: 62ch;
+  font-size: clamp(16px, 1.5vw, 18px);
+  line-height: 1.6;
+  color: var(--hk-ink-2);
+}
+
+/* A faint rule sealing the header on the centered-column sections. */
+.hawk-modules .hk-modules__head,
+.hawk-how .hk-how__head,
+.hawk-industries .hk-ind__head,
+.hawk-caps .hk-caps__head,
+.hawk-enrich .hk-enrich__head,
+.hawk-features .hk-features__head,
+.hawk-ai .hk-ai__head,
+.hawk-takedown .hk-takedown__head {
+  margin: 0 0 clamp(32px, 4vw, 52px);
+  padding: 0 0 clamp(20px, 2.6vw, 30px);
+  border-bottom: 1px solid var(--hk-rule);
+}
+
+/* Focus — always visible, dark-tuned (brief §6.6). */
+.hawk-hero :focus-visible,
+.hawk-about :focus-visible,
+.hawk-modules :focus-visible,
+.hawk-numbers :focus-visible,
+.hawk-how :focus-visible,
+.hawk-industries :focus-visible,
+.hawk-caps :focus-visible,
+.hawk-wires :focus-visible,
+.hawk-enrich :focus-visible,
+.hawk-features :focus-visible,
+.hawk-ai :focus-visible,
+.hawk-takedown :focus-visible,
+.hawk-industries .hk-modal :focus-visible,
+.hawk-features .hk-modal :focus-visible {
+  outline: 3px solid rgba(12, 104, 255, .6);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Console traffic-dots — macOS-style red / amber / green, left to right.
+   Shared across every chrome bar (hero, About, Wires, modal). */
+.hawk-hero .hk-hero__chrome-dots i:nth-child(1),
+.hawk-about .hk-about__dots i:nth-child(1),
+.hawk-wires .hk-wires__console-dots i:nth-child(1),
+.hawk-industries .hk-modal__dots i:nth-child(1),
+.hawk-features .hk-modal__dots i:nth-child(1) { background: #ff5f57; }
+
+.hawk-hero .hk-hero__chrome-dots i:nth-child(2),
+.hawk-about .hk-about__dots i:nth-child(2),
+.hawk-wires .hk-wires__console-dots i:nth-child(2),
+.hawk-industries .hk-modal__dots i:nth-child(2),
+.hawk-features .hk-modal__dots i:nth-child(2) { background: #febc2e; }
+
+.hawk-hero .hk-hero__chrome-dots i:nth-child(3),
+.hawk-about .hk-about__dots i:nth-child(3),
+.hawk-wires .hk-wires__console-dots i:nth-child(3),
+.hawk-industries .hk-modal__dots i:nth-child(3),
+.hawk-features .hk-modal__dots i:nth-child(3) { background: #28c840; }
+
+/* =====================================================================
+   0. Hero  —  .hawk-hero  (prefix hk-hero)
+   ===================================================================== */
+/* The theme header sits over the top of this section. On desktop it is
+   transparent with a white logo + light links, which vanish on this light
+   hero — so we paint a dark navy band behind it (the colour the header turns
+   when it sticks on scroll). It is an inset box-shadow, not a gradient, so
+   Elementor's background lazy-load can never blank it and leave the links
+   unreadable. Tablet/phone headers carry their own white background, so there
+   we only reserve the clearance. Mirrors the udc/ hero. */
+.hawk-hero {
+  --hk-hr-bar: 0px;                 /* dark header band height; desktop only */
+  --hk-hr-bar-bg: #080b1a;          /* the stuck header's navy */
+  --hk-hero-offset: 90px;           /* header height, cleared above the content */
+  background-color: var(--hk-canvas);
+  background-image:
+    radial-gradient(42% 52% at 80% 24%, rgba(12, 104, 255, .08), transparent 72%),
+    linear-gradient(180deg, #fbfcff 0%, #f1f6ff 46%, #ffffff 100%);
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .hawk-hero { --hk-hero-offset: 102px; }
+}
+
+/* Desktop: paint the dark band behind the transparent header. The second
+   inset shadow is 1px deeper — a faint indigo rule under the bar, matching
+   the line the mega-menu draws on its panels. The band height follows the
+   live header (≈114px at 1025 → ≈137px at 2560). */
+@media (min-width: 1025px) {
+  .hawk-hero {
+    --hk-hr-bar: calc(100px + 1.5vw);
+    --hk-hero-offset: var(--hk-hr-bar);
+    box-shadow:
+      inset 0 var(--hk-hr-bar) 0 0 var(--hk-hr-bar-bg),
+      inset 0 calc(var(--hk-hr-bar) + 1px) 0 0 rgba(129, 140, 248, 0.45);
+  }
+}
+
+.hawk-hero .hk-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: center;
+  gap: clamp(32px, 4.4vw, 72px);
+  padding-top: calc(var(--hk-hero-offset) + clamp(32px, 4vw, 56px));
+  padding-bottom: clamp(64px, 7vw, 112px);
+}
+
+/* Faint fixed grid overlay just for the hero (slightly stronger lines) */
+.hawk-hero .hk-hero__grid-bg {
+  position: absolute;
+  inset: var(--hk-hr-bar) 0 0 0;   /* start below the header band */
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(13, 19, 48, .03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(13, 19, 48, .03) 1px, transparent 1px);
+  background-size: 34px 34px, 34px 34px;
+  -webkit-mask-image: radial-gradient(120% 120% at 70% 30%, #000 30%, transparent 82%);
+          mask-image: radial-gradient(120% 120% at 70% 30%, #000 30%, transparent 82%);
+}
+
+.hawk-hero .hk-hero__decor {
+  position: absolute;
+  inset: var(--hk-hr-bar) 0 0 0;   /* keep the orb below the header band */
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hawk-hero .hk-hero__orb {
+  position: absolute;
+  top: -180px;
+  right: -140px;
+  width: 460px;
+  height: 460px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    rgba(12, 104, 255, .14), rgba(12, 104, 255, .04) 60%, transparent);
+}
+
+.hawk-hero .hk-hero__copy {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.hawk-hero .hk-hero__eyebrow {
+  margin: 0 0 18px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--hk-ink-2);
+}
+
+.hawk-hero .hk-hero__title {
+  margin: 0;
+  font-size: clamp(38px, 5vw, 66px);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -.025em;
+  color: var(--hk-ink);
+}
+.hawk-hero .hk-hero__accent { color: var(--hk-accent-text); }
+
+.hawk-hero .hk-hero__lead {
+  margin: 22px 0 0;
+  max-width: 54ch;
+  font-size: clamp(18px, 1.7vw, 20px);
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--hk-ink);
+}
+.hawk-hero .hk-hero__body {
+  margin: 16px 0 0;
+  max-width: 58ch;
+  font-size: 16px;
+  line-height: 1.62;
+  color: var(--hk-ink-2);
+}
+/* Buttons (brief §6.5). */
+.hawk-hero .hk-hero__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 28px 0 0;
+}
+.hawk-hero .hk-hero__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px;
+  border-radius: 10px;
+  border: 1px solid var(--hk-accent);
+  background: var(--hk-accent);
+  color: #ffffff;
+  font-family: var(--hk-font);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 10px 26px rgba(12, 104, 255, .32);
+}
+.hawk-hero .hk-hero__btn svg { width: 18px; height: 18px; }
+.hawk-hero .hk-hero__btn:hover {
+  background: var(--hk-accent-hover);
+  border-color: var(--hk-accent-hover);
+  box-shadow: 0 16px 34px rgba(12, 104, 255, .32);
+}
+.hawk-hero .hk-hero__btn--ghost {
+  background: #ffffff;
+  border: 1px solid #c9dafc;
+  color: var(--hk-accent-text);
+  box-shadow: none;
+}
+.hawk-hero .hk-hero__btn--ghost:hover {
+  background: #ffffff;
+  border-color: var(--hk-accent);
+  color: var(--hk-accent-text);
+  box-shadow: 0 12px 28px rgba(13, 19, 48, .08);
+}
+
+/* Proof strip — telemetry readouts (brief §7.0). */
+.hawk-hero .hk-hero__proof {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 22px;
+  margin: 32px 0 0;
+  padding: 26px 0 0;
+  list-style: none;
+  border-top: 1px solid var(--hk-rule);
+}
+.hawk-hero .hk-hero__proof-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  min-width: 0;
+}
+.hawk-hero .hk-hero__check {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  border-radius: 6px;
+  background: var(--hk-accent-soft);
+  color: var(--hk-accent-text);
+}
+.hawk-hero .hk-hero__check svg { width: 14px; height: 14px; }
+.hawk-hero .hk-hero__proof-copy { display: flex; flex-direction: column; min-width: 0; }
+.hawk-hero .hk-hero__proof-label {
+  font-family: var(--hk-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  color: var(--hk-ink-mono);
+}
+.hawk-hero .hk-hero__proof-text {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--hk-ink);
+}
+
+/* ---- Hero visual: the console centerpiece -------------------------- */
+.hawk-hero .hk-hero__visual { position: relative; z-index: 1; min-width: 0; }
+
+.hawk-hero .hk-hero__media { margin: 0; }
+.hawk-hero .hk-hero__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  border: 1px solid var(--hk-border);
+  box-shadow: var(--hk-shadow);
+}
+
+.hawk-hero .hk-hero__stage {
+  position: relative;
+  border-radius: 18px;
+  border: 1px solid var(--hk-border);
+  background:
+    linear-gradient(180deg, #ffffff, #f6f8fe);
+  box-shadow: var(--hk-shadow);
+  overflow: hidden;
+}
+
+/* chrome bar */
+.hawk-hero .hk-hero__chrome {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  background: var(--hk-panel-top);
+  border-bottom: 1px solid var(--hk-border);
+}
+.hawk-hero .hk-hero__chrome-dots { display: inline-flex; gap: 6px; }
+.hawk-hero .hk-hero__chrome-dots i {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: #cfd6e4;
+}
+.hawk-hero .hk-hero__chrome-title {
+  font-family: var(--hk-mono);
+  font-size: 11px;
+  letter-spacing: .16em;
+  color: var(--hk-ink-mono);
+}
+.hawk-hero .hk-hero__chrome-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+  font-family: var(--hk-mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  color: var(--hk-live);
+}
+.hawk-hero .hk-hero__chrome-live span {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--hk-live);
+  box-shadow: 0 0 6px rgba(11, 143, 87, .3);
+}
+
+/* screen stage (coordinate space for bands, core, signals) */
+.hawk-hero .hk-hero__screen {
+  position: relative;
+  min-height: clamp(330px, 30vw, 440px);
+  padding: 18px;
+}
+
+.hawk-hero .hk-hero__links {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.hawk-hero .hk-hero__line {
+  fill: none;                      /* it's a curved <path>, not a filled shape */
+  stroke: var(--hk-accent-line);
+  stroke-width: 1;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.hawk-hero .hk-hero__signal {
+  fill: var(--hk-accent);
+  opacity: 0;
+}
+
+/* three web-layer bands, centres aligned to the SVG endpoints */
+.hawk-hero .hk-hero__bands { position: absolute; inset: 0; }
+.hawk-hero .hk-hero__band {
+  position: absolute;
+  left: 18px;
+  width: 52%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-panel);
+}
+.hawk-hero .hk-hero__band--0 { top: 21%; background: linear-gradient(180deg, var(--hk-depth-surface), var(--hk-panel)); }
+.hawk-hero .hk-hero__band--1 { top: 50%; background: linear-gradient(180deg, var(--hk-depth-deep), var(--hk-panel)); }
+.hawk-hero .hk-hero__band--2 { top: 79%; background: linear-gradient(180deg, var(--hk-depth-dark), var(--hk-panel)); }
+.hawk-hero .hk-hero__band-icon {
+  flex: none;
+  display: grid; place-items: center;
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  background: rgba(12, 104, 255, .16);
+  color: var(--hk-accent-text);
+}
+.hawk-hero .hk-hero__band-icon svg { width: 19px; height: 19px; }
+.hawk-hero .hk-hero__band-copy { display: flex; flex-direction: column; min-width: 0; }
+.hawk-hero .hk-hero__band-code {
+  font-family: var(--hk-mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  color: var(--hk-ink-mono);
+}
+.hawk-hero .hk-hero__band-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--hk-ink);
+  white-space: nowrap;
+}
+.hawk-hero .hk-hero__band-dots { margin-left: auto; display: inline-flex; gap: 5px; }
+.hawk-hero .hk-hero__band-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--hk-accent-line);
+}
+
+/* scan sweep */
+.hawk-hero .hk-hero__scan {
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 42%;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(12, 104, 255, .12), transparent);
+  opacity: 0;
+}
+
+/* the HawkINT core the signals converge on */
+.hawk-hero .hk-hero__core {
+  position: absolute;
+  top: 50%; left: 80%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 112px;
+  padding: 16px 10px;
+  border-radius: 14px;
+  border: 1px solid var(--hk-accent-line);
+  background: linear-gradient(180deg, var(--hk-panel-2), var(--hk-panel));
+  box-shadow: 0 0 0 1px rgba(12, 104, 255, .12), 0 10px 26px rgba(12, 104, 255, .16);
+  text-align: center;
+}
+.hawk-hero .hk-hero__core-pulse {
+  position: absolute;
+  inset: -1px;
+  border-radius: 14px;
+  border: 1px solid var(--hk-accent);
+  opacity: 0;
+  pointer-events: none;
+}
+.hawk-hero .hk-hero__core-icon {
+  display: grid; place-items: center;
+  width: 40px; height: 40px;
+  color: var(--hk-accent-text);
+}
+.hawk-hero .hk-hero__core-icon svg { width: 30px; height: 30px; }
+.hawk-hero .hk-hero__core-name {
+  font-size: 15px; font-weight: 700; color: var(--hk-ink);
+}
+.hawk-hero .hk-hero__core-caption {
+  font-family: var(--hk-mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  color: var(--hk-ink-mono);
+}
+
+/* corner brackets */
+.hawk-hero .hk-hero__bracket {
+  position: absolute;
+  width: 16px; height: 16px;
+  border: 2px solid var(--hk-accent-line);
+  pointer-events: none;
+}
+.hawk-hero .hk-hero__bracket--tl { top: 12px; left: 12px; border-right: 0; border-bottom: 0; border-top-left-radius: 4px; }
+.hawk-hero .hk-hero__bracket--tr { top: 12px; right: 12px; border-left: 0; border-bottom: 0; border-top-right-radius: 4px; }
+.hawk-hero .hk-hero__bracket--bl { bottom: 12px; left: 12px; border-right: 0; border-top: 0; border-bottom-left-radius: 4px; }
+.hawk-hero .hk-hero__bracket--br { bottom: 12px; right: 12px; border-left: 0; border-top: 0; border-bottom-right-radius: 4px; }
+
+@media (max-width: 1024px) {
+  .hawk-hero .hk-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(36px, 6vw, 56px);
+  }
+  .hawk-hero .hk-hero__visual { max-width: 560px; }
+}
+@media (max-width: 620px) {
+  .hawk-hero .hk-hero__buttons { flex-direction: column; align-items: stretch; }
+  .hawk-hero .hk-hero__btn { width: 100%; justify-content: center; }
+}
+@media (max-width: 520px) {
+  .hawk-hero .hk-hero__visual { margin: 0 auto; }
+  .hawk-hero .hk-hero__proof { grid-template-columns: minmax(0, 1fr); }
+  .hawk-hero .hk-hero__band { width: 60%; }
+  .hawk-hero .hk-hero__core { width: 92px; left: 78%; }
+}
+
+/* motion */
+@media (prefers-reduced-motion: no-preference) {
+  .hawk-hero .hk-hero.is-animated .hk-hero__mod,
+  .hawk-hero .hk-hero.is-animated .hk-hero__eyebrow,
+  .hawk-hero .hk-hero.is-animated .hk-hero__title,
+  .hawk-hero .hk-hero.is-animated .hk-hero__lead,
+  .hawk-hero .hk-hero.is-animated .hk-hero__body,
+  .hawk-hero .hk-hero.is-animated .hk-hero__buttons,
+  .hawk-hero .hk-hero.is-animated .hk-hero__proof-item,
+  .hawk-hero .hk-hero.is-animated .hk-hero__visual {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .6s ease, transform .6s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i, 0) * 70ms);
+  }
+  .hawk-hero .hk-hero.is-animated.is-visible .hk-hero__mod,
+  .hawk-hero .hk-hero.is-animated.is-visible .hk-hero__eyebrow,
+  .hawk-hero .hk-hero.is-animated.is-visible .hk-hero__title,
+  .hawk-hero .hk-hero.is-animated.is-visible .hk-hero__lead,
+  .hawk-hero .hk-hero.is-animated.is-visible .hk-hero__body,
+  .hawk-hero .hk-hero.is-animated.is-visible .hk-hero__buttons,
+  .hawk-hero .hk-hero.is-animated.is-visible .hk-hero__proof-item,
+  .hawk-hero .hk-hero.is-animated.is-visible .hk-hero__visual {
+    opacity: 1;
+    transform: none;
+  }
+  .hawk-hero .hk-hero__btn { transition: background .2s ease, border-color .2s ease, box-shadow .25s ease, transform .2s ease; }
+  .hawk-hero .hk-hero__btn:hover { transform: translateY(-2px); }
+
+  /* console animation — only while the stage is "is-moving" (on screen,
+     tab in front). Paused via .is-paused. The signal dots ride the curved
+     connectors via offset-path; where that is unsupported they stay
+     hidden and the curves alone carry the connection. */
+  @supports (offset-path: path("M0 0 L1 1")) {
+    .hawk-hero .hk-hero__stage.is-moving .hk-hero__signal {
+      animation: hk-hero-signal var(--d, 3s) linear var(--delay, 0s) infinite;
+    }
+  }
+  .hawk-hero .hk-hero__stage.is-moving .hk-hero__scan {
+    animation: hk-hero-scan 8s ease-in-out infinite;
+  }
+  .hawk-hero .hk-hero__stage.is-moving .hk-hero__core-pulse {
+    animation: hk-hero-pulse 2.8s ease-out infinite;
+  }
+  .hawk-hero .hk-hero__stage.is-paused .hk-hero__signal,
+  .hawk-hero .hk-hero__stage.is-paused .hk-hero__scan,
+  .hawk-hero .hk-hero__stage.is-paused .hk-hero__core-pulse {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes hk-hero-signal {
+  0%   { offset-distance: 0%; opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+@keyframes hk-hero-scan {
+  0%   { transform: translateX(-20%); opacity: 0; }
+  50%  { opacity: 1; }
+  100% { transform: translateX(240%); opacity: 0; }
+}
+@keyframes hk-hero-pulse {
+  0%   { transform: scale(1); opacity: .6; }
+  100% { transform: scale(1.14); opacity: 0; }
+}
+
+/* =====================================================================
+   1. About HawkINT  —  .hawk-about  (prefix hk-about)
+   ===================================================================== */
+.hawk-about .hk-about__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(32px, 4.6vw, 72px);
+}
+.hawk-about .hk-about__copy { min-width: 0; }
+.hawk-about .hk-about__eyebrow {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--hk-ink-2);
+}
+.hawk-about .hk-about__body {
+  margin: 20px 0 0;
+  max-width: 60ch;
+  font-size: clamp(16px, 1.5vw, 17px);
+  line-height: 1.64;
+  color: var(--hk-ink-2);
+}
+.hawk-about .hk-about__media { min-width: 0; }
+
+/* console frame (brief §6.4) */
+.hawk-about .hk-about__console {
+  margin: 0;
+  border-radius: 16px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+  overflow: hidden;
+}
+.hawk-about .hk-about__bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  background: var(--hk-panel-top);
+  border-bottom: 1px solid var(--hk-border);
+}
+.hawk-about .hk-about__dots { display: inline-flex; gap: 6px; }
+.hawk-about .hk-about__dots i { width: 9px; height: 9px; border-radius: 50%; background: #cfd6e4; }
+.hawk-about .hk-about__bar-title {
+  font-family: var(--hk-mono); font-size: 11px; letter-spacing: .14em; color: var(--hk-ink-mono);
+}
+.hawk-about .hk-about__live {
+  display: inline-flex; align-items: center; gap: 7px; margin-left: auto;
+  font-family: var(--hk-mono); font-size: 11px; letter-spacing: .12em; color: var(--hk-live);
+}
+.hawk-about .hk-about__live-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--hk-live);
+  box-shadow: 0 0 6px rgba(11, 143, 87, .3);
+}
+.hawk-about .hk-about__screen {
+  position: relative;
+  background: var(--hk-canvas);
+}
+.hawk-about .hk-about__img { display: block; width: 100%; height: auto; }
+.hawk-about .hk-about__fallback {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; min-height: 220px; color: var(--hk-accent-text);
+}
+.hawk-about .hk-about__fallback .hk-about__mono svg { width: 48px; height: 48px; }
+.hawk-about .hk-about__wordmark { font-size: 24px; font-weight: 700; color: var(--hk-ink); }
+.hawk-about .hk-about__wordmark span { color: var(--hk-accent-text); }
+.hawk-about .hk-about__bracket {
+  position: absolute; width: 16px; height: 16px; border: 2px solid var(--hk-accent-line); pointer-events: none;
+}
+.hawk-about .hk-about__bracket--tl { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
+.hawk-about .hk-about__bracket--tr { top: 10px; right: 10px; border-left: 0; border-bottom: 0; }
+.hawk-about .hk-about__bracket--bl { bottom: 10px; left: 10px; border-right: 0; border-top: 0; }
+.hawk-about .hk-about__bracket--br { bottom: 10px; right: 10px; border-left: 0; border-top: 0; }
+.hawk-about .hk-about__caption {
+  display: flex; align-items: center; gap: 9px;
+  padding: 13px 16px;
+  border-top: 1px solid var(--hk-border);
+  font-family: var(--hk-mono); font-size: 11.5px; letter-spacing: .04em; color: var(--hk-ink-mono);
+}
+.hawk-about .hk-about__caption svg { flex: none; width: 16px; height: 16px; color: var(--hk-accent-text); }
+
+/* "What You Get" — a console OUTPUTS readout (echoes the media console:
+   chrome bar, mono telemetry, a signal rail lighting each line on hover). */
+.hawk-about .hk-about__outputs {
+  margin: 28px 0 0;
+  border: 1px solid var(--hk-border);
+  border-radius: 14px;
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+  overflow: hidden;
+}
+/* readout chrome bar: live dot · title · output counter */
+.hawk-about .hk-about__outputs-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  background: var(--hk-panel-top);
+  border-bottom: 1px solid var(--hk-border);
+}
+.hawk-about .hk-about__outputs-dot {
+  flex: none;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--hk-live);
+  box-shadow: 0 0 0 3px rgba(11, 143, 87, .14);
+}
+.hawk-about .hk-about__outputs-title {
+  font-family: var(--hk-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--hk-ink);
+}
+.hawk-about .hk-about__outputs-count {
+  margin-left: auto;
+  font-family: var(--hk-mono);
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  color: var(--hk-ink-mono);
+}
+
+/* a row of output cards, split by hairlines, with a shared signal line
+   running across the node band at the top */
+.hawk-about .hk-about__out-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+/* each output card */
+.hawk-about .hk-about__out {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 18px 20px;
+  border-left: 1px solid var(--hk-rule);
+  isolation: isolate;
+}
+.hawk-about .hk-about__out:first-child { border-left: 0; }
+
+/* soft accent wash that lights the hovered card (How-it-works idiom) */
+.hawk-about .hk-about__out-glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, var(--hk-accent-soft), transparent 72%);
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+.hawk-about .hk-about__out:hover .hk-about__out-glow,
+.hawk-about .hk-about__out:focus-within .hk-about__out-glow { opacity: 1; }
+
+/* top band: index on the left, check node on the right, with a hairline
+   "signal line" running between them and on across the cards */
+.hawk-about .hk-about__out-rail {
+  position: relative;
+  order: -1;
+  display: flex;
+  align-items: center;
+  height: 24px;
+}
+.hawk-about .hk-about__out-rail::before {
+  content: "";
+  position: absolute;
+  left: -18px; right: -18px;   /* bleed across the card padding + divider */
+  top: 50%;
+  height: 1px;
+  background: var(--hk-accent-line);
+}
+.hawk-about .hk-about__out:first-child .hk-about__out-rail::before { left: 0; }
+.hawk-about .hk-about__out:last-child .hk-about__out-rail::before { right: 0; }
+.hawk-about .hk-about__out-node {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--hk-accent-soft);
+  color: var(--hk-accent-text);
+  box-shadow: 0 0 0 4px var(--hk-panel);
+  transition: box-shadow .3s ease;
+}
+.hawk-about .hk-about__out-node svg { width: 13px; height: 13px; }
+.hawk-about .hk-about__out:hover .hk-about__out-node,
+.hawk-about .hk-about__out:focus-within .hk-about__out-node {
+  box-shadow: 0 0 0 4px var(--hk-panel), 0 0 0 7px var(--hk-accent-soft);
+}
+
+/* zero-padded index — sits at the far right of the node band */
+.hawk-about .hk-about__out-idx {
+  margin-left: auto;
+  position: relative;
+  padding-left: 8px;
+  background: var(--hk-panel);
+  font-family: var(--hk-mono);
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: var(--hk-ink-mono);
+}
+
+.hawk-about .hk-about__out-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.hawk-about .hk-about__out-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+}
+.hawk-about .hk-about__out-label {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--hk-ink);
+  letter-spacing: -.005em;
+}
+.hawk-about .hk-about__out-tag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--hk-accent-line);
+  background: var(--hk-accent-soft);
+  font-family: var(--hk-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  color: var(--hk-accent-text);
+}
+.hawk-about .hk-about__out-text {
+  display: block;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--hk-ink-2);
+}
+
+/* staggered reveal, keyed off the section's existing is-visible flag */
+@media (prefers-reduced-motion: no-preference) {
+  .hawk-about .hk-about.is-animated .hk-about__out {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .5s ease, transform .5s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i) * 70ms);
+  }
+  .hawk-about .hk-about.is-animated.is-visible .hk-about__out {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 920px) {
+  .hawk-about .hk-about__grid { grid-template-columns: minmax(0, 1fr); }
+  .hawk-about .hk-about__media { max-width: 620px; }
+  .hawk-about .hk-about__outputs { margin-top: 24px; }
+  /* 5-across is too tight on tablets → wrap to a two-row grid */
+  .hawk-about .hk-about__out-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .hawk-about .hk-about__out:nth-child(3n + 1) { border-left: 0; }
+  .hawk-about .hk-about__out:nth-child(n + 4) { border-top: 1px solid var(--hk-rule); }
+  /* the horizontal signal line only reads in a single row — hide when wrapped */
+  .hawk-about .hk-about__out-rail::before { display: none; }
+}
+@media (max-width: 620px) {
+  .hawk-about .hk-about__out-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hawk-about .hk-about__out { border-left: 0; border-top: 1px solid var(--hk-rule); }
+  .hawk-about .hk-about__out:nth-child(2n) { border-left: 1px solid var(--hk-rule); }
+  .hawk-about .hk-about__out:nth-child(-n + 2) { border-top: 0; }
+}
+@media (max-width: 420px) {
+  .hawk-about .hk-about__out-list { grid-template-columns: minmax(0, 1fr); }
+  .hawk-about .hk-about__out { border-left: 0; }
+  .hawk-about .hk-about__out:nth-child(n + 2) { border-top: 1px solid var(--hk-rule); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hawk-about .hk-about.is-animated .hk-about__copy,
+  .hawk-about .hk-about.is-animated .hk-about__media {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .6s ease, transform .6s cubic-bezier(.22, 1, .36, 1);
+  }
+  .hawk-about .hk-about.is-animated .hk-about__media { transition-delay: .1s; }
+  .hawk-about .hk-about.is-animated.is-visible .hk-about__copy,
+  .hawk-about .hk-about.is-animated.is-visible .hk-about__media {
+    opacity: 1; transform: none;
+  }
+}
+
+/* =====================================================================
+   1.5 Product Modules  —  .hawk-modules  (prefix hk-modules)
+   Three module cards in one row, each a full-height flex column so the
+   CTAs align at the bottom (margin-top:auto on the button). Panel
+   surface + border + --hk-shadow, lifting on hover to --hk-shadow-hover
+   and --hk-border-2 — the same elevation idiom and timing as the hero
+   button, gated behind the file's single prefers-reduced-motion handling.
+   ===================================================================== */
+.hawk-modules .hk-modules__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 1.8vw, 22px);
+  margin: 0; padding: 0; list-style: none;
+}
+.hawk-modules .hk-modules__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  height: 100%;
+  padding: clamp(24px, 2.6vw, 32px);
+  border-radius: 16px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+  text-align: left;
+  font-family: var(--hk-font);
+}
+.hawk-modules .hk-modules__card:hover {
+  border-color: var(--hk-border-2);
+  box-shadow: var(--hk-shadow-hover);
+}
+
+/* Small uppercase accent label above the badge. */
+.hawk-modules .hk-modules__tag {
+  font-family: var(--hk-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--hk-accent-text);
+}
+
+/* Rounded accent chip holding the module icon. */
+.hawk-modules .hk-modules__badge {
+  display: grid; place-items: center;
+  width: 46px; height: 46px;
+  border-radius: 11px;
+  background: var(--hk-accent-soft);
+  color: var(--hk-accent-text);
+}
+.hawk-modules .hk-modules__badge svg { width: 25px; height: 25px; }
+
+.hawk-modules .hk-modules__card-title {
+  margin: 2px 0 0;
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--hk-ink);
+}
+.hawk-modules .hk-modules__desc {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--hk-ink-2);
+}
+
+/* Bullet list: check glyph inline with each item. */
+.hawk-modules .hk-modules__list {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+.hawk-modules .hk-modules__li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--hk-ink-2);
+}
+.hawk-modules .hk-modules__li-ico {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 20px; height: 20px;
+  margin-top: 1px;
+  color: var(--hk-accent-text);
+}
+.hawk-modules .hk-modules__li-ico svg { width: 15px; height: 15px; }
+
+@media (max-width: 920px) {
+  .hawk-modules .hk-modules__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .hawk-modules .hk-modules__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Reveal/stagger — same opacity+rise, easing and --i delay as the other
+     card grids. */
+  .hawk-modules .hk-modules.is-animated .hk-modules__card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .55s ease,
+                transform .55s cubic-bezier(.22, 1, .36, 1),
+                border-color .2s ease, box-shadow .25s ease;
+    transition-delay: calc(var(--i, 0) * 60ms);
+  }
+  .hawk-modules .hk-modules.is-animated.is-visible .hk-modules__card {
+    opacity: 1; transform: none;
+  }
+  /* Subtle hover lift, mirroring the hero button's -2px translate. The
+     reveal transition above already carries this card's border/shadow
+     timing, so hover reuses it. */
+  .hawk-modules .hk-modules.is-animated.is-visible .hk-modules__card:hover {
+    transform: translateY(-4px);
+  }
+}
+
+/* =====================================================================
+   2. HawkINT in Numbers  —  .hawk-numbers  (prefix hk-numbers)
+   Desktop: a glowing 3-D shield on a layered circuit platform inside faint
+   orbit rings (with a travelling signal arc), ringed by eight figures each
+   wired to an inner-ring node, with a dotted signal wave in the lower
+   corners. Below 1024px the orbit is dropped for a centred shield above a
+   clean metric grid. Figures count up on reveal (hawk-int.js).
+   ===================================================================== */
+
+/* Centred header (— MOD 02 / IN NUMBERS —, title, subtitle) */
+.hawk-numbers .hk-numbers__head {
+  max-width: 740px;
+  margin: 0 auto;
+  text-align: center;
+}
+.hawk-numbers .hk-numbers__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 20px;
+  font-family: var(--hk-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--hk-accent-text);
+}
+.hawk-numbers .hk-numbers__eyebrow-line {
+  width: 44px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(12, 104, 255, 0), var(--hk-accent));
+}
+.hawk-numbers .hk-numbers__eyebrow-line:last-child {
+  background: linear-gradient(90deg, var(--hk-accent), rgba(12, 104, 255, 0));
+}
+.hawk-numbers .hk-numbers__title {
+  margin: 0;
+  font-size: clamp(30px, 4.4vw, 54px);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -.02em;
+  color: var(--hk-ink);
+}
+/* "in Numbers" — a large-display gradient; large text, so the lighter end
+   still clears AA for display type. The MOD tag above uses --hk-accent-text. */
+.hawk-numbers .hk-numbers__accent {
+  background: linear-gradient(92deg, var(--hk-accent), #2f82ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hawk-numbers .hk-numbers__sub {
+  max-width: 600px;
+  margin: 16px auto 0;
+  font-size: clamp(15px, 1.4vw, 17px);
+  line-height: 1.6;
+  color: var(--hk-ink-2);
+}
+
+/* Visualization stage */
+.hawk-numbers .hk-numbers__viz {
+  position: relative;
+  width: 100%;
+  max-width: 1120px;
+  min-height: 560px;
+  margin: clamp(26px, 5vw, 56px) auto 0;
+}
+
+/* shared full-bleed layers */
+.hawk-numbers .hk-numbers__orbits,
+.hawk-numbers .hk-numbers__connectors,
+.hawk-numbers .hk-numbers__nodes,
+.hawk-numbers .hk-numbers__decor {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+.hawk-numbers .hk-numbers__decor      { z-index: 0; }
+.hawk-numbers .hk-numbers__orbits     { z-index: 1; }
+.hawk-numbers .hk-numbers__connectors { z-index: 2; }
+.hawk-numbers .hk-numbers__nodes      { z-index: 3; }
+.hawk-numbers .hk-numbers__core       { z-index: 4; }
+.hawk-numbers .hk-numbers__metrics    { z-index: 5; }
+
+/* decorations — central glow + dotted signal waves */
+.hawk-numbers .hk-numbers__glow {
+  position: absolute;
+  left: 50%; top: 46%;
+  width: 620px; height: 620px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle,
+      rgba(12, 104, 255, .14) 0%,
+      rgba(12, 104, 255, .05) 34%,
+      rgba(12, 104, 255, 0) 68%);
+  filter: blur(4px);
+}
+.hawk-numbers .hk-numbers__wave {
+  position: absolute;
+  bottom: -30px;
+  width: 340px;
+  color: var(--hk-accent);
+  opacity: .22;
+}
+.hawk-numbers .hk-numbers__wave--left  { left: -30px; }
+.hawk-numbers .hk-numbers__wave--right { right: -30px; transform: scaleX(-1); }
+
+/* orbit rings */
+.hawk-numbers .hk-numbers__ring {
+  fill: none;
+  stroke: var(--hk-accent-line);
+  vector-effect: non-scaling-stroke;
+}
+.hawk-numbers .hk-numbers__ring--1 { stroke-width: 1; opacity: .34; }
+.hawk-numbers .hk-numbers__ring--2 { stroke-width: 1; opacity: .30; }
+.hawk-numbers .hk-numbers__ring--3 { stroke-width: 1; opacity: .26; }
+.hawk-numbers .hk-numbers__ring-glow {
+  fill: none;
+  stroke: var(--hk-accent);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  opacity: .85;
+  vector-effect: non-scaling-stroke;
+  /* a short bright arc; pathLength="100" on the element normalizes dashes */
+  stroke-dasharray: 9 91;
+}
+
+/* connectors + nodes */
+.hawk-numbers .hk-numbers__connectors path {
+  fill: none;
+  stroke: var(--hk-accent-line);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.hawk-numbers .hk-numbers__node {
+  position: absolute;
+  left: var(--nx);
+  top: var(--ny);
+  width: 11px; height: 11px;
+  margin: -5.5px 0 0 -5.5px;      /* centre on the coordinate */
+  border-radius: 50%;
+  background: var(--hk-accent);
+  box-shadow: 0 0 0 4px rgba(12, 104, 255, .14);
+}
+
+/* ---- Centre composition: 3-D platform + shield ---- */
+.hawk-numbers .hk-numbers__core {
+  position: absolute;
+  left: 50%; top: 46%;
+  width: 300px; height: 300px;
+  transform: translate(-50%, -50%);
+}
+.hawk-numbers .hk-numbers__core-stage { position: absolute; inset: 0; }
+
+/* ambient glow pooled beneath the platform */
+.hawk-numbers .hk-numbers__core-glow {
+  position: absolute;
+  left: 50%; bottom: 40px;
+  width: 260px; height: 90px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center,
+      rgba(12, 104, 255, .5) 0%, rgba(12, 104, 255, 0) 70%);
+  filter: blur(10px);
+}
+
+/* platform */
+.hawk-numbers .hk-numbers__platform {
+  position: absolute;
+  left: 50%; bottom: 44px;
+  width: 232px; height: 150px;
+  transform: translateX(-50%) perspective(1000px) rotateX(58deg);
+  transform-style: preserve-3d;
+}
+.hawk-numbers .hk-numbers__slab {
+  position: absolute;
+  inset: 0;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #1b2550 0%, #0c1230 70%);
+  border: 1px solid rgba(12, 104, 255, .55);
+  box-shadow:
+    0 0 36px rgba(12, 104, 255, .4),
+    inset 0 0 26px rgba(12, 104, 255, .2);
+}
+.hawk-numbers .hk-numbers__slab--2 {
+  transform: translateZ(-16px) scale(.965);
+  background: linear-gradient(135deg, #141c40 0%, #090d26 70%);
+  opacity: .92;
+}
+.hawk-numbers .hk-numbers__slab--3 {
+  transform: translateZ(-32px) scale(.93);
+  background: linear-gradient(135deg, #0f1534 0%, #070a1e 70%);
+  border-color: rgba(12, 104, 255, .3);
+  opacity: .82;
+}
+/* circuit traces on the top slab */
+.hawk-numbers .hk-numbers__circuit {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  border-radius: 30px;
+  overflow: hidden;
+  opacity: .8;
+}
+.hawk-numbers .hk-numbers__circuit path {
+  fill: none; stroke: #2f82ff; stroke-width: 1; opacity: .5;
+}
+.hawk-numbers .hk-numbers__circuit circle { fill: #4c8bff; }
+
+/* shield */
+.hawk-numbers .hk-numbers__shield {
+  position: absolute;
+  left: 50%; top: 2px;
+  width: 168px;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 18px 30px rgba(12, 104, 255, .35));
+}
+.hawk-numbers .hk-numbers__shield-face {
+  fill: url(#hk-numbers-shield-grad);
+  stroke: var(--hk-accent);
+  stroke-width: 3;
+}
+.hawk-numbers .hk-numbers__shield-inner {
+  fill: none;
+  stroke: #2f82ff;
+  stroke-width: 1.4;
+  opacity: .55;
+}
+.hawk-numbers .hk-numbers__shield-wing { fill: var(--hk-accent); }
+.hawk-numbers .hk-numbers__shield-sheen { fill: #ffffff; opacity: .5; }
+
+/* ---- Figures on the orbit ---- */
+.hawk-numbers .hk-numbers__metrics {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hawk-numbers .hk-numbers__metric {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: max-content;
+  max-width: 236px;
+  min-width: 0;            /* allow shrink inside the mobile grid */
+}
+.hawk-numbers .hk-numbers__badge {
+  flex: 0 0 64px;
+  width: 64px; height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--hk-accent-soft);
+  color: var(--hk-accent);
+  box-shadow: inset 0 0 0 1px var(--hk-accent-line),
+              0 6px 18px rgba(12, 104, 255, .12);
+}
+.hawk-numbers .hk-numbers__badge svg { width: 28px; height: 28px; display: block; }
+.hawk-numbers .hk-numbers__fig {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+.hawk-numbers .hk-numbers__value {
+  display: flex;
+  align-items: baseline;
+  gap: 1px;
+  font-size: clamp(30px, 3.1vw, 42px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.02em;
+  color: var(--hk-ink);
+  white-space: nowrap;
+}
+.hawk-numbers .hk-numbers__metric--long .hk-numbers__value { font-size: clamp(27px, 2.7vw, 37px); }
+.hawk-numbers .hk-numbers__unit { color: var(--hk-accent); }
+.hawk-numbers .hk-numbers__text {
+  margin-top: 6px;
+  font-size: clamp(13.5px, 1.4vw, 16px);
+  line-height: 1.25;
+  color: var(--hk-ink-2);
+}
+
+/* Left column (desktop orbital): mirror the row so the icon faces the
+   shield and the figure reads outward to the left. --x is the icon's inner
+   (right) edge, so the metric is anchored by its right edge. */
+.hawk-numbers .hk-numbers__metric--left {
+  left: auto;
+  right: calc(100% - var(--x));
+  flex-direction: row-reverse;
+  text-align: right;
+}
+.hawk-numbers .hk-numbers__metric--left .hk-numbers__fig { align-items: flex-end; }
+.hawk-numbers .hk-numbers__metric--left .hk-numbers__value { justify-content: flex-end; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* Large desktop / small laptop: full orbital, scaled down. */
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .hawk-numbers .hk-numbers__viz { min-height: 520px; max-width: 980px; }
+  .hawk-numbers .hk-numbers__badge { flex-basis: 56px; width: 56px; height: 56px; }
+  .hawk-numbers .hk-numbers__badge svg { width: 25px; height: 25px; }
+  .hawk-numbers .hk-numbers__metric { max-width: 200px; }
+  .hawk-numbers .hk-numbers__value { font-size: 32px; }
+  .hawk-numbers .hk-numbers__metric--long .hk-numbers__value { font-size: 27px; }
+  .hawk-numbers .hk-numbers__core { width: 270px; transform: translate(-50%, -50%) scale(.84); }
+}
+
+/* Tablet & mobile: drop the orbit for a centred shield above a grid. */
+@media (max-width: 1023px) {
+  .hawk-numbers .hk-numbers__viz {
+    min-height: 0;
+    max-width: 760px;
+    margin: clamp(28px, 6vw, 44px) auto 0;
+  }
+  /* coordinate-based decorative layers can't map onto a flow layout */
+  .hawk-numbers .hk-numbers__orbits,
+  .hawk-numbers .hk-numbers__connectors,
+  .hawk-numbers .hk-numbers__nodes,
+  .hawk-numbers .hk-numbers__wave { display: none; }
+
+  .hawk-numbers .hk-numbers__glow { top: 150px; width: 440px; height: 440px; }
+
+  .hawk-numbers .hk-numbers__core {
+    position: relative;
+    left: auto; top: auto;
+    width: 262px; height: 250px;
+    margin: 0 auto clamp(14px, 3vw, 26px);
+    transform: none;
+  }
+
+  /* Auto-fit: one column on phones, a second only once a column can hold
+     the longest figure ("410,000+") without clipping (~240px min). Capped
+     at two columns by the 600px max-width. This is what keeps the figures
+     from being cut off in the ~420–530px range. */
+  .hawk-numbers .hk-numbers__metrics {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: clamp(22px, 4vw, 34px) clamp(18px, 3.5vw, 30px);
+    max-width: 600px;
+    margin: 6px auto 0;
+  }
+  .hawk-numbers .hk-numbers__metric {
+    position: static;
+    left: auto; top: auto;
+    max-width: none;
+    width: auto;
+  }
+  /* undo the desktop left-column mirror in the stacked grid */
+  .hawk-numbers .hk-numbers__metric--left {
+    right: auto;
+    flex-direction: row;
+    text-align: left;
+  }
+  .hawk-numbers .hk-numbers__metric--left .hk-numbers__fig { align-items: flex-start; }
+  .hawk-numbers .hk-numbers__metric--left .hk-numbers__value { justify-content: flex-start; }
+  .hawk-numbers .hk-numbers__badge { flex-basis: 56px; width: 56px; height: 56px; }
+  .hawk-numbers .hk-numbers__badge svg { width: 25px; height: 25px; }
+  .hawk-numbers .hk-numbers__value { font-size: clamp(26px, 4.4vw, 34px); }
+  .hawk-numbers .hk-numbers__metric--long .hk-numbers__value { font-size: clamp(23px, 3.9vw, 30px); }
+  .hawk-numbers .hk-numbers__text { font-size: 15px; }
+}
+
+/* Small tablet / large phone. */
+@media (max-width: 600px) {
+  .hawk-numbers .hk-numbers__core { width: 224px; height: 214px; }
+  .hawk-numbers .hk-numbers__badge { flex-basis: 54px; width: 54px; height: 54px; }
+  .hawk-numbers .hk-numbers__badge svg { width: 24px; height: 24px; }
+  .hawk-numbers .hk-numbers__value { font-size: clamp(24px, 6.4vw, 30px); }
+  .hawk-numbers .hk-numbers__metric--long .hk-numbers__value { font-size: clamp(22px, 5.4vw, 27px); }
+  .hawk-numbers .hk-numbers__text { font-size: 14px; }
+}
+
+/* Small mobile: the auto-fit grid is already one column here; just trim the
+   shield a touch so it never crowds the figures below it. */
+@media (max-width: 420px) {
+  .hawk-numbers .hk-numbers__core { width: 206px; height: 198px; }
+}
+
+/* ---- Reveal. Header lines rise + fade; the orbital pieces fade only
+   (opacity), so the centring transform on the core and figures is never
+   disturbed. Motion-safe only. ---- */
+@media (prefers-reduced-motion: no-preference) {
+  .hawk-numbers .hk-numbers.is-animated .hk-numbers__eyebrow,
+  .hawk-numbers .hk-numbers.is-animated .hk-numbers__title,
+  .hawk-numbers .hk-numbers.is-animated .hk-numbers__sub {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .6s ease, transform .6s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i, 0) * 70ms);
+  }
+  .hawk-numbers .hk-numbers.is-animated.is-visible .hk-numbers__eyebrow,
+  .hawk-numbers .hk-numbers.is-animated.is-visible .hk-numbers__title,
+  .hawk-numbers .hk-numbers.is-animated.is-visible .hk-numbers__sub {
+    opacity: 1;
+    transform: none;
+  }
+  .hawk-numbers .hk-numbers.is-animated .hk-numbers__decor,
+  .hawk-numbers .hk-numbers.is-animated .hk-numbers__orbits,
+  .hawk-numbers .hk-numbers.is-animated .hk-numbers__connectors,
+  .hawk-numbers .hk-numbers.is-animated .hk-numbers__nodes,
+  .hawk-numbers .hk-numbers.is-animated .hk-numbers__core,
+  .hawk-numbers .hk-numbers.is-animated .hk-numbers__metric {
+    opacity: 0;
+    transition: opacity .6s ease;
+    transition-delay: calc(var(--i, 0) * 70ms);
+  }
+  .hawk-numbers .hk-numbers.is-animated.is-visible .hk-numbers__decor,
+  .hawk-numbers .hk-numbers.is-animated.is-visible .hk-numbers__orbits,
+  .hawk-numbers .hk-numbers.is-animated.is-visible .hk-numbers__connectors,
+  .hawk-numbers .hk-numbers.is-animated.is-visible .hk-numbers__nodes,
+  .hawk-numbers .hk-numbers.is-animated.is-visible .hk-numbers__core,
+  .hawk-numbers .hk-numbers.is-animated.is-visible .hk-numbers__metric {
+    opacity: 1;
+  }
+
+  /* Ambient motion, started once the stage is revealed. */
+  .hawk-numbers .hk-numbers.is-visible .hk-numbers__ring-glow {
+    animation: hk-numbers-orbit 7s linear infinite;
+  }
+  .hawk-numbers .hk-numbers.is-visible .hk-numbers__node--pulse {
+    animation: hk-numbers-node-pulse 2.8s cubic-bezier(.22, .61, .36, 1) infinite;
+  }
+}
+
+/* The core float is desktop-only (the core is static in the mobile grid). */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .hawk-numbers .hk-numbers.is-visible .hk-numbers__core-stage {
+    animation: hk-numbers-float 7s ease-in-out infinite;
+  }
+}
+
+@keyframes hk-numbers-orbit {
+  to { stroke-dashoffset: -100; }
+}
+@keyframes hk-numbers-node-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(12, 104, 255, .18); }
+  50%      { box-shadow: 0 0 0 7px rgba(12, 104, 255, .05); }
+}
+@keyframes hk-numbers-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* =====================================================================
+   3. How HawkINT Works  —  .hawk-how  (prefix hk-how)
+   ===================================================================== */
+.hawk-how .hk-how__measure { max-width: 880px; margin: 0 auto; }
+
+/* The pipeline: a single vertical list. Node column is fixed; the card
+   takes the rest. --node and --gap drive both the layout and the spine
+   geometry so the line always threads the centre of every node. */
+.hawk-how .hk-how__steps {
+  --node: 52px;             /* node diameter */
+  --col-gap: clamp(18px, 2.4vw, 28px);  /* node -> card gap */
+  --row-gap: clamp(26px, 3.4vw, 44px);  /* flow between stages */
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--row-gap);
+}
+
+/* The continuous spine is built from a per-step connector rather than one
+   absolute line, so it can never protrude past the end nodes no matter how
+   tall the first or last card is. Each step draws a segment from its own
+   node centre down into the next node's centre; the last step draws none,
+   so the line caps exactly on node #05. Together the segments read as a
+   single unbroken line threading all five nodes. */
+.hawk-how .hk-how__step {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: var(--node) minmax(0, 1fr);
+  column-gap: var(--col-gap);
+  align-items: start;
+}
+.hawk-how .hk-how__step::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--node) / 2);
+  top: calc(var(--node) / 2);
+  /* from this node's centre, across the row gap, to the next node's centre */
+  height: calc(100% - var(--node) / 2 + var(--row-gap));
+  width: 2px;
+  transform: translateX(-50%);
+  background: var(--hk-accent-line);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 0;
+}
+.hawk-how .hk-how__step:last-child::before { display: none; }
+
+/* Node: a circular badge sitting on the spine, carrying the step icon. */
+.hawk-how .hk-how__node {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--node);
+  height: var(--node);
+  border-radius: 50%;
+  border: 1px solid var(--hk-border-2);
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow), 0 0 0 5px var(--hk-panel);
+  color: var(--hk-accent-text);
+}
+.hawk-how .hk-how__node-ico { display: grid; place-items: center; }
+.hawk-how .hk-how__node-ico svg { width: 24px; height: 24px; }
+
+/* Card: the console-panel idiom shared with the other sections. */
+.hawk-how .hk-how__step-card {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(18px, 2.2vw, 24px) clamp(18px, 2.4vw, 26px);
+  border-radius: 16px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hawk-how .hk-how__step-card {
+    transition: border-color .2s ease, box-shadow .25s ease, transform .25s ease;
+  }
+}
+.hawk-how .hk-how__step:hover .hk-how__step-card,
+.hawk-how .hk-how__step:focus-within .hk-how__step-card {
+  border-color: var(--hk-border-2);
+  box-shadow: var(--hk-shadow-hover), 0 0 0 1px var(--hk-glow);
+}
+
+/* The large ghosted numeral — the signature of this redesign. Pinned
+   top-right of the card, kept out of the copy's way via title padding. */
+.hawk-how .hk-how__num {
+  position: absolute;
+  top: clamp(6px, 1.2vw, 12px);
+  right: clamp(12px, 1.8vw, 20px);
+  font-family: var(--hk-mono);
+  font-size: clamp(38px, 6vw, 56px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.02em;
+  color: var(--hk-accent);
+  opacity: .12;
+  pointer-events: none;
+}
+.hawk-how .hk-how__step-title {
+  margin: 0;
+  padding-right: clamp(48px, 9vw, 72px);  /* clear the ghost numeral */
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--hk-ink);
+}
+.hawk-how .hk-how__step-text {
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--hk-ink-2);
+}
+
+/* Narrow widths: keep the pipeline vertical, shrink the node column and
+   gaps so icons/numbers never collide with copy inside a 16px gutter. */
+@media (max-width: 560px) {
+  .hawk-how .hk-how__steps {
+    --node: 44px;
+    --col-gap: 14px;
+    --row-gap: 22px;
+  }
+  .hawk-how .hk-how__node-ico svg { width: 21px; height: 21px; }
+  .hawk-how .hk-how__num { font-size: clamp(32px, 11vw, 44px); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Steps rise/fade in sequence, Collect first -> Act last. */
+  .hawk-how .hk-how.is-animated .hk-how__step {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .55s ease, transform .55s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+  .hawk-how .hk-how.is-animated.is-visible .hk-how__step {
+    opacity: 1; transform: none;
+  }
+  /* The spine draws in once on reveal, then holds (no perpetual loop).
+     Each connector grows from its node downward, staggered with its step. */
+  .hawk-how .hk-how.is-animated .hk-how__step::before {
+    transform: translateX(-50%) scaleY(0);
+    transform-origin: top;
+    transition: transform .6s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i, 0) * 90ms + 180ms);
+  }
+  .hawk-how .hk-how.is-animated.is-visible .hk-how__step::before {
+    transform: translateX(-50%) scaleY(1);
+  }
+}
+
+/* =====================================================================
+   4. Industries We Protect  —  .hawk-industries  (prefix hk-ind)
+   ===================================================================== */
+.hawk-industries .hk-ind__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 1.8vw, 22px);
+  margin: 0; padding: 0; list-style: none;
+}
+.hawk-industries .hk-ind__grid > li { display: flex; }
+.hawk-industries .hk-ind__card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: clamp(22px, 2.4vw, 28px);
+  border-radius: 16px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+  text-align: left;
+  font-family: var(--hk-font);
+}
+.hawk-industries .hk-ind__badge {
+  display: grid; place-items: center;
+  width: 46px; height: 46px;
+  border-radius: 11px;
+  background: var(--hk-accent-soft);
+  color: var(--hk-accent-text);
+}
+.hawk-industries .hk-ind__badge svg { width: 25px; height: 25px; }
+.hawk-industries .hk-ind__card-title { margin: 2px 0 0; font-size: 19px; font-weight: 700; color: var(--hk-ink); }
+.hawk-industries .hk-ind__card-text { margin: 0; font-size: 15px; line-height: 1.55; color: var(--hk-ink-2); }
+
+@media (max-width: 900px) {
+  .hawk-industries .hk-ind__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .hawk-industries .hk-ind__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hawk-industries .hk-ind.is-animated .hk-ind__card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .55s ease, transform .55s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i, 0) * 60ms);
+  }
+  .hawk-industries .hk-ind.is-animated.is-visible .hk-ind__card { opacity: 1; transform: none; }
+}
+
+/* =====================================================================
+   4.5 Core Capabilities  —  .hawk-caps  (prefix hk-caps)
+   ---------------------------------------------------------------------
+   A STATIC 3-up capability grid. Its signature — a thin top accent rule
+   plus a mono zero-padded index chip paired with the accent badge — sets
+   it apart from the clickable Industries/Features dossier cards while
+   using only the shared tokens. Hover timing/easing is copied from the
+   module cards (the file's established card hover), not re-invented.
+   ===================================================================== */
+.hawk-caps .hk-caps__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2vw, 26px);
+  margin: 0; padding: 0; list-style: none;
+}
+.hawk-caps .hk-caps__grid > li { display: flex; }
+.hawk-caps .hk-caps__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 13px;
+  width: 100%;
+  padding: clamp(24px, 2.6vw, 30px);
+  border-radius: 18px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+  text-align: left;
+  font-family: var(--hk-font);
+}
+.hawk-caps .hk-caps__card:hover {
+  border-color: var(--hk-border-2);
+  box-shadow: var(--hk-shadow-hover), 0 0 0 1px var(--hk-glow);
+}
+
+/* Decorative zero-padded index chip, pinned top-right (paired with the
+   badge — the thing that makes this grid read as numbered capabilities). */
+.hawk-caps .hk-caps__index {
+  position: absolute;
+  top: clamp(16px, 2vw, 22px);
+  right: clamp(18px, 2.2vw, 24px);
+  font-family: var(--hk-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  color: var(--hk-ink-mono);
+}
+/* Accent badge — same chip language and icon sizing as the other sections'
+   badges (see .hk-ind__badge / .hk-features__badge). */
+.hawk-caps .hk-caps__badge {
+  display: grid; place-items: center;
+  width: 46px; height: 46px;
+  border-radius: 11px;
+  background: var(--hk-accent-soft);
+  color: var(--hk-accent-text);
+}
+.hawk-caps .hk-caps__badge svg { width: 25px; height: 25px; }
+.hawk-caps .hk-caps__card-title {
+  margin: 2px 0 0;
+  /* leave room for the index chip so a long title never runs under it */
+  padding-right: 34px;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--hk-ink);
+}
+.hawk-caps .hk-caps__card-text {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--hk-ink-2);
+}
+
+@media (max-width: 900px) {
+  .hawk-caps .hk-caps__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .hawk-caps .hk-caps__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Reveal/stagger — same opacity+rise, easing and --i delay as the other
+     card grids; hover border/shadow timing folded into the same transition
+     (as the module cards do) so no new motion curve is introduced. */
+  .hawk-caps .hk-caps.is-animated .hk-caps__card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .55s ease,
+                transform .55s cubic-bezier(.22, 1, .36, 1),
+                border-color .2s ease, box-shadow .25s ease;
+    transition-delay: calc(var(--i, 0) * 60ms);
+  }
+  .hawk-caps .hk-caps.is-animated.is-visible .hk-caps__card {
+    opacity: 1; transform: none;
+  }
+  .hawk-caps .hk-caps.is-animated.is-visible .hk-caps__card:hover {
+    transform: translateY(-4px);
+  }
+}
+
+/* =====================================================================
+   5. Targeted Alerts & Incident Wires  —  .hawk-wires  (prefix hk-wires)
+   ===================================================================== */
+.hawk-wires .hk-wires__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: clamp(32px, 4.4vw, 68px);
+}
+.hawk-wires .hk-wires__copy { min-width: 0; }
+.hawk-wires .hk-wires__body {
+  margin: 18px 0 0;
+  max-width: 54ch;
+  font-size: clamp(16px, 1.5vw, 17px);
+  line-height: 1.64;
+  color: var(--hk-ink-2);
+}
+.hawk-wires .hk-wires__body strong { color: var(--hk-ink); font-weight: 700; }
+
+/* the live wires console */
+.hawk-wires .hk-wires__console {
+  min-width: 0;
+  border-radius: 16px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+  overflow: hidden;
+}
+.hawk-wires .hk-wires__console-bar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 16px;
+  background: var(--hk-panel-top);
+  border-bottom: 1px solid var(--hk-border);
+}
+.hawk-wires .hk-wires__console-dots { display: inline-flex; gap: 6px; }
+.hawk-wires .hk-wires__console-dots i { width: 9px; height: 9px; border-radius: 50%; background: #cfd6e4; }
+.hawk-wires .hk-wires__console-title {
+  font-family: var(--hk-mono); font-size: 11px; letter-spacing: .14em; color: var(--hk-ink-mono);
+}
+.hawk-wires .hk-wires__live {
+  display: inline-flex; align-items: center; gap: 7px; margin-left: auto;
+  font-family: var(--hk-mono); font-size: 11px; letter-spacing: .12em; color: var(--hk-live);
+}
+.hawk-wires .hk-wires__live-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--hk-live);
+  box-shadow: 0 0 6px rgba(11, 143, 87, .3);
+}
+.hawk-wires .hk-wires__screen { padding: 18px; }
+
+/* pinned lead wire */
+.hawk-wires .hk-wires__card {
+  padding: 18px;
+  border-radius: 13px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-canvas-2);
+}
+.hawk-wires .hk-wires__card-top { display: flex; align-items: center; gap: 10px; }
+.hawk-wires .hk-wires__sev {
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-family: var(--hk-mono); font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--hk-sev-high);
+  background: rgba(255, 93, 93, .14);
+  border: 1px solid rgba(255, 93, 93, .4);
+}
+.hawk-wires .hk-wires__ref {
+  margin-left: auto;
+  font-family: var(--hk-mono); font-size: 11px; letter-spacing: .1em; color: var(--hk-ink-mono);
+}
+.hawk-wires .hk-wires__card-title { margin: 12px 0 14px; font-size: 17px; font-weight: 700; color: var(--hk-ink); }
+.hawk-wires .hk-wires__rows { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 11px; }
+.hawk-wires .hk-wires__row { display: flex; flex-direction: column; gap: 3px; }
+.hawk-wires .hk-wires__label {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--hk-mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--hk-accent-text);
+}
+.hawk-wires .hk-wires__label svg { width: 14px; height: 14px; }
+.hawk-wires .hk-wires__val { font-size: 14px; line-height: 1.45; color: var(--hk-ink-2); }
+
+/* streaming feed */
+.hawk-wires .hk-wires__feed-label {
+  display: flex; align-items: center; gap: 12px;
+  margin: 18px 0 10px;
+  font-family: var(--hk-mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--hk-ink-mono);
+}
+.hawk-wires .hk-wires__scanline {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--hk-accent-line), transparent);
+}
+.hawk-wires .hk-wires__feed { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.hawk-wires .hk-wires__feed-item {
+  display: flex; align-items: center; gap: 11px;
+  padding: 11px 13px;
+  border-radius: 10px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-canvas-2);
+}
+.hawk-wires .hk-wires__feed-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; }
+.hawk-wires .hk-wires__feed-item--high .hk-wires__feed-dot { background: var(--hk-sev-high); }
+.hawk-wires .hk-wires__feed-item--med .hk-wires__feed-dot { background: var(--hk-sev-med); }
+.hawk-wires .hk-wires__feed-item--low .hk-wires__feed-dot { background: var(--hk-sev-low); }
+.hawk-wires .hk-wires__feed-tag {
+  flex: none;
+  font-family: var(--hk-mono); font-size: 10.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--hk-ink);
+}
+.hawk-wires .hk-wires__feed-text {
+  font-size: 13px; color: var(--hk-ink-2);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
+}
+
+@media (max-width: 920px) {
+  .hawk-wires .hk-wires__grid { grid-template-columns: minmax(0, 1fr); }
+  .hawk-wires .hk-wires__console { max-width: 620px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hawk-wires .hk-wires.is-animated .hk-wires__copy,
+  .hawk-wires .hk-wires.is-animated .hk-wires__console {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .6s ease, transform .6s cubic-bezier(.22, 1, .36, 1);
+  }
+  .hawk-wires .hk-wires.is-animated .hk-wires__console { transition-delay: .1s; }
+  .hawk-wires .hk-wires.is-animated.is-visible .hk-wires__copy,
+  .hawk-wires .hk-wires.is-animated.is-visible .hk-wires__console { opacity: 1; transform: none; }
+
+  /* feed rows animate in on insert (JS toggles .is-in next frame) */
+  .hawk-wires .hk-wires__feed-item {
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity .4s ease, transform .4s cubic-bezier(.22, 1, .36, 1);
+  }
+  .hawk-wires .hk-wires__feed-item.is-in { opacity: 1; transform: none; }
+}
+
+/* =====================================================================
+   6. Advanced Processing & Enrichment  —  .hawk-enrich  (prefix hk-enrich)
+   ===================================================================== */
+.hawk-enrich .hk-enrich__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 1.8vw, 22px);
+  margin: 0; padding: 0; list-style: none;
+}
+.hawk-enrich .hk-enrich__item {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+}
+.hawk-enrich .hk-enrich__media {
+  position: relative;
+  display: block;
+  border-radius: 10px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-canvas);
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+}
+.hawk-enrich .hk-enrich__media::before,
+.hawk-enrich .hk-enrich__media::after {
+  content: "";
+  position: absolute; width: 12px; height: 12px;
+  border: 2px solid var(--hk-accent-line);
+  pointer-events: none; z-index: 1;
+}
+.hawk-enrich .hk-enrich__media::before { top: 7px; left: 7px; border-right: 0; border-bottom: 0; }
+.hawk-enrich .hk-enrich__media::after { bottom: 7px; right: 7px; border-left: 0; border-top: 0; }
+.hawk-enrich .hk-enrich__img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hawk-enrich .hk-enrich__badge {
+  display: grid; place-items: center;
+  aspect-ratio: 16 / 10;
+  border-radius: 10px;
+  border: 1px solid var(--hk-border);
+  background: linear-gradient(160deg, var(--hk-panel-2), var(--hk-canvas));
+  color: var(--hk-accent-text);
+}
+.hawk-enrich .hk-enrich__badge svg { width: 44px; height: 44px; }
+.hawk-enrich .hk-enrich__text { margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--hk-ink-2); }
+
+@media (max-width: 900px) {
+  .hawk-enrich .hk-enrich__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+  .hawk-enrich .hk-enrich__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hawk-enrich .hk-enrich.is-animated .hk-enrich__item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .55s ease, transform .55s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i, 0) * 70ms);
+  }
+  .hawk-enrich .hk-enrich.is-animated.is-visible .hk-enrich__item { opacity: 1; transform: none; }
+}
+
+/* =====================================================================
+   7. Platform Features  —  .hawk-features  (prefix hk-features)
+   ===================================================================== */
+.hawk-features .hk-features__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 1.6vw, 20px);
+  margin: 0; padding: 0; list-style: none;
+}
+.hawk-features .hk-features__grid > li { display: flex; }
+.hawk-features .hk-features__card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 11px;
+  width: 100%;
+  padding: clamp(20px, 2vw, 24px);
+  border-radius: 16px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+  text-align: left;
+  font-family: var(--hk-font);
+}
+.hawk-features .hk-features__badge {
+  display: grid; place-items: center;
+  width: 44px; height: 44px;
+  border-radius: 11px;
+  background: var(--hk-accent-soft);
+  color: var(--hk-accent-text);
+}
+.hawk-features .hk-features__badge svg { width: 24px; height: 24px; }
+.hawk-features .hk-features__card-title { margin: 2px 0 0; font-size: 17px; font-weight: 700; color: var(--hk-ink); }
+.hawk-features .hk-features__card-text { margin: 0; font-size: 14px; line-height: 1.5; color: var(--hk-ink-2); }
+
+@media (max-width: 900px) {
+  .hawk-features .hk-features__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .hawk-features .hk-features__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hawk-features .hk-features.is-animated .hk-features__card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .5s ease, transform .5s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i, 0) * 55ms);
+  }
+  .hawk-features .hk-features.is-animated.is-visible .hk-features__card { opacity: 1; transform: none; }
+}
+
+/* =====================================================================
+   8. AI & Associated Services  —  .hawk-ai  (prefix hk-ai)
+   ===================================================================== */
+.hawk-ai .hk-ai__blocks {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: clamp(18px, 2.2vw, 28px);
+}
+.hawk-ai .hk-ai__block {
+  padding: clamp(24px, 2.6vw, 32px);
+  border-radius: 16px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+}
+.hawk-ai .hk-ai__block--svc { background: linear-gradient(170deg, var(--hk-panel-2), var(--hk-panel)); }
+.hawk-ai .hk-ai__block-title {
+  display: flex; align-items: center; gap: 11px;
+  margin: 0 0 20px;
+  font-size: 19px; font-weight: 700; color: var(--hk-ink);
+}
+.hawk-ai .hk-ai__block-ico {
+  display: grid; place-items: center;
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  background: var(--hk-accent-soft);
+  color: var(--hk-accent-text);
+}
+.hawk-ai .hk-ai__block-ico svg { width: 20px; height: 20px; }
+.hawk-ai .hk-ai__list { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; }
+.hawk-ai .hk-ai__cap { display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; line-height: 1.45; color: var(--hk-ink-2); }
+.hawk-ai .hk-ai__cap-ico {
+  flex: none; display: grid; place-items: center;
+  width: 20px; height: 20px; margin-top: 1px;
+  border-radius: 6px; background: var(--hk-accent-soft); color: var(--hk-accent-text);
+}
+.hawk-ai .hk-ai__cap-ico svg { width: 13px; height: 13px; }
+.hawk-ai .hk-ai__pills { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.hawk-ai .hk-ai__pill {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-canvas-2);
+  font-family: var(--hk-mono); font-size: 13px; letter-spacing: .02em; color: var(--hk-ink);
+}
+.hawk-ai .hk-ai__pill svg { flex: none; width: 15px; height: 15px; color: var(--hk-accent-text); }
+
+@media (max-width: 860px) {
+  .hawk-ai .hk-ai__blocks { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 480px) {
+  .hawk-ai .hk-ai__list { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hawk-ai .hk-ai.is-animated .hk-ai__block {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .55s ease, transform .55s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+  .hawk-ai .hk-ai.is-animated.is-visible .hk-ai__block { opacity: 1; transform: none; }
+}
+
+/* =====================================================================
+   9. Takedown Services  —  .hawk-takedown  (prefix hk-takedown)
+   ===================================================================== */
+.hawk-takedown .hk-takedown__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 1.8vw, 22px);
+  margin: 0; padding: 0; list-style: none;
+}
+.hawk-takedown .hk-takedown__tile {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+}
+.hawk-takedown .hk-takedown__media {
+  position: relative;
+  display: block;
+  border-radius: 10px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-canvas);
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+}
+.hawk-takedown .hk-takedown__media::before,
+.hawk-takedown .hk-takedown__media::after {
+  content: "";
+  position: absolute; width: 12px; height: 12px;
+  border: 2px solid var(--hk-accent-line);
+  pointer-events: none; z-index: 1;
+}
+.hawk-takedown .hk-takedown__media::before { top: 7px; left: 7px; border-right: 0; border-bottom: 0; }
+.hawk-takedown .hk-takedown__media::after { bottom: 7px; right: 7px; border-left: 0; border-top: 0; }
+.hawk-takedown .hk-takedown__img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hawk-takedown .hk-takedown__badge {
+  display: grid; place-items: center;
+  aspect-ratio: 16 / 10;
+  border-radius: 10px;
+  border: 1px solid var(--hk-border);
+  background: linear-gradient(160deg, var(--hk-panel-2), var(--hk-canvas));
+  color: var(--hk-accent-text);
+}
+.hawk-takedown .hk-takedown__badge svg { width: 44px; height: 44px; }
+.hawk-takedown .hk-takedown__label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--hk-ink);
+}
+.hawk-takedown .hk-takedown__status {
+  display: inline-flex; align-items: center; gap: 6px;
+  align-self: flex-start;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(11, 143, 87, .35);
+  background: rgba(11, 143, 87, .10);
+  font-family: var(--hk-mono); font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--hk-live);
+}
+.hawk-takedown .hk-takedown__status svg { width: 12px; height: 12px; }
+
+@media (max-width: 900px) {
+  .hawk-takedown .hk-takedown__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+  .hawk-takedown .hk-takedown__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hawk-takedown .hk-takedown.is-animated .hk-takedown__tile {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .55s ease, transform .55s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i, 0) * 70ms);
+  }
+  .hawk-takedown .hk-takedown.is-animated.is-visible .hk-takedown__tile { opacity: 1; transform: none; }
+}
+
+/* =====================================================================
+   Shared modal (Industries + Features) — dark dossier
+   The portal carries both container classes so these scoped rules and
+   the :root tokens reach it.
+   ===================================================================== */
+
+/* The portal wrapper inherits the two container classes only so the
+   scoped rules above reach the dialog — it must not itself become a dark
+   band. Undo the full-width-band styling on the wrapper element. */
+.hawk-industries.hk-modal-portal,
+.hawk-features.hk-modal-portal {
+  background: none;
+  min-height: 0;
+  padding: 0;
+  overflow: visible;
+}
+
+.hawk-industries .hk-modal,
+.hawk-features .hk-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  font-family: var(--hk-font);
+}
+.hawk-industries .hk-modal[hidden],
+.hawk-features .hk-modal[hidden] { display: none; }
+.hawk-industries .hk-modal__backdrop,
+.hawk-features .hk-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 19, 48, .5);
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.hawk-industries .hk-modal.is-open .hk-modal__backdrop,
+.hawk-features .hk-modal.is-open .hk-modal__backdrop { opacity: 1; }
+.hawk-industries .hk-modal__dialog,
+.hawk-features .hk-modal__dialog {
+  position: relative;
+  width: min(480px, 100%);
+  border-radius: 16px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-panel);
+  box-shadow: 0 30px 80px rgba(13, 19, 48, .22), 0 0 0 1px var(--hk-border);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(12px) scale(.98);
+  transition: opacity .28s ease, transform .28s cubic-bezier(.22, 1, .36, 1);
+}
+.hawk-industries .hk-modal.is-open .hk-modal__dialog,
+.hawk-features .hk-modal.is-open .hk-modal__dialog { opacity: 1; transform: none; }
+.hawk-industries .hk-modal__bar,
+.hawk-features .hk-modal__bar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px;
+  background: var(--hk-panel-top);
+  border-bottom: 1px solid var(--hk-border);
+}
+.hawk-industries .hk-modal__dots,
+.hawk-features .hk-modal__dots { display: inline-flex; gap: 6px; }
+.hawk-industries .hk-modal__dots i,
+.hawk-features .hk-modal__dots i { width: 9px; height: 9px; border-radius: 50%; background: #cfd6e4; }
+.hawk-industries .hk-modal__bar-title,
+.hawk-features .hk-modal__bar-title {
+  font-family: var(--hk-mono); font-size: 11px; letter-spacing: .14em; color: var(--hk-ink-mono);
+}
+.hawk-industries .hk-modal__close,
+.hawk-features .hk-modal__close {
+  display: grid; place-items: center;
+  width: 32px; height: 32px;
+  margin-left: auto;
+  border: 1px solid var(--hk-border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--hk-ink-2);
+  cursor: pointer;
+}
+.hawk-industries .hk-modal__close:hover,
+.hawk-features .hk-modal__close:hover { color: var(--hk-ink); border-color: var(--hk-border-2); background: var(--hk-panel-2); }
+.hawk-industries .hk-modal__close svg,
+.hawk-features .hk-modal__close svg { width: 18px; height: 18px; }
+.hawk-industries .hk-modal__body,
+.hawk-features .hk-modal__body { padding: clamp(24px, 3vw, 32px); }
+.hawk-industries .hk-modal__badge,
+.hawk-features .hk-modal__badge {
+  display: grid; place-items: center;
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  background: var(--hk-accent-soft);
+  color: var(--hk-accent-text);
+}
+.hawk-industries .hk-modal__badge svg,
+.hawk-features .hk-modal__badge svg { width: 28px; height: 28px; }
+.hawk-industries .hk-modal__title,
+.hawk-features .hk-modal__title {
+  margin: 18px 0 10px; font-size: 22px; font-weight: 700; color: var(--hk-ink);
+}
+.hawk-industries .hk-modal__text,
+.hawk-features .hk-modal__text {
+  margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--hk-ink-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hawk-industries .hk-modal__backdrop,
+  .hawk-features .hk-modal__backdrop,
+  .hawk-industries .hk-modal__dialog,
+  .hawk-features .hk-modal__dialog { transition: none; }
+}

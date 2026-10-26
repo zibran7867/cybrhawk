@@ -7,9 +7,7 @@
    selector and pairs with hawk-int.css.
 
    The file is a set of independent IIFEs - one per section - sharing a
-   few helpers (esc, markup, reveal, waitForSection, countUp, icon) and
-   one modal controller used by the two clickable card grids
-   (Industries + Features).
+   few helpers (esc, markup, reveal, waitForSection, countUp, icon).
 
    Element prefix is `hk-<section>__…`; the fixed Elementor container
    classes are `.hawk-<section>`. Each SECTION const is the only page
@@ -412,85 +410,6 @@
       "</header>"
     );
   }
-
-  /* ===================================================================
-     Shared modal controller (Industries + Features)
-     A single dialog portalled to <body>, reused by both grids. Carries
-     the container classes so the scoped CSS + tokens reach it. The
-     markup is restyled dark (dossier), but the open/close/focus logic
-     (Escape, backdrop, return focus) is unchanged.
-     =================================================================== */
-  var modal = (function () {
-    var el = null;
-    var lastFocus = null;
-
-    function ensure() {
-      if (el) return el;
-      var wrap = document.createElement("div");
-      wrap.className = "hawk-industries hawk-features hk-modal-portal";
-      wrap.innerHTML =
-        '<div class="hk-modal" hidden role="dialog" aria-modal="true" ' +
-        'aria-labelledby="hk-modal-title">' +
-        '<div class="hk-modal__backdrop" data-close></div>' +
-        '<div class="hk-modal__dialog">' +
-        '<div class="hk-modal__bar">' +
-        '<span class="hk-modal__dots" aria-hidden="true"><i></i><i></i><i></i></span>' +
-        '<span class="hk-modal__bar-title" data-bartitle></span>' +
-        '<button class="hk-modal__close" type="button" aria-label="Close" ' +
-        'data-close>' + icon("close") + "</button>" +
-        "</div>" +
-        '<div class="hk-modal__body">' +
-        '<span class="hk-modal__badge" data-badge></span>' +
-        '<h3 class="hk-modal__title" id="hk-modal-title"></h3>' +
-        '<p class="hk-modal__text"></p>' +
-        "</div>" +
-        "</div></div>";
-      document.body.appendChild(wrap);
-      el = wrap.querySelector(".hk-modal");
-
-      el.addEventListener("click", function (e) {
-        if (e.target.closest("[data-close]")) close();
-      });
-      document.addEventListener("keydown", function (e) {
-        if (e.key === "Escape" && !el.hidden) close();
-      });
-      return el;
-    }
-
-    function open(item, trigger, barTitle) {
-      ensure();
-      lastFocus = trigger || null;
-      el.querySelector("[data-badge]").innerHTML = icon(item.icon);
-      el.querySelector("[data-bartitle]").textContent =
-        barTitle || "HawkINT · Dossier";
-      el.querySelector(".hk-modal__title").textContent = item.title;
-      el.querySelector(".hk-modal__text").textContent =
-        item.detail || item.text;
-      el.hidden = false;
-      // Next frame so the transition runs from the hidden state.
-      requestAnimationFrame(function () {
-        el.classList.add("is-open");
-      });
-      el.querySelector(".hk-modal__close").focus();
-    }
-
-    function close() {
-      if (!el || el.hidden) return;
-      el.classList.remove("is-open");
-      var done = function () {
-        el.hidden = true;
-        el.removeEventListener("transitionend", done);
-        if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
-      };
-      if (prefersReduced()) done();
-      else {
-        el.addEventListener("transitionend", done);
-        setTimeout(done, 400); // fallback if transitionend never fires
-      }
-    }
-
-    return { open: open };
-  })();
 
   /* ===================================================================
      0. Hero  -  container .hawk-hero  -  prefix hk-hero
@@ -1444,7 +1363,14 @@
 
   /* ===================================================================
      4. Industries We Protect  -  container .hawk-industries  -  prefix hk-ind
-     Clickable cards -> shared modal.
+     An interactive SECTOR SELECTOR (not a card grid): a vertical rail of
+     seven sectors on the left drives a single large detail panel on the
+     right (icon, sector, threat copy and a row of threat chips). One
+     sector is active at a time; the rail is a real tablist (roles,
+     arrow-key roving focus). Below 860px it collapses to an accordion -
+     each rail item becomes a header with its panel directly beneath. This
+     shape deliberately breaks from the Capabilities/Features grids so no
+     two neighbouring sections read alike. (PDF §11 - seven sectors.)
      =================================================================== */
   (function () {
     var SECTION = ".hawk-industries";
@@ -1452,61 +1378,98 @@
     var MOD = "INDUSTRIES";
     var TITLE = "Intelligence tuned to your sector's threats";
     var SUB = "Select an industry to see how HawkINT is applied.";
-    var CARDS = [
+
+    // Each sector: rail icon + label, a mono "focus" tag for the panel
+    // eyebrow, and the body copy.
+    var SECTORS = [
       {
         icon: "bank",
-        title: "Banking & Financial Services",
+        label: "Banking & Financial Services",
+        tag: "FINANCIAL CRIME",
         text:
           "Stop card fraud, account takeover and phishing; track groups " +
           "targeting banks and meet regulatory intelligence requirements."
       },
       {
         icon: "health",
-        title: "Healthcare & Life Sciences",
+        label: "Healthcare & Life Sciences",
+        tag: "PATIENT DATA",
         text:
           "Protect patient data, support HIPAA obligations and detect " +
           "records for sale on dark web markets."
       },
       {
         icon: "gov",
-        title: "Government & Public Sector",
+        label: "Government & Public Sector",
+        tag: "NATIONAL RISK",
         text:
           "Monitor hacktivists, geopolitical threats, disinformation and " +
           "risks to citizen services."
       },
       {
         icon: "cart",
-        title: "Retail & E-Commerce",
+        label: "Retail & E-Commerce",
+        tag: "CUSTOMER FRAUD",
         text:
           "Catch fake stores, credential stuffing, loyalty fraud and " +
           "customer-targeted scams."
       },
       {
         icon: "energy",
-        title: "Energy, Utilities & Manufacturing",
+        label: "Energy, Utilities & Manufacturing",
+        tag: "CRITICAL INFRA",
         text:
           "Track nation-state actors, ransomware groups and OT/ICS-focused " +
           "threats to critical infrastructure."
       },
       {
         icon: "chip",
-        title: "Technology & SaaS",
+        label: "Technology & SaaS",
+        tag: "IP & SOURCE",
         text:
           "Detect source code leaks, exposed API keys, IP theft and brand " +
           "impersonation."
+      },
+      {
+        icon: "profiles",
+        label: "Telecom",
+        tag: "SUBSCRIBER RISK",
+        text:
+          "Spot SIM-swap services, subscriber data leaks and insider " +
+          "recruitment on underground forums."
       }
     ];
     var ANIMATE = true;
 
-    function cardHTML(c, i) {
+    // A rail button = one tab. The first is selected on build.
+    function tabHTML(s, i) {
       return (
-        '<li>' +
-          '<div class="hk-ind__card" style="--i:' + i + '">' +
-            '<span class="hk-ind__badge">' + icon(c.icon) + "</span>" +
-            '<h3 class="hk-ind__card-title">' + esc(c.title) + "</h3>" +
-            '<p class="hk-ind__card-text">' + esc(c.text) + "</p>" +
+        '<button class="hk-ind__tab" type="button" role="tab" ' +
+          'id="hk-ind-tab-' + i + '" aria-controls="hk-ind-panel-' + i + '" ' +
+          'aria-selected="' + (i === 0 ? "true" : "false") + '" ' +
+          'tabindex="' + (i === 0 ? "0" : "-1") + '" data-i="' + i + '" ' +
+          'style="--i:' + i + '">' +
+          '<span class="hk-ind__tab-ico" aria-hidden="true">' + icon(s.icon) + "</span>" +
+          '<span class="hk-ind__tab-label">' + esc(s.label) + "</span>" +
+          '<span class="hk-ind__tab-caret" aria-hidden="true">' + icon("arrow") + "</span>" +
+        "</button>"
+      );
+    }
+
+    // The detail panel for one sector. All seven are rendered; CSS shows
+    // only the one whose [hidden] is false. On mobile each sits under its
+    // own tab (accordion) - the markup already supports both via ordering.
+    function panelHTML(s, i) {
+      return (
+        '<div class="hk-ind__panel" role="tabpanel" id="hk-ind-panel-' + i + '" ' +
+          'aria-labelledby="hk-ind-tab-' + i + '"' + (i === 0 ? "" : " hidden") + ">" +
+          '<div class="hk-ind__panel-head">' +
+            '<span class="hk-ind__panel-badge" aria-hidden="true">' + icon(s.icon) + "</span>" +
+            '<span class="hk-ind__panel-eyebrow">' + esc(s.tag) + "</span>" +
           "</div>" +
-        "</li>"
+          '<h3 class="hk-ind__panel-title">' + esc(s.label) + "</h3>" +
+          '<p class="hk-ind__panel-text">' + esc(s.text) + "</p>" +
+        "</div>"
       );
     }
 
@@ -1515,16 +1478,58 @@
       if (!host) return false;
       if (host.querySelector(".hk-ind")) return true;
 
+      // Tabs and panels are emitted as interleaved [tab][panel] pairs so the
+      // source order is correct for the mobile accordion. On desktop, CSS
+      // grid places every tab into the left rail column and every panel into
+      // the right stage column (via grid-column), so the two-pane selector
+      // still renders - no duplicated markup, one accessible tablist.
+      var pairs = SECTORS.map(function (s, i) {
+        return tabHTML(s, i) + panelHTML(s, i);
+      }).join("");
+
       host.insertAdjacentHTML(
         "beforeend",
         '<div class="hk-ind' + (ANIMATE ? " is-animated" : "") + '">' +
           moduleHead("hk-ind", MOD, TITLE, SUB) +
-          '<ul class="hk-ind__grid">' + CARDS.map(cardHTML).join("") + "</ul>" +
+          '<div class="hk-ind__selector" role="tablist" ' +
+            'aria-label="Industries" aria-orientation="vertical">' +
+            pairs +
+          "</div>" +
         "</div>"
       );
 
       var root = host.querySelector(".hk-ind");
       if (ANIMATE) reveal(root);
+
+      var tabs = Array.prototype.slice.call(root.querySelectorAll(".hk-ind__tab"));
+      var panels = Array.prototype.slice.call(root.querySelectorAll(".hk-ind__panel"));
+
+      function select(i, focus) {
+        tabs.forEach(function (t, j) {
+          var on = j === i;
+          t.setAttribute("aria-selected", on ? "true" : "false");
+          t.setAttribute("tabindex", on ? "0" : "-1");
+          if (on && focus) t.focus();
+        });
+        panels.forEach(function (p, j) {
+          if (j === i) p.removeAttribute("hidden");
+          else p.setAttribute("hidden", "");
+        });
+      }
+
+      tabs.forEach(function (t, i) {
+        t.addEventListener("click", function () { select(i, false); });
+        t.addEventListener("keydown", function (e) {
+          var next = null;
+          if (e.key === "ArrowDown" || e.key === "ArrowRight") next = (i + 1) % tabs.length;
+          else if (e.key === "ArrowUp" || e.key === "ArrowLeft") next = (i - 1 + tabs.length) % tabs.length;
+          else if (e.key === "Home") next = 0;
+          else if (e.key === "End") next = tabs.length - 1;
+          if (next === null) return;
+          e.preventDefault();
+          select(next, true);
+        });
+      });
       return true;
     }
 
@@ -1533,28 +1538,28 @@
 
   /* ===================================================================
      4.5 Core Capabilities  -  container .hawk-caps  -  prefix hk-caps
-     "Built for the Modern Threat Landscape" (PDF §5). A STATIC capability
-     grid - no modal, no click, no streaming - deliberately distinct from
-     the clickable Industries/Features dossier cards: each card carries a
-     zero-padded index chip + accent badge and a thin top accent rule, so
-     the grid reads as its own panel while using only the shared tokens and
-     helpers. Placed after Industries ("what the platform can do" right
-     after the sectors it serves) and before Alerts & Wires. Labelled with
-     an unnumbered MOD tag so the existing MOD 02–09 numbering is untouched.
+     "Built for the Modern Threat Landscape" (PDF §5). Rendered as a
+     technical DATASHEET / capability matrix - deliberately flatter and more
+     "engineered" than the Industries selector and the Features console: a
+     tight grid of cells separated by hairline rules (no floating rounded
+     cards), each cell led by a large ghosted index numeral (01..09), a mono
+     micro-label, an inline icon + title on one row and the body below. Nine
+     capabilities (PDF §5). Each icon name resolves through shared ICONS.
      =================================================================== */
   (function () {
     var SECTION = ".hawk-caps";
 
-    var MOD = "MOD · CAPABILITIES";
+    var MOD = "CAPABILITIES";
     var TITLE = "Built for the Modern Threat Landscape";
     var SUB =
       "Every capability is designed to keep you one step ahead of attackers.";
 
-    // Six capabilities (icon, title, text) - wording fixed (PDF §5). Each
-    // icon name resolves through the shared ICONS set.
+    // Nine capabilities (icon, kind, title, text) - wording fixed (PDF §5).
+    // `kind` is a short mono micro-label shown above the title.
     var CAPS = [
       {
         icon: "mask",
+        kind: "BRAND",
         title: "Brand Protection",
         text:
           "Find and shut down impersonation, lookalike domains, phishing " +
@@ -1563,6 +1568,7 @@
       },
       {
         icon: "dark",
+        kind: "SURVEILLANCE",
         title: "Deep & Dark Web Monitoring",
         text:
           "Continuous surveillance of underground forums, marketplaces, " +
@@ -1571,6 +1577,7 @@
       },
       {
         icon: "evidence",
+        kind: "DATA LOSS",
         title: "Data Leakage Detection",
         text:
           "Catch exposed credentials, sensitive documents, source code and " +
@@ -1578,6 +1585,7 @@
       },
       {
         icon: "vip",
+        kind: "VIP",
         title: "VIP & Executive Protection",
         text:
           "Dedicated monitoring of leaders and key staff for personal data " +
@@ -1585,7 +1593,8 @@
       },
       {
         icon: "sources",
-        title: "External Attack Surface Management (EASM)",
+        kind: "EASM",
+        title: "External Attack Surface Management",
         text:
           "Discover, map and monitor every internet-facing asset - domains, " +
           "subdomains, certificates, cloud services and exposed ports - and " +
@@ -1593,27 +1602,52 @@
       },
       {
         icon: "search",
+        kind: "HUNTING",
         title: "Threat Hunting",
         text:
           "Proactive, analyst-led searches for advanced threats that slip " +
           "past traditional controls, guided by live adversary intelligence."
+      },
+      {
+        icon: "ransom",
+        kind: "RANSOMWARE",
+        title: "Ransomware Intelligence",
+        text:
+          "Track ransomware groups, affiliates, leak sites and disclosures - " +
+          "including attacks on your suppliers and partners."
+      },
+      {
+        icon: "card",
+        kind: "FRAUD",
+        title: "Fraud & Payment Card Intelligence",
+        text:
+          "Detect compromised cards, BIN abuse, fraud tutorials and scam " +
+          "campaigns targeting your customers."
+      },
+      {
+        icon: "context",
+        kind: "SUPPLY CHAIN",
+        title: "Third-Party & Supply Chain Risk",
+        text:
+          "Watch vendors and partners for breaches, leaks and dark web " +
+          "chatter that could become your problem."
       }
     ];
     var ANIMATE = true;
 
-    // Index chip + badge pairing is the signature that sets this grid apart
-    // from Industries/Features (which have no numbering). The chip is purely
-    // decorative - zero-padded ("01".."06") and aria-hidden.
-    function cardHTML(c, i) {
+    // A datasheet cell: large ghosted index, mono kind label, icon + title
+    // on one line, body below. The index is decorative (aria-hidden).
+    function cellHTML(c, i) {
       var idx = ("0" + (i + 1)).slice(-2);
       return (
-        '<li>' +
-          '<div class="hk-caps__card" style="--i:' + i + '">' +
-            '<span class="hk-caps__index" aria-hidden="true">' + idx + "</span>" +
-            '<span class="hk-caps__badge">' + icon(c.icon) + "</span>" +
-            '<h3 class="hk-caps__card-title">' + esc(c.title) + "</h3>" +
-            '<p class="hk-caps__card-text">' + esc(c.text) + "</p>" +
-          "</div>" +
+        '<li class="hk-caps__cell" style="--i:' + i + '">' +
+          '<span class="hk-caps__index" aria-hidden="true">' + idx + "</span>" +
+          '<span class="hk-caps__kind">' + esc(c.kind) + "</span>" +
+          '<span class="hk-caps__cellhead">' +
+            '<span class="hk-caps__ico" aria-hidden="true">' + icon(c.icon) + "</span>" +
+            '<h3 class="hk-caps__cell-title">' + esc(c.title) + "</h3>" +
+          "</span>" +
+          '<p class="hk-caps__cell-text">' + esc(c.text) + "</p>" +
         "</li>"
       );
     }
@@ -1627,7 +1661,7 @@
         "beforeend",
         '<div class="hk-caps' + (ANIMATE ? " is-animated" : "") + '">' +
           moduleHead("hk-caps", MOD, TITLE, SUB) +
-          '<ul class="hk-caps__grid">' + CAPS.map(cardHTML).join("") + "</ul>" +
+          '<ul class="hk-caps__sheet">' + CAPS.map(cellHTML).join("") + "</ul>" +
         "</div>"
       );
 
@@ -1642,7 +1676,12 @@
   /* ===================================================================
      5. Targeted Alerts & Incident Wires  -  container .hawk-wires
         prefix hk-wires  -  the page's signature "live wires console".
+     -------------------------------------------------------------------
+     TEMPORARILY DISABLED: the whole IIFE below is commented out so the
+     section does not render. Remove the surrounding block comment to
+     re-enable (the CSS for .hawk-wires is likewise commented out).
      =================================================================== */
+  /* COMMENTED-OUT-WIRES-START
   (function () {
     var SECTION = ".hawk-wires";
 
@@ -1802,20 +1841,28 @@
 
     onReady(function () { waitForSection(build); });
   })();
+  COMMENTED-OUT-WIRES-END */
 
   /* ===================================================================
      6. Advanced Processing & Enrichment  -  container .hawk-enrich
         prefix hk-enrich  -  framed image tiles, icon fallback.
+     -------------------------------------------------------------------
+     TEMPORARILY DISABLED: the whole IIFE below is commented out so the
+     section does not render. Remove the surrounding block comment to
+     re-enable (the CSS for .hawk-enrich is likewise commented out). The
+     one inner block-comment's delimiters were broken (/ * … * /) only so
+     this single wrapper can enclose it; restore them when re-enabling.
      =================================================================== */
+  /* COMMENTED-OUT-ENRICH-START
   (function () {
     var SECTION = ".hawk-enrich";
 
     var MOD = "ENRICHMENT";
     var TITLE = "Advanced processing & enrichment";
     // Each tile pairs an image with a one-line enrichment step (PDF §6 Enrich).
-    /* Each tile shows an image. Drop the image URL into `img` (and a short
+    / * Each tile shows an image. Drop the image URL into `img` (and a short
        `alt`); while `img` is "" the icon named in `icon` is drawn instead,
-       so the section still renders before the artwork is ready. */
+       so the section still renders before the artwork is ready. * /
     var ITEMS = [
       {
         img:
@@ -1906,17 +1953,23 @@
 
     onReady(function () { waitForSection(build); });
   })();
+  COMMENTED-OUT-ENRICH-END */
 
   /* ===================================================================
      7. Platform Features  -  container .hawk-features  -  prefix hk-features
-     Clickable cards -> shared modal.
+     Rendered as a single framed CONSOLE PANEL (chrome bar + "feature list")
+     whose ten features are horizontal ROWS - a numbered index, an icon, the
+     title and its description on one line, split by hairline rules. It reads
+     like looking inside the product's settings/inspector, deliberately
+     different from the Industries selector and the Capabilities datasheet.
+     Ten features (PDF §7). Each icon resolves through the shared ICONS set.
      =================================================================== */
   (function () {
     var SECTION = ".hawk-features";
 
     var MOD = "FEATURES";
     var TITLE = "Everything your analysts need in one console";
-    var SUB = "Select a feature to see what it does.";
+    var SUB = "";
     var CARDS = [
       {
         icon: "search",
@@ -1968,23 +2021,42 @@
           "individuals behind each threat."
       },
       {
+        icon: "profiles",
+        title: "Teams, Roles & Access Profiles",
+        text:
+          "Create project-based workspaces and role-based access to match " +
+          "your internal workflows."
+      },
+      {
         icon: "report",
         title: "Executive Dashboards & Reports",
         text:
           "Share exposure trends, risk scores and takedown results with " +
           "leadership and auditors."
+      },
+      {
+        icon: "wire",
+        title: "API & Integrations",
+        text:
+          "Stream wires and IOCs into your SIEM, SOAR, TIP and ticketing " +
+          "tools via REST API and STIX/TAXII."
       }
     ];
     var ANIMATE = true;
 
-    function cardHTML(c, i) {
+    // One feature row: mono index, icon, title + description. The title and
+    // text sit in a two-column inner grid so descriptions align down the list.
+    function rowHTML(c, i) {
+      var idx = ("0" + (i + 1)).slice(-2);
       return (
-        '<li>' +
-          '<div class="hk-features__card" style="--i:' + i + '">' +
-            '<span class="hk-features__badge">' + icon(c.icon) + "</span>" +
-            '<h3 class="hk-features__card-title">' + esc(c.title) + "</h3>" +
-            '<p class="hk-features__card-text">' + esc(c.text) + "</p>" +
-          "</div>" +
+        '<li class="hk-features__row" style="--i:' + i + '">' +
+          '<span class="hk-features__idx" aria-hidden="true">' + idx + "</span>" +
+          '<span class="hk-features__ico" aria-hidden="true">' + icon(c.icon) + "</span>" +
+          '<span class="hk-features__row-copy">' +
+            '<span class="hk-features__row-title">' + esc(c.title) + "</span>" +
+            '<span class="hk-features__row-text">' + esc(c.text) + "</span>" +
+          "</span>" +
+          '<span class="hk-features__row-caret" aria-hidden="true">' + icon("arrow") + "</span>" +
         "</li>"
       );
     }
@@ -1998,7 +2070,15 @@
         "beforeend",
         '<div class="hk-features' + (ANIMATE ? " is-animated" : "") + '">' +
           moduleHead("hk-features", MOD, TITLE, SUB) +
-          '<ul class="hk-features__grid">' + CARDS.map(cardHTML).join("") + "</ul>" +
+          '<div class="hk-features__console">' +
+            '<div class="hk-features__bar">' +
+              '<span class="hk-features__dots" aria-hidden="true">' +
+                "<i></i><i></i><i></i></span>" +
+              '<span class="hk-features__bar-title">HawkINT · Console</span>' +
+              '<span class="hk-features__count">' + CARDS.length + " MODULES</span>" +
+            "</div>" +
+            '<ul class="hk-features__list">' + CARDS.map(rowHTML).join("") + "</ul>" +
+          "</div>" +
         "</div>"
       );
 
@@ -2011,48 +2091,65 @@
   })();
 
   /* ===================================================================
-     8. AI & Associated Services  -  container .hawk-ai  -  prefix hk-ai
+     8. AI at the Core  -  container .hawk-ai  -  prefix hk-ai
+     A "core diagram" split: the left column carries the intro and a living
+     AI CORE node (a pulsing hawk badge inside orbit rings), the right
+     column lists the nine applied-AI capabilities as compact connected
+     pills feeding that core. This diagram shape is deliberately unlike the
+     Industries selector, the Capabilities datasheet and the Features
+     console, so no two neighbouring sections read alike. (PDF §8.)
      =================================================================== */
   (function () {
     var SECTION = ".hawk-ai";
 
-    var MOD = "AI & SERVICES";
-    var TITLE = "Human expertise, amplified by applied AI";
+    var MOD = "AI AT THE CORE";
+    var TITLE = "Human Expertise, Amplified by Applied AI";
     var SUB =
       "HawkINT's AI turns overwhelming volumes of raw data into a short list " +
-      "of threats that matter - and our analysts train, tune and validate " +
-      "every model.";
+      "of threats that matter. Our analysts train, tune and validate every " +
+      "model, so automation never replaces judgment.";
 
-    var CAPABILITIES = [
-      "ML event ranking by severity and relevance",
-      "LLM-powered threat-actor profiling",
-      "AI threat summaries for faster triage",
-      "Automated phishing classification",
-      "Image similarity & logo detection for brand abuse",
-      "Facial recognition to spot impersonation and deepfakes",
-      "Behavioral fake-profile detection",
-      "Anomaly detection in the environments we monitor"
-    ];
-    var SERVICES = [
-      "Active threat hunting",
-      "Threat actor engagement",
-      "Incident response",
-      "Digital forensics",
-      "Phishing website takedowns",
-      "Fake profile takedowns",
-      "Fraudulent mobile app removal",
-      "API & integrations (REST, STIX/TAXII)"
+    // Nine AI capabilities, in PDF order. Each icon name is already in the
+    // shared ICONS set (visually distinct) — reused, not redrawn.
+    var CAPS = [
+      { icon: "rank",      title: "ML Event Ranking",                  text: "Prioritizes every event by severity and relevance." },
+      { icon: "actor",     title: "LLM-Powered Actor Profiling",       text: "Summarizes who is behind a threat and what they want." },
+      { icon: "report",    title: "AI Threat Summaries",               text: "Plain-language briefs on each wire for faster triage." },
+      { icon: "classify",  title: "Automated Phishing Classification", text: "Separates live phishing from benign lookalikes." },
+      { icon: "search",    title: "Image Similarity & Logo Detection", text: "Finds brand abuse even when no text matches." },
+      { icon: "profiles",  title: "Facial Recognition",                text: "Spots executive impersonation and deepfake misuse." },
+      { icon: "mask",      title: "Behavioral Fake-Profile Detection", text: "Flags inauthentic accounts by how they act." },
+      { icon: "pulse",     title: "Anomaly Detection",                 text: "Surfaces unusual activity in the environments we monitor." },
+      { icon: "recommend", title: "Personalized Recommendations",      text: "Suggests next actions based on your team's behavior." }
     ];
     var ANIMATE = true;
 
-    function capHTML(t) {
+    // The living AI core: a pulsing hawk badge inside two orbit rings, with
+    // a mono caption. Purely decorative (aria-hidden) — the pills carry the
+    // meaning. Motion is CSS-only and respects prefers-reduced-motion.
+    function coreHTML() {
       return (
-        '<li class="hk-ai__cap"><span class="hk-ai__cap-ico">' + icon("check") +
-          "</span><span>" + esc(t) + "</span></li>"
+        '<div class="hk-ai__core" aria-hidden="true">' +
+          '<span class="hk-ai__core-ring hk-ai__core-ring--1"></span>' +
+          '<span class="hk-ai__core-ring hk-ai__core-ring--2"></span>' +
+          '<span class="hk-ai__core-pulse"></span>' +
+          '<span class="hk-ai__core-badge">' + icon("hawk") + "</span>" +
+          '<span class="hk-ai__core-label">HawkINT AI</span>' +
+        "</div>"
       );
     }
-    function pillHTML(t) {
-      return '<li class="hk-ai__pill">' + icon("check") + "<span>" + esc(t) + "</span></li>";
+
+    // One capability pill: accent icon, title, one-line description.
+    function pillHTML(c, i) {
+      return (
+        '<li class="hk-ai__pill" style="--i:' + i + '">' +
+          '<span class="hk-ai__pill-ico" aria-hidden="true">' + icon(c.icon) + "</span>" +
+          '<span class="hk-ai__pill-copy">' +
+            '<span class="hk-ai__pill-title">' + esc(c.title) + "</span>" +
+            '<span class="hk-ai__pill-text">' + esc(c.text) + "</span>" +
+          "</span>" +
+        "</li>"
+      );
     }
 
     function build() {
@@ -2064,23 +2161,15 @@
         "beforeend",
         '<div class="hk-ai' + (ANIMATE ? " is-animated" : "") + '">' +
           moduleHead("hk-ai", MOD, TITLE, SUB) +
-          '<div class="hk-ai__blocks">' +
-            '<section class="hk-ai__block" style="--i:0">' +
-              '<h3 class="hk-ai__block-title">' +
-                '<span class="hk-ai__block-ico">' + icon("chip") + "</span>" +
-                "AI capabilities</h3>" +
-              '<ul class="hk-ai__list">' +
-                CAPABILITIES.map(capHTML).join("") +
-              "</ul>" +
-            "</section>" +
-            '<section class="hk-ai__block hk-ai__block--svc" style="--i:1">' +
-              '<h3 class="hk-ai__block-title">' +
-                '<span class="hk-ai__block-ico">' + icon("shield") + "</span>" +
-                "Associated services</h3>" +
-              '<ul class="hk-ai__pills">' +
-                SERVICES.map(pillHTML).join("") +
-              "</ul>" +
-            "</section>" +
+          '<div class="hk-ai__diagram">' +
+            '<div class="hk-ai__aside">' +
+              coreHTML() +
+              '<p class="hk-ai__note">' +
+                "Every model is analyst-trained and validated — automation " +
+                "narrows the field, people make the call." +
+              "</p>" +
+            "</div>" +
+            '<ul class="hk-ai__pills">' + CAPS.map(pillHTML).join("") + "</ul>" +
           "</div>" +
         "</div>"
       );
@@ -2191,6 +2280,283 @@
           m.outerHTML = '<span class="hk-takedown__badge">' + icon(TARGETS[i].icon) + "</span>";
         });
       });
+      return true;
+    }
+
+    onReady(function () { waitForSection(build); });
+  })();
+
+  /* ===================================================================
+     10. Professional Services  -  container .hawk-services  -  prefix hk-svc
+     The "response desk": a sticky console aside on the left states who is
+     on call, and a numbered service ledger on the right lists what the
+     CybrHawk team does by hand. Reads as a roster, not another card grid,
+     so it sits apart from the product sections above.
+     =================================================================== */
+  (function () {
+    var SECTION = ".hawk-services";
+
+    var MOD = "PROFESSIONAL SERVICES";
+    var TITLE = "A team on call when the platform finds something";
+    var SUB =
+      "The platform surfaces the threat - CybrHawk's analysts, responders " +
+      "and forensics specialists take it from there.";
+
+    // The aside's "on call" strip - a quiet operational signal, not a stat.
+    var DESK = {
+      status: "Analysts on call",
+      note:
+        "Every engagement is run by named specialists and scoped to your " +
+        "environment - no handoff to a queue."
+    };
+
+    // The ledger. `tag` is the mono index drawn down the spine; order here
+    // is the order on the page. Icons resolve through the shared ICONS set.
+    var SERVICES = [
+      {
+        tag: "S-01",
+        icon: "search",
+        title: "Active Threat Hunting",
+        text:
+          "Analysts search your environment for hidden threats using live " +
+          "adversary intelligence."
+      },
+      {
+        tag: "S-02",
+        icon: "actor",
+        title: "Threat Actor Engagement",
+        text:
+          "Controlled, discreet engagement with actors to validate leaks " +
+          "and verify their claims."
+      },
+      {
+        tag: "S-03",
+        icon: "bell",
+        title: "Incident Response",
+        text:
+          "Rapid 24/7 response to contain breaches and restore operations."
+      },
+      {
+        tag: "S-04",
+        icon: "evidence",
+        title: "Digital Forensics",
+        text:
+          "Court-ready evidence collection, analysis and chain of custody."
+      },
+      {
+        tag: "S-05",
+        icon: "shield",
+        title: "Compromise Assessment",
+        text:
+          "A proactive review that finds signs of past or ongoing intrusion."
+      },
+      {
+        tag: "S-06",
+        icon: "key",
+        title: "Internal Investigations",
+        text:
+          "Confidential inquiries into insider threats and policy violations."
+      },
+      {
+        tag: "S-07",
+        icon: "report",
+        title: "Custom Intelligence Reports",
+        text:
+          "Tailored briefings on your sector, region or the adversaries " +
+          "that matter to you."
+      }
+    ];
+    var ANIMATE = true;
+
+    function deskHTML() {
+      return (
+        '<aside class="hk-svc__desk">' +
+          '<div class="hk-svc__desk-chrome" aria-hidden="true">' +
+            '<span class="hk-svc__desk-dots"><i></i><i></i><i></i></span>' +
+            '<span class="hk-svc__desk-chrome-label">response-desk</span>' +
+          "</div>" +
+          '<div class="hk-svc__desk-body">' +
+            '<p class="hk-svc__desk-status">' +
+              '<span class="hk-svc__desk-dot" aria-hidden="true"></span>' +
+              esc(DESK.status) +
+            "</p>" +
+            '<p class="hk-svc__desk-note">' + esc(DESK.note) + "</p>" +
+          "</div>" +
+        "</aside>"
+      );
+    }
+
+    // One ledger row: mono index on the spine, icon badge, title + body.
+    function rowHTML(s, i) {
+      return (
+        '<li class="hk-svc__row" style="--i:' + i + '">' +
+          '<span class="hk-svc__index" aria-hidden="true">' + esc(s.tag) + "</span>" +
+          '<span class="hk-svc__ico">' + icon(s.icon) + "</span>" +
+          '<span class="hk-svc__text">' +
+            '<span class="hk-svc__row-title">' + esc(s.title) + "</span>" +
+            '<span class="hk-svc__row-desc">' + esc(s.text) + "</span>" +
+          "</span>" +
+        "</li>"
+      );
+    }
+
+    function build() {
+      var host = hostFor(SECTION);
+      if (!host) return false;
+      if (host.querySelector(".hk-svc")) return true;
+
+      host.insertAdjacentHTML(
+        "beforeend",
+        '<div class="hk-svc' + (ANIMATE ? " is-animated" : "") + '">' +
+          '<div class="hk-svc__layout">' +
+            '<div class="hk-svc__aside">' +
+              moduleHead("hk-svc", MOD, TITLE, SUB) +
+              deskHTML() +
+            "</div>" +
+            '<ol class="hk-svc__ledger">' +
+              SERVICES.map(rowHTML).join("") +
+            "</ol>" +
+          "</div>" +
+        "</div>"
+      );
+
+      var root = host.querySelector(".hk-svc");
+      if (ANIMATE) reveal(root);
+      return true;
+    }
+
+    onReady(function () { waitForSection(build); });
+  })();
+
+  /* ===================================================================
+     11. Integrations  -  container .hawk-integrations  -  prefix hk-int
+     A patch-bay / wiring board. A thin signal bus at the top carries
+     HawkINT's output ("outside-in") into the CybrHawk platform
+     ("inside-out"); below it, each integration is a connector "port"
+     card with a mono port label and a jack that lights when wired. The
+     wiring shape is unlike the AI core+pills above, so neighbours never
+     read alike.
+     =================================================================== */
+  (function () {
+    var SECTION = ".hawk-integrations";
+
+    var MOD = "INTEGRATIONS WITH THE CYBRHAWK PLATFORM";
+    var TITLE = "External Intelligence, Wired Into Your Defenses";
+    var SUB =
+      "HawkINT works on its own or as the external intelligence layer of the " +
+      "CybrHawk unified defense platform. Wires and indicators flow straight " +
+      "into detection and response, so outside-in threats trigger " +
+      "inside-out action.";
+
+    // The signal bus caption - the two ends of the flow line.
+    var BUS = { from: "HawkINT", flow: "outside-in → inside-out", to: "CybrHawk platform" };
+
+    // Six connector ports (PDF §7). `port` is the mono jack label; icons
+    // resolve through the shared ICONS set and are kept visually distinct.
+    var PORTS = [
+      {
+        icon: "shield",
+        port: "SIEM-XDR / NDR / CLOUD",
+        title: "SIEM XDR / NDR / Cloud",
+        text: "Enrich detections with live IOCs and actor context."
+      },
+      {
+        icon: "bot",
+        port: "AUTONOMOUS-SOC",
+        title: "Autonomous SOC & Hyper Automation",
+        text:
+          "Auto-trigger playbooks - resetting leaked credentials or " +
+          "blocking phishing domains."
+      },
+      {
+        icon: "key",
+        port: "ITDR",
+        title: "Identity Threat Detection & Response",
+        text:
+          "Correlate leaked credentials with active identities and " +
+          "privileged accounts."
+      },
+      {
+        icon: "energy",
+        port: "HAWKSTRIKE",
+        title: "HawkStrike",
+        text:
+          "Validate whether exposed assets and vulnerabilities are " +
+          "actually exploitable."
+      },
+      {
+        icon: "evidence",
+        port: "IR-ONE",
+        title: "IR One",
+        text:
+          "Hand off confirmed threats to incident response with full " +
+          "evidence attached."
+      },
+      {
+        icon: "chip",
+        port: "THIRD-PARTY",
+        title: "Third-Party Tools",
+        text:
+          "REST API, STIX/TAXII, webhooks, email and ticketing connectors."
+      }
+    ];
+    var ANIMATE = true;
+
+    // The signal bus: source chip, an animated flow line, platform chip.
+    // Decorative (aria-hidden) - the heading and ports carry the meaning.
+    function busHTML() {
+      return (
+        '<div class="hk-int__bus" aria-hidden="true">' +
+          '<span class="hk-int__bus-end hk-int__bus-end--src">' +
+            '<span class="hk-int__bus-dot"></span>' + esc(BUS.from) +
+          "</span>" +
+          '<span class="hk-int__bus-line">' +
+            '<span class="hk-int__bus-flow">' + esc(BUS.flow) + "</span>" +
+          "</span>" +
+          '<span class="hk-int__bus-end hk-int__bus-end--dst">' +
+            esc(BUS.to) + '<span class="hk-int__bus-dot"></span>' +
+          "</span>" +
+        "</div>"
+      );
+    }
+
+    // One connector port card: jack label + icon, product title, flow note.
+    function portHTML(p, i) {
+      return (
+        '<li class="hk-int__port" style="--i:' + i + '">' +
+          '<span class="hk-int__port-head">' +
+            '<span class="hk-int__jack" aria-hidden="true"></span>' +
+            '<span class="hk-int__port-tag">' + esc(p.port) + "</span>" +
+          "</span>" +
+          '<span class="hk-int__port-main">' +
+            '<span class="hk-int__port-ico" aria-hidden="true">' + icon(p.icon) + "</span>" +
+            '<span class="hk-int__port-copy">' +
+              '<span class="hk-int__port-title">' + esc(p.title) + "</span>" +
+              '<span class="hk-int__port-text">' + esc(p.text) + "</span>" +
+            "</span>" +
+          "</span>" +
+        "</li>"
+      );
+    }
+
+    function build() {
+      var host = hostFor(SECTION);
+      if (!host) return false;
+      if (host.querySelector(".hk-int")) return true;
+
+      host.insertAdjacentHTML(
+        "beforeend",
+        '<div class="hk-int' + (ANIMATE ? " is-animated" : "") + '">' +
+          moduleHead("hk-int", MOD, TITLE, SUB) +
+          busHTML() +
+          '<ul class="hk-int__ports">' +
+            PORTS.map(portHTML).join("") +
+          "</ul>" +
+        "</div>"
+      );
+
+      var root = host.querySelector(".hk-int");
+      if (ANIMATE) reveal(root);
       return true;
     }
 
