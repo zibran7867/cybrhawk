@@ -2819,11 +2819,18 @@ COMMENTED-OUT-ENRICH-END */
   display: grid; place-items: center;
   width: 32%; height: 32%;
   border-radius: 22px;
-  background: var(--hk-accent);
+  background: #0d1330;
   color: #fff;
   box-shadow: 0 10px 30px var(--hk-glow);
 }
 .hawk-ai .hk-ai__core-badge svg { width: 54%; height: 54%; }
+/* The CybrHawk wordmark fits the badge by width, aspect preserved. */
+.hawk-ai .hk-ai__core-logo {
+  width: 80%;
+  height: auto;
+  max-height: 60%;
+  object-fit: contain;
+}
 .hawk-ai .hk-ai__core-label {
   position: absolute;
   bottom: 3%;
@@ -3486,7 +3493,7 @@ COMMENTED-OUT-ENRICH-END */
   line-height: 1.6;
   color: var(--hk-ink-2);
 }
-/* A large, faint watermark hawk sealing the aside foot — decorative. */
+/* The CybrHawk logo sealing the aside foot — decorative. */
 .hawk-why .hk-why__badge {
   display: none;                 /* shown only where there's room, below */
 }
@@ -3494,14 +3501,25 @@ COMMENTED-OUT-ENRICH-END */
   .hawk-why .hk-why__badge {
     display: grid;
     place-items: center;
-    width: 112px; height: 112px;
+    /* Rectangular tile so the horizontal wordmark logo fits properly. */
+    width: 200px; height: 72px;
+    padding: 0 20px;
     margin-top: clamp(28px, 4vw, 48px);
-    border-radius: 24px;
-    background: var(--hk-accent-soft);
+    border-radius: 16px;
+    /* Dark tile so the white CybrHawk logo reads against it. */
+    background: var(--hk-ink);
     border: 1px solid var(--hk-border);
-    color: var(--hk-accent);
+    color: #fff;
     box-shadow: var(--hk-shadow);
   }
+  /* The logo keeps its aspect ratio within the padded tile. */
+  .hawk-why .hk-why__logo {
+    width: 100%;
+    height: auto;
+    max-height: 40px;
+    object-fit: contain;
+  }
+  /* SVG fallback (if the image fails) stays centred and sized. */
   .hawk-why .hk-why__badge svg { width: 56px; height: 56px; }
 }
 
@@ -3515,7 +3533,7 @@ COMMENTED-OUT-ENRICH-END */
 .hawk-why .hk-why__item {
   position: relative;
   display: grid;
-  grid-template-columns: auto auto 1fr;
+  grid-template-columns: auto 1fr;
   align-items: start;
   column-gap: 16px;
   row-gap: 6px;
@@ -3539,18 +3557,6 @@ COMMENTED-OUT-ENRICH-END */
 }
 .hawk-why .hk-why__item:hover .hk-why__glow { opacity: .5; }
 
-/* Zero-padded mono index, ghosted. */
-.hawk-why .hk-why__idx {
-  grid-row: 1 / span 2;
-  font-family: var(--hk-mono);
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--hk-ink);
-  opacity: .28;
-  font-variant-numeric: tabular-nums;
-  padding-top: 3px;
-}
 /* Accent icon tile. */
 .hawk-why .hk-why__tile {
   grid-row: 1 / span 2;

@@ -917,8 +917,6 @@
         tag: "Intelligent Leak Monitoring",
         icon: "evidence",
         title: "HawkINT Leak Intelligence",
-        featured: true,
-        flag: "Most adopted",
         desc:
           "Know exactly what leaked, and where. Leak Intelligence gives you " +
           "early, evidence-grade visibility into exposed sensitive data - " +
@@ -2171,8 +2169,12 @@
           '<span class="hk-ai__core-ring hk-ai__core-ring--1"></span>' +
           '<span class="hk-ai__core-ring hk-ai__core-ring--2"></span>' +
           '<span class="hk-ai__core-pulse"></span>' +
-          '<span class="hk-ai__core-badge">' + icon("hawk") + "</span>" +
-          '<span class="hk-ai__core-label">HawkINT AI</span>' +
+          '<span class="hk-ai__core-badge">' +
+            '<img class="hk-ai__core-logo" src="https://cybrhawk.com/' +
+              'wp-content/uploads/2025/07/logo-white-cybrhawk-2-scaled.png" ' +
+              'alt="CybrHawk" loading="lazy" decoding="async">' +
+          "</span>" +
+          '<span class="hk-ai__core-label">HawkINT</span>' +
         "</div>"
       );
     }
@@ -2202,16 +2204,23 @@
           '<div class="hk-ai__diagram">' +
             '<div class="hk-ai__aside">' +
               coreHTML() +
-              '<p class="hk-ai__note">' +
-                "Every model is analyst-trained and validated — automation " +
-                "narrows the field, people make the call." +
-              "</p>" +
             "</div>" +
             '<ul class="hk-ai__pills">' + CAPS.map(pillHTML).join("") + "</ul>" +
           "</div>" +
         "</div>"
       );
-      if (ANIMATE) reveal(host.querySelector(".hk-ai"));
+      var root = host.querySelector(".hk-ai");
+      if (ANIMATE) reveal(root);
+
+      // If the logo image fails to load, fall back to the hawk glyph so the
+      // core badge is never blank (same idiom as the other logo badges).
+      var logo = root.querySelector(".hk-ai__core-logo");
+      if (logo) {
+        logo.addEventListener("error", function () {
+          var badge = logo.closest(".hk-ai__core-badge");
+          if (badge) badge.innerHTML = icon("hawk");
+        });
+      }
       return true;
     }
 
@@ -2287,8 +2296,6 @@
         '<li class="hk-takedown__tile" style="--i:' + i + '">' +
           tileMediaHTML(t) +
           '<span class="hk-takedown__label">' +
-            '<span class="hk-takedown__status" aria-hidden="true">' +
-              icon("check") + "Neutralized</span>" +
             esc(t.label) +
           "</span>" +
         "</li>"
@@ -2339,14 +2346,6 @@
     var SUB =
       "The platform surfaces the threat - CybrHawk's analysts, responders " +
       "and forensics specialists take it from there.";
-
-    // The aside's "on call" strip - a quiet operational signal, not a stat.
-    var DESK = {
-      status: "Analysts on call",
-      note:
-        "Every engagement is run by named specialists and scoped to your " +
-        "environment - no handoff to a queue."
-    };
 
     // The ledger. `tag` is the mono index drawn down the spine; order here
     // is the order on the page. Icons resolve through the shared ICONS set.
@@ -2406,24 +2405,6 @@
     ];
     var ANIMATE = true;
 
-    function deskHTML() {
-      return (
-        '<aside class="hk-svc__desk">' +
-          '<div class="hk-svc__desk-chrome" aria-hidden="true">' +
-            '<span class="hk-svc__desk-dots"><i></i><i></i><i></i></span>' +
-            '<span class="hk-svc__desk-chrome-label">response-desk</span>' +
-          "</div>" +
-          '<div class="hk-svc__desk-body">' +
-            '<p class="hk-svc__desk-status">' +
-              '<span class="hk-svc__desk-dot" aria-hidden="true"></span>' +
-              esc(DESK.status) +
-            "</p>" +
-            '<p class="hk-svc__desk-note">' + esc(DESK.note) + "</p>" +
-          "</div>" +
-        "</aside>"
-      );
-    }
-
     // One ledger row: mono index on the spine, icon badge, title + body.
     function rowHTML(s, i) {
       return (
@@ -2449,7 +2430,6 @@
           '<div class="hk-svc__layout">' +
             '<div class="hk-svc__aside">' +
               moduleHead("hk-svc", MOD, TITLE, SUB) +
-              deskHTML() +
             "</div>" +
             '<ol class="hk-svc__ledger">' +
               SERVICES.map(rowHTML).join("") +
@@ -2660,11 +2640,9 @@
     // proof line, with a hover glow that lights the row (same idiom as the
     // About OUTPUTS panel). All text via esc(); glyph from the shared set.
     function reasonHTML(r, i) {
-      var idx = ("0" + (i + 1)).slice(-2);
       return (
         '<li class="hk-why__item" style="--i:' + i + '">' +
           '<span class="hk-why__glow" aria-hidden="true"></span>' +
-          '<span class="hk-why__idx" aria-hidden="true">' + idx + "</span>" +
           '<span class="hk-why__tile" aria-hidden="true">' + icon(r.icon) + "</span>" +
           '<span class="hk-why__copy">' +
             '<span class="hk-why__item-title">' + esc(r.title) + "</span>" +
@@ -2691,7 +2669,9 @@
               '<h2 class="hk-why__title">' + esc(TITLE) + "</h2>" +
               '<p class="hk-why__sub">' + esc(SUB) + "</p>" +
               '<span class="hk-why__badge" aria-hidden="true">' +
-                icon("hawk") +
+                '<img class="hk-why__logo" src="https://cybrhawk.com/' +
+                  'wp-content/uploads/2025/07/logo-white-cybrhawk-2-scaled.png" ' +
+                  'alt="CybrHawk" loading="lazy" decoding="async">' +
               "</span>" +
             "</div>" +
             '<ul class="hk-why__list">' +
@@ -2703,6 +2683,16 @@
 
       var root = host.querySelector(".hk-why");
       if (ANIMATE) reveal(root);
+
+      // If the logo image fails to load, fall back to the hawk glyph so the
+      // badge is never blank (same idiom as the About / Takedown images).
+      var logo = root.querySelector(".hk-why__logo");
+      if (logo) {
+        logo.addEventListener("error", function () {
+          var badge = logo.closest(".hk-why__badge");
+          if (badge) badge.innerHTML = icon("hawk");
+        });
+      }
       return true;
     }
 
