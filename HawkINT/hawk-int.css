@@ -102,7 +102,8 @@
 .hawk-enrich, .hawk-enrich *,
 .hawk-features, .hawk-features *,
 .hawk-ai, .hawk-ai *,
-.hawk-takedown, .hawk-takedown * {
+.hawk-takedown, .hawk-takedown *,
+.hawk-why, .hawk-why * {
   box-sizing: border-box;
 }
 
@@ -121,7 +122,8 @@
 .hawk-enrich > .e-con-inner,
 .hawk-features > .e-con-inner,
 .hawk-ai > .e-con-inner,
-.hawk-takedown > .e-con-inner {
+.hawk-takedown > .e-con-inner,
+.hawk-why > .e-con-inner {
   padding: 0 !important;
   max-width: none !important;
   width: 100%;
@@ -142,7 +144,8 @@
 .hawk-ai,
 .hawk-takedown,
 .hawk-services,
-.hawk-integrations {
+.hawk-integrations,
+.hawk-why {
   --hk-gutter: 24px;
   position: relative;
   width: 100%;
@@ -158,7 +161,8 @@
 .hawk-industries,
 .hawk-enrich,
 .hawk-ai,
-.hawk-services {
+.hawk-services,
+.hawk-why {
   background-color: var(--hk-canvas);
 }
 .hawk-about,
@@ -188,14 +192,14 @@
 @media (max-width: 980px) {
   .hawk-hero, .hawk-about, .hawk-modules, .hawk-numbers, .hawk-how,
   .hawk-industries, .hawk-caps, .hawk-wires, .hawk-enrich, .hawk-features,
-  .hawk-ai, .hawk-takedown, .hawk-services, .hawk-integrations {
+  .hawk-ai, .hawk-takedown, .hawk-services, .hawk-integrations, .hawk-why {
     --hk-gutter: 22px;
   }
 }
 @media (max-width: 520px) {
   .hawk-hero, .hawk-about, .hawk-modules, .hawk-numbers, .hawk-how,
   .hawk-industries, .hawk-caps, .hawk-wires, .hawk-enrich, .hawk-features,
-  .hawk-ai, .hawk-takedown, .hawk-services, .hawk-integrations {
+  .hawk-ai, .hawk-takedown, .hawk-services, .hawk-integrations, .hawk-why {
     --hk-gutter: 18px;
   }
 }
@@ -214,7 +218,8 @@
 .hawk-ai .hk-ai,
 .hawk-takedown .hk-takedown,
 .hawk-services .hk-svc,
-.hawk-integrations .hk-int {
+.hawk-integrations .hk-int,
+.hawk-why .hk-why {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -238,7 +243,8 @@
 .hawk-ai .hk-ai__mod,
 .hawk-takedown .hk-takedown__mod,
 .hawk-services .hk-svc__mod,
-.hawk-integrations .hk-int__mod {
+.hawk-integrations .hk-int__mod,
+.hawk-why .hk-why__mod {
   display: flex;               /* flex (not inline-flex) so it can wrap in its box */
   align-items: center;
   flex-wrap: wrap;             /* long tags wrap instead of overflowing on mobile */
@@ -268,7 +274,8 @@
   .hawk-ai .hk-ai__mod,
   .hawk-takedown .hk-takedown__mod,
   .hawk-services .hk-svc__mod,
-  .hawk-integrations .hk-int__mod {
+  .hawk-integrations .hk-int__mod,
+  .hawk-why .hk-why__mod {
     font-size: 11px;
     letter-spacing: .12em;
   }
@@ -287,7 +294,8 @@
 .hawk-ai .hk-ai__tick,
 .hawk-takedown .hk-takedown__tick,
 .hawk-services .hk-svc__tick,
-.hawk-integrations .hk-int__tick {
+.hawk-integrations .hk-int__tick,
+.hawk-why .hk-why__tick {
   flex: none;
   width: 16px;
   height: 2px;
@@ -1173,33 +1181,104 @@
    and --hk-border-2 — the same elevation idiom and timing as the hero
    button, gated behind the file's single prefers-reduced-motion handling.
    ===================================================================== */
+/* Three "module panels" on one row. align-items:stretch keeps them equal
+   height; the featured (middle) card is raised with an accent frame, a
+   filled badge and a "flag" chip, and stays a touch taller than its peers
+   so it reads as the focal plan — like a pricing table's highlighted tier. */
 .hawk-modules .hk-modules__grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(16px, 1.8vw, 22px);
+  align-items: stretch;
+  gap: clamp(16px, 1.8vw, 24px);
   margin: 0; padding: 0; list-style: none;
 }
+
+/* ---- Base panel ------------------------------------------------------ */
 .hawk-modules .hk-modules__card {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
+  gap: 14px;
   height: 100%;
-  padding: clamp(24px, 2.6vw, 32px);
-  border-radius: 16px;
+  padding: clamp(26px, 2.6vw, 34px);
+  border-radius: 18px;
   border: 1px solid var(--hk-border);
   background: var(--hk-panel);
   box-shadow: var(--hk-shadow);
   text-align: left;
   font-family: var(--hk-font);
+  overflow: hidden;              /* clip the top accent seam + hover glow */
+  isolation: isolate;           /* glow paints under the content */
 }
-.hawk-modules .hk-modules__card:hover {
-  border-color: var(--hk-border-2);
-  box-shadow: var(--hk-shadow-hover);
+/* A hairline accent seam across the top of every card. */
+.hawk-modules .hk-modules__card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--hk-accent-line), transparent);
+  opacity: .6;
+}
+/* A soft radial that lights on hover (and always on the featured card). */
+.hawk-modules .hk-modules__glow {
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(70% 55% at 50% 0%, var(--hk-glow), transparent 72%);
+  opacity: 0;
+}
+.hawk-modules .hk-modules__card:hover { border-color: var(--hk-border-2); box-shadow: var(--hk-shadow-hover); }
+.hawk-modules .hk-modules__card:hover .hk-modules__glow { opacity: .55; }
+
+/* ---- Top rail: index · flag · badge --------------------------------- */
+.hawk-modules .hk-modules__rail {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+/* Big ghosted module number, 01/02/03. */
+.hawk-modules .hk-modules__index {
+  font-family: var(--hk-mono);
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.02em;
+  color: var(--hk-ink);
+  opacity: .14;
+  font-variant-numeric: tabular-nums;
+}
+/* Rounded accent chip holding the module icon, pushed to the rail end. */
+.hawk-modules .hk-modules__badge {
+  display: grid; place-items: center;
+  width: 50px; height: 50px;
+  margin-left: auto;
+  border-radius: 13px;
+  background: var(--hk-accent-soft);
+  color: var(--hk-accent-text);
+  border: 1px solid var(--hk-border);
+}
+.hawk-modules .hk-modules__badge svg { width: 26px; height: 26px; }
+
+/* "Most adopted" flag chip — only rendered on the featured card. */
+.hawk-modules .hk-modules__flag {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--hk-accent);
+  color: #fff;
+  font-family: var(--hk-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  box-shadow: 0 6px 16px rgba(12, 104, 255, .28);
 }
 
-/* Small uppercase accent label above the badge. */
+/* Small uppercase accent label. */
 .hawk-modules .hk-modules__tag {
   font-family: var(--hk-mono);
   font-size: 11px;
@@ -1209,37 +1288,30 @@
   color: var(--hk-accent-text);
 }
 
-/* Rounded accent chip holding the module icon. */
-.hawk-modules .hk-modules__badge {
-  display: grid; place-items: center;
-  width: 46px; height: 46px;
-  border-radius: 11px;
-  background: var(--hk-accent-soft);
-  color: var(--hk-accent-text);
-}
-.hawk-modules .hk-modules__badge svg { width: 25px; height: 25px; }
-
 .hawk-modules .hk-modules__card-title {
-  margin: 2px 0 0;
-  font-size: 21px;
+  margin: -2px 0 0;
+  font-size: clamp(20px, 1.7vw, 23px);
   font-weight: 700;
+  line-height: 1.2;
   color: var(--hk-ink);
 }
 .hawk-modules .hk-modules__desc {
   margin: 0;
   font-size: 15px;
-  line-height: 1.55;
+  line-height: 1.58;
   color: var(--hk-ink-2);
 }
 
-/* Bullet list: check glyph inline with each item. */
+/* Capability list: check glyph inline with each item, sealed off above by
+   a faint rule so it reads as a distinct "capabilities" block. */
 .hawk-modules .hk-modules__list {
   margin: 4px 0 0;
-  padding: 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--hk-rule);
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 11px;
   width: 100%;
 }
 .hawk-modules .hk-modules__li {
@@ -1260,8 +1332,76 @@
 }
 .hawk-modules .hk-modules__li-ico svg { width: 15px; height: 15px; }
 
+/* CTA pinned to the card foot — margin-top:auto drops it to the bottom so
+   all three line up regardless of description/list length. Ghost style,
+   matched to the hero's secondary button; it fills accent on hover. */
+.hawk-modules .hk-modules__cta {
+  margin-top: auto;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 13px 18px;
+  border-radius: 11px;
+  border: 1px solid #c9dafc;
+  background: #fff;
+  color: var(--hk-accent-text);
+  font-family: var(--hk-font);
+  font-size: 14.5px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.hawk-modules .hk-modules__cta svg { flex: none; width: 18px; height: 18px; }
+.hawk-modules .hk-modules__cta:hover {
+  background: var(--hk-accent);
+  border-color: var(--hk-accent);
+  color: #fff;
+  box-shadow: 0 12px 26px rgba(12, 104, 255, .28);
+}
+
+/* ---- Featured (middle) card: the focal panel ------------------------- */
+.hawk-modules .hk-modules__card--featured {
+  border-color: var(--hk-border-2);
+  box-shadow: var(--hk-shadow-hover);
+  background:
+    linear-gradient(180deg, var(--hk-accent-soft), transparent 180px),
+    var(--hk-panel);
+}
+.hawk-modules .hk-modules__card--featured::before { opacity: 1; height: 4px; }
+.hawk-modules .hk-modules__card--featured .hk-modules__glow { opacity: .5; }
+/* Filled badge + brighter index to pull the eye to the focal card. */
+.hawk-modules .hk-modules__card--featured .hk-modules__badge {
+  background: var(--hk-accent);
+  border-color: var(--hk-accent);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(12, 104, 255, .30);
+}
+.hawk-modules .hk-modules__card--featured .hk-modules__index { opacity: .22; }
+/* The primary CTA on the focal card is filled rather than ghost. */
+.hawk-modules .hk-modules__card--featured .hk-modules__cta {
+  background: var(--hk-accent);
+  border-color: var(--hk-accent);
+  color: #fff;
+  box-shadow: 0 10px 26px rgba(12, 104, 255, .28);
+}
+.hawk-modules .hk-modules__card--featured .hk-modules__cta:hover {
+  background: var(--hk-accent-hover);
+  border-color: var(--hk-accent-hover);
+  box-shadow: 0 16px 34px rgba(12, 104, 255, .32);
+}
+/* On wide screens the focal card sits a touch proud of its neighbours. */
+@media (min-width: 921px) {
+  .hawk-modules .hk-modules__card--featured { transform: translateY(-14px); }
+  /* …and grows to match, so its foot doesn't float above the others. */
+  .hawk-modules .hk-modules__card--featured { margin-bottom: -14px; }
+}
+
+/* ---- Responsive ------------------------------------------------------ */
 @media (max-width: 920px) {
   .hawk-modules .hk-modules__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* No raised focal card once it wraps — keep the row tidy. */
+  .hawk-modules .hk-modules__card--featured { transform: none; margin-bottom: 0; }
 }
 @media (max-width: 600px) {
   .hawk-modules .hk-modules__grid { grid-template-columns: minmax(0, 1fr); }
@@ -1269,23 +1409,31 @@
 
 @media (prefers-reduced-motion: no-preference) {
   /* Reveal/stagger — same opacity+rise, easing and --i delay as the other
-     card grids. */
+     card grids. The featured card's resting -14px lift is folded into both
+     states so the reveal settles there instead of snapping. */
   .hawk-modules .hk-modules.is-animated .hk-modules__card {
     opacity: 0;
     transform: translateY(20px);
     transition: opacity .55s ease,
                 transform .55s cubic-bezier(.22, 1, .36, 1),
                 border-color .2s ease, box-shadow .25s ease;
-    transition-delay: calc(var(--i, 0) * 60ms);
+    transition-delay: calc(var(--i, 0) * 70ms);
   }
   .hawk-modules .hk-modules.is-animated.is-visible .hk-modules__card {
     opacity: 1; transform: none;
   }
-  /* Subtle hover lift, mirroring the hero button's -2px translate. The
-     reveal transition above already carries this card's border/shadow
-     timing, so hover reuses it. */
+  /* Subtle hover lift, mirroring the hero button's translate. */
   .hawk-modules .hk-modules.is-animated.is-visible .hk-modules__card:hover {
     transform: translateY(-4px);
+  }
+  .hawk-modules .hk-modules__cta { transition: background .2s ease, border-color .2s ease, color .2s ease, box-shadow .25s ease; }
+  .hawk-modules .hk-modules__glow { transition: opacity .3s ease; }
+
+  @media (min-width: 921px) {
+    /* Keep the featured card's extra lift through both reveal states. */
+    .hawk-modules .hk-modules.is-animated .hk-modules__card--featured { transform: translateY(6px); }
+    .hawk-modules .hk-modules.is-animated.is-visible .hk-modules__card--featured { transform: translateY(-14px); }
+    .hawk-modules .hk-modules.is-animated.is-visible .hk-modules__card--featured:hover { transform: translateY(-18px); }
   }
 }
 
@@ -3295,5 +3443,164 @@ COMMENTED-OUT-ENRICH-END */
   12%  { opacity: 1; }
   88%  { opacity: 1; }
   100% { left: 100%; opacity: 0; }
+}
+
+/* =====================================================================
+   12. Why CybrHawk  —  .hawk-why  (prefix hk-why)
+   A left header "aside" (sticky on wide screens, carrying its own MOD tag,
+   H2, lead and a watermark hawk badge) beside a "reasons ledger": numbered
+   rows, each an accent icon tile + bold claim + proof line, on panel cards
+   that light on hover. Aside + ledger are a 2-column grid; the ledger is
+   itself two-up, collapsing to one column, then the whole thing stacks.
+   ===================================================================== */
+.hawk-why .hk-why__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
+  gap: clamp(32px, 4vw, 64px);
+  align-items: start;
+}
+
+/* ---- Left aside ------------------------------------------------------ */
+.hawk-why .hk-why__aside {
+  position: relative;
+}
+@media (min-width: 981px) {
+  /* Hold the header beside the ledger as the reasons scroll past. */
+  .hawk-why .hk-why__aside {
+    position: sticky;
+    top: clamp(24px, 6vh, 64px);
+  }
+}
+.hawk-why .hk-why__title {
+  margin: 18px 0 0;
+  font-size: clamp(26px, 3.4vw, 42px);
+  font-weight: 700;
+  line-height: 1.14;
+  letter-spacing: -.018em;
+  color: var(--hk-ink);
+}
+.hawk-why .hk-why__sub {
+  margin: 18px 0 0;
+  max-width: 44ch;
+  font-size: clamp(15px, 1.4vw, 17px);
+  line-height: 1.6;
+  color: var(--hk-ink-2);
+}
+/* A large, faint watermark hawk sealing the aside foot — decorative. */
+.hawk-why .hk-why__badge {
+  display: none;                 /* shown only where there's room, below */
+}
+@media (min-width: 981px) {
+  .hawk-why .hk-why__badge {
+    display: grid;
+    place-items: center;
+    width: 112px; height: 112px;
+    margin-top: clamp(28px, 4vw, 48px);
+    border-radius: 24px;
+    background: var(--hk-accent-soft);
+    border: 1px solid var(--hk-border);
+    color: var(--hk-accent);
+    box-shadow: var(--hk-shadow);
+  }
+  .hawk-why .hk-why__badge svg { width: 56px; height: 56px; }
+}
+
+/* ---- Reasons ledger -------------------------------------------------- */
+.hawk-why .hk-why__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(14px, 1.4vw, 18px);
+  margin: 0; padding: 0; list-style: none;
+}
+.hawk-why .hk-why__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: start;
+  column-gap: 16px;
+  row-gap: 6px;
+  padding: clamp(20px, 2vw, 26px);
+  border-radius: 16px;
+  border: 1px solid var(--hk-border);
+  background: var(--hk-panel);
+  box-shadow: var(--hk-shadow);
+  overflow: hidden;
+  isolation: isolate;
+}
+.hawk-why .hk-why__item:hover { border-color: var(--hk-border-2); box-shadow: var(--hk-shadow-hover); }
+/* Soft radial that lights the row on hover. */
+.hawk-why .hk-why__glow {
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(80% 70% at 18% 0%, var(--hk-glow), transparent 70%);
+  opacity: 0;
+}
+.hawk-why .hk-why__item:hover .hk-why__glow { opacity: .5; }
+
+/* Zero-padded mono index, ghosted. */
+.hawk-why .hk-why__idx {
+  grid-row: 1 / span 2;
+  font-family: var(--hk-mono);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--hk-ink);
+  opacity: .28;
+  font-variant-numeric: tabular-nums;
+  padding-top: 3px;
+}
+/* Accent icon tile. */
+.hawk-why .hk-why__tile {
+  grid-row: 1 / span 2;
+  display: grid; place-items: center;
+  width: 46px; height: 46px;
+  border-radius: 12px;
+  background: var(--hk-accent-soft);
+  border: 1px solid var(--hk-border);
+  color: var(--hk-accent-text);
+}
+.hawk-why .hk-why__tile svg { width: 24px; height: 24px; }
+.hawk-why .hk-why__copy { min-width: 0; }
+.hawk-why .hk-why__item-title {
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--hk-ink);
+}
+.hawk-why .hk-why__item-text {
+  display: block;
+  margin-top: 6px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--hk-ink-2);
+}
+
+/* ---- Responsive ------------------------------------------------------ */
+@media (max-width: 980px) {
+  /* Stack: header above a single-column ledger. */
+  .hawk-why .hk-why__grid { grid-template-columns: minmax(0, 1fr); gap: clamp(24px, 4vw, 36px); }
+  .hawk-why .hk-why__sub { max-width: 60ch; }
+}
+@media (max-width: 620px) {
+  .hawk-why .hk-why__list { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Reveal/stagger — same opacity+rise, easing and --i delay as the other
+     card grids. */
+  .hawk-why .hk-why.is-animated .hk-why__item {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .55s ease,
+                transform .55s cubic-bezier(.22, 1, .36, 1),
+                border-color .2s ease, box-shadow .25s ease;
+    transition-delay: calc(var(--i, 0) * 60ms);
+  }
+  .hawk-why .hk-why.is-animated.is-visible .hk-why__item { opacity: 1; transform: none; }
+  .hawk-why .hk-why.is-animated.is-visible .hk-why__item:hover { transform: translateY(-4px); }
+  .hawk-why .hk-why__glow { transition: opacity .3s ease; }
 }
 

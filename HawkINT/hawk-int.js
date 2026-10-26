@@ -884,8 +884,14 @@
       "program grows. Every module shares the same data lake, AI models " +
       "and analyst team.";
 
-    // Each module: small tag label, icon (shared ICONS), H3 title, a
-    // description and a bullet list.
+    // Each module: a zero-padded index, small tag label, icon (shared
+    // ICONS), H3 title, a description, a capability list and a CTA. One
+    // module may carry `featured:true` to be raised as the focal card
+    // (accent frame, filled badge, "Most adopted" flag) — like a pricing
+    // table's highlighted plan. The CTA renders as a bottom-pinned link;
+    // a card with no cta.label/href simply omits the button.
+    // TODO: confirm the per-module landing-page URLs with marketing — the
+    // hrefs below point at the contact page as a safe interim target.
     var MODULES = [
       {
         tag: "Cyber Threat Intelligence Platform",
@@ -904,12 +910,15 @@
           "Deep and dark web surveillance, including closed groups",
           "Ransomware group and leak-site tracking",
           "Proactive threat reports and actor profiles"
-        ]
+        ],
+        cta: { label: "Explore HawkINT CTI", href: "https://cybrhawk.com/contact/" }
       },
       {
         tag: "Intelligent Leak Monitoring",
         icon: "evidence",
         title: "HawkINT Leak Intelligence",
+        featured: true,
+        flag: "Most adopted",
         desc:
           "Know exactly what leaked, and where. Leak Intelligence gives you " +
           "early, evidence-grade visibility into exposed sensitive data - " +
@@ -923,7 +932,8 @@
           "Infostealer log and combolist analysis",
           "Corporate reputation monitoring",
           "Real-time exposure alerts with file-level evidence"
-        ]
+        ],
+        cta: { label: "Explore Leak Intelligence", href: "https://cybrhawk.com/contact/" }
       },
       {
         tag: "Compliance Platform",
@@ -942,7 +952,8 @@
           "Supports frameworks such as DORA, NIS2, PCI DSS 4.0, HIPAA, " +
             "SEC cyber disclosure rules and RBI/SEBI cyber resilience " +
             "guidelines"
-        ]
+        ],
+        cta: { label: "Explore Compliance Guard", href: "https://cybrhawk.com/contact/" }
       }
     ];
     var ANIMATE = true;
@@ -959,18 +970,45 @@
       );
     }
 
-    function cardHTML(m, i) {
+    // CTA: an accent arrow link pinned to the card foot. No label or href →
+    // no button (an empty/"#" link would only reload the page).
+    function ctaHTML(c) {
+      if (!c || !c.label || !c.href) return "";
       return (
-        '<li class="hk-modules__card" style="--i:' + i + '">' +
+        '<a class="hk-modules__cta" href="' + esc(c.href) + '">' +
+          "<span>" + esc(c.label) + "</span>" + icon("arrow") +
+        "</a>"
+      );
+    }
+
+    // A console "module panel": a top rail with a zero-padded index and the
+    // icon badge, the tag, H3, description, a divided capability list, and
+    // the bottom-pinned CTA. The featured module carries an extra flag chip
+    // and the --featured modifier that the stylesheet raises.
+    function cardHTML(m, i) {
+      var idx = ("0" + (i + 1)).slice(-2);
+      var flag = m.featured && m.flag
+        ? '<span class="hk-modules__flag">' + esc(m.flag) + "</span>"
+        : "";
+      return (
+        '<li class="hk-modules__card' +
+          (m.featured ? " hk-modules__card--featured" : "") +
+          '" style="--i:' + i + '">' +
+          '<span class="hk-modules__glow" aria-hidden="true"></span>' +
+          '<div class="hk-modules__rail">' +
+            '<span class="hk-modules__index" aria-hidden="true">' + idx + "</span>" +
+            flag +
+            '<span class="hk-modules__badge" aria-hidden="true">' +
+              icon(m.icon) +
+            "</span>" +
+          "</div>" +
           '<span class="hk-modules__tag">' + esc(m.tag) + "</span>" +
-          '<span class="hk-modules__badge" aria-hidden="true">' +
-            icon(m.icon) +
-          "</span>" +
           '<h3 class="hk-modules__card-title">' + esc(m.title) + "</h3>" +
           '<p class="hk-modules__desc">' + esc(m.desc) + "</p>" +
           '<ul class="hk-modules__list">' +
             m.bullets.map(bulletHTML).join("") +
           "</ul>" +
+          ctaHTML(m.cta) +
         "</li>"
       );
     }
@@ -2556,6 +2594,114 @@
       );
 
       var root = host.querySelector(".hk-int");
+      if (ANIMATE) reveal(root);
+      return true;
+    }
+
+    onReady(function () { waitForSection(build); });
+  })();
+
+  /* ===================================================================
+     12. Why CybrHawk  -  container .hawk-why  -  prefix hk-why
+     The page's trust/differentiators band: a left header panel (sticky on
+     wide screens) beside a "reasons ledger" - each reason is a numbered
+     row with an accent icon tile, a bold claim and a supporting line, so
+     the block reads like an operator's capability checklist rather than a
+     plain feature grid. Two-up on desktop, one column on phones.
+     =================================================================== */
+  (function () {
+    var SECTION = ".hawk-why";
+
+    /* ---- Content (edit freely) ---- */
+    var MOD = "WHY CYBRHAWK";
+    var TITLE = "Why Security Teams Choose HawkINT";
+    var SUB =
+      "Not another feed to triage. HawkINT pairs AI at scale with analyst " +
+      "tradecraft, then carries each finding through to action - inside one " +
+      "unified defense.";
+
+    // Each reason: icon (shared ICONS), the bold claim, and its proof line.
+    var REASONS = [
+      {
+        icon: "bot",
+        title: "Technology Plus Tradecraft",
+        text: "AI at scale, guided by experienced CTI analysts."
+      },
+      {
+        icon: "evidence",
+        title: "Evidence, Not Noise",
+        text: "Every wire comes with proof, context and a recommended action."
+      },
+      {
+        icon: "shield",
+        title: "From Detection to Takedown",
+        text: "One partner to find, investigate and remove threats."
+      },
+      {
+        icon: "chip",
+        title: "Part of a Unified Defense",
+        text: "Native links to CybrHawk SOC, SIEM, XDR and IR."
+      },
+      {
+        icon: "report",
+        title: "Built for Compliance",
+        text: "Reporting designed for auditors, regulators and boards."
+      },
+      {
+        icon: "pulse",
+        title: "Always On",
+        text: "24/7 monitoring and response."
+      }
+    ];
+    var ANIMATE = true;
+    /* -------------------------------- */
+
+    // A numbered reason row: zero-padded index, accent icon tile, claim +
+    // proof line, with a hover glow that lights the row (same idiom as the
+    // About OUTPUTS panel). All text via esc(); glyph from the shared set.
+    function reasonHTML(r, i) {
+      var idx = ("0" + (i + 1)).slice(-2);
+      return (
+        '<li class="hk-why__item" style="--i:' + i + '">' +
+          '<span class="hk-why__glow" aria-hidden="true"></span>' +
+          '<span class="hk-why__idx" aria-hidden="true">' + idx + "</span>" +
+          '<span class="hk-why__tile" aria-hidden="true">' + icon(r.icon) + "</span>" +
+          '<span class="hk-why__copy">' +
+            '<span class="hk-why__item-title">' + esc(r.title) + "</span>" +
+            '<span class="hk-why__item-text">' + esc(r.text) + "</span>" +
+          "</span>" +
+        "</li>"
+      );
+    }
+
+    function build() {
+      var host = hostFor(SECTION);
+      if (!host) return false;
+      if (host.querySelector(".hk-why")) return true;
+
+      host.insertAdjacentHTML(
+        "beforeend",
+        '<div class="hk-why' + (ANIMATE ? " is-animated" : "") + '">' +
+          '<div class="hk-why__grid">' +
+            '<div class="hk-why__aside">' +
+              '<p class="hk-why__mod">' +
+                '<span class="hk-why__tick" aria-hidden="true"></span>' +
+                "<span>" + esc(MOD) + "</span>" +
+              "</p>" +
+              '<h2 class="hk-why__title">' + esc(TITLE) + "</h2>" +
+              '<p class="hk-why__sub">' + esc(SUB) + "</p>" +
+              '<span class="hk-why__badge" aria-hidden="true">' +
+                icon("hawk") +
+              "</span>" +
+            "</div>" +
+            '<ul class="hk-why__list">' +
+              REASONS.map(reasonHTML).join("") +
+            "</ul>" +
+          "</div>" +
+        "</div>"
+      );
+
+      var root = host.querySelector(".hk-why");
       if (ANIMATE) reveal(root);
       return true;
     }
