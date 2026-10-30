@@ -793,7 +793,7 @@
 
 /* ============================================================
    Platform product tree (step 1c in mega-menu.js)
-   Hawk UCD → capabilities → pages. On desktop each level is a
+   UCD → capabilities → pages. On desktop each level is a
    row, and an item's children open as the next row below it; at
    ≤768px the tree is a nested accordion. Every colour, size,
    radius and timing is reused from the light theme above.
@@ -879,6 +879,11 @@
 /* Outranks the nested-link `padding-left: 20px` rule above (2 ids, 7 classes). */
 #mega-menu-wrap-main-menu #mega-menu-main-menu > li.mega-menu-megamenu > ul.mega-sub-menu.mega-platform-tree li.mega-menu-column > ul.mega-sub-menu > li.mega-menu-item li.mega-menu-item > a.mega-menu-link {
   padding-left: 10px !important;
+}
+
+/* A label with "Disable link" on (no href) doesn't navigate, so no link cursor. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root li > a.mega-menu-link:not([href]) {
+  cursor: default !important;
 }
 
 /* Room for the ☰ at the right end of an item that has children. */

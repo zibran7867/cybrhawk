@@ -66,7 +66,7 @@
        prefix, like positionIn(), so the order holds even if items are dragged
        around in wp-admin; anything unlisted follows in WordPress order.
        "identity threat detection" is ITDR's old WordPress label.          */
-    var PLATFORM_ORDER = ["hawk ucd", "hawkint", "hawkstrike", "hawkops"];
+    var PLATFORM_ORDER = ["unified cyber defense", "hawkint", "hawkstrike", "hawkops"];
     var UCD_ORDER = ["siem xdr", "siem ndr", "siem cloud", "incident response",
                      "itdr", "identity threat detection", "ot security monitoring"];
     var TREE_HOVER_DELAY = 120; // ms before hover moves the open path to a sibling
@@ -270,8 +270,9 @@
     });
 
     /* 1c. "The Platform" becomes a three-level product tree that opens on
-          hover: level 1 = Hawk UCD, HawkINT, HawkStrike, HawkOps; level 2 =
-          the capabilities under Hawk UCD; level 3 = each capability's pages.
+          hover: level 1 = Unified Cyber Defense (UCD), HawkINT, HawkStrike,
+          HawkOps; level 2 = their children (UCD's capabilities, HawkINT's and
+          HawkStrike's pages); level 3 = each capability's pages.
 
           WordPress stays the source of truth for labels, URLs and nesting,
           and the plugin's nested li > ul.mega-sub-menu markup is kept as-is
@@ -339,7 +340,8 @@
       $root.addClass("mega-tree-root");
       var root = $root[0];
 
-      // Level 2: Hawk UCD's capabilities, re-appended inside their own list.
+      // Level 2: UCD's capabilities (UCD is PLATFORM_ORDER[0]), re-appended
+      // inside their own list.
       var $ucd = $(items).filter(function () {
         return positionIn([PLATFORM_ORDER], treeLabel(this)).key === 0;
       }).first();
@@ -382,13 +384,13 @@
       }
 
       // Open an item's children and close any open sibling. A leaf only
-      // closes its siblings, so resting on HawkINT folds Hawk UCD away.
+      // closes its siblings, so resting on HawkOps folds UCD away.
       function openItem($li) {
         $li.siblings(".is-active").each(function () { closeItem($(this)); });
         if ($li.hasClass("mega-tree-parent") && !$li.hasClass("is-active")) setItem($li, true);
       }
 
-      // Default state: Hawk UCD open, nothing deeper, so the panel never
+      // Default state: UCD open, nothing deeper, so the panel never
       // opens on an empty second row.
       var $defaultItem = $ucd.hasClass("mega-tree-parent") ? $ucd : $root.children(".mega-tree-parent").first();
       function resetTree() {
@@ -432,7 +434,7 @@
       // away from an open sibling waits TREE_HOVER_DELAY, and only happens
       // if the pointer is still resting on that item: touching another item
       // (e.g. one in the open row below) or empty panel space cancels it.
-      // So a diagonal move from Hawk UCD down to OT Security Monitoring can
+      // So a diagonal move from UCD down to OT Security Monitoring can
       // cross HawkINT, HawkStrike and HawkOps without flipping the menu.
       var intentItem = null;
       var intentTimer = null;
@@ -460,16 +462,24 @@
         }, TREE_HOVER_DELAY);
       });
 
-      // The ☰ toggles; the label next to it stays a plain link. With a mouse,
+      // Open a closed item; close an open one unless `openOnly`.
+      function toggleItem($item, openOnly) {
+        cancelIntent();
+        if (!$item.hasClass("is-active")) openItem($item);
+        else if (!openOnly) closeItem($item);
+      }
+
+      // A label with Max Mega Menu's "Disable link" on has no href (e.g.
+      // HawkStrike): it doesn't navigate, so it works like its ☰.
+      var NO_LINK_LABEL = ".mega-tree-parent > a.mega-menu-link:not([href])";
+
+      // The ☰ toggles; a label with a link stays a plain link. With a mouse,
       // hover has already opened the item by the time the click lands, so a
       // mouse click only opens: toggling would close the very list the
       // visitor is reaching for. Keyboard clicks (detail 0) and taps toggle.
-      $wrap.on("click.megaPlatform", ".mega-platform-tree .mega-tree-toggle", function (e) {
+      $wrap.on("click.megaPlatform", ".mega-platform-tree .mega-tree-toggle, .mega-platform-tree " + NO_LINK_LABEL, function (e) {
         e.preventDefault();
-        cancelIntent();
-        var $item = $(this).parent();
-        if (!$item.hasClass("is-active")) openItem($item);
-        else if (!(e.detail && hoverMode())) closeItem($item);
+        toggleItem($(this).parent(), !!(e.detail && hoverMode()));
       });
 
       // Keyboard focus entering an item opens it, like hover. Focus from a
@@ -496,6 +506,12 @@
       // plugin from also closing the whole panel. With nothing open in the
       // tree, Escape falls through to the plugin as before.
       $wrap.on("keydown.megaPlatform", ".mega-platform-tree a, .mega-platform-tree .mega-tree-toggle", function (e) {
+        // A label without a link gets no native Enter/Space activation.
+        if ((e.key === "Enter" || e.key === " " || e.key === "Spacebar") && $(this).is(NO_LINK_LABEL)) {
+          e.preventDefault();
+          toggleItem($(this).parent(), false);
+          return;
+        }
         if (e.key !== "Escape" && e.key !== "Esc") return;
         var $open = $root.find("ul.mega-sub-menu").not("[hidden]").last();
         if (!$open.length) return;
