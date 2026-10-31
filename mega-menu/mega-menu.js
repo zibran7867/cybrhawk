@@ -62,14 +62,14 @@
     if (!$wrap.length || $wrap.data("megaInit")) return;
     $wrap.data("megaInit", true);
 
-    /* Platform tree config (step 1c). Labels are normalised and matched by
+    /* Platform panel config (step 1c). Labels are normalised and matched by
        prefix, like positionIn(), so the order holds even if items are dragged
        around in wp-admin; anything unlisted follows in WordPress order.
+       PLATFORM_ORDER is the column order; UCD_ORDER the order of UCD's items.
        "identity threat detection" is ITDR's old WordPress label.          */
     var PLATFORM_ORDER = ["unified cyber defense", "hawkint", "hawkstrike", "hawkops"];
     var UCD_ORDER = ["siem xdr", "siem ndr", "siem cloud", "incident response",
                      "itdr", "identity threat detection", "ot security monitoring"];
-    var TREE_HOVER_DELAY = 120; // ms before hover moves the open path to a sibling
 
     /* 0. Re-tag block titles: Max Mega Menu prints them as <h4>, which injects
           nav labels into the page's heading outline. Swap the element for a <p>
@@ -123,10 +123,10 @@
               columns (~4 max) so any panel — Solutions, Services, future
               menus — comes out balanced without hard-coding.
 
-          "The Platform" is skipped here and built as a product tree in 1c.
-          It has no entry in PANEL_LAYOUTS on purpose: its old keys (hawkint,
-          hawkstrike, hawkops) would still match the new level 1 and force
-          the flat 3-column grid back onto the tree.                         */
+          "The Platform" is skipped here and built in 1c: it needs one column
+          per product plus ☰ accordions, which a PANEL_LAYOUTS entry can't
+          express (an unlisted product would land under UCD, not in a
+          column of its own).                                                */
     var PANEL_LAYOUTS = [
       // "Solutions" — explicit 4-column arrangement.
       [
@@ -201,6 +201,23 @@
       return { sections: sections, $blockTitle: $blockTitle };
     }
 
+    // Replace a panel's rows with one row holding a column per bucket (each
+    // a list of section items). The block title, if given, heads column 1.
+    // Shared by 1b and 1c.
+    function buildColumns($rows, buckets, $blockTitle) {
+      var $grid = $("<ul class='mega-sub-menu' role='presentation'></ul>");
+      for (var col = 0; col < buckets.length; col++) {
+        var $colLi = $("<li class='mega-menu-column mega-menu-columns-3-of-12'></li>");
+        var $inner = $("<ul class='mega-sub-menu'></ul>");
+        if (col === 0 && $blockTitle) $inner.append($blockTitle);
+        for (var j = 0; j < buckets[col].length; j++) $inner.append(buckets[col][j]);
+        $colLi.append($inner);
+        $grid.append($colLi);
+      }
+      $rows.first().empty().append($grid);
+      $rows.slice(1).remove();
+    }
+
     // The top-level "The Platform" item, found by its label, not its position.
     function isPlatformItem($li) {
       var label = norm($li.children("a.mega-menu-link").first().text());
@@ -253,35 +270,26 @@
         buckets = buckets.filter(function (arr) { return arr.length; });
       }
 
-      // Build the fresh grid.
-      var $grid = $("<ul class='mega-sub-menu' role='presentation'></ul>");
-      for (var col = 0; col < buckets.length; col++) {
-        var $colLi = $("<li class='mega-menu-column mega-menu-columns-3-of-12'></li>");
-        var $inner = $("<ul class='mega-sub-menu'></ul>");
-        if (col === 0 && $blockTitle) $inner.append($blockTitle);
-        for (var j = 0; j < buckets[col].length; j++) $inner.append(buckets[col][j]);
-        $colLi.append($inner);
-        $grid.append($colLi);
-      }
-
       // Replace all rows with a single rebuilt row.
-      $rows.first().empty().append($grid);
-      $rows.slice(1).remove();
+      buildColumns($rows, buckets, $blockTitle);
     });
 
-    /* 1c. "The Platform" becomes a three-level product tree that opens on
-          hover: level 1 = Unified Cyber Defense (UCD), HawkINT, HawkStrike,
-          HawkOps; level 2 = their children (UCD's capabilities, HawkINT's and
-          HawkStrike's pages); level 3 = each capability's pages.
+    /* 1c. "The Platform" is laid out like the other panels: one column per
+          product (Unified Cyber Defense (UCD), HawkINT, HawkStrike, HawkOps),
+          each a heading with its items listed beneath it. An item that has
+          pages of its own (UCD's capabilities) gets a ☰ button that opens
+          those pages as an accordion right under it.
 
           WordPress stays the source of truth for labels, URLs and nesting,
           and the plugin's nested li > ul.mega-sub-menu markup is kept as-is
-          so tab order follows the tree. We only gather the level-1 items into
-          one list, re-append items to enforce PLATFORM_ORDER / UCD_ORDER, add
-          a ☰ button after every label that has children, and toggle
-          `is-active` on items / `hidden` on lists. CSS lays each level out
-          as a row and opens an item's children as the next row below it, or
-          as an accordion at ≤768px.
+          so tab order follows the tree. We only give each product its own
+          column, re-append items to enforce PLATFORM_ORDER / UCD_ORDER, add
+          a ☰ button after every label below a product that has children,
+          and toggle `is-active` on items / `hidden` on lists.
+
+          The ☰ opens on click, not hover: an accordion pushes the items
+          below it down, so opening on hover would slide the next item out
+          from under the pointer and open whatever slid in.
 
           Handlers are delegated from $wrap rather than the panel: the plugin
           initialises after this script and, with "Unbind JavaScript events"
@@ -318,30 +326,17 @@
       var found = collectSections($rows);
       if (!found.sections.length) return;
 
-      // The first section's own list becomes the tree root. Every other
-      // level-1 item moves into it (the plugin scatters them over columns
-      // and rows), then the spare columns and rows go. Keeping one
-      // .mega-menu-column means step 2 still sizes the row instead of
-      // hiding it.
-      var $root = found.sections[0].parent();
-      var $column = $root.parent();
-      var $row = $column.closest(".mega-menu-row");
+      // One column per product, in PLATFORM_ORDER. The block title leaves
+      // column 1 and sits above all of them, so every product heading
+      // starts on the same line (and 2b adds no spacer captions).
+      var $title = found.$blockTitle ? found.$blockTitle.children(".mega-block-title").detach() : $();
       var items = orderByKeys($.map(found.sections, function ($i) { return $i[0]; }), PLATFORM_ORDER);
-      $root.append(items);
-
-      // The block title sits above the root list, not inside it, so the
-      // root holds only the products and lays out as a single row.
-      if (found.$blockTitle) $column.prepend(found.$blockTitle.children(".mega-block-title"));
-      $root.children().not(items).remove();
-      $column.siblings().remove();
-      $rows.not($row).remove();
-
+      buildColumns($rows, items.map(function (li) { return [li]; }), null);
+      $rows.first().prepend($title);
       $panel.addClass("mega-platform-tree");
-      $root.addClass("mega-tree-root");
-      var root = $root[0];
 
-      // Level 2: UCD's capabilities (UCD is PLATFORM_ORDER[0]), re-appended
-      // inside their own list.
+      // UCD's capabilities (UCD is PLATFORM_ORDER[0]), re-appended inside
+      // their own list.
       var $ucd = $(items).filter(function () {
         return positionIn([PLATFORM_ORDER], treeLabel(this)).key === 0;
       }).first();
@@ -349,9 +344,10 @@
       $ucdList.append(orderByKeys($ucdList.children("li").get(), UCD_ORDER));
 
       // A ☰ button right after every label whose list has items, so it
-      // follows the label in tab order. Leaves get nothing.
+      // follows the label in tab order. Products are skipped: they are
+      // column headings whose items always show. Leaves get nothing.
       var listCount = 0;
-      $root.find("li").each(function () {
+      $(items).find("li").each(function () {
         var $li = $(this);
         var $a = $li.children("a.mega-menu-link").first();
         var $list = $li.children("ul.mega-sub-menu").first();
@@ -366,9 +362,41 @@
           TREE_HAMBURGER + '</button>');
       });
 
-      function setItem($li, open) {
+      // Slide a list open or shut by setting its height; the transition
+      // itself lives in the CSS. It starts from the list's current height,
+      // so a click mid-slide reverses smoothly instead of jumping, and the
+      // slide ends after the CSS duration (read back, so the reduced-motion
+      // rule shortens it too). `hidden` goes back on only once a closing
+      // slide has finished.
+      function slide(list, open) {
+        var $list = $(list);
+        clearTimeout($list.data("megaSlide"));
+        var from = list.hasAttribute("hidden") ? 0 : list.getBoundingClientRect().height;
+        $list.removeAttr("hidden").addClass("is-sliding");
+        var to = open ? list.scrollHeight : 0;
+        list.style.height = from + "px";
+        list.getBoundingClientRect(); // commit the start height before the transition
+        list.style.height = to + "px";
+        var ms = parseFloat(window.getComputedStyle(list).transitionDuration) * 1000 || 0;
+        $list.data("megaSlide", setTimeout(function () {
+          $list.removeClass("is-sliding");
+          list.style.height = "";
+          if (!open) $list.attr("hidden", "");
+        }, ms));
+      }
+
+      // Open or close one item, sliding its list when `animate` is set.
+      // The slide runs before `is-active` changes, so an opening list is
+      // laid out at opacity 0 first and the CSS fade-in has a start point.
+      function setItem($li, open, animate) {
+        var $list = $li.children("ul.mega-sub-menu").first();
+        if (animate) {
+          slide($list[0], open);
+        } else {
+          clearTimeout($list.data("megaSlide"));
+          $list.removeClass("is-sliding").css("height", "").attr("hidden", open ? null : "");
+        }
         $li.toggleClass("is-active", open);
-        $li.children("ul.mega-sub-menu").first().attr("hidden", open ? null : "");
         $li.children(".mega-tree-toggle").attr({
           "aria-expanded": open ? "true" : "false",
           // .attr() stores the raw string, so no escapeAttr() here.
@@ -376,159 +404,68 @@
         });
       }
 
-      // Close an item and everything open beneath it.
-      function closeItem($li) {
-        $li.find(".is-active").addBack(".is-active").each(function () {
-          setItem($(this), false);
-        });
+      // Close an item and everything open beneath it. Only the item itself
+      // slides; whatever is open inside it folds away within that slide.
+      function closeItem($li, animate) {
+        if ($li.hasClass("is-active")) setItem($li, false, animate);
+        $li.find(".is-active").each(function () { setItem($(this), false, false); });
       }
 
-      // Open an item's children and close any open sibling. A leaf only
-      // closes its siblings, so resting on HawkOps folds UCD away.
-      function openItem($li) {
-        $li.siblings(".is-active").each(function () { closeItem($(this)); });
-        if ($li.hasClass("mega-tree-parent") && !$li.hasClass("is-active")) setItem($li, true);
-      }
-
-      // Default state: UCD open, nothing deeper, so the panel never
-      // opens on an empty second row.
-      var $defaultItem = $ucd.hasClass("mega-tree-parent") ? $ucd : $root.children(".mega-tree-parent").first();
-      function resetTree() {
-        cancelIntent();
-        $root.children(".is-active").each(function () { closeItem($(this)); });
-        if ($defaultItem.length) setItem($defaultItem, true);
-      }
-
-      var MOBILE_MQ = window.matchMedia ? window.matchMedia("(max-width: 768px)") : null;
-      var HOVER_MQ = window.matchMedia ? window.matchMedia("(hover: hover) and (pointer: fine)") : null;
-      // Rows opened by a mouse (not touch, not the accordion).
-      function hoverMode() {
-        return !!(HOVER_MQ && HOVER_MQ.matches && !MOBILE_MQ.matches);
-      }
-
-      // Rows 2 and 3 open below the root row, out of flow, so reserve room
-      // under it once for the deepest list in the tree: opening a row then
-      // never changes the panel's height. offsetTop (not a bounding rect) so
-      // the reveal animation's transform can't skew it. A closed desktop
-      // panel is visibility:hidden but still laid out, so this works at
-      // build time; if nothing is laid out yet the next open retries.
-      function fitTreeHeight() {
-        if ((MOBILE_MQ && MOBILE_MQ.matches) || !root.offsetWidth) return;
-        var $closed = $root.find("ul.mega-sub-menu[hidden]").removeAttr("hidden");
-        var reserve = 0;
-        $root.find("ul.mega-sub-menu").each(function () {
-          var top = 0;
-          for (var el = this; el && el !== root; el = el.offsetParent) top += el.offsetTop;
-          reserve = Math.max(reserve, top + this.offsetHeight - root.offsetHeight);
-        });
-        $closed.attr("hidden", "");
-        root.style.setProperty("--mega-tree-reserve", reserve + "px");
-      }
-
-      // The innermost tree item containing `el`, or null outside the tree.
-      function itemOf(el) {
-        return $.contains(root, el) ? $(el).closest("li", root)[0] || null : null;
-      }
-
-      // Hover intent. An item with no open sibling opens at once. Switching
-      // away from an open sibling waits TREE_HOVER_DELAY, and only happens
-      // if the pointer is still resting on that item: touching another item
-      // (e.g. one in the open row below) or empty panel space cancels it.
-      // So a diagonal move from UCD down to OT Security Monitoring can
-      // cross HawkINT, HawkStrike and HawkOps without flipping the menu.
-      var intentItem = null;
-      var intentTimer = null;
-      function cancelIntent() {
-        clearTimeout(intentTimer);
-        intentItem = null;
-      }
-
-      $wrap.on("mouseover.megaPlatform", ".mega-platform-tree", function (e) {
-        if (!hoverMode()) return;
-        var item = itemOf(e.target);
-        if (item && item === intentItem) return;
-        cancelIntent();
-        if (!item) return;
-        var $item = $(item);
-        if ($item.hasClass("is-active")) return;
-        if (!$item.siblings(".is-active").length) {
-          openItem($item);
+      // Accordion: opening an item closes any open sibling, and the two
+      // slide at once.
+      function toggleItem($li) {
+        if ($li.hasClass("is-active")) {
+          closeItem($li, true);
           return;
         }
-        intentItem = item;
-        intentTimer = setTimeout(function () {
-          intentItem = null;
-          openItem($item);
-        }, TREE_HOVER_DELAY);
-      });
-
-      // Open a closed item; close an open one unless `openOnly`.
-      function toggleItem($item, openOnly) {
-        cancelIntent();
-        if (!$item.hasClass("is-active")) openItem($item);
-        else if (!openOnly) closeItem($item);
+        $li.siblings(".is-active").each(function () { closeItem($(this), true); });
+        setItem($li, true, true);
       }
 
-      // A label with Max Mega Menu's "Disable link" on has no href (e.g.
-      // HawkStrike): it doesn't navigate, so it works like its ☰.
+      // Default state: everything folded, so each column shows just its
+      // product's items. The panel is already closed, so no slide.
+      function resetTree() {
+        $panel.find(".mega-tree-parent.is-active").each(function () {
+          setItem($(this), false, false);
+        });
+      }
+
+      // A label with Max Mega Menu's "Disable link" on has no href: it
+      // doesn't navigate, so it works like its ☰.
       var NO_LINK_LABEL = ".mega-tree-parent > a.mega-menu-link:not([href])";
 
-      // The ☰ toggles; a label with a link stays a plain link. With a mouse,
-      // hover has already opened the item by the time the click lands, so a
-      // mouse click only opens: toggling would close the very list the
-      // visitor is reaching for. Keyboard clicks (detail 0) and taps toggle.
+      // The ☰ toggles; a label with a link stays a plain link.
       $wrap.on("click.megaPlatform", ".mega-platform-tree .mega-tree-toggle, .mega-platform-tree " + NO_LINK_LABEL, function (e) {
         e.preventDefault();
-        toggleItem($(this).parent(), !!(e.detail && hoverMode()));
+        toggleItem($(this).parent());
       });
 
-      // Keyboard focus entering an item opens it, like hover. Focus from a
-      // click or tap is ignored (the click that follows toggles, and the two
-      // would cancel out), as is focus moving within one item, so a list
-      // closed with Escape stays closed while focus sits on its button.
-      var pointerFocus = false;
-      var quietFocus = false;
-      $wrap.on("mousedown.megaPlatform", ".mega-platform-tree", function () {
-        pointerFocus = true;
-        setTimeout(function () { pointerFocus = false; }, 0);
-      });
-      $wrap.on("focusin.megaPlatform", ".mega-platform-tree", function (e) {
-        if (pointerFocus || quietFocus) return;
-        var item = itemOf(e.target);
-        if (!item || (e.relatedTarget && $.contains(item, e.relatedTarget))) return;
-        cancelIntent();
-        openItem($(item));
-      });
-
-      // Escape closes the deepest open list and returns focus to its button.
-      // Matching the focused element itself (as the plugin's own keydown
-      // does) and binding first lets stopImmediatePropagation() keep the
-      // plugin from also closing the whole panel. With nothing open in the
-      // tree, Escape falls through to the plugin as before.
+      // Escape closes the open item focus is in (on its label or ☰, or
+      // inside its pages) and returns focus to its ☰. Matching the focused
+      // element itself (as the plugin's own keydown does) and binding first
+      // lets stopImmediatePropagation() keep the plugin from also closing
+      // the whole panel. Anywhere else, Escape falls through to the plugin.
       $wrap.on("keydown.megaPlatform", ".mega-platform-tree a, .mega-platform-tree .mega-tree-toggle", function (e) {
         // A label without a link gets no native Enter/Space activation.
         if ((e.key === "Enter" || e.key === " " || e.key === "Spacebar") && $(this).is(NO_LINK_LABEL)) {
           e.preventDefault();
-          toggleItem($(this).parent(), false);
+          toggleItem($(this).parent());
           return;
         }
         if (e.key !== "Escape" && e.key !== "Esc") return;
-        var $open = $root.find("ul.mega-sub-menu").not("[hidden]").last();
-        if (!$open.length) return;
+        var $item = $(this).closest(".mega-tree-parent.is-active");
+        if (!$item.length) return;
         e.preventDefault();
         e.stopImmediatePropagation();
-        var $item = $open.parent();
-        closeItem($item);
+        closeItem($item, true);
         var button = $item.children(".mega-tree-toggle")[0];
-        quietFocus = true;
         if (button) button.focus();
-        quietFocus = false;
       });
 
       // Back to the default state whenever the panel closes: the plugin
       // drops `mega-toggle-on`, or the pointer leaves the top-level item.
       // The reset waits out the plugin's close effect so the panel doesn't
-      // visibly snap back while it fades; reopening first resets at once.
+      // visibly fold while it fades; reopening first resets at once.
       var top = $top[0];
       var closeDelay = parseInt($top.parent().attr("data-effect-speed"), 10) || 0;
       var resetTimer = null;
@@ -536,16 +473,16 @@
         clearTimeout(resetTimer);
         resetTimer = setTimeout(function () {
           resetTimer = null;
+          // The pointer came back before the plugin closed the panel.
+          if ($top.hasClass("mega-toggle-on")) return;
           resetTree();
         }, closeDelay);
       }
       function panelOpened() {
-        if (resetTimer) {
-          clearTimeout(resetTimer);
-          resetTimer = null;
-          resetTree();
-        }
-        fitTreeHeight();
+        if (!resetTimer) return;
+        clearTimeout(resetTimer);
+        resetTimer = null;
+        resetTree();
       }
 
       $wrap.on("mouseleave.megaPlatform", "li.mega-menu-megamenu", function () {
@@ -564,11 +501,6 @@
           else scheduleReset();
         }).observe(top, { attributes: true, attributeFilter: ["class"] });
       }
-
-      resetTree();
-      fitTreeHeight();
-      $(window).on("resize.megaPlatform load.megaPlatform", fitTreeHeight);
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitTreeHeight);
     });
 
     /* 2. Tag each row with its column count for the grid template */

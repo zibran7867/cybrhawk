@@ -792,121 +792,128 @@
 
 
 /* ============================================================
-   Platform product tree (step 1c in mega-menu.js)
-   UCD → capabilities → pages. On desktop each level is a
-   row, and an item's children open as the next row below it; at
-   ≤768px the tree is a nested accordion. Every colour, size,
-   radius and timing is reused from the light theme above.
+   Platform panel (step 1c in mega-menu.js)
+   Laid out like the other panels: one column per product (UCD,
+   HawkINT, HawkStrike, HawkOps), each a heading with its items
+   listed beneath. An item with pages of its own (UCD's
+   capabilities) has a ☰ that opens them as an accordion under it.
+   Colours, radii and timings are reused from the light theme above.
    Selectors include #mega-menu-main-menu so they outrank the 1-id
    rules above; the one 2-id rule they would still lose to
    (nested-link padding-left) has its own override.
    ============================================================ */
 
-/* Row 1 is the root list. Every li stays static, so each nested list
-   is positioned against the list it sits in: it opens below that
-   whole row at full width, not under its parent item. Rows 2 and 3
-   are out of flow, so JS reserves room for the deepest one once
-   (--mega-tree-reserve) and the panel never changes height. */
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root {
-  position: relative !important;
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 4px !important;
-  margin: 0 0 var(--mega-tree-reserve, 0px) -10px !important;
-}
-
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root li {
-  position: static !important;
-  display: flex !important;
-  align-items: stretch !important;
-  float: none !important;
-  width: auto !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-/* Rows 2 and 3. */
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root ul.mega-sub-menu {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 4px !important;
-  position: absolute !important;
-  top: 100% !important;
-  left: 0 !important;
-  right: 0 !important;
-  width: auto !important;
-  margin: 10px 0 0 !important;
-  padding: 10px 0 0 !important;
-  border-top: 1px solid rgba(15, 23, 42, 0.10) !important;
-  background: transparent !important;
-  list-style: none !important;
-  /* Not !important, so the reduced-motion rule above still wins. */
-  animation: megaTreeRowIn 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root ul.mega-sub-menu[hidden] {
-  display: none !important;
-}
-
-/* Items. No translateX nudge here: an active item stays put. */
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root li > a.mega-menu-link {
-  flex: 0 1 auto !important;
-  min-width: 0 !important;
-  margin: 0 !important;
-  border-radius: 8px !important;
-  background: transparent !important;
+/* No translateX hover nudge in this panel: the ☰ sits beside its
+   label, not in it, and an open item shouldn't stay shifted. A label
+   that wraps splits evenly rather than leaving one word on a line. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree a.mega-menu-link {
   transform: none !important;
+  text-wrap: balance;
 }
 
-/* Level 1: the section-heading style. */
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root > li > a.mega-menu-link {
-  padding: 8px 10px !important;
-  font-size: 14px !important;
-  font-weight: 700 !important;
-  line-height: 1.35 !important;
+/* A product with "Disable link" on (no href, e.g. HawkStrike) is a
+   plain heading: no link cursor and no hover, since it goes nowhere. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-menu-column > .mega-sub-menu > .mega-menu-item > a.mega-menu-link:not([href]) {
+  cursor: default !important;
+  background: transparent !important;
   color: #0f172a !important;
 }
 
-/* Levels 2 and 3: the link style. */
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root ul li > a.mega-menu-link {
-  padding: 7px 10px !important;
-  font-size: 13.5px !important;
-  font-weight: 500 !important;
-  line-height: 1.4 !important;
-  color: #475569 !important;
+/* An item with pages: label and ☰ on one line, its pages beneath. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
 }
 
-/* Outranks the nested-link `padding-left: 20px` rule above (2 ids, 7 classes). */
-#mega-menu-wrap-main-menu #mega-menu-main-menu > li.mega-menu-megamenu > ul.mega-sub-menu.mega-platform-tree li.mega-menu-column > ul.mega-sub-menu > li.mega-menu-item li.mega-menu-item > a.mega-menu-link {
-  padding-left: 10px !important;
-}
-
-/* A label with "Disable link" on (no href) doesn't navigate, so no link cursor. */
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root li > a.mega-menu-link:not([href]) {
-  cursor: default !important;
-}
-
-/* Room for the ☰ at the right end of an item that has children. */
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root li.mega-tree-parent > a.mega-menu-link {
+/* 0% basis: a long label wraps instead of pushing its ☰ onto a new
+   line. The right padding leaves room for the ☰. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent > a.mega-menu-link {
+  flex: 1 1 0% !important;
+  min-width: 0 !important;
   padding-right: 38px !important;
 }
 
-/* Hover and active look the same, so the open path stays lit. */
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root > li:hover > a.mega-menu-link,
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root > li.is-active > a.mega-menu-link {
-  background: rgba(2, 132, 199, 0.08) !important;
-  color: #0369a1 !important;
-}
-
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root ul li:hover > a.mega-menu-link,
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root ul li.is-active > a.mega-menu-link {
+/* Hover and open look the same, so the open item stays lit. A
+   closed item's pages are display:none, so li:hover is the row. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent:hover > a.mega-menu-link,
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent.is-active > a.mega-menu-link {
   background: rgba(2, 132, 199, 0.08) !important;
   color: #0f172a !important;
 }
 
-/* The ☰ button overlaps the right end of its label link, so the item's
+/* An item's pages hang off a guide line that starts under the
+   item's text, so the hierarchy reads at a glance. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent > ul.mega-sub-menu {
+  display: block !important;
+  flex: 0 0 100% !important;
+  position: static !important;
+  width: auto !important;
+  margin: 0 0 0 10px !important;
+  padding: 0 0 0 4px !important;
+  border-left: 1px solid rgba(15, 23, 42, 0.10) !important;
+  background: transparent !important;
+  list-style: none !important;
+  /* !important: the plugin sets opacity: 1 on nested lists at higher
+     specificity. */
+  opacity: 0 !important;
+  /* JS slides the height (slide() in mega-menu.js) and reads the first
+     duration here to know when a slide ends, so keep height first. Not
+     !important, so the reduced-motion rule above still shortens it. */
+  transition: height 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
+}
+
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent > ul.mega-sub-menu[hidden] {
+  display: none !important;
+}
+
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent.is-active > ul.mega-sub-menu {
+  opacity: 1 !important;
+}
+
+/* Clip only while the list moves, so focus rings and hover backgrounds
+   aren't cut off once it's open. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent > ul.mega-sub-menu.is-sliding {
+  overflow: hidden !important;
+}
+
+/* The pages settle down into place as the list opens. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent > ul.mega-sub-menu > li {
+  transform: translateY(-6px);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent.is-active > ul.mega-sub-menu > li {
+  transform: none;
+}
+
+/* The gap above and below the pages lives inside the list (not in its
+   margins), so it opens and closes with the slide instead of popping. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent > ul.mega-sub-menu > li:first-child {
+  padding-top: 2px !important;
+}
+
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent > ul.mega-sub-menu > li:last-child {
+  padding-bottom: 6px !important;
+}
+
+/* The pages: one step quieter than the items above them. Long enough
+   to outrank the nested-link `padding-left: 20px` rule above. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu > li.mega-menu-megamenu > ul.mega-sub-menu.mega-platform-tree li.mega-menu-column > ul.mega-sub-menu > li.mega-menu-item li.mega-menu-item li.mega-menu-item > a.mega-menu-link {
+  margin: 0 -10px 0 0 !important;
+  padding: 6px 10px !important;
+  font-size: 13px !important;
+  color: #64748b !important;
+}
+
+#mega-menu-wrap-main-menu #mega-menu-main-menu > li.mega-menu-megamenu > ul.mega-sub-menu.mega-platform-tree li.mega-menu-column > ul.mega-sub-menu > li.mega-menu-item li.mega-menu-item li.mega-menu-item > a.mega-menu-link:hover {
+  background: rgba(2, 132, 199, 0.07) !important;
+  color: #0f172a !important;
+}
+
+/* The ☰ button overlaps the right end of its label link, so the row's
    hover background runs underneath it. Its negative left margin equals
-   its width plus the right margin, so it takes no room in the item.
+   its width plus the right margin, so it takes no room in the row.
    position: relative paints it above the (also relative) link. */
 #mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-toggle {
   position: relative !important;
@@ -929,7 +936,7 @@
   opacity: 0.65 !important;
   line-height: 0 !important;
   cursor: pointer !important;
-  transition: opacity 0.2s ease, color 0.2s ease;
+  transition: opacity 0.2s ease, color 0.2s ease, background 0.2s ease;
 }
 
 #mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-toggle svg {
@@ -939,47 +946,38 @@
   pointer-events: none !important;
 }
 
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root > li > .mega-tree-toggle {
-  color: #0f172a !important;
-}
-
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root > li:hover > .mega-tree-toggle,
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root > li.is-active > .mega-tree-toggle {
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent:hover > .mega-tree-toggle,
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent.is-active > .mega-tree-toggle {
   color: #0369a1 !important;
   opacity: 1 !important;
 }
 
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root ul li:hover > .mega-tree-toggle,
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root ul li.is-active > .mega-tree-toggle {
-  color: #0f172a !important;
-  opacity: 1 !important;
+/* The ☰ toggles and the label navigates, so the ☰ marks itself out as
+   its own target under the pointer. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-toggle:hover {
+  background: rgba(2, 132, 199, 0.10) !important;
 }
 
-#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root a.mega-menu-link:focus-visible,
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree a.mega-menu-link:focus-visible,
 #mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-toggle:focus-visible {
   outline: 3px solid rgba(12, 104, 255, 0.4) !important;
   outline-offset: 3px !important;
   opacity: 1 !important;
 }
 
-@keyframes megaTreeRowIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to   { opacity: 1; transform: translateY(0);    }
-}
-
-/* Touch and the mobile accordion: 44px ☰ targets. */
+/* Touch and the mobile menu: 44px ☰ targets. */
 @media (hover: none), (pointer: coarse), (max-width: 768px) {
   #mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-toggle {
     width: 44px !important;
     height: 44px !important;
     margin: 0 10px 0 -54px !important;
   }
-  #mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root li.mega-tree-parent > a.mega-menu-link {
+  #mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent > a.mega-menu-link {
     padding-right: 54px !important;
   }
 }
 
-/* ≤768px: back to static flow as a nested accordion, 12px per level.
+/* ≤768px: the products stack into one column, with 44px rows.
    The full-bleed panel rules above have no breakpoint, so in the
    plugin's 300px off-canvas menu the panel would be viewport-wide and
    clip the ☰ buttons; this panel returns to the plugin's own static
@@ -991,27 +989,7 @@
     width: auto !important;
     transform: none !important;
   }
-  #mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root {
-    display: block !important;
-    margin-bottom: 0 !important;
-  }
-  #mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root li {
-    flex-wrap: wrap !important;
-  }
-  #mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root > li {
-    margin-bottom: 4px !important;
-  }
-  #mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root ul.mega-sub-menu {
-    display: block !important;
-    position: static !important;
-    flex: 0 0 100% !important;
-    margin: 0 !important;
-    padding: 0 0 0 12px !important;
-    border-top: 0 !important;
-  }
-  /* 0% basis: a long label must not push its ☰ onto a new line. */
-  #mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-root li > a.mega-menu-link {
-    flex: 1 1 0% !important;
+  #mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree a.mega-menu-link {
     min-height: 44px !important;
   }
 }
