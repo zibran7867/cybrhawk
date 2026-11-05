@@ -35,7 +35,10 @@
 
   // One container class per section. "" skips that section.
   var SECTIONS = {
-    banner: ".ir-banner",
+    // Emergency banner, commented out for now. Restore this line to bring
+    // it back. The mobile call bar still works without it: it reads
+    // CONTENT.banner.cta and watches the hero buttons alone.
+    // banner: ".ir-banner",
     hero: ".ir-hero",
     why: ".ir-why",
     services: ".ir-services",
