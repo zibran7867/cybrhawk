@@ -257,6 +257,11 @@
   // reduced motion.
   var HERO_LOOP = true;
 
+  // The hero banner's life after load: a soft scan line sweeping it every
+  // few seconds (paused off screen and in a background tab), and a small
+  // drift that follows the mouse on desktop. Off under reduced motion.
+  var HERO_AMBIENT = true;
+
   /* Section 02's "separate consoles": each card's own offset (px) and
      tilt (deg), so the four never line up. Phones and reduced motion
      drop them (siem-cloud.css), because misalignment on a narrow screen
@@ -719,6 +724,7 @@
         '<div class="sc-hr__media">' +
           '<img class="sc-hr__img" src="' + esc(v.image) + '" alt="' + esc(v.imageAlt || "") + '" ' +
             'width="1254" height="1254" decoding="async" fetchpriority="high">' +
+          (HERO_AMBIENT ? '<span class="sc-hr__scan" aria-hidden="true"></span>' : "") +
         "</div>"
       );
     }
@@ -733,9 +739,10 @@
     var title = c.title || [];
     if (typeof title === "string") title = [title];
 
-    var trust = (c.trust || []).map(function (t) {
+    // Each point arrives on its own beat after the buttons.
+    var trust = (c.trust || []).map(function (t, i) {
       return (
-        '<li class="sc-hr__trust-item">' +
+        '<li class="sc-hr__trust-item sc-hr__in"' + after(520 + i * 70) + ">" +
           '<span class="sc-hr__check">' + icon("check") + "</span>" +
           esc(t) +
         "</li>"
@@ -743,11 +750,12 @@
     }).join("");
 
     // Separate spans for colour and stagger, with real spaces between
-    // them so a screen reader reads one sentence.
+    // them so a screen reader reads one sentence. Each line is a mask
+    // (the outer span) that its text rises out of (the inner one).
     var lines = title.map(function (line, i) {
       return (
-        '<span class="sc-hr__line sc-hr__line--' + (i + 1) + ' sc-hr__in"' +
-          after(80 * (i + 1)) + ">" + esc(line) +
+        '<span class="sc-hr__line sc-hr__line--' + (i + 1) + '">' +
+          '<span class="sc-hr__line-in"' + after(80 * (i + 1)) + ">" + esc(line) + "</span>" +
         "</span>"
       );
     }).join(" ");
@@ -769,9 +777,7 @@
             (actions
               ? '<div class="sc-hr__actions sc-hr__in"' + after(400) + ">" + actions + "</div>"
               : "") +
-            (trust
-              ? '<ul class="sc-hr__trust sc-hr__in"' + after(480) + ">" + trust + "</ul>"
-              : "") +
+            (trust ? '<ul class="sc-hr__trust">' + trust + "</ul>" : "") +
           "</div>" +
           '<div class="sc-hr__visual">' +
             // Seen only around the console (the image covers it).
@@ -783,6 +789,8 @@
               '<span class="sc-hr__glow sc-hr__glow--story"></span>' +
             "</div>" +
             heroVisual(v) +
+            // Wipes off the panel on load (siem-cloud.css).
+            '<span class="sc-hr__curtain" aria-hidden="true"></span>' +
           "</div>" +
         "</div>" +
       "</div>",
@@ -804,8 +812,57 @@
     }
 
     heroLoop(root.querySelector(".sc-hr__stage"));
+    heroAmbient(root);
     bindAnchors(root);
     return true;
+  }
+
+  /* The banner's ambient motion. The scan line is a CSS animation; this
+     only pauses it while the panel is off screen or the tab is hidden.
+     The drift follows the mouse (never touch) as two custom properties,
+     -1 to 1 across the hero, written once per frame; the CSS turns them
+     into a small eased translate of the image. Neither starts under
+     reduced motion. */
+  function heroAmbient(root) {
+    if (!HERO_AMBIENT || !ANIMATE || reducedMotion()) return;
+
+    var visual = root.querySelector(".sc-hr__visual");
+    if (visual) {
+      whileVisible(visual, function (on) {
+        root.classList.toggle("is-paused", !on);
+      });
+    }
+
+    if (!window.matchMedia ||
+        !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+    var frame = 0;
+    var x = 0;
+    var y = 0;
+
+    function paint() {
+      frame = 0;
+      root.style.setProperty("--sc-px", x.toFixed(3));
+      root.style.setProperty("--sc-py", y.toFixed(3));
+    }
+
+    function queue() {
+      if (!frame) frame = window.requestAnimationFrame(paint);
+    }
+
+    root.addEventListener("mousemove", function (e) {
+      var r = root.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      x = ((e.clientX - r.left) / r.width) * 2 - 1;
+      y = ((e.clientY - r.top) / r.height) * 2 - 1;
+      queue();
+    });
+
+    root.addEventListener("mouseleave", function () {
+      x = 0;
+      y = 0;
+      queue();
+    });
   }
 
   /* ---- 02 · The challenge -------------------------------------------------
