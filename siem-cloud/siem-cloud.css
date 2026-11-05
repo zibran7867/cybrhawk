@@ -1,0 +1,2359 @@
+/* =====================================================================
+   CybrHawk — SIEM Cloud (Cloud Detection & Response) page styles
+   (markup injected by siem-cloud.js, sections 01–09)
+
+   Every rule is scoped under a section container. The shared tokens and
+   primitives sit on `.sc-section`, which the script adds to each
+   container it builds into (plus `.sc-section--dark` on the two dark
+   grounds, 03 and 06); the per-section blocks below also name the container's own
+   class (.sc-hero, .sc-challenge, …), so nothing leaks onto the page.
+
+   Order: tokens, shared primitives (reset, shell, header, eyebrow,
+   button, lanes, reveal), then one block per section in page order,
+   each with its own responsive and reduced-motion rules.
+
+   The idea is convergence: three signal lanes (amber posture, teal
+   identity, red threat) start apart and are pulled into one blue line,
+   the correlated story. The lane colours appear only where a signal
+   type is shown — the hero console, the 02 chrome dots, the 03 rail,
+   the 06 card lines and the 08 mini-diagram — always beside its word
+   or inside an aria-hidden layer. Everything else is brand blue.
+
+   Specificity: Elementor's page CSS writes selectors up to (0,4,0), but
+   it never targets the injected markup, which carries its own classes.
+   The only Elementor wrappers styled here are the container itself and
+   its .e-con-inner, and those rules carry an extra class to win. The
+   theme's own element rules (a:hover, p margins, list bullets, button
+   fills) are beaten by the (0,2,0) class selectors below without
+   !important.
+
+   Background images: Elementor's lazy-load blanks background-image on
+   containers below the fold until they near the viewport, so anything
+   drawn with a gradient also declares a solid background-color first.
+
+   Contrast: ratios noted beside the tokens were measured with the WCAG
+   relative-luminance formula. Text needs 4.5:1 (3:1 at 24px and up),
+   UI parts and graphics 3:1.
+   ===================================================================== */
+
+.sc-section {
+  /* Tweak to rebrand */
+  /* Brand: the correlated story and every CTA */
+  --sc-accent: #0c68ff;                      /* fills, buttons, large display: 4.7:1 on white; white on it 4.7:1 */
+  --sc-accent-hover: #0a58d6;                /* white on it 6.2:1 */
+  --sc-accent-ink: #0a58d6;                  /* blue AS TEXT on light grounds: 6.2:1 on white, 5.5:1 on accent-soft */
+  --sc-accent-soft: #eaf2ff;
+  --sc-accent-wash: #f5f8ff;                 /* accent-soft at 50% on white: the 04 cell hover; text on it 5.6:1 */
+  --sc-accent-on-dark: #6ea8ff;              /* blue AS TEXT on dark: 8.1:1 on #070b18, 7.6:1 on #0d1330 */
+
+  /* Signal lanes: a light-ground ink and a dark-ground ink each */
+  --sc-posture: #b96c00;                     /* amber: 4.0:1 on white. Graphics only (3:1); text uses posture-ink */
+  --sc-posture-ink: #9a5a00;                 /* amber AS TEXT on light: 5.5:1 on white */
+  --sc-posture-on-dark: #f5b041;             /* 9.7:1 on #0d1330, 7.3:1 on its 12% chip in the console */
+  --sc-identity: #0f7f8a;                    /* teal: 4.75:1 on white, so text-safe too */
+  --sc-identity-on-dark: #5eead4;            /* 12.3:1 on #0d1330, 8.8:1 on its 12% chip */
+  --sc-threat: #c42525;                      /* red AS TEXT on white: 5.8:1 */
+  --sc-threat-on-dark: #ff7a7a;              /* 7.2:1 on #0d1330, 5.7:1 on its 12% chip */
+
+  /* Neutrals */
+  --sc-heading: #0d1330;                     /* 18.2:1 on white, 17.1:1 on the tint */
+  --sc-text: #5b6478;                        /* body grey: 5.9:1 on white, 5.6:1 on the tint, 5.5:1 on #f3f7ff */
+  --sc-night: #070b18;
+  --sc-night-2: #0d1330;
+  --sc-console: #111a3a;                     /* the hero console's body */
+  --sc-on-dark: #ffffff;
+  --sc-on-dark-body: #c3cadb;                /* 12.0:1 on #070b18, 11.1:1 on #0d1330, 10.4:1 on the console */
+  --sc-on-dark-muted: #9aa3bd;               /* 7.8:1 on #070b18, 7.2:1 on #0d1330, 6.8:1 on the console. Nothing dimmer for real copy on dark */
+  --sc-bg: #ffffff;
+  --sc-bg-tint: #f6f8fc;
+  --sc-border: #e6eaf2;
+  --sc-border-dark: rgba(255, 255, 255, 0.10);
+  --sc-rule: #edf0f6;
+
+  /* Shape and space */
+  --sc-shadow: 0 1px 2px rgba(13, 19, 48, 0.04),
+               0 8px 24px rgba(13, 19, 48, 0.05);
+  --sc-shadow-hover: 0 2px 4px rgba(13, 19, 48, 0.05),
+                     0 16px 38px rgba(13, 19, 48, 0.10);
+  --sc-radius: 16px;
+  --sc-radius-sm: 10px;
+  --sc-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+  --sc-body-size: clamp(16px, 1.3vw, 18px);
+  --sc-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Layout. The Elementor containers carry no padding of their own, so
+     the gutter is what keeps content off the screen edge below the
+     measure; it is added on top of the measure, so wide screens keep the
+     same content width. */
+  --sc-measure: 1320px;
+  --sc-gutter: 24px;                         /* 22px ≤980px, 18px ≤520px */
+  --sc-pad-y: clamp(56px, 7vw, 96px);
+  --sc-gap: clamp(16px, 1.6vw, 24px);
+
+  /* The theme header sits over the top of the page (positioned
+     absolutely, as on the UCD, HawkINT and IR pages), so the hero clears
+     its height before any content. Measured on cybrhawk.com: at most
+     90px on phones, 102px on tablets, 100px + 1.5vw on desktop. The
+     desktop header is transparent with light links, which read on the
+     hero's night ground with no extra band (unlike HawkINT's light hero,
+     which needs --hk-hr-bar). If this template's header does not
+     overlay, set 0px. */
+  --sc-header-offset: 90px;
+
+  /* Roles: what the shared primitives actually paint with. Light by
+     default; .sc-section--dark swaps them. */
+  --sc-c-heading: var(--sc-heading);
+  --sc-c-body: var(--sc-text);
+  --sc-c-eyebrow: var(--sc-heading);
+  --sc-c-border: var(--sc-border);
+  --sc-c-accent: var(--sc-accent-ink);       /* [[accent]] runs in titles */
+  --sc-c-blue: var(--sc-accent);             /* blue graphics: the eyebrow mark's bar */
+  --sc-c-posture: var(--sc-posture);
+  --sc-c-identity: var(--sc-identity);
+  --sc-c-threat: var(--sc-threat);
+  --sc-c-focus: rgba(12, 104, 255, 0.45);
+
+  /* Per element, set by the lane classes below where a lane is shown. */
+  --sc-lane: var(--sc-accent);
+}
+
+.sc-section {
+  position: relative;
+  background-color: var(--sc-bg);
+}
+
+/* Dark grounds (03, 06; the hero's image panel paints its own). Cards on them are translucent with a
+   hairline and no drop shadow. */
+.sc-section.sc-section--dark {
+  --sc-c-heading: var(--sc-on-dark);
+  --sc-c-body: var(--sc-on-dark-body);
+  --sc-c-eyebrow: var(--sc-on-dark-body);
+  --sc-c-border: var(--sc-border-dark);
+  --sc-c-accent: var(--sc-accent-on-dark);
+  --sc-c-blue: var(--sc-accent-on-dark);
+  --sc-c-posture: var(--sc-posture-on-dark);
+  --sc-c-identity: var(--sc-identity-on-dark);
+  --sc-c-threat: var(--sc-threat-on-dark);
+  --sc-c-focus: rgba(110, 168, 255, 0.7);
+  background-color: var(--sc-night);
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .sc-section {
+    --sc-header-offset: 102px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .sc-section {
+    --sc-header-offset: calc(100px + 1.5vw);
+  }
+}
+
+@media (max-width: 980px) {
+  .sc-section {
+    --sc-gutter: 22px;
+  }
+}
+
+@media (max-width: 520px) {
+  .sc-section {
+    --sc-gutter: 18px;
+  }
+}
+
+/* The site's Additional CSS gives every .e-con-inner 0.5% side padding
+   and no max-width; both are reset so the shell alone sets the measure. */
+.sc-section.e-con > .e-con-inner {
+  width: 100%;
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ---- Reset -------------------------------------------------------------
+   The theme styles bare elements (p margins, list bullets, heading
+   fonts). Every section's content sits in a .sc-shell, and :where()
+   adds no weight, so this sits at (0,2,0): above any element or kit
+   rule, below every component rule that follows it.
+   ----------------------------------------------------------------------- */
+.sc-section .sc-shell :where(h1, h2, h3, p, ul, ol, li, figure, strong, article) {
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+}
+
+.sc-section .sc-shell :where(ul, ol) {
+  list-style: none;
+}
+
+/* ---- Shell ------------------------------------------------------------- */
+.sc-section .sc-shell {
+  width: 100%;
+  max-width: calc(var(--sc-measure) + 2 * var(--sc-gutter));
+  margin: 0 auto;
+  padding: var(--sc-pad-y) var(--sc-gutter);
+  box-sizing: border-box;
+  font-family: inherit;
+  text-align: left;
+}
+
+.sc-section .sc-shell *,
+.sc-section .sc-shell *::before,
+.sc-section .sc-shell *::after {
+  box-sizing: border-box;
+}
+
+/* Set by [[double brackets]] in any title. */
+.sc-section .sc-accent {
+  color: var(--sc-c-accent);
+}
+
+/* ---- Section header ---------------------------------------------------- */
+.sc-section .sc-head {
+  max-width: 880px;
+  margin: 0 auto clamp(36px, 4vw, 56px);
+  text-align: center;
+}
+
+.sc-section .sc-head--start {
+  margin-left: 0;
+  text-align: left;
+}
+
+/* The eyebrow is the page's second voice: mono, uppercase, led by the
+   page's signature mark — three tiny bars in the lane colours that run
+   into one wider blue bar ("three signals, one story"). One
+   pseudo-element, four solid gradient layers, no image. It is pinned to
+   the first line, so it stays put if the eyebrow wraps on a phone. */
+.sc-section .sc-eyebrow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 0 0 16px;
+  font-family: var(--sc-mono);
+  font-weight: 600;
+  font-size: 12.5px;
+  line-height: 1.5;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sc-c-eyebrow);
+}
+
+.sc-section .sc-eyebrow::before {
+  content: "";
+  flex: none;
+  width: 30px;
+  height: 10px;
+  margin-top: calc(0.75em - 5px);
+  background:
+    linear-gradient(var(--sc-c-posture), var(--sc-c-posture)) 0 0 / 6px 2px no-repeat,
+    linear-gradient(var(--sc-c-identity), var(--sc-c-identity)) 0 4px / 6px 2px no-repeat,
+    linear-gradient(var(--sc-c-threat), var(--sc-c-threat)) 0 8px / 6px 2px no-repeat,
+    linear-gradient(var(--sc-c-blue), var(--sc-c-blue)) 6px 2px / 24px 6px no-repeat;
+}
+
+.sc-section .sc-head:not(.sc-head--start) .sc-eyebrow {
+  justify-content: center;
+}
+
+/* 700, not 800: the site only loads Figtree up to 700, and anything
+   heavier falls back to Helvetica. */
+.sc-section .sc-head__title {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(30px, 4vw, 50px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--sc-c-heading);
+  text-wrap: balance;
+}
+
+.sc-section .sc-head__sub {
+  margin: 18px 0 0;
+  font-size: var(--sc-body-size);
+  line-height: 1.65;
+  color: var(--sc-c-body);
+  text-wrap: pretty;
+}
+
+.sc-section .sc-head:not(.sc-head--start) .sc-head__sub {
+  max-width: 46em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---- Buttons (walkthrough-cta shape) ------------------------------------
+   Only in the hero: the solid blue is the demo request, the outline its
+   quiet twin. Both lift 2px under a real pointer.
+   ----------------------------------------------------------------------- */
+.sc-section .sc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 26px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: clamp(15px, 1.1vw, 16px);
+  line-height: 1.2;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: transform 0.25s ease, background-color 0.25s ease,
+              border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.sc-section .sc-btn svg {
+  flex: 0 0 auto;
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.sc-section .sc-btn--primary {
+  background: var(--sc-accent);
+  border-color: var(--sc-accent);
+  color: #ffffff;
+  box-shadow: 0 10px 26px rgba(12, 104, 255, 0.32);
+}
+
+.sc-section .sc-btn--primary:hover,
+.sc-section .sc-btn--primary:focus {
+  background: var(--sc-accent-hover);
+  border-color: var(--sc-accent-hover);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* An ink hairline (17:1 on the hero tint) that fills with ink on hover;
+   white on it is 18.2:1. */
+.sc-section .sc-btn--outline {
+  background: transparent;
+  border-color: var(--sc-heading);
+  color: var(--sc-heading);
+}
+
+.sc-section .sc-btn--outline:hover,
+.sc-section .sc-btn--outline:focus {
+  background: var(--sc-heading);
+  border-color: var(--sc-heading);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* A real hover only: a tap on a phone would leave it stuck raised. */
+@media (hover: hover) {
+  .sc-section .sc-btn:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.sc-section .sc-btn:focus-visible {
+  outline: 3px solid var(--sc-c-focus);
+  outline-offset: 3px;
+}
+
+/* ---- Lanes ----------------------------------------------------------------
+   An element showing a signal type carries .sc-lane--{posture|identity|
+   threat}; it and its children paint with --sc-lane (and, in the hero
+   console, --sc-lane-fill). The ink follows the ground through the
+   --sc-c-* roles, so one class works on light and dark.
+   ----------------------------------------------------------------------- */
+.sc-section .sc-lane--posture {
+  --sc-lane: var(--sc-c-posture);
+  --sc-lane-fill: rgba(245, 176, 65, 0.12);
+}
+
+.sc-section .sc-lane--identity {
+  --sc-lane: var(--sc-c-identity);
+  --sc-lane-fill: rgba(94, 234, 212, 0.12);
+}
+
+.sc-section .sc-lane--threat {
+  --sc-lane: var(--sc-c-threat);
+  --sc-lane-fill: rgba(255, 122, 122, 0.12);
+}
+
+/* ---- Scroll reveal ------------------------------------------------------
+   Builders mark what rises with .sc-reveal and an inline --i for the
+   stagger. The hero has its own load stagger instead (see 01), and 02's
+   windows and 03's rail have their own entrances.
+   ----------------------------------------------------------------------- */
+.sc-section .is-animated .sc-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s var(--sc-ease);
+  transition-delay: calc(var(--i, 0) * 0.07s);
+}
+
+.sc-section .is-animated.is-visible .sc-reveal {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-section .is-animated .sc-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .sc-section .sc-btn {
+    transition: none;
+  }
+  .sc-section .sc-btn:hover,
+  .sc-section .sc-btn:focus {
+    transform: none;
+  }
+}
+
+
+/* =====================================================================
+   01 · Hero (.sc-hero → .sc-hr)
+   ---------------------------------------------------------------------
+   A split: the copy on a light tint on the left, its left edge on the
+   same line as every other section's content; on the right a dark panel
+   that runs to the screen's edge and the hero's full height, holding
+   the square banner whole, never cropped (see "The image panel"). Below
+   1025px the panel drops under the copy, edge to edge.
+
+   On desktop the whole hero is sized to fit the first screen: the image
+   is never taller than the space under the header, and the copy's type
+   and spacing scale with the viewport's height as well as its width
+   (min(vw, vh) clamps), so a short laptop screen (≈660px tall at 125%
+   Windows scaling) shows all of it without the fold cutting through.
+
+   With no image, or one that fails, the panel holds the convergence
+   console on its night ground ("three becoming one": a fine dot grid,
+   three faint lane-coloured glows off the top left, one larger blue
+   glow behind the console).
+
+   The theme header sits over the top of this section. On desktop it is
+   transparent with light links, which would vanish on this light hero,
+   so a navy band (the colour the header turns when it sticks) is
+   painted behind it: HawkINT's --hk-hr-bar technique. It is an inset
+   box-shadow, not a gradient, so Elementor's background lazy-load can
+   never blank it and leave the links unreadable. Tablet and phone
+   headers carry their own white background, so there the hero only
+   reserves the clearance.
+   ===================================================================== */
+.sc-section.sc-hero {
+  background-color: var(--sc-bg-tint);
+}
+
+.sc-hero .sc-hr {
+  --sc-hr-bar: 0px;                          /* dark header band height; desktop only */
+  --sc-hr-bar-bg: #080b1a;                   /* the stuck header's navy */
+  position: relative;
+  overflow: clip;                            /* the image panel and the console's offset ghost never widen the page */
+  padding-top: var(--sc-header-offset);
+  background-color: var(--sc-bg-tint);
+}
+
+@media (min-width: 1025px) {
+  .sc-hero .sc-hr {
+    --sc-hr-bar: var(--sc-header-offset);
+    box-shadow: inset 0 var(--sc-hr-bar) 0 0 var(--sc-hr-bar-bg);
+  }
+}
+
+/* ---- Layout -----------------------------------------------------------
+   The grid is the full width of the page. Its left padding is where the
+   shell would put content (the gutter, or half of what is left over
+   beyond the measure), and it has no right padding, so the image column
+   meets the screen's edge. The copy column pads itself.
+   ----------------------------------------------------------------------- */
+.sc-section .sc-hr__inner.sc-shell {
+  max-width: none;
+  margin: 0;
+  padding: 0 0 0 max(var(--sc-gutter), (100% - var(--sc-measure)) / 2);
+}
+
+.sc-hero .sc-hr__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.sc-hero .sc-hr__copy {
+  min-width: 0;
+  align-self: center;
+  max-width: 720px;
+  padding: clamp(24px, min(3.6vw, 5vh), 64px) clamp(32px, 4vw, 64px) clamp(24px, min(3.6vw, 5vh), 64px) 0;
+}
+
+.sc-hero .sc-hr__eyebrow {
+  margin-bottom: clamp(12px, 2.4vh, 22px);
+}
+
+/* 500, not 700: at this size the lighter cut reads calm and editorial,
+   as in the reference. Each sentence holds one line on desktop: the
+   longest ("Respond in Real Time.") is about 9.4em, budgeted at 9.8em
+   for font-metric differences, and 4.2vw / 64px keep that inside the
+   copy column at every width from 1025px up. 7vh keeps the three lines
+   short enough for a short screen. Line 3 is the story's resolution, so
+   it alone takes the accent. */
+.sc-hero .sc-hr__title {
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(34px, min(4.2vw, 7vh), 64px);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  color: var(--sc-heading);
+}
+
+/* On phones a sentence may wrap; balance keeps its two halves even. */
+.sc-hero .sc-hr__line {
+  display: block;
+  text-wrap: balance;
+}
+
+.sc-hero .sc-hr__line--3 {
+  color: var(--sc-accent-ink);
+}
+
+.sc-hero .sc-hr__sub {
+  max-width: 36em;
+  margin-top: clamp(14px, 2.6vh, 24px);
+  font-size: clamp(15px, min(1.25vw, 2.5vh), 18px);
+  line-height: 1.65;
+  color: var(--sc-text);                     /* 5.6:1 on the tint */
+  text-wrap: pretty;
+}
+
+.sc-hero .sc-hr__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: clamp(18px, 3.4vh, 32px);
+}
+
+.sc-hero .sc-hr__trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  margin-top: clamp(18px, 3.6vh, 36px);
+  padding-top: clamp(12px, 2.2vh, 22px);
+  border-top: 1px solid var(--sc-border);
+}
+
+.sc-hero .sc-hr__trust-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14.5px;
+  line-height: 1.4;
+  color: var(--sc-heading);
+}
+
+.sc-hero .sc-hr__check {
+  flex: none;
+  display: inline-flex;
+  margin-top: 1px;
+  color: var(--sc-accent-ink);
+}
+
+.sc-hero .sc-hr__check svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.4;
+}
+
+/* ---- The image panel ----------------------------------------------------
+   The banner is square and is never cropped. It sits in the flow of the
+   panel, centred, at the smaller of the column's width and the height
+   left under the header (never below 420px), so on desktop the whole
+   image is on the first screen. The row takes the taller of the image
+   and the copy, and the panel fills the row with the banner's own edge
+   navy (#000a21, sampled from the file); the image's edges fade into
+   it, so wherever there is spare room on any side there is no seam.
+   Change --sc-hr-art-bg with the artwork.
+
+   With no image, the night ground holds the console. The lane roles are
+   swapped to their dark-ground inks here, since the hero itself is
+   light.
+   ----------------------------------------------------------------------- */
+.sc-hero .sc-hr__visual {
+  --sc-c-posture: var(--sc-posture-on-dark);
+  --sc-c-identity: var(--sc-identity-on-dark);
+  --sc-c-threat: var(--sc-threat-on-dark);
+  --sc-hr-art-bg: #000a21;
+  position: relative;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(40px, 5vw, 72px) var(--sc-gutter);
+  background-color: var(--sc-night);
+  background-image: linear-gradient(180deg, var(--sc-night) 0%, var(--sc-night-2) 100%);
+}
+
+.sc-hero .sc-hr--image .sc-hr__visual {
+  padding: 0;
+  background: var(--sc-hr-art-bg);
+}
+
+/* svh where supported, so a phone's collapsing toolbar does not change
+   it; vh before it as the fallback. */
+.sc-hero .sc-hr__media {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: 100%;
+  max-width: max(420px, calc(100vh - var(--sc-header-offset)));
+  max-width: max(420px, calc(100svh - var(--sc-header-offset)));
+  overflow: hidden;
+}
+
+/* Every edge fades over 6% into the panel's navy: invisible where the
+   image fills the panel, a seamless join where it does not. */
+.sc-hero .sc-hr__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%),
+    linear-gradient(180deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+  -webkit-mask-composite: source-in;
+          mask-image:
+    linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%),
+    linear-gradient(180deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+          mask-composite: intersect;
+}
+
+/* ---- Decoration (around the console only) ------------------------------ */
+.sc-hero .sc-hr__decor {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.sc-hero .sc-hr--image .sc-hr__decor {
+  display: none;                             /* under the image: nothing to see */
+}
+
+.sc-hero .sc-hr__dots-bg {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1.4px);
+  background-size: 28px 28px;
+  -webkit-mask-image: radial-gradient(75% 70% at 50% 45%, #000 25%, transparent 85%);
+          mask-image: radial-gradient(75% 70% at 50% 45%, #000 25%, transparent 85%);
+}
+
+.sc-hero .sc-hr__glow {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.sc-hero .sc-hr__glow--posture,
+.sc-hero .sc-hr__glow--identity,
+.sc-hero .sc-hr__glow--threat {
+  width: 520px;
+  height: 520px;
+}
+
+.sc-hero .sc-hr__glow--posture {
+  top: -300px;
+  left: -220px;
+  background: radial-gradient(closest-side, rgba(245, 176, 65, 0.10), transparent);
+}
+
+.sc-hero .sc-hr__glow--identity {
+  top: -340px;
+  left: -40px;
+  background: radial-gradient(closest-side, rgba(94, 234, 212, 0.10), transparent);
+}
+
+.sc-hero .sc-hr__glow--threat {
+  top: -160px;
+  left: -300px;
+  background: radial-gradient(closest-side, rgba(255, 122, 122, 0.10), transparent);
+}
+
+/* The one larger blue glow the three collapse into, behind the console. */
+.sc-hero .sc-hr__glow--story {
+  top: 50%;
+  left: 50%;
+  width: 900px;
+  height: 760px;
+  transform: translate(-50%, -45%);
+  background: radial-gradient(closest-side, rgba(12, 104, 255, 0.22), transparent);
+}
+
+/* ---- The convergence console ------------------------------------------
+   The HawkINT console idiom on night: chrome bar, provider tabs, then
+   the body. Its default styles are the FINAL state (rows together, the
+   story and the guardrail shown, "Guardrail applied"), which is what
+   reduced motion shows; the loop's step rules further down only apply
+   while the script is stepping it.
+   ----------------------------------------------------------------------- */
+.sc-hero .sc-hr__stage {
+  position: relative;
+  width: 100%;
+  max-width: 468px;
+  padding: 0 8px 8px 0;                      /* room for the ghost, inside the column */
+}
+
+/* A faint second console, offset down and right: depth without another
+   illustration. */
+.sc-hero .sc-hr__ghost {
+  position: absolute;
+  inset: 8px 0 0 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--sc-radius);
+  background: var(--sc-console);
+  opacity: 0.4;
+}
+
+.sc-hero .sc-hr__console {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--sc-radius);
+  background: var(--sc-console);
+  box-shadow: 0 30px 80px rgba(2, 6, 20, 0.55);
+}
+
+/* Wraps on a narrow console: the status chip drops under the label
+   rather than squeezing it. */
+.sc-hero .sc-hr__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  padding: 11px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--sc-border-dark);
+}
+
+/* Neutral dots, not traffic lights: red and amber mean signals here. */
+.sc-hero .sc-hr__dots {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.sc-hero .sc-hr__dots i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.sc-hero .sc-hr__label {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--sc-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--sc-on-dark-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The three state words share one grid cell; only the current one is
+   opaque, so the chip never changes width mid-loop. */
+.sc-hero .sc-hr__status {
+  display: grid;
+  margin-left: auto;
+}
+
+.sc-hero .sc-hr__state {
+  grid-area: 1 / 1;
+  justify-self: end;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  font-family: var(--sc-mono);
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+  color: var(--sc-on-dark-muted);
+  opacity: 0;
+}
+
+.sc-hero .sc-hr__state--correlated,
+.sc-hero .sc-hr__state--guarded {
+  border-color: rgba(110, 168, 255, 0.4);
+  background: rgba(12, 104, 255, 0.16);
+  color: var(--sc-accent-on-dark);
+}
+
+.sc-hero .sc-hr__state--guarded {
+  opacity: 1;
+}
+
+.sc-hero .sc-hr__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--sc-border-dark);
+}
+
+.sc-hero .sc-hr__tab {
+  padding: 3px 10px;
+  border: 1px solid var(--sc-border-dark);
+  border-radius: 6px;
+  font-family: var(--sc-mono);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--sc-on-dark-muted);
+}
+
+.sc-hero .sc-hr__body {
+  padding: 16px 14px;
+}
+
+/* The three rows and the story card share one grid of equal rows with
+   no gap (each row pads itself), so row i's centre sits at (i + .5) / n
+   of the stack: the spine runs from the first centre to the last, and
+   each row's stub meets it, at any width. */
+.sc-hero .sc-hr__stack {
+  position: relative;
+  display: grid;
+  grid-template-rows: repeat(var(--n, 4), 1fr);
+  padding-left: 22px;
+}
+
+.sc-hero .sc-hr__spine {
+  position: absolute;
+  left: 6px;
+  top: calc(100% / (2 * var(--n, 4)));
+  bottom: calc(100% / (2 * var(--n, 4)));
+  width: 2px;
+  border-radius: 2px;
+  background: var(--sc-accent-on-dark);
+}
+
+.sc-hero .sc-hr__row {
+  position: relative;
+  display: flex;
+  padding: 4px 0;
+}
+
+/* The stub from the row to the spine: the row's lane colour, or blue
+   for the story card. */
+.sc-hero .sc-hr__row::after {
+  content: "";
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  width: 15px;
+  height: 2px;
+  margin-top: -1px;
+  background: var(--sc-lane);
+}
+
+.sc-hero .sc-hr__signal,
+.sc-hero .sc-hr__story {
+  position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  min-width: 0;
+  min-height: 42px;
+  padding: 8px 12px 8px 15px;
+  border-radius: var(--sc-radius-sm);
+}
+
+.sc-hero .sc-hr__signal {
+  border: 1px solid var(--sc-border-dark);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Each alert's own lane-coloured left bar. */
+.sc-hero .sc-hr__signal::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: var(--sc-lane);
+}
+
+.sc-hero .sc-hr__tag {
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: var(--sc-lane-fill);
+  font-family: var(--sc-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sc-lane);
+}
+
+.sc-hero .sc-hr__sig-text {
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--sc-on-dark);
+}
+
+/* White on this blue wash is 14:1. */
+.sc-hero .sc-hr__story {
+  border: 1px solid rgba(110, 168, 255, 0.5);
+  background: rgba(12, 104, 255, 0.18);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--sc-on-dark);
+}
+
+.sc-hero .sc-hr__guard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  margin-left: 22px;
+  padding: 9px 12px;
+  border: 1px dashed rgba(110, 168, 255, 0.4);
+  border-radius: var(--sc-radius-sm);
+  font-size: 13.5px;
+  line-height: 1.4;
+  color: var(--sc-on-dark-body);
+}
+
+.sc-hero .sc-hr__node {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--sc-accent);
+  color: #ffffff;
+}
+
+.sc-hero .sc-hr__node svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+  stroke-width: 2.6;
+}
+
+.sc-hero .sc-hr__guard-text {
+  min-width: 0;
+}
+
+/* ---- Motion ---------------------------------------------------------------
+   One moment on load: the copy fades up 16px on its inline --d (eyebrow
+   0, H1 lines 80/160/240, sub 320, buttons 400, trust 480ms) while the
+   banner settles from a slight zoom (its opacity stays 1: it is the
+   page's largest paint). Without an image the console rises at 300ms,
+   then loops. Everything below runs only without a reduced-motion
+   preference, so that preference (even one switched on mid-loop)
+   always shows the final state.
+   ----------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .sc-hero .sc-hr.is-animated .sc-hr__in {
+    animation: sc-rise 0.7s var(--sc-ease) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  .sc-hero .sc-hr.is-animated .sc-hr__img {
+    animation: sc-settle 1.8s var(--sc-ease) both;
+  }
+
+  .sc-hero .sc-hr.is-animated .sc-hr__stage {
+    animation: sc-rise 0.7s var(--sc-ease) 300ms both;
+  }
+
+  .sc-hero .sc-hr__stage.is-looping .sc-hr__body {
+    transition: opacity 0.45s ease;
+  }
+
+  .sc-hero .sc-hr__stage.is-looping .sc-hr__row,
+  .sc-hero .sc-hr__stage.is-looping .sc-hr__spine,
+  .sc-hero .sc-hr__stage.is-looping .sc-hr__row::after,
+  .sc-hero .sc-hr__stage.is-looping .sc-hr__guard,
+  .sc-hero .sc-hr__stage.is-looping .sc-hr__state {
+    transition: opacity 0.5s ease, transform 0.6s var(--sc-ease);
+  }
+
+  .sc-hero .sc-hr__stage.is-looping .sc-hr__node svg {
+    transition: transform 0.4s var(--sc-ease) 0.25s;
+  }
+
+  /* 0 · Separate alerts: the rows arrive one by one, apart and out of
+     line, each with only its own bar; no spine, no story. */
+  .sc-hero .sc-hr__stage.is-looping[data-step="0"] .sc-hr__row {
+    transform: translate(calc(var(--k, 0) * 9px - 6px), calc((var(--k, 0) - 1) * 9px));
+    transition-delay: calc(var(--k, 0) * 0.3s);
+  }
+
+  .sc-hero .sc-hr__stage.is-looping[data-step="0"] .sc-hr__spine,
+  .sc-hero .sc-hr__stage.is-looping[data-step="0"] .sc-hr__row::after {
+    opacity: 0;
+  }
+
+  .sc-hero .sc-hr__stage.is-looping[data-step="0"] .sc-hr__row--story {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  .sc-hero .sc-hr__stage.is-looping[data-step="0"] .sc-hr__state--separate,
+  .sc-hero .sc-hr__stage.is-looping[data-step="1"] .sc-hr__state--correlated {
+    opacity: 1;
+  }
+
+  .sc-hero .sc-hr__stage.is-looping[data-step="0"] .sc-hr__state--guarded,
+  .sc-hero .sc-hr__stage.is-looping[data-step="1"] .sc-hr__state--guarded {
+    opacity: 0;
+  }
+
+  /* 1 · Correlated: the rows slide together, the stubs and spine join
+     them, the story card arrives (the default styles, bar the guard). */
+  .sc-hero .sc-hr__stage.is-looping[data-step="1"] .sc-hr__row--story {
+    transition-delay: 0.25s;
+  }
+
+  .sc-hero .sc-hr__stage.is-looping[data-step="0"] .sc-hr__guard,
+  .sc-hero .sc-hr__stage.is-looping[data-step="1"] .sc-hr__guard {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  .sc-hero .sc-hr__stage.is-looping[data-step="0"] .sc-hr__node svg,
+  .sc-hero .sc-hr__stage.is-looping[data-step="1"] .sc-hr__node svg {
+    transform: scale(0);
+  }
+
+  /* 2 · Guardrail applied, and 3 · hold: the defaults. */
+
+  /* Clearing, between the hold and the next start (and before the first
+     one): the body fades out, then the rows jump back to their scattered
+     places while unseen, so step 0 only has to fade them in. */
+  .sc-hero .sc-hr__stage.is-looping.is-clearing .sc-hr__body {
+    opacity: 0;
+  }
+
+  .sc-hero .sc-hr__stage.is-looping.is-clearing .sc-hr__row {
+    opacity: 0;
+    transform: translate(calc(var(--k, 0) * 9px - 6px), calc((var(--k, 0) - 1) * 9px));
+    transition: opacity 0.45s ease, transform 0s linear 0.45s;
+  }
+}
+
+@keyframes sc-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes sc-settle {
+  from { transform: scale(1.05); }
+  to   { transform: none; }
+}
+
+/* ---- Responsive ----------------------------------------------------------- */
+/* Stacked: the copy within the gutters, then the panel edge to edge
+   holding the whole image (the img's width and height attributes
+   reserve the box). On tablets it is capped at 600px, centred on the
+   navy, so it does not swamp the screen; the type goes back to sizing
+   by width alone, since the stacked hero scrolls anyway. */
+@media (max-width: 1024px) {
+  .sc-section .sc-hr__inner.sc-shell {
+    padding-left: 0;
+  }
+
+  .sc-hero .sc-hr__inner {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  .sc-hero .sc-hr__copy {
+    width: 100%;
+    max-width: calc(720px + 2 * var(--sc-gutter));
+    padding: clamp(40px, 6vw, 64px) var(--sc-gutter) clamp(48px, 7vw, 72px);
+  }
+
+  /* 8.4vw keeps each sentence on one line down to a 320px phone (30px
+     there); 52px caps it on tablets. */
+  .sc-hero .sc-hr__title {
+    font-size: clamp(30px, 8.4vw, 52px);
+  }
+
+  .sc-hero .sc-hr__sub {
+    font-size: clamp(16px, 2vw, 18px);
+  }
+
+  .sc-hero .sc-hr__media {
+    max-width: 600px;
+  }
+
+  .sc-hero .sc-hr__stage {
+    max-width: 480px;
+  }
+}
+
+@media (max-width: 620px) {
+  .sc-hero .sc-hr__actions {
+    flex-direction: column;
+  }
+
+  .sc-hero .sc-btn {
+    width: 100%;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 520px) {
+  .sc-hero .sc-hr__trust {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* =====================================================================
+   02 · The challenge (.sc-challenge → .sc-ch)
+   ---------------------------------------------------------------------
+   White, with a faint hairline grid behind the right half only, where
+   the four "separate consoles" sit deliberately out of line. Each
+   window's offset and tilt come in as --dx/--dy/--rot; they settle into
+   place as the section scrolls in, and stay crooked: that is the point.
+   ===================================================================== */
+.sc-section.sc-challenge {
+  background-color: var(--sc-bg);
+}
+
+.sc-challenge .sc-ch {
+  position: relative;
+  overflow: clip;                            /* tilted windows never widen the page */
+}
+
+.sc-challenge .sc-ch__decor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  right: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(13, 19, 48, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(13, 19, 48, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%);
+          mask-image: linear-gradient(90deg, transparent, #000 18%);
+}
+
+.sc-challenge .sc-ch__inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(40px, 6vw, 96px);
+}
+
+.sc-challenge .sc-ch__lede .sc-head {
+  margin-bottom: 24px;
+}
+
+.sc-challenge .sc-ch__p {
+  font-size: var(--sc-body-size);
+  line-height: 1.65;
+  color: var(--sc-text);
+  text-wrap: pretty;
+}
+
+.sc-challenge .sc-ch__p + .sc-ch__p {
+  margin-top: 16px;
+}
+
+.sc-challenge .sc-ch__p--lead {
+  font-size: clamp(17px, 1.35vw, 18px);
+  color: var(--sc-heading);
+}
+
+.sc-challenge .sc-ch__windows {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 20px;
+  padding: 14px;
+}
+
+.sc-challenge .sc-ch__item {
+  display: flex;
+  transform: translate(var(--dx, 0px), var(--dy, 0px)) rotate(var(--rot, 0deg));
+}
+
+.sc-challenge .sc-ch__win {
+  flex: 1 1 auto;
+  overflow: hidden;
+  border: 1px solid var(--sc-border);
+  border-radius: 12px;
+  background: var(--sc-bg);
+  box-shadow: var(--sc-shadow);
+}
+
+.sc-challenge .sc-ch__chrome {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--sc-rule);
+  background: #fafbfd;
+}
+
+.sc-challenge .sc-ch__dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.sc-challenge .sc-ch__dot--posture  { background: var(--sc-posture); }
+.sc-challenge .sc-ch__dot--identity { background: var(--sc-identity); }
+.sc-challenge .sc-ch__dot--neutral  { background: var(--sc-text); }
+
+/* No fill: no signal comes out of the SaaS window at all. */
+.sc-challenge .sc-ch__dot--hollow {
+  border: 1.5px solid var(--sc-text);
+  background: transparent;
+}
+
+.sc-challenge .sc-ch__title {
+  min-width: 0;
+  font-family: var(--sc-mono);
+  font-weight: 600;
+  font-size: 12.5px;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sc-heading);
+}
+
+.sc-challenge .sc-ch__text {
+  padding: 14px 16px 18px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--sc-text);
+}
+
+/* Entrance: each window drops in from three times its tilt and offset
+   and settles into its crooked place. */
+@media (prefers-reduced-motion: no-preference) {
+  .sc-challenge .sc-ch.is-animated .sc-ch__item {
+    opacity: 0;
+    transform: translate(calc(var(--dx, 0px) * 3), calc(var(--dy, 0px) * 3 + 28px))
+               rotate(calc(var(--rot, 0deg) * 3));
+    transition: opacity 0.6s ease, transform 0.9s var(--sc-ease);
+    transition-delay: calc(var(--i, 0) * 0.1s);
+  }
+
+  .sc-challenge .sc-ch.is-animated.is-visible .sc-ch__item {
+    opacity: 1;
+    transform: translate(var(--dx, 0px), var(--dy, 0px)) rotate(var(--rot, 0deg));
+  }
+}
+
+@media (max-width: 1024px) {
+  .sc-challenge .sc-ch__inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sc-challenge .sc-ch__decor {
+    top: 45%;
+    left: 0;
+  }
+
+  .sc-challenge .sc-ch__windows {
+    max-width: 720px;
+  }
+}
+
+/* One column, square to the page: crooked windows on a narrow screen
+   just look broken. The offsets are inline custom properties, which
+   beat any stylesheet value for them, so these replace the transform
+   itself, at the entrance's own weights so they win at every point of
+   it; the entrance becomes the plain rise. */
+@media (max-width: 600px) {
+  .sc-challenge .sc-ch__windows {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    padding: 0;
+  }
+
+  .sc-challenge .sc-ch__item,
+  .sc-challenge .sc-ch.is-animated.is-visible .sc-ch__item {
+    transform: none;
+  }
+}
+
+@media (max-width: 600px) and (prefers-reduced-motion: no-preference) {
+  .sc-challenge .sc-ch.is-animated .sc-ch__item {
+    transform: translateY(20px);
+  }
+
+  .sc-challenge .sc-ch.is-animated.is-visible .sc-ch__item {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-challenge .sc-ch__item {
+    transform: none;
+  }
+}
+
+
+/* =====================================================================
+   03 · Platform overview (.sc-platform → .sc-pf)
+   ---------------------------------------------------------------------
+   The signature section. Dark, with long horizontal "lane" hairlines
+   running edge to edge. Four steps on one rail: three lane lines leave
+   Connect side by side, merge at Ingest & Correlate, and one blue line
+   carries on through Detect and Respond.
+
+   Each piece of the rail belongs to the step it leaves from and is
+   sized off that step's box plus the list gap (--sc-pf-gap), so the
+   same markup runs across (≥1100px) or down (<1100px). The nodes sit on
+   top with a solid fill, so segments run centre to centre beneath them.
+   ===================================================================== */
+.sc-section.sc-platform {
+  background-color: var(--sc-night-2);
+}
+
+.sc-platform .sc-pf {
+  position: relative;
+  overflow: clip;
+  background-color: var(--sc-night-2);
+}
+
+.sc-platform .sc-pf__decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(180deg,
+    transparent 0, transparent 71px,
+    rgba(255, 255, 255, 0.04) 71px, rgba(255, 255, 255, 0.04) 72px);
+}
+
+.sc-platform .sc-pf__inner {
+  position: relative;
+}
+
+.sc-platform .sc-pf__steps {
+  --sc-pf-gap: 40px;
+  position: relative;
+  display: grid;
+  gap: var(--sc-pf-gap);
+}
+
+.sc-platform .sc-pf__step {
+  --sc-pf-ring: var(--sc-accent-on-dark);
+  position: relative;
+  display: flex;
+}
+
+.sc-platform .sc-pf__step--1 {
+  --sc-pf-ring: rgba(255, 255, 255, 0.85);
+}
+
+/* ---- Nodes ------------------------------------------------------------- */
+.sc-platform .sc-pf__node {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--sc-night-2);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.14);
+}
+
+/* The lit ring, which fades in when the line reaches it. */
+.sc-platform .sc-pf__node::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--sc-pf-ring);
+  border-radius: 50%;
+}
+
+/* The end point: Respond & Remediate glows. */
+.sc-platform .sc-pf__step--end .sc-pf__node::before {
+  box-shadow: 0 0 0 6px rgba(110, 168, 255, 0.12),
+              0 0 28px 6px rgba(12, 104, 255, 0.25);
+}
+
+.sc-platform .sc-pf__num {
+  position: relative;
+  font-family: var(--sc-mono);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--sc-on-dark);
+}
+
+.sc-platform .sc-pf__body {
+  min-width: 0;
+}
+
+.sc-platform .sc-pf__title {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--sc-on-dark);
+}
+
+.sc-platform .sc-pf__text {
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--sc-on-dark-body);
+}
+
+/* ---- Rail pieces (shared) ---------------------------------------------- */
+.sc-platform .sc-pf__lanes {
+  position: absolute;
+  z-index: 1;
+}
+
+.sc-platform .sc-pf__lane {
+  position: absolute;
+  border-radius: 2px;
+  background: var(--sc-lane);
+}
+
+.sc-platform .sc-pf__merge {
+  position: absolute;
+  display: block;
+  overflow: visible;
+  fill: none;
+}
+
+.sc-platform .sc-pf__merge path {
+  stroke: var(--sc-lane);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.sc-platform .sc-pf__tags {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 4px 10px;
+  white-space: nowrap;
+}
+
+.sc-platform .sc-pf__tag {
+  font-family: var(--sc-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  color: var(--sc-lane);
+}
+
+.sc-platform .sc-pf__line {
+  position: absolute;
+  z-index: 1;
+  border-radius: 2px;
+  background: var(--sc-accent-on-dark);
+}
+
+/* ---- Horizontal pipeline (≥1100px) -------------------------------------- */
+@media (min-width: 1100px) {
+  .sc-platform .sc-pf__steps {
+    --sc-pf-gap: clamp(24px, 2.6vw, 40px);
+    grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr));
+  }
+
+  .sc-platform .sc-pf__step {
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  /* From node 1's right edge to 28px short of node 2, where the merge
+     takes over; the three lines are 6px apart, centred on the node. */
+  .sc-platform .sc-pf__lanes {
+    top: 16px;
+    left: 48px;
+    right: calc(28px - var(--sc-pf-gap));
+    height: 16px;
+  }
+
+  .sc-platform .sc-pf__lane {
+    left: 0;
+    right: 0;
+    top: calc(1px + var(--k, 0) * 6px);
+    height: 2px;
+    transform-origin: left center;
+  }
+
+  .sc-platform .sc-pf__merge--h {
+    top: 0;
+    left: 100%;
+    width: 28px;
+    height: 16px;
+  }
+
+  .sc-platform .sc-pf__merge--v {
+    display: none;
+  }
+
+  .sc-platform .sc-pf__tags {
+    top: 28px;
+    left: 8px;
+  }
+
+  /* Node centre to the next node's centre. */
+  .sc-platform .sc-pf__line {
+    top: 23px;
+    left: 24px;
+    right: calc(-1 * var(--sc-pf-gap) - 24px);
+    height: 2px;
+    transform-origin: left center;
+  }
+}
+
+/* ---- Vertical pipeline (<1100px) ------------------------------------------ */
+@media (max-width: 1099px) {
+  .sc-platform .sc-pf__steps {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .sc-platform .sc-pf__step {
+    gap: 20px;
+  }
+
+  .sc-platform .sc-pf__body {
+    padding-top: 10px;
+  }
+
+  /* From node 1's foot to 22px short of node 2, which sits one gap below
+     this step's box. */
+  .sc-platform .sc-pf__lanes {
+    top: 48px;
+    left: 16px;
+    width: 16px;
+    bottom: calc(22px - var(--sc-pf-gap));
+  }
+
+  .sc-platform .sc-pf__lane {
+    top: 0;
+    bottom: 0;
+    left: calc(1px + var(--k, 0) * 6px);
+    width: 2px;
+    transform-origin: center top;
+  }
+
+  .sc-platform .sc-pf__merge--v {
+    top: 100%;
+    left: 0;
+    width: 16px;
+    height: 22px;
+  }
+
+  .sc-platform .sc-pf__merge--h {
+    display: none;
+  }
+
+  /* In the gap between step 1's text and step 2, beside the merge. */
+  .sc-platform .sc-pf__tags {
+    top: calc(100% + 22px - var(--sc-pf-gap));
+    left: 44px;
+    height: var(--sc-pf-gap);
+  }
+
+  .sc-platform .sc-pf__line {
+    top: 24px;
+    left: 23px;
+    width: 2px;
+    height: calc(100% + var(--sc-pf-gap));
+    transform-origin: center top;
+  }
+}
+
+/* ---- Draw on reveal --------------------------------------------------------
+   Runs once, when the scroll reveal adds .is-visible. The lanes draw
+   staggered 0/120/240ms, the merge fades in as they arrive, then the
+   blue line spends 0.45s on each later segment; each node lights at its
+   --t, the moment the line reaches it (set per step by the script).
+   ----------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .sc-platform .sc-pf.is-animated .sc-pf__lane {
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    transition-delay: calc(var(--k, 0) * 0.12s);
+  }
+
+  .sc-platform .sc-pf.is-animated .sc-pf__merge {
+    opacity: 0;
+    transition: opacity 0.25s ease 0.6s;
+  }
+
+  .sc-platform .sc-pf.is-animated .sc-pf__tags {
+    opacity: 0;
+    transition: opacity 0.4s ease 0.35s;
+  }
+
+  .sc-platform .sc-pf.is-animated .sc-pf__line {
+    transition: transform 0.45s linear;
+    transition-delay: var(--t, 0s);
+  }
+
+  .sc-platform .sc-pf.is-animated .sc-pf__node::before {
+    opacity: 0;
+    transform: scale(0.7);
+    transition: opacity 0.4s ease, transform 0.4s var(--sc-ease);
+    transition-delay: var(--t, 0s);
+  }
+
+  .sc-platform .sc-pf.is-animated .sc-pf__num {
+    opacity: 0.4;
+    transition: opacity 0.4s ease;
+    transition-delay: var(--t, 0s);
+  }
+
+  .sc-platform .sc-pf.is-animated.is-visible .sc-pf__merge,
+  .sc-platform .sc-pf.is-animated.is-visible .sc-pf__tags,
+  .sc-platform .sc-pf.is-animated.is-visible .sc-pf__num {
+    opacity: 1;
+  }
+
+  .sc-platform .sc-pf.is-animated.is-visible .sc-pf__node::before {
+    opacity: 1;
+    transform: none;
+  }
+
+  .sc-platform .sc-pf.is-animated.is-visible .sc-pf__lane,
+  .sc-platform .sc-pf.is-animated.is-visible .sc-pf__line {
+    transform: none;
+  }
+}
+
+/* The undrawn state per orientation. The drawn state above carries one
+   more class (.is-visible), so it wins whatever the order. */
+@media (min-width: 1100px) and (prefers-reduced-motion: no-preference) {
+  .sc-platform .sc-pf.is-animated .sc-pf__lane,
+  .sc-platform .sc-pf.is-animated .sc-pf__line {
+    transform: scaleX(0);
+  }
+}
+
+@media (max-width: 1099px) and (prefers-reduced-motion: no-preference) {
+  .sc-platform .sc-pf.is-animated .sc-pf__lane,
+  .sc-platform .sc-pf.is-animated .sc-pf__line {
+    transform: scaleY(0);
+  }
+}
+
+
+
+/* =====================================================================
+   04 · Key capabilities (.sc-capabilities → .sc-cp, #sc-capabilities)
+   ---------------------------------------------------------------------
+   A control matrix: one white panel split by 1px hairlines into a 3×3
+   grid. The hairlines are each cell's right and bottom border; the grid
+   overhangs the panel by 1px on those sides, so the panel's rounded
+   clip hides the outer ones at any column count. Static cells: hover
+   tints, nothing lifts.
+   ===================================================================== */
+.sc-section.sc-capabilities {
+  background-color: var(--sc-bg-tint);
+  background-image: radial-gradient(60% 50% at 50% 0%, rgba(12, 104, 255, 0.06), transparent 70%);
+}
+
+/* Clears the site's fixed header when "Tour All Features" scrolls here. */
+.sc-capabilities .sc-cp {
+  scroll-margin-top: 96px;
+}
+
+.sc-capabilities .sc-cp:focus {
+  outline: none;                             /* focus lands here only to continue from; the heading shows where */
+}
+
+.sc-capabilities .sc-cp__panel {
+  overflow: hidden;
+  border: 1px solid var(--sc-border);
+  border-radius: var(--sc-radius);
+  background: var(--sc-bg);
+  box-shadow: var(--sc-shadow);
+}
+
+.sc-capabilities .sc-cp__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0 -1px -1px 0;
+}
+
+.sc-capabilities .sc-cp__item {
+  display: flex;
+  border-right: 1px solid var(--sc-border);
+  border-bottom: 1px solid var(--sc-border);
+  background: var(--sc-bg);
+  transition: background-color 0.2s ease;
+}
+
+.sc-capabilities .sc-cp__cell {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: clamp(24px, 2.4vw, 34px) clamp(22px, 2.2vw, 32px);
+}
+
+.sc-capabilities .sc-cp__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.sc-capabilities .sc-cp__num {
+  font-family: var(--sc-mono);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--sc-text);
+  transition: color 0.2s ease;
+}
+
+/* Stroke accent-ink on accent-soft: 5.5:1. */
+.sc-capabilities .sc-cp__icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--sc-accent-soft);
+  color: var(--sc-accent-ink);
+}
+
+.sc-capabilities .sc-cp__icon svg {
+  display: block;
+  width: 21px;
+  height: 21px;
+}
+
+.sc-capabilities .sc-cp__title {
+  margin-top: 20px;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--sc-heading);
+}
+
+.sc-capabilities .sc-cp__text {
+  margin-top: 8px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--sc-text);
+}
+
+@media (hover: hover) {
+  .sc-capabilities .sc-cp__item:hover {
+    background: var(--sc-accent-wash);
+  }
+
+  .sc-capabilities .sc-cp__item:hover .sc-cp__num {
+    color: var(--sc-accent-ink);
+  }
+}
+
+@media (max-width: 1024px) {
+  .sc-capabilities .sc-cp__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* An odd last cell spans the row, so the matrix stays a rectangle. */
+  .sc-capabilities .sc-cp__item:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 599px) {
+  .sc-capabilities .sc-cp__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-capabilities .sc-cp__item,
+  .sc-capabilities .sc-cp__num {
+    transition: none;
+  }
+}
+
+
+/* =====================================================================
+   05 · Coverage (.sc-coverage → .sc-cv)
+   ---------------------------------------------------------------------
+   A service manifest: rows under hairlines, each with a short blue tab
+   marker, the group name, and mono service chips or a sentence. Two
+   columns at ≥960px that fill downward (--rows from the script), so the
+   three clouds sit together on the left. No logos, no brand colours.
+   ===================================================================== */
+.sc-section.sc-coverage {
+  background-color: var(--sc-bg);
+}
+
+.sc-coverage .sc-cv__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.sc-coverage .sc-cv__item {
+  position: relative;
+  padding: 24px 0 26px 22px;
+  border-bottom: 1px solid var(--sc-rule);
+}
+
+/* A tab marker, as tall as the title's first line. */
+.sc-coverage .sc-cv__item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 24px;
+  width: 3px;
+  height: 28px;
+  border-radius: 2px;
+  background: var(--sc-accent);
+}
+
+.sc-coverage .sc-cv__title {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 28px;
+  color: var(--sc-heading);
+}
+
+.sc-coverage .sc-cv__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.sc-coverage .sc-cv__chip {
+  padding: 5px 10px;
+  border: 1px solid var(--sc-border);
+  border-radius: 6px;
+  background: var(--sc-bg-tint);
+  font-family: var(--sc-mono);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--sc-heading);
+}
+
+.sc-coverage .sc-cv__text {
+  margin-top: 8px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--sc-text);
+}
+
+@media (min-width: 960px) {
+  .sc-coverage .sc-cv__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(var(--rows, 3), auto);
+    grid-auto-flow: column;
+    column-gap: clamp(40px, 5vw, 80px);
+  }
+}
+
+
+/* =====================================================================
+   06 · Use cases (.sc-usecases → .sc-uc)
+   ---------------------------------------------------------------------
+   Night, with one blue glow at the bottom centre over a faint dot grid.
+   Translucent cards, each topped by a 2px line in its lane colour
+   (decoration: the title says what it is). Static, so no lift.
+   ===================================================================== */
+.sc-section.sc-usecases {
+  background-color: var(--sc-night);
+}
+
+.sc-usecases .sc-uc {
+  position: relative;
+  overflow: clip;
+  background-color: var(--sc-night);
+}
+
+.sc-usecases .sc-uc__decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(50% 60% at 50% 100%, rgba(12, 104, 255, 0.24), transparent 70%),
+    radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1.4px);
+  background-size: auto, 28px 28px;
+}
+
+.sc-usecases .sc-uc__inner {
+  position: relative;
+}
+
+.sc-usecases .sc-uc__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sc-gap);
+}
+
+.sc-usecases .sc-uc__item {
+  display: flex;
+}
+
+.sc-usecases .sc-uc__card {
+  position: relative;
+  flex: 1 1 auto;
+  overflow: hidden;
+  padding: clamp(24px, 2.4vw, 32px) clamp(22px, 2.2vw, 28px);
+  border: 1px solid var(--sc-border-dark);
+  border-radius: var(--sc-radius);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.sc-usecases .sc-uc__card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--sc-lane);
+}
+
+.sc-usecases .sc-uc__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  color: var(--sc-on-dark-body);
+}
+
+.sc-usecases .sc-uc__icon svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.sc-usecases .sc-uc__title {
+  margin-top: 20px;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--sc-on-dark);
+}
+
+.sc-usecases .sc-uc__text {
+  margin-top: 8px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--sc-on-dark-body);
+}
+
+@media (max-width: 1024px) {
+  .sc-usecases .sc-uc__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .sc-usecases .sc-uc__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+
+/* =====================================================================
+   07 · Business impact (.sc-impact → .sc-im)
+   ---------------------------------------------------------------------
+   An outcome ledger: editorial rows, no cards, no icons. At ≥900px the
+   index takes its own grid row, so the title and the text share the
+   next one and align on their first baseline.
+   ===================================================================== */
+.sc-section.sc-impact {
+  background-color: var(--sc-bg);
+}
+
+.sc-impact .sc-im__list {
+  border-top: 1px solid var(--sc-rule);
+}
+
+.sc-impact .sc-im__row {
+  padding: clamp(28px, 3vw, 36px) 0;
+  border-bottom: 1px solid var(--sc-rule);
+}
+
+.sc-impact .sc-im__num {
+  display: block;
+  margin-bottom: 10px;
+  font-family: var(--sc-mono);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--sc-accent-ink);
+}
+
+.sc-impact .sc-im__title {
+  font-weight: 700;
+  font-size: clamp(22px, 2.2vw, 28px);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--sc-heading);
+  text-wrap: balance;
+}
+
+.sc-impact .sc-im__text {
+  margin-top: 10px;
+  max-width: 40em;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--sc-text);
+  text-wrap: pretty;
+}
+
+@media (min-width: 900px) {
+  .sc-impact .sc-im__row {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    grid-template-areas:
+      "num   ."
+      "title text";
+    align-items: baseline;
+    column-gap: clamp(32px, 5vw, 80px);
+  }
+
+  .sc-impact .sc-im__num   { grid-area: num; }
+  .sc-impact .sc-im__title { grid-area: title; }
+
+  .sc-impact .sc-im__text {
+    grid-area: text;
+    margin-top: 0;
+  }
+}
+
+
+/* =====================================================================
+   08 · Why CybrHawk (.sc-why → .sc-wy)
+   ---------------------------------------------------------------------
+   A calm gradient ground and a bento: the first differentiator is the
+   dark anchor card, carrying a static mini-diagram of the page's motif;
+   the other four are white cards with an icon badge.
+   ===================================================================== */
+.sc-section.sc-why {
+  background-color: #f3f7ff;
+  background-image: linear-gradient(180deg, #f3f7ff 0%, #ffffff 100%);
+}
+
+.sc-why .sc-wy__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sc-gap);
+}
+
+.sc-why .sc-wy__item {
+  display: flex;
+}
+
+.sc-why .sc-wy__card {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(24px, 2.4vw, 32px);
+  border: 1px solid var(--sc-border);
+  border-radius: var(--sc-radius);
+  background: var(--sc-bg);
+  box-shadow: var(--sc-shadow);
+}
+
+.sc-why .sc-wy__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 20px;
+  border-radius: 11px;
+  background: var(--sc-accent-soft);
+  color: var(--sc-accent-ink);
+}
+
+.sc-why .sc-wy__icon svg {
+  display: block;
+  width: 21px;
+  height: 21px;
+}
+
+.sc-why .sc-wy__title {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--sc-heading);
+}
+
+.sc-why .sc-wy__text {
+  margin-top: 8px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--sc-text);
+}
+
+/* The anchor: night, white type, and the lane inks swapped to their
+   dark-ground versions for its diagram. */
+.sc-why .sc-wy__card--anchor {
+  --sc-c-posture: var(--sc-posture-on-dark);
+  --sc-c-identity: var(--sc-identity-on-dark);
+  --sc-c-threat: var(--sc-threat-on-dark);
+  border-color: var(--sc-night-2);
+  background: var(--sc-night-2);
+  box-shadow: 0 18px 44px rgba(13, 19, 48, 0.18);
+}
+
+.sc-why .sc-wy__card--anchor .sc-wy__title {
+  font-size: clamp(22px, 2vw, 26px);
+  line-height: 1.2;
+  color: var(--sc-on-dark);
+}
+
+.sc-why .sc-wy__card--anchor .sc-wy__text {
+  margin-top: 12px;
+  font-size: 16.5px;
+  color: var(--sc-on-dark-body);
+}
+
+/* Pushed to the card's foot, however tall the bento row makes it, and
+   as wide as the card; the strokes stay 2px at any scale. */
+.sc-why .sc-wy__diagram {
+  display: block;
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+  margin-top: auto;
+  padding-top: 32px;
+  fill: none;
+  overflow: visible;
+}
+
+.sc-why .sc-wy__diagram path {
+  stroke: var(--sc-lane);
+  stroke-width: 2;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.sc-why .sc-wy__diagram .sc-wy__diagram-story {
+  stroke: var(--sc-accent-on-dark);
+  stroke-width: 3;
+}
+
+.sc-why .sc-wy__diagram-node {
+  fill: var(--sc-accent);
+  stroke: var(--sc-accent-on-dark);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+@media (min-width: 700px) {
+  .sc-why .sc-wy__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "a a"
+      "b c"
+      "d e";
+  }
+
+  .sc-why .sc-wy__item--a { grid-area: a; }
+  .sc-why .sc-wy__item--b { grid-area: b; }
+  .sc-why .sc-wy__item--c { grid-area: c; }
+  .sc-why .sc-wy__item--d { grid-area: d; }
+  .sc-why .sc-wy__item--e { grid-area: e; }
+}
+
+@media (min-width: 1100px) {
+  .sc-why .sc-wy__grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "a b c"
+      "a d e";
+  }
+}
+
+
+/* =====================================================================
+   09 · FAQ (.sc-faq → .sc-fq)
+   ---------------------------------------------------------------------
+   The UDC accordion, one column at most 880px wide. Ends on white with
+   its normal bottom padding: the site's closing CTA component follows
+   directly.
+   ===================================================================== */
+.sc-section.sc-faq {
+  background-color: var(--sc-bg);
+}
+
+.sc-faq .sc-fq {
+  max-width: calc(880px + 2 * var(--sc-gutter));
+}
+
+.sc-faq .sc-fq__list {
+  border-top: 1px solid var(--sc-rule);
+}
+
+.sc-faq .sc-fq__item {
+  border-bottom: 1px solid var(--sc-rule);
+}
+
+.sc-faq .sc-fq__q {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* A full reset: the theme gives every <button> a coloured border, a
+   filled hover and focus, centred nowrap text and its own font size. */
+.sc-faq .sc-fq__btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  margin: 0;
+  padding: 22px 4px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  box-shadow: none;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: clamp(17px, 1.3vw, 18px);
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-align: left;
+  text-transform: none;
+  white-space: normal;
+  color: var(--sc-heading);
+  cursor: pointer;
+  transition: none;
+  -webkit-appearance: none;
+          appearance: none;
+}
+
+.sc-faq .sc-fq__btn:hover,
+.sc-faq .sc-fq__btn:focus,
+.sc-faq .sc-fq__btn:active {
+  background: transparent;
+  color: var(--sc-heading);
+  text-decoration: none;
+}
+
+.sc-faq .sc-fq__btn:focus-visible {
+  outline: 3px solid var(--sc-c-focus);
+  outline-offset: 3px;
+}
+
+.sc-faq .sc-fq__q-text {
+  min-width: 0;
+}
+
+.sc-faq .sc-fq__icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--sc-border);
+  border-radius: 50%;
+  color: var(--sc-accent);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.sc-faq .sc-fq__icon svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+@media (hover: hover) {
+  .sc-faq .sc-fq__btn:hover .sc-fq__icon {
+    border-color: #c9d6ee;
+  }
+}
+
+.sc-faq .sc-fq__btn[aria-expanded="true"] .sc-fq__icon {
+  border-color: transparent;
+  background: var(--sc-accent-soft);
+}
+
+/* Plus to minus: the vertical stroke folds flat. */
+.sc-faq .sc-fq__v {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+
+.sc-faq .sc-fq__btn[aria-expanded="true"] .sc-fq__v {
+  transform: scaleY(0);
+}
+
+/* No display here: the `hidden` attribute has to keep hiding it. */
+.sc-faq .sc-fq__a {
+  padding: 0 58px 24px 4px;
+}
+
+.sc-faq .sc-fq__a p {
+  max-width: 68ch;
+  margin: 0;
+  font-size: clamp(15.5px, 1.2vw, 17px);
+  line-height: 1.7;
+  color: var(--sc-text);
+}
+
+/* `display` cannot be transitioned, so opening is a keyframe fade on the
+   newly shown answer rather than a two-state transition. */
+.sc-faq .sc-fq__a:not([hidden]) {
+  animation: sc-fq-fade 0.3s ease both;
+}
+
+@keyframes sc-fq-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-faq .sc-fq__a:not([hidden]) {
+    animation: none;
+  }
+  .sc-faq .sc-fq__v,
+  .sc-faq .sc-fq__icon {
+    transition: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .sc-faq .sc-fq__btn {
+    gap: 14px;
+    padding: 18px 2px;
+  }
+  .sc-faq .sc-fq__a {
+    padding: 0 2px 20px;
+  }
+}

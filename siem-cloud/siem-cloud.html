@@ -1,0 +1,115 @@
+<!doctype html>
+<!--
+  =====================================================================
+  CybrHawk — SIEM Cloud (Cloud Detection & Response) page: local preview harness
+  ---------------------------------------------------------------------
+  For previewing siem-cloud.js + siem-cloud.css in a browser. This file
+  is not deployed; on the live site Elementor supplies the containers
+  below.
+
+  Elementor setup
+  ---------------
+  1. Create 9 containers, in this order, each with Content Width set to
+     Full Width, padding 0 and no background, and its class typed into
+     Advanced → CSS Classes:
+
+       01  sc-hero          Hero
+       02  sc-challenge     The challenge
+       03  sc-platform      Platform overview
+       04  sc-capabilities  Key capabilities (target of "Tour All Features")
+       05  sc-coverage      Coverage
+       06  sc-usecases      Use cases
+       07  sc-impact        Business impact
+       08  sc-why           Why CybrHawk
+       09  sc-faq           FAQ
+
+     Leave each one empty: siem-cloud.js builds the section inside it and
+     adds `sc-section` (and `sc-section--dark` where it applies), so
+     nothing else needs typing.
+
+  2. Load siem-cloud.css and siem-cloud.js the same way the other pages'
+     files are loaded.
+
+  3. The hero holds the page's only <h1>. If the page template prints the
+     WordPress page title as a second H1, hide it (Page Settings → Hide
+     Title).
+
+  4. Put the site's existing CTA container directly after the FAQ, and
+     paste Appendix B of the brief (heading, body, both buttons and the
+     phone / email line) into its CONTENT block. The FAQ ends on white
+     with its normal bottom padding, so the two join without a seam.
+
+  5. Paste Appendix C of the brief (meta title and description, slug,
+     keywords, Open Graph title) into the SEO plugin (Rank Math or Yoast).
+
+  Also check
+  ----------
+  - Open items are marked `// TODO:` in the CONTENT block of
+    siem-cloud.js: "SIEM XDR" versus "SIEM / XDR" (section 08), and
+    whether the SEO plugin already emits FAQ schema before
+    CONTENT.faq.schema is turned on.
+  - The site header overlays the page, so the hero clears its measured
+    height before any content (--sc-header-offset in the tokens of
+    siem-cloud.css: 90px phone, 102px tablet, 100px + 1.5vw desktop).
+    If this template's header does not overlay, set it to 0px. The fake
+    header below is fixed and shorter, so a little extra night ground
+    shows under it here.
+  - Hero image: CONTENT.hero.visual.image in siem-cloud.js (the banner,
+    1254×1254). It fills the right half to the screen edge on desktop,
+    shown whole (never cropped), and sits under the copy below 1025px.
+    Empty, or failing to load, it gives way to
+    the coded convergence console.
+  - The hero is light, so on desktop it paints a navy band behind the
+    transparent site header (--sc-hr-bar in siem-cloud.css) to keep the
+    header's light links readable.
+  - Click tracking: the hero buttons carry
+    data-sc-cta="hero-primary | hero-secondary" for GTM.
+  - Two containers below use an inner .e-con-inner (Elementor's boxed
+    layout) so both host paths are exercised.
+  =====================================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIEM Cloud — preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="siem-cloud.css">
+  <style>
+    /* Preview only. */
+    body { margin: 0; font-family: "Figtree", sans-serif; }
+    .preview-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 72px; padding: 0 24px; box-sizing: border-box;
+      background: rgba(7, 11, 24, 0.85); color: #fff;
+      font-weight: 700; font-size: 18px;
+    }
+    .preview-header span { font-weight: 500; font-size: 14px; opacity: 0.7; }
+    .preview-cta {
+      display: flex; align-items: center; justify-content: center;
+      height: 320px; background: #e9ecf2; color: #5b6478;
+      font-size: 15px; font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <header class="preview-header">CybrHawk <span>Fake 72px site header</span></header>
+
+  <div class="e-con e-con-full sc-hero"></div>
+  <div class="e-con e-con-full sc-challenge"></div>
+  <div class="e-con e-con-boxed sc-platform"><div class="e-con-inner"></div></div>
+  <div class="e-con e-con-full sc-capabilities"></div>
+  <div class="e-con e-con-full sc-coverage"></div>
+  <div class="e-con e-con-full sc-usecases"></div>
+  <div class="e-con e-con-boxed sc-impact"><div class="e-con-inner"></div></div>
+  <div class="e-con e-con-full sc-why"></div>
+  <div class="e-con e-con-full sc-faq"></div>
+
+  <div class="preview-cta">Existing CTA component goes here</div>
+
+  <script src="siem-cloud.js"></script>
+</body>
+</html>
