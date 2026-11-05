@@ -181,7 +181,10 @@
     usecases: {
       eyebrow: "Use Cases",
       title: "Stop the Cloud Threats [[That Matter Most]]",
-      // lane drives the card's top line only (decoration, no visible label).
+      // Each card's lane sets its colour and its tag; the tag words (and the
+      // legend beside the H2) are the lane names from the section 03 H2.
+      // Empty tags hide both the tags and the legend.
+      tags: { posture: "Posture", identity: "Identity", threat: "Threat" },
       items: [
         { lane: "posture",  icon: "bucket",    title: "Exposed Storage & Data Leaks",
           text: "Find public buckets, open blob containers, and overly permissive sharing, and close them before data is exposed." },
@@ -1115,39 +1118,87 @@
   }
 
   /* ---- 06 · Use cases -----------------------------------------------------
-     Dark cards, each topped by a 2px line in its lane colour: by now the
-     reader knows the code, so the lane needs no label (and the colour is
-     decoration, not information). Static, so no lift.
+     Dark cards read like detections: a lane-tinted icon tile, the lane's
+     name as a mono tag (so the colour is never the only signal), the
+     title and the text, under a top line in the lane colour. A legend
+     beside the H2 explains the code once.
+
+     The tag follows the title in the DOM, so a screen reader meets the
+     heading first; the CSS places it top right. The cards are static (no
+     lift); under a mouse a soft spotlight in the card's lane colour
+     follows the pointer, moved by transform from two custom properties
+     the delegated handler below writes once per frame.
      -------------------------------------------------------------------- */
   function buildUsecases(host, c) {
     if (!host) return false;
     if (host.querySelector(".sc-uc")) return true;
 
+    var tags = c.tags || {};
+
     var items = (c.items || []).map(function (it, i) {
+      var l = lane(it.lane);
       return (
         '<li class="sc-uc__item sc-reveal"' + at(i + 1) + ">" +
-          '<div class="sc-uc__card sc-lane--' + lane(it.lane) + '">' +
+          '<div class="sc-uc__card sc-lane--' + l + '">' +
+            '<span class="sc-uc__spot" aria-hidden="true"></span>' +
             '<span class="sc-uc__icon">' + icon(it.icon) + "</span>" +
             '<h3 class="sc-uc__title">' + esc(it.title) + "</h3>" +
+            (tags[l] ? '<span class="sc-uc__tag">' + esc(tags[l]) + "</span>" : "") +
             '<p class="sc-uc__text">' + esc(it.text) + "</p>" +
           "</div>" +
         "</li>"
       );
     }).join("");
 
-    mount(
+    // Decoration: each card already names its lane in words.
+    var legend = LANES.filter(function (l) { return tags[l]; }).map(function (l) {
+      return '<span class="sc-uc__key sc-lane--' + l + '">' + esc(tags[l]) + "</span>";
+    }).join("");
+
+    var root = mount(
       host,
       '<div class="' + bleedClass("sc-uc") + '">' +
         '<div class="sc-uc__decor" aria-hidden="true"></div>' +
         '<div class="sc-shell sc-uc__inner">' +
-          head({ id: "sc-usecases-title", eyebrow: c.eyebrow, title: c.title, align: "start" }) +
+          '<div class="sc-uc__header">' +
+            head({ id: "sc-usecases-title", eyebrow: c.eyebrow, title: c.title, align: "start" }) +
+            (legend ? '<div class="sc-uc__legend sc-reveal" aria-hidden="true"' + at(1) + ">" + legend + "</div>" : "") +
+          "</div>" +
           (items ? '<ul class="sc-uc__grid">' + items + "</ul>" : "") +
         "</div>" +
       "</div>",
       "sc-uc"
     );
 
+    spotlight(root.querySelector(".sc-uc__grid"));
     return true;
+  }
+
+  // The 06 card spotlight: mouse only, never under reduced motion.
+  function spotlight(grid) {
+    if (!grid || !ANIMATE || reducedMotion() || !window.matchMedia ||
+        !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+    var frame = 0;
+    var card = null;
+    var x = 0;
+    var y = 0;
+
+    function paint() {
+      frame = 0;
+      if (!card) return;
+      card.style.setProperty("--sc-mx", Math.round(x) + "px");
+      card.style.setProperty("--sc-my", Math.round(y) + "px");
+    }
+
+    grid.addEventListener("mousemove", function (e) {
+      card = e.target.closest && e.target.closest(".sc-uc__card");
+      if (!card) return;
+      var r = card.getBoundingClientRect();
+      x = e.clientX - r.left;
+      y = e.clientY - r.top;
+      if (!frame) frame = window.requestAnimationFrame(paint);
+    });
   }
 
   /* ---- 07 · Business impact -----------------------------------------------

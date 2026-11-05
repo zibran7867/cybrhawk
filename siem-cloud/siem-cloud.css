@@ -361,18 +361,23 @@
    console, --sc-lane-fill). The ink follows the ground through the
    --sc-c-* roles, so one class works on light and dark.
    ----------------------------------------------------------------------- */
+/* --sc-lane-rgb is the dark-ground ink as a triplet, for the tints and
+   washes that need it at an alpha (rgba(var(--sc-lane-rgb), a)). */
 .sc-section .sc-lane--posture {
   --sc-lane: var(--sc-c-posture);
+  --sc-lane-rgb: 245, 176, 65;
   --sc-lane-fill: rgba(245, 176, 65, 0.12);
 }
 
 .sc-section .sc-lane--identity {
   --sc-lane: var(--sc-c-identity);
+  --sc-lane-rgb: 94, 234, 212;
   --sc-lane-fill: rgba(94, 234, 212, 0.12);
 }
 
 .sc-section .sc-lane--threat {
   --sc-lane: var(--sc-c-threat);
+  --sc-lane-rgb: 255, 122, 122;
   --sc-lane-fill: rgba(255, 122, 122, 0.12);
 }
 
@@ -2026,8 +2031,18 @@
    06 · Use cases (.sc-usecases → .sc-uc)
    ---------------------------------------------------------------------
    Night, with one blue glow at the bottom centre over a faint dot grid.
-   Translucent cards, each topped by a 2px line in its lane colour
-   (decoration: the title says what it is). Static, so no lift.
+   Cards that read like detections: a lane-tinted icon tile, the lane's
+   name as a mono tag top right, then the title and the text, under a
+   top line in the lane colour that bleeds a faint wash down the card.
+   A legend beside the H2 explains the colour code once.
+
+   Static cards, so nothing lifts. Under a mouse the border picks up the
+   lane colour and a soft spotlight in that colour follows the pointer
+   (moved by transform; --sc-mx / --sc-my come from the script).
+
+   Tag contrast, lane ink on its 12% chip over the card and its wash
+   (the worst case): amber 6.2:1, teal 7.3:1, red 5.0:1. The legend on
+   the night: 10.4, 13.3 and 7.8:1.
    ===================================================================== */
 .sc-section.sc-usecases {
   background-color: var(--sc-night);
@@ -2053,6 +2068,51 @@
   position: relative;
 }
 
+/* ---- Header and legend --------------------------------------------------- */
+.sc-usecases .sc-uc__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px 40px;
+  margin-bottom: clamp(36px, 4vw, 56px);
+}
+
+.sc-usecases .sc-uc__header .sc-head {
+  margin-bottom: 0;
+}
+
+.sc-usecases .sc-uc__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sc-usecases .sc-uc__key {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 10px;
+  border: 1px solid rgba(var(--sc-lane-rgb), 0.3);
+  border-radius: 999px;
+  font-family: var(--sc-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.3;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sc-lane);
+}
+
+.sc-usecases .sc-uc__key::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sc-lane);
+}
+
+/* ---- Cards ----------------------------------------------------------------- */
 .sc-usecases .sc-uc__grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2064,55 +2124,118 @@
 }
 
 .sc-usecases .sc-uc__card {
+  --sc-uc-pad: clamp(24px, 2.4vw, 30px);
   position: relative;
+  isolation: isolate;                        /* keeps the wash and the spotlight under the text */
   flex: 1 1 auto;
   overflow: hidden;
-  padding: clamp(24px, 2.4vw, 32px) clamp(22px, 2.2vw, 28px);
+  padding: var(--sc-uc-pad);
   border: 1px solid var(--sc-border-dark);
   border-radius: var(--sc-radius);
-  background: rgba(255, 255, 255, 0.04);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02));
+  transition: border-color 0.3s ease;
 }
 
-.sc-usecases .sc-uc__card::before {
+/* The lane line, and the faint wash it casts down the card. */
+
+.sc-usecases .sc-uc__card::after {
   content: "";
   position: absolute;
+  z-index: -1;
   top: 0;
   left: 0;
   right: 0;
-  height: 2px;
-  background: var(--sc-lane);
+  height: 120px;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(var(--sc-lane-rgb), 0.09), rgba(var(--sc-lane-rgb), 0));
+}
+
+.sc-usecases .sc-uc__spot {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 440px;
+  height: 440px;
+  margin: -220px 0 0 -220px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgba(var(--sc-lane-rgb), 0.16), rgba(var(--sc-lane-rgb), 0));
+  opacity: 0;
+  transform: translate(var(--sc-mx, 50%), var(--sc-my, 0px));
+  transition: opacity 0.35s ease;
 }
 
 .sc-usecases .sc-uc__icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 50%;
-  color: var(--sc-on-dark-body);
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(var(--sc-lane-rgb), 0.28);
+  border-radius: 12px;
+  background: var(--sc-lane-fill);
+  color: var(--sc-lane);
 }
 
 .sc-usecases .sc-uc__icon svg {
   display: block;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
+}
+
+/* After the title in the DOM, top right on screen, centred on the icon. */
+.sc-usecases .sc-uc__tag {
+  position: absolute;
+  top: calc(var(--sc-uc-pad) + 12px);
+  right: var(--sc-uc-pad);
+  padding: 3px 9px;
+  border: 1px solid rgba(var(--sc-lane-rgb), 0.25);
+  border-radius: 999px;
+  background: var(--sc-lane-fill);
+  font-family: var(--sc-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sc-lane);
 }
 
 .sc-usecases .sc-uc__title {
-  margin-top: 20px;
+  margin-top: 22px;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 18.5px;
   line-height: 1.3;
   color: var(--sc-on-dark);
 }
 
 .sc-usecases .sc-uc__text {
-  margin-top: 8px;
+  margin-top: 10px;
   font-size: 15.5px;
   line-height: 1.6;
   color: var(--sc-on-dark-body);
+}
+
+@media (hover: hover) {
+  .sc-usecases .sc-uc__card:hover {
+    border-color: rgba(var(--sc-lane-rgb), 0.45);
+  }
+
+  .sc-usecases .sc-uc__card:hover .sc-uc__spot {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-usecases .sc-uc__card,
+  .sc-usecases .sc-uc__spot {
+    transition: none;
+  }
+
+  .sc-usecases .sc-uc__spot {
+    display: none;
+  }
 }
 
 @media (max-width: 1024px) {
