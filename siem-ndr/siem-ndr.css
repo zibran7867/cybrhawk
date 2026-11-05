@@ -421,6 +421,34 @@
   background-image: linear-gradient(180deg, var(--nd-night) 0%, var(--nd-night-2) 100%);
 }
 
+/* ---- Fitting the screen ------------------------------------------------
+   On desktop the hero is one screen tall, never less: every vertical
+   size below scales with the viewport's height as well as its width
+   (min(vw, vh) clamps), so on a short screen (a 1080p laptop at 125%
+   scaling leaves about 1536×730; a browser with toolbars, 1897×812) the
+   copy, the deck and the readout strip all fit under the header. On a
+   tall screen the spare height goes around the copy, and the deck and
+   the strip stay on the screen's bottom edge. svh where supported, so a
+   collapsing toolbar does not change it; vh before it as the fallback.
+   Stacked (≤1024px) the hero simply runs as tall as its content.
+   ----------------------------------------------------------------------- */
+@media (min-width: 1025px) {
+  .nd-hero .nd-hr {
+    box-sizing: border-box;                  /* the header clearance counts inside the one screen */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
+  .nd-hero .nd-hr__inner.nd-shell {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
 /* One blue glow high on the right, and the page's wire lines (1px, 5%
    white, 36px pitch) fading in towards the deck. */
 .nd-hero .nd-hr__decor {
@@ -453,22 +481,22 @@
 /* ---- The copy ---------------------------------------------------------- */
 .nd-hero .nd-hr__inner.nd-shell {
   position: relative;
-  padding-top: clamp(28px, min(4vw, 5vh), 64px);
-  padding-bottom: clamp(24px, min(3.2vw, 4.4vh), 44px);
+  padding-top: clamp(18px, min(4vw, 4vh), 64px);
+  padding-bottom: clamp(16px, min(3.2vw, 3.4vh), 44px);
 }
 
 .nd-hero .nd-hr__eyebrow {
-  margin-bottom: clamp(14px, 2.4vh, 24px);
+  margin-bottom: clamp(10px, 2vh, 24px);
 }
 
-/* The brief's scale (40–74px, 700, 1.02). With the full measure to run
-   in, "the Network Tells the Truth." (about 14.6em) holds one line from
-   1025px up; 9vh keeps a short laptop screen in budget. Line 2 is the
-   answer, so it alone takes the accent. */
+/* The brief's scale (up to 74px, 700, 1.02). With the full measure to
+   run in, "the Network Tells the Truth." (about 14.6em) holds one line
+   from 1025px up; 8vh keeps a short screen in budget, down to 36px.
+   Line 2 is the answer, so it alone takes the accent. */
 .nd-hero .nd-hr__title {
   margin: 0;
   font-weight: 700;
-  font-size: clamp(40px, min(5.2vw, 9vh), 74px);
+  font-size: clamp(36px, min(5.2vw, 8vh), 74px);
   line-height: 1.02;
   letter-spacing: -0.03em;
   color: var(--nd-on-dark);
@@ -493,13 +521,14 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: end;
-  gap: 24px clamp(32px, 5vw, 80px);
-  margin-top: clamp(18px, 3.2vh, 32px);
+  gap: clamp(16px, 2.6vh, 24px) clamp(32px, 5vw, 80px);
+  margin-top: clamp(12px, 2.6vh, 32px);
 }
 
+/* Wide enough for three lines on a desktop, so it costs little height. */
 .nd-hero .nd-hr__sub {
-  max-width: 44em;
-  font-size: clamp(16px, min(1.3vw, 2.4vh), 19px);
+  max-width: 54em;
+  font-size: clamp(15.5px, min(1.25vw, 2.3vh), 19px);
   line-height: 1.65;
   color: var(--nd-on-dark-body);             /* 12.0:1 on night */
   text-wrap: pretty;
@@ -554,7 +583,7 @@
 
 /* (0,3,0): beats the deck's shell padding reset above. */
 .nd-hero .nd-hr__deck .nd-hr__readout {
-  padding-top: 14px;
+  padding-top: clamp(8px, 1.6vh, 14px);
 }
 
 /* A small ring that pulses while the deck is recording (motion only). */
@@ -646,12 +675,13 @@
 }
 
 /* The pill zones above and below the wire are the track's own height:
-   the wire runs through the middle, so a 24px pill clears it by 12px
-   and still sits inside the track (the lanes clip). */
+   the wire runs through the middle, and a 23px pill clears it by 8px,
+   so even the shortest track (64px, on a short screen) holds both
+   pills inside it (the lanes clip). */
 .nd-hero .nd-hr__track {
   position: relative;
   display: block;
-  height: 80px;
+  height: clamp(64px, 9vh, 80px);
 }
 
 .nd-hero .nd-hr__baseline {
@@ -731,8 +761,8 @@
   top: 50%;
   left: -1px;
   width: 2px;
-  height: 20px;
-  margin-top: -10px;
+  height: 18px;
+  margin-top: -9px;
   border-radius: 2px;
   background: var(--nd-mk);
   box-shadow: 0 0 12px var(--nd-mk-glow);
@@ -746,17 +776,17 @@
   background: var(--nd-mk-fill);
   font-family: var(--nd-mono);
   font-size: 12px;
-  line-height: 1.4;
+  line-height: 1.25;
   white-space: nowrap;
   color: var(--nd-mk-ink);
 }
 
 .nd-hero .nd-hr__mark--up .nd-hr__mark-pill {
-  bottom: calc(50% + 12px);
+  bottom: calc(50% + 8px);
 }
 
 .nd-hero .nd-hr__mark--down .nd-hr__mark-pill {
-  top: calc(50% + 12px);
+  top: calc(50% + 8px);
 }
 
 .nd-hero .nd-hr__mark--start .nd-hr__mark-pill {
@@ -844,8 +874,8 @@
 
 /* ---- The readout strip (trust) ------------------------------------------- */
 .nd-hero .nd-hr__bottom.nd-shell {
-  padding-top: clamp(18px, 2.6vh, 26px);
-  padding-bottom: clamp(24px, 3.6vh, 40px);
+  padding-top: clamp(12px, 2.2vh, 26px);
+  padding-bottom: clamp(14px, 3vh, 40px);
 }
 
 .nd-hero .nd-hr__trust {
@@ -1080,7 +1110,7 @@
    sub, the readout strip folds to two columns. */
 @media (max-width: 1024px) {
   .nd-hero .nd-hr__title {
-    font-size: clamp(40px, 8.4vw, 64px);
+    font-size: clamp(40px, min(8.4vw, 7.4vh), 64px);
   }
 
   .nd-hero .nd-hr__lede {
@@ -1097,6 +1127,10 @@
     opacity: 0.2;
   }
 
+}
+
+/* The readout strip keeps its four columns down to 900px, then folds. */
+@media (max-width: 899px) {
   .nd-hero .nd-hr__trust {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px 0;
