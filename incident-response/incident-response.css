@@ -1189,9 +1189,14 @@
     height: 32px;
     }
 
+    /* Tablet and phone only: the copy drops to the card's foot, under the
+       photo's lit screens. On desktop (1100px and up, the bento) it sits
+       straight under the number and icon. */
+    @media (max-width: 1099px) {
     .ir-services .ir-sv__card--anchor .ir-sv__body {
-    margin-top: auto;
-    padding-top: clamp(28px, 4vw, 64px);
+        margin-top: auto;
+        padding-top: clamp(28px, 4vw, 64px);
+    }
     }
 
     .ir-services .ir-sv__card--anchor .ir-sv__title {
@@ -1246,16 +1251,19 @@
     object-position: 50% 62%;                    /* overridden by CONTENT imagePosition */
     }
 
+    /* Desktop: the copy sits at the top of the card, so the shade is
+       deepest there and clears toward the lit screens below, with a
+       light fade at the foot. Tablet and phone flip it (below). */
     .ir-services .ir-sv__bg::after {
     content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(180deg,
-        rgba(13, 19, 48, 0.45) 0%,
-        rgba(13, 19, 48, 0.12) 30%,
-        rgba(13, 19, 48, 0.5) 58%,
-        rgba(13, 19, 48, 0.94) 80%,
-        rgba(13, 19, 48, 0.98) 100%);
+        rgba(13, 19, 48, 0.9) 0%,
+        rgba(13, 19, 48, 0.75) 32%,
+        rgba(13, 19, 48, 0.15) 58%,
+        rgba(13, 19, 48, 0.1) 80%,
+        rgba(13, 19, 48, 0.55) 100%);
     }
 
     .ir-services .ir-sv__card--photo .ir-sv__top,
