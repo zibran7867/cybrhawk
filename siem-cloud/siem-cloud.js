@@ -224,7 +224,11 @@
       title: "Why CybrHawk for [[Cloud Security]]",
       // Item 1 is the dark anchor card with the mini convergence diagram.
       items: [
-        { icon: "",        title: "Detection and Posture Together", text: "Most tools do one or the other. CybrHawk connects misconfigurations, identities, and live threats in one view." },
+        // diagram: the anchor card's labels, verbatim from its own text
+        // ("connects misconfigurations, identities, and live threats in one
+        // view"), one per lane in rail order, then the end point.
+        { icon: "",        title: "Detection and Posture Together", text: "Most tools do one or the other. CybrHawk connects misconfigurations, identities, and live threats in one view.",
+          diagram: { lanes: ["misconfigurations", "identities", "live threats"], end: "one view" } },
         { icon: "globe",   title: "True Multi-Cloud",               text: "Consistent detection, response, and reporting across AWS, Azure, Google Cloud, and SaaS." },
         // TODO: copy says "SIEM XDR"; the UCD page writes "SIEM / XDR". Confirm before launch. Don't change it here.
         { icon: "layers",  title: "Unified With Your SOC",          text: "Cloud detections correlate natively with endpoint, network, and identity data in CybrHawk SIEM XDR." },
@@ -1291,19 +1295,45 @@
 
   /* ---- 08 · Why CybrHawk --------------------------------------------------
      A bento: the first differentiator is the dark anchor card, and its
-     icon is a small static replay of the page's motif (three lane lines
-     merging into one blue line that ends in a node). The other four are
-     white cards with an icon badge.
+     icon is a labelled replay of the page's motif: three lane lines, each
+     named with a word from the card's own text, merging into one blue
+     line that ends in a node marked "one view". The other four are white
+     cards with an icon badge.
+
+     The diagram is decoration (aria-hidden): the card's text says it. The
+     lines live in a 300×150 viewBox at a fixed ratio, so the HTML labels
+     can sit on them by percentage (DIAGRAM_Y, as a share of 150).
      -------------------------------------------------------------------- */
-  var MINI_DIAGRAM =
-    '<svg class="sc-wy__diagram" viewBox="0 0 240 60" preserveAspectRatio="xMinYMid meet" ' +
-      'aria-hidden="true" focusable="false">' +
-      '<path class="sc-lane--posture" d="M2 14h70c30 0 30 16 60 16"/>' +
-      '<path class="sc-lane--identity" d="M2 30h130"/>' +
-      '<path class="sc-lane--threat" d="M2 46h70c30 0 30-16 60-16"/>' +
-      '<path class="sc-wy__diagram-story" d="M132 30h86"/>' +
-      '<circle class="sc-wy__diagram-node" cx="226" cy="30" r="7"/>' +
-    "</svg>";
+  var DIAGRAM_Y = [25, 75, 125];
+
+  function whyDiagram(d) {
+    var labels = (d && d.lanes) || [];
+    var keys = "";
+
+    LANES.forEach(function (l, k) {
+      if (!labels[k]) return;
+      keys +=
+        '<span class="sc-wy__flow-key sc-lane--' + l + '" style="top:' +
+          Math.round((DIAGRAM_Y[k] / 150) * 10000) / 100 + '%;--k:' + k + '">' +
+          esc(labels[k]) +
+        "</span>";
+    });
+
+    return (
+      '<div class="sc-wy__flow" aria-hidden="true">' +
+        '<svg class="sc-wy__diagram" viewBox="0 0 300 150" focusable="false">' +
+          '<path class="sc-lane--posture" style="--k:0" d="M2 25h88c36 0 36 50 72 50"/>' +
+          '<path class="sc-lane--identity" style="--k:1" d="M2 75h160"/>' +
+          '<path class="sc-lane--threat" style="--k:2" d="M2 125h88c36 0 36-50 72-50"/>' +
+          '<path class="sc-wy__diagram-story" d="M162 75h108"/>' +
+          '<circle class="sc-wy__diagram-halo" cx="280" cy="75" r="16"/>' +
+          '<circle class="sc-wy__diagram-node" cx="280" cy="75" r="7"/>' +
+        "</svg>" +
+        keys +
+        (d && d.end ? '<span class="sc-wy__flow-end">' + esc(d.end) + "</span>" : "") +
+      "</div>"
+    );
+  }
 
   function buildWhy(host, c) {
     if (!host) return false;
@@ -1318,7 +1348,7 @@
             (!anchor && it.icon ? '<span class="sc-wy__icon">' + icon(it.icon) + "</span>" : "") +
             '<h3 class="sc-wy__title">' + esc(it.title) + "</h3>" +
             '<p class="sc-wy__text">' + esc(it.text) + "</p>" +
-            (anchor ? MINI_DIAGRAM : "") +
+            (anchor ? whyDiagram(it.diagram) : "") +
           "</div>" +
         "</li>"
       );
