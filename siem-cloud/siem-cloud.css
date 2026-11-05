@@ -1,6 +1,6 @@
 /* =====================================================================
    CybrHawk — SIEM Cloud (Cloud Detection & Response) page styles
-   (markup injected by siem-cloud.js, sections 01–09)
+   (markup injected by siem-cloud.js, sections 01–08)
 
    Every rule is scoped under a section container. The shared tokens and
    primitives sit on `.sc-section`, which the script adds to each
@@ -2558,8 +2558,10 @@
    08 · Why CybrHawk (.sc-why → .sc-wy)
    ---------------------------------------------------------------------
    A calm gradient ground and a bento: the first differentiator is the
-   dark anchor card, carrying a static mini-diagram of the page's motif;
-   the other four are white cards with an icon badge.
+   dark anchor card, carrying a labelled diagram of the page's motif;
+   the other four are white cards with an icon badge. The last section
+   built here: its gradient ends on white, with its normal bottom
+   padding, so the site's closing CTA component follows without a seam.
    ===================================================================== */
 .sc-section.sc-why {
   background-color: #f3f7ff;
@@ -2819,166 +2821,5 @@
     grid-template-areas:
       "a b c"
       "a d e";
-  }
-}
-
-
-/* =====================================================================
-   09 · FAQ (.sc-faq → .sc-fq)
-   ---------------------------------------------------------------------
-   The UDC accordion, one column at most 880px wide. Ends on white with
-   its normal bottom padding: the site's closing CTA component follows
-   directly.
-   ===================================================================== */
-.sc-section.sc-faq {
-  background-color: var(--sc-bg);
-}
-
-.sc-faq .sc-fq {
-  max-width: calc(880px + 2 * var(--sc-gutter));
-}
-
-.sc-faq .sc-fq__list {
-  border-top: 1px solid var(--sc-rule);
-}
-
-.sc-faq .sc-fq__item {
-  border-bottom: 1px solid var(--sc-rule);
-}
-
-.sc-faq .sc-fq__q {
-  margin: 0;
-  font-size: inherit;
-  line-height: inherit;
-}
-
-/* A full reset: the theme gives every <button> a coloured border, a
-   filled hover and focus, centred nowrap text and its own font size. */
-.sc-faq .sc-fq__btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  width: 100%;
-  margin: 0;
-  padding: 22px 4px;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  box-shadow: none;
-  font-family: inherit;
-  font-weight: 600;
-  font-size: clamp(17px, 1.3vw, 18px);
-  line-height: 1.4;
-  letter-spacing: normal;
-  text-align: left;
-  text-transform: none;
-  white-space: normal;
-  color: var(--sc-heading);
-  cursor: pointer;
-  transition: none;
-  -webkit-appearance: none;
-          appearance: none;
-}
-
-.sc-faq .sc-fq__btn:hover,
-.sc-faq .sc-fq__btn:focus,
-.sc-faq .sc-fq__btn:active {
-  background: transparent;
-  color: var(--sc-heading);
-  text-decoration: none;
-}
-
-.sc-faq .sc-fq__btn:focus-visible {
-  outline: 3px solid var(--sc-c-focus);
-  outline-offset: 3px;
-}
-
-.sc-faq .sc-fq__q-text {
-  min-width: 0;
-}
-
-.sc-faq .sc-fq__icon {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border: 1px solid var(--sc-border);
-  border-radius: 50%;
-  color: var(--sc-accent);
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
-.sc-faq .sc-fq__icon svg {
-  display: block;
-  width: 16px;
-  height: 16px;
-}
-
-@media (hover: hover) {
-  .sc-faq .sc-fq__btn:hover .sc-fq__icon {
-    border-color: #c9d6ee;
-  }
-}
-
-.sc-faq .sc-fq__btn[aria-expanded="true"] .sc-fq__icon {
-  border-color: transparent;
-  background: var(--sc-accent-soft);
-}
-
-/* Plus to minus: the vertical stroke folds flat. */
-.sc-faq .sc-fq__v {
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: transform 0.25s ease;
-}
-
-.sc-faq .sc-fq__btn[aria-expanded="true"] .sc-fq__v {
-  transform: scaleY(0);
-}
-
-/* No display here: the `hidden` attribute has to keep hiding it. */
-.sc-faq .sc-fq__a {
-  padding: 0 58px 24px 4px;
-}
-
-.sc-faq .sc-fq__a p {
-  max-width: 68ch;
-  margin: 0;
-  font-size: clamp(15.5px, 1.2vw, 17px);
-  line-height: 1.7;
-  color: var(--sc-text);
-}
-
-/* `display` cannot be transitioned, so opening is a keyframe fade on the
-   newly shown answer rather than a two-state transition. */
-.sc-faq .sc-fq__a:not([hidden]) {
-  animation: sc-fq-fade 0.3s ease both;
-}
-
-@keyframes sc-fq-fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sc-faq .sc-fq__a:not([hidden]) {
-    animation: none;
-  }
-  .sc-faq .sc-fq__v,
-  .sc-faq .sc-fq__icon {
-    transition: none;
-  }
-}
-
-@media (max-width: 520px) {
-  .sc-faq .sc-fq__btn {
-    gap: 14px;
-    padding: 18px 2px;
-  }
-  .sc-faq .sc-fq__a {
-    padding: 0 2px 20px;
   }
 }

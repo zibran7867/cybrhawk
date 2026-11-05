@@ -9,7 +9,7 @@
 
   Elementor setup
   ---------------
-  1. Create 9 containers, in this order, each with Content Width set to
+  1. Create 8 containers, in this order, each with Content Width set to
      Full Width, padding 0 and no background, and its class typed into
      Advanced → CSS Classes:
 
@@ -21,7 +21,6 @@
        06  sc-usecases      Use cases
        07  sc-impact        Business impact
        08  sc-why           Why CybrHawk
-       09  sc-faq           FAQ
 
      Leave each one empty: siem-cloud.js builds the section inside it and
      adds `sc-section` (and `sc-section--dark` where it applies), so
@@ -34,9 +33,9 @@
      WordPress page title as a second H1, hide it (Page Settings → Hide
      Title).
 
-  4. Put the site's existing CTA container directly after the FAQ, and
+  4. Put the site's existing CTA container directly after Why CybrHawk, and
      paste Appendix B of the brief (heading, body, both buttons and the
-     phone / email line) into its CONTENT block. The FAQ ends on white
+     phone / email line) into its CONTENT block. Why CybrHawk ends on white
      with its normal bottom padding, so the two join without a seam.
 
   5. Paste Appendix C of the brief (meta title and description, slug,
@@ -44,10 +43,8 @@
 
   Also check
   ----------
-  - Open items are marked `// TODO:` in the CONTENT block of
-    siem-cloud.js: "SIEM XDR" versus "SIEM / XDR" (section 08), and
-    whether the SEO plugin already emits FAQ schema before
-    CONTENT.faq.schema is turned on.
+  - One open item is marked `// TODO:` in the CONTENT block of
+    siem-cloud.js: "SIEM XDR" versus "SIEM / XDR" (section 08).
   - The site header overlays the page, so the hero clears its measured
     height before any content (--sc-header-offset in the tokens of
     siem-cloud.css: 90px phone, 102px tablet, 100px + 1.5vw desktop).
@@ -106,7 +103,6 @@
   <div class="e-con e-con-full sc-usecases"></div>
   <div class="e-con e-con-boxed sc-impact"><div class="e-con-inner"></div></div>
   <div class="e-con e-con-full sc-why"></div>
-  <div class="e-con e-con-full sc-faq"></div>
 
   <div class="preview-cta">Existing CTA component goes here</div>
 

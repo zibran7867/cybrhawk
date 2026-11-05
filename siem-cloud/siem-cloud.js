@@ -1,17 +1,17 @@
 /* =====================================================================
-   CybrHawk — SIEM Cloud (Cloud Detection & Response) page, sections 01–09
+   CybrHawk — SIEM Cloud (Cloud Detection & Response) page, sections 01–08
    ---------------------------------------------------------------------
    The Elementor container markup is fixed, so this script injects each
    section's markup into its own empty container and pairs with
-   siem-cloud.css. Section 10 (the final call to action) is the site's
-   existing CTA component and is not built here; the FAQ ends on white
-   so it joins without a seam.
+   siem-cloud.css. The final call to action is the site's existing CTA
+   component and is not built here; section 08 ends on white so it joins
+   without a seam. (The FAQ was dropped from this page.)
 
    One container per section, in page order, each set to Full Width with
    padding 0 and no background, its class in the CSS Classes field:
 
      sc-hero       sc-challenge  sc-platform   sc-capabilities
-     sc-coverage   sc-usecases   sc-impact     sc-why          sc-faq
+     sc-coverage   sc-usecases   sc-impact     sc-why
 
    On build each container also gets `sc-section` (and `sc-section--dark`
    for the two dark grounds, 03 and 06), which carries the shared tokens, so
@@ -40,8 +40,7 @@
     coverage: ".sc-coverage",
     usecases: ".sc-usecases",
     impact: ".sc-impact",
-    why: ".sc-why",
-    faq: ".sc-faq"
+    why: ".sc-why"
   };
 
   // Sections on a dark ground; their container also gets sc-section--dark.
@@ -235,28 +234,6 @@
         { icon: "shield",  title: "Safe Automation",                text: "Guardrail responses include approvals, scoping, and rollback, so automation never breaks production." },
         { icon: "headset", title: "Expert Support",                 text: "Optional 24/7 cloud threat monitoring and response from the CybrHawk SOC." }
       ]
-    },
-
-    faq: {
-      eyebrow: "",   // "FAQ" would repeat the H2
-      title: "Frequently Asked Questions",
-      // TODO: confirm with whoever runs Rank Math / Yoast whether it already
-      // emits FAQ schema for this page before turning this on.
-      schema: false,
-      items: [
-        { q: "What is Cloud Detection and Response (CDR)?",
-          a: "CDR is a security approach that continuously monitors cloud environments for threats, using cloud-native logs, identity activity, and configuration data, and enables rapid, automated response. It is built for the speed and scale of cloud infrastructure." },
-        { q: "How is SIEM Cloud different from CSPM?",
-          a: "CSPM identifies misconfigurations. CybrHawk SIEM Cloud includes posture assessment but also detects active threats, correlates identity and API activity, and takes response actions, giving you prevention and detection in one platform." },
-        { q: "Which cloud platforms are supported?",
-          a: "Amazon Web Services, Microsoft Azure, and Google Cloud, plus SaaS applications such as Microsoft 365 and Google Workspace." },
-        { q: "Do I need to install agents?",
-          a: "No. CybrHawk SIEM Cloud connects through cloud provider APIs and log services using read-only access, so onboarding is fast and does not affect workloads." },
-        { q: "Can it take automated action?",
-          a: "Yes. Guardrail responses can quarantine workloads, revoke tokens, rotate keys, and block risky policies, either automatically or after approval." },
-        { q: "Does it help with compliance?",
-          a: "Yes. Controls and evidence are mapped to frameworks including CIS Benchmarks, NIST, ISO 27001, PCI DSS, HIPAA, SOC 2, and GDPR." }
-      ]
     }
   };
 
@@ -398,16 +375,6 @@
       'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ' +
       'aria-hidden="true" focusable="false">' +
       '<path d="M4.5 12h14M13 6.5 18.5 12 13 17.5"/>' +
-    "</svg>";
-
-  // The vertical stroke is its own path so CSS can fold it away: plus
-  // becomes minus without swapping markup.
-  var PLUS_MINUS =
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
-      'stroke-width="2" stroke-linecap="round" aria-hidden="true" ' +
-      'focusable="false">' +
-      '<path d="M5.5 12h13"/>' +
-      '<path class="sc-fq__v" d="M12 5.5v13"/>' +
     "</svg>";
 
   // The three signal lanes, in rail order. Anything else falls back to
@@ -1366,99 +1333,6 @@
     return true;
   }
 
-  /* ---- 09 · FAQ -----------------------------------------------------------
-     The UDC accordion: each question is a real <button> in an <h3>, so
-     Enter and Space work without key handling, and each answer is a
-     labelled region carrying `hidden` while closed. Items open
-     independently. Ends on white with its normal bottom padding: the
-     site's closing CTA component follows directly.
-     -------------------------------------------------------------------- */
-  function buildFaq(host, c) {
-    if (!host) return false;
-    if (host.querySelector(".sc-fq")) return true;
-
-    var list = c.items || [];
-
-    var items = list.map(function (it, i) {
-      var q = "sc-faq-q-" + (i + 1);
-      var a = "sc-faq-a-" + (i + 1);
-
-      return (
-        '<div class="sc-fq__item sc-reveal"' + at(i + 1) + ">" +
-          '<h3 class="sc-fq__q">' +
-            '<button type="button" class="sc-fq__btn" id="' + q + '" ' +
-              'aria-expanded="false" aria-controls="' + a + '">' +
-              '<span class="sc-fq__q-text">' + esc(it.q) + "</span>" +
-              '<span class="sc-fq__icon">' + PLUS_MINUS + "</span>" +
-            "</button>" +
-          "</h3>" +
-          '<div class="sc-fq__a" id="' + a + '" role="region" ' +
-            'aria-labelledby="' + q + '" hidden>' +
-            "<p>" + esc(it.a) + "</p>" +
-          "</div>" +
-        "</div>"
-      );
-    }).join("");
-
-    var root = mount(
-      host,
-      '<div class="' + rootClass("sc-fq") + '">' +
-        head({ id: "sc-faq-title", eyebrow: c.eyebrow, title: c.title }) +
-        '<div class="sc-fq__list">' + items + "</div>" +
-      "</div>",
-      "sc-fq"
-    );
-
-    if (c.schema) faqSchema(root, list);
-    bindFaq(root);
-    return true;
-  }
-
-  /* FAQPage structured data from the same CONTENT, as plain text. It
-     lives inside the section root, so the builder's own "already built"
-     check keeps it to one copy. "<" is escaped so no answer can close
-     the script element early. */
-  function faqSchema(root, list) {
-    if (root.querySelector('script[type="application/ld+json"]')) return;
-
-    var data = {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: list.map(function (it) {
-        return {
-          "@type": "Question",
-          name: String(it.q),
-          acceptedAnswer: { "@type": "Answer", text: String(it.a) }
-        };
-      })
-    };
-
-    var script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.text = JSON.stringify(data).replace(/</g, "\\u003c");
-    root.appendChild(script);
-  }
-
-  // Delegated from the section root, so it keeps working if items change.
-  function bindFaq(root) {
-    root.addEventListener("click", function (e) {
-      var btn = e.target.closest && e.target.closest(".sc-fq__btn");
-      if (!btn || !root.contains(btn)) return;
-
-      var panel = document.getElementById(btn.getAttribute("aria-controls"));
-      if (!panel) return;
-
-      var open = btn.getAttribute("aria-expanded") === "true";
-      btn.setAttribute("aria-expanded", open ? "false" : "true");
-
-      if (open) {
-        panel.setAttribute("hidden", "");
-      } else {
-        panel.removeAttribute("hidden");
-      }
-    });
-  }
-
   /* ---- Build ------------------------------------------------------------ */
   var BUILDERS = [
     ["hero", buildHero],
@@ -1468,8 +1342,7 @@
     ["coverage", buildCoverage],
     ["usecases", buildUsecases],
     ["impact", buildImpact],
-    ["why", buildWhy],
-    ["faq", buildFaq]
+    ["why", buildWhy]
   ];
 
   var settled = {};
