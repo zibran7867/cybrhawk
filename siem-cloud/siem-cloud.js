@@ -208,7 +208,12 @@
         { title: "Empower DevOps",           text: "Clear remediation guidance and ticketing integrations help engineering teams fix issues fast, without slowing delivery." },
         { title: "Simplify Audits",          text: "Continuous compliance mapping and evidence collection reduce audit preparation effort." },
         { title: "Consolidate Tools",        text: "One platform replaces separate CSPM, cloud log analytics, and SaaS monitoring tools." }
-      ]
+      ],
+      // The small "noise to signal" graphic beside the list (aria-hidden).
+      // Its two labels are words from outcome 3: "Correlated, risk-ranked
+      // findings replace thousands of disconnected posture alerts."
+      // An empty `from` hides the graphic.
+      visual: { from: "disconnected posture alerts", to: "risk-ranked findings" }
     },
 
     why: {
@@ -1146,11 +1151,62 @@
   }
 
   /* ---- 07 · Business impact -----------------------------------------------
-     An outcome ledger: editorial rows under hairlines, no cards and no
-     icons. On wide screens the index sits on its own grid row so the
-     title and the text share the next one and align on their first
-     baseline.
+     A split: on desktop the header and a small graphic stay pinned on the
+     left while the six outcomes scroll past on the right, each a row
+     with a numbered tile.
+
+     The graphic draws outcome 3 ("risk-ranked findings replace thousands
+     of disconnected posture alerts"): a scatter of alerts in the posture
+     lane's amber (the copy says posture, and on this page a lane colour
+     always names its signal type), each with a faint line into one blue
+     node. It is
+     decoration (aria-hidden); the list says it in words. The dots sit at
+     fixed places in a 360×220 viewBox, so it draws the same everywhere.
      -------------------------------------------------------------------- */
+  var IMPACT_DOTS = [
+    [24, 44], [70, 30], [118, 54], [60, 72], [18, 96], [96, 98], [146, 84],
+    [40, 128], [128, 124], [78, 150], [20, 176], [110, 178], [150, 156], [60, 200]
+  ];
+  var IMPACT_NODE = [300, 110];
+
+  function impactVisual(v) {
+    if (!v || !v.from) return "";
+    var nx = IMPACT_NODE[0];
+    var ny = IMPACT_NODE[1];
+
+    var dots = IMPACT_DOTS.map(function (p, j) {
+      var x = p[0];
+      var y = p[1];
+      return (
+        '<g class="sc-lane--posture" style="--j:' + j + '">' +
+          '<path class="sc-im__link" d="M' + x + " " + y + "C" + (x + 90) + " " + y + " " +
+            (nx - 70) + " " + ny + " " + (nx - 15) + " " + ny + '"/>' +
+          '<circle class="sc-im__dot" cx="' + x + '" cy="' + y + '" r="4"/>' +
+        "</g>"
+      );
+    }).join("");
+
+    return (
+      '<div class="sc-im__visual sc-reveal" aria-hidden="true"' + at(2) + ">" +
+        '<svg class="sc-im__art" viewBox="0 0 360 220" focusable="false">' +
+          dots +
+          '<circle class="sc-im__halo" cx="' + nx + '" cy="' + ny + '" r="28"/>' +
+          '<circle class="sc-im__node" cx="' + nx + '" cy="' + ny + '" r="15"/>' +
+          '<path class="sc-im__tick" d="M' + (nx - 6) + " " + ny + "l4.5 4.5 8-9" + '"/>' +
+        "</svg>" +
+        '<div class="sc-im__legend">' +
+          '<span class="sc-im__key sc-im__key--from">' +
+            '<span class="sc-im__swatch"><i class="sc-lane--posture"></i></span>' +
+            esc(v.from) +
+          "</span>" +
+          (v.to
+            ? '<span class="sc-im__key sc-im__key--to"><span class="sc-im__swatch"><i></i></span>' + esc(v.to) + "</span>"
+            : "") +
+        "</div>" +
+      "</div>"
+    );
+  }
+
   function buildImpact(host, c) {
     if (!host) return false;
     if (host.querySelector(".sc-im")) return true;
@@ -1159,8 +1215,10 @@
       return (
         '<li class="sc-im__row sc-reveal"' + at(i + 1) + ">" +
           '<span class="sc-im__num" aria-hidden="true">' + pad(i + 1) + "</span>" +
-          '<h3 class="sc-im__title">' + esc(it.title) + "</h3>" +
-          '<p class="sc-im__text">' + esc(it.text) + "</p>" +
+          '<div class="sc-im__body">' +
+            '<h3 class="sc-im__title">' + esc(it.title) + "</h3>" +
+            '<p class="sc-im__text">' + esc(it.text) + "</p>" +
+          "</div>" +
         "</li>"
       );
     }).join("");
@@ -1168,7 +1226,10 @@
     mount(
       host,
       '<div class="' + rootClass("sc-im") + '">' +
-        head({ id: "sc-impact-title", eyebrow: c.eyebrow, title: c.title, align: "start" }) +
+        '<div class="sc-im__aside">' +
+          head({ id: "sc-impact-title", eyebrow: c.eyebrow, title: c.title, align: "start" }) +
+          impactVisual(c.visual) +
+        "</div>" +
         (items ? '<ol class="sc-im__list">' + items + "</ol>" : "") +
       "</div>",
       "sc-im"
