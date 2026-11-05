@@ -1,0 +1,2368 @@
+/* =====================================================================
+   CybrHawk — Incident Response (CybrHawk IR One) page styles
+   (markup injected by incident-response.js, sections 01–10)
+
+   Every rule is scoped under a section container. The shared tokens and
+   primitives sit on `.ir-section`, which the script adds to each
+   container it builds into (plus `.ir-section--dark` on the four dark
+   grounds); the per-section blocks below also name the container's own
+   class (.ir-hero, .ir-why, …), so nothing leaks onto the page.
+
+   Two exceptions, both for the mobile call bar the script appends to
+   <body>: the bar's own rules sit under its `.ir-callbar` class, and one
+   global rule, `body.ir-has-callbar`, pads the page so the bar never
+   covers its last line (see "Mobile call bar").
+
+   Order: tokens, shared primitives (reset, shell, header, eyebrow,
+   button, live dot, reveal), then one block per section in page order,
+   each with its own responsive and reduced-motion rules.
+
+   Colour carries the story: alert red at the top (01–03), amber and
+   blue while the incident is contained (04–07), green for readiness
+   (09). Each section sets one --ir-tone, which its eyebrow square and
+   small markers read. Red means "active incident" and nothing else.
+
+   Specificity: Elementor's page CSS writes selectors up to (0,4,0), but
+   it never targets the injected markup, which carries its own classes.
+   The only Elementor wrappers styled here are the container itself and
+   its .e-con-inner, and those rules carry an extra class to win. The
+   theme's own element rules (a:hover, p margins, list bullets) are
+   beaten by the (0,2,0) class selectors below without !important.
+
+   Background images: Elementor's lazy-load blanks background-image on
+   containers below the fold until they near the viewport, so anything
+   drawn with a gradient also declares a solid background-color first.
+
+   Contrast: ratios noted beside the tokens were measured with the WCAG
+   relative-luminance formula. Text needs 4.5:1 (3:1 at 24px and up),
+   UI parts and graphics 3:1.
+   ===================================================================== */
+
+.ir-section,
+.ir-callbar {
+  /* Tweak to rebrand */
+  /* Brand */
+  --ir-accent: #010920;                        /* site blue: fills, buttons, large display. 4.7:1 on white; white on it 4.7:1 */
+  --ir-accent-hover: #0a58d6;
+  --ir-accent-ink: #0a58d6;                    /* blue AS TEXT on light grounds: 6.2:1 on white */
+  --ir-accent-soft: #eaf2ff;                   /* chip and badge fills; accent-ink on it 5.5:1 */
+  --ir-accent-on-dark: #6ea8ff;                /* blue AS TEXT on dark: 8.1:1 on #080b1a, 7.4:1 on #0d1330 */
+
+  /* The page's blue for the risk register (03), the readiness band (04),
+     incidents (06) and readiness (09): the same #2F6DFF as the alert
+     tokens, kept separate from --ir-accent so each can change alone. */
+  --ir-blue: #2F6DFF;                          /* strokes, bars, large type: 4.4:1 on white */
+  --ir-blue-ink: #1863DC;                      /* blue AS TEXT on light grounds: 5.4:1 on white */
+  --ir-blue-soft: #eaf2ff;                     /* badge and chip fills; blue-ink on it 4.8:1 */
+
+  /* Incident tones: a fill, a light-ground ink and a dark-ground ink */
+  --ir-alert: #2F6DFF;                         /* emergency fill; white on it 4.8:1 */
+  --ir-alert-hover: #3672ffce;                   /* white on it 6.4:1 */
+  --ir-alert-ink: #1863DC;                     /* on white 5.8:1 */
+  --ir-alert-on-dark: #2F6DFF;                 /* 7.8:1 on #080b1a */
+  --ir-amber: #b96c00;                         /* strokes and graphics only: 4.0:1 on white passes 3:1, fails 4.5:1 for text */
+  --ir-amber-ink: #9a5a00;                     /* amber AS TEXT on light: 5.5:1 on white */
+  --ir-amber-on-dark: #f5b041;                 /* 10.4:1 on #0d1330 */
+  --ir-green: #087a4a;                         /* 5.4:1 on white, 5.0:1 on #eef7f2. Not #0b8f57: 4.1:1 */
+  --ir-green-on-dark: #34d399;                 /* 9.8:1 on #0d1330 */
+
+  /* Neutrals */
+  --ir-heading: #0d1330;                       /* 17.8:1 on white */
+  --ir-text: #5b6478;                          /* body grey: 5.9:1 on white, 5.6:1 on the tint */
+  --ir-night: #080b1a;
+  --ir-night-2: #0d1330;
+  --ir-on-dark: #ffffff;
+  --ir-on-dark-body: #c3cadb;                  /* 11.9:1 on #080b1a, 10.9:1 on #0d1330 */
+  --ir-on-dark-muted: #9aa3bd;                 /* 7.2:1 on #0d1330, 6.7:1 on the hero panel. Nothing dimmer for real copy on dark */
+  --ir-bg: #ffffff;
+  --ir-bg-tint: #f8f9fd;
+  --ir-border: #e6eaf2;
+  --ir-border-dark: rgba(255, 255, 255, 0.10);
+  --ir-rule: #edf0f6;
+
+  /* Shape and space */
+  --ir-shadow: 0 1px 2px rgba(13, 19, 48, 0.04),
+               0 8px 24px rgba(13, 19, 48, 0.05);
+  --ir-shadow-hover: 0 2px 4px rgba(13, 19, 48, 0.05),
+                     0 16px 38px rgba(13, 19, 48, 0.10);
+  --ir-radius: 16px;
+  --ir-radius-sm: 10px;
+  --ir-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+  --ir-body-size: clamp(16px, 1.3vw, 18px);
+
+  /* Layout. The Elementor containers carry no padding of their own, so
+     the gutter is what keeps content off the screen edge below the
+     measure; it is added on top of the measure, so wide screens keep the
+     same content width. */
+  --ir-measure: 1320px;
+  --ir-gutter: 24px;                           /* 22px ≤980px, 18px ≤520px */
+  --ir-pad-y: clamp(56px, 7vw, 96px);
+  --ir-gap: clamp(16px, 1.6vw, 24px);
+
+  /* The theme header sits over the top of the page (it is positioned
+     absolutely, as on the UCD and HawkINT pages), so the first IR
+     section clears its height before any content. Measured on
+     cybrhawk.com: at most 90px on phones, 102px on tablets, and
+     100px + 1.5vw on desktop. On desktop the header is transparent with
+     light links, which read on the banner's and hero's night ground with
+     no extra band. If this template's header does not overlay, set 0px. */
+  --ir-header-offset: 90px;
+
+  /* Roles: what the shared primitives actually paint with. Light by
+     default; .ir-section--dark swaps them. */
+  --ir-c-heading: var(--ir-heading);
+  --ir-c-body: var(--ir-text);
+  --ir-c-eyebrow: var(--ir-heading);
+  --ir-c-border: var(--ir-border);
+  --ir-c-accent: var(--ir-accent);             /* [[accent]] runs in titles */
+  --ir-c-focus: rgba(12, 104, 255, 0.45);
+
+  /* Per section, set on each container below. */
+  --ir-tone: var(--ir-accent);
+}
+
+.ir-section {
+  position: relative;
+  background-color: var(--ir-bg);
+}
+
+/* Dark grounds (01, 02, 05, 07). Cards on them are translucent with a
+   hairline and no drop shadow. */
+.ir-section.ir-section--dark {
+  --ir-c-heading: var(--ir-on-dark);
+  --ir-c-body: var(--ir-on-dark-body);
+  --ir-c-eyebrow: var(--ir-on-dark-body);
+  --ir-c-border: var(--ir-border-dark);
+  --ir-c-accent: var(--ir-accent-on-dark);
+  --ir-c-focus: rgba(110, 168, 255, 0.7);
+  background-color: var(--ir-night);
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .ir-section,
+  .ir-callbar {
+    --ir-header-offset: 102px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .ir-section,
+  .ir-callbar {
+    --ir-header-offset: calc(100px + 1.5vw);
+  }
+}
+
+@media (max-width: 980px) {
+  .ir-section {
+    --ir-gutter: 22px;
+  }
+}
+
+@media (max-width: 520px) {
+  .ir-section {
+    --ir-gutter: 18px;
+  }
+}
+
+/* The site's Additional CSS gives every .e-con-inner 0.5% side padding
+   and no max-width; both are reset so the shell alone sets the measure. */
+.ir-section.e-con > .e-con-inner {
+  width: 100%;
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ---- Reset -------------------------------------------------------------
+   The theme styles bare elements (p margins, list bullets, heading
+   fonts). :where() adds no weight, so this sits at (0,2,0): above any
+   element or kit rule, below every component rule that follows it.
+   ----------------------------------------------------------------------- */
+.ir-section .ir-shell :where(h1, h2, h3, p, ul, ol, li, figure, strong) {
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+}
+
+.ir-section .ir-shell :where(ul, ol) {
+  list-style: none;
+}
+
+/* ---- Shell ------------------------------------------------------------- */
+.ir-section .ir-shell {
+  width: 100%;
+  max-width: calc(var(--ir-measure) + 2 * var(--ir-gutter));
+  margin: 0 auto;
+  padding: var(--ir-pad-y) var(--ir-gutter);
+  box-sizing: border-box;
+  font-family: inherit;
+  text-align: left;
+}
+
+.ir-section .ir-shell *,
+.ir-section .ir-shell *::before,
+.ir-section .ir-shell *::after {
+  box-sizing: border-box;
+}
+
+/* Set by [[double brackets]] in any title. */
+.ir-section .ir-accent {
+  color: var(--ir-c-accent);
+}
+
+/* The mono "incident record" voice, for a phone number's digits. */
+.ir-section .ir-num,
+.ir-callbar .ir-num {
+  font-family: var(--ir-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+/* ---- Section header ---------------------------------------------------- */
+.ir-section .ir-head {
+  max-width: 880px;
+  margin: 0 auto clamp(36px, 4vw, 56px);
+  text-align: center;
+}
+
+.ir-section .ir-head--start {
+  margin-left: 0;
+  text-align: left;
+}
+
+/* The eyebrow is the page's second voice: mono, uppercase, led by an
+   8px status light in the section's tone (not a gradient line, so this
+   page doesn't repeat HawkINT). The light is pinned to the first line,
+   so it stays put if the eyebrow wraps on a phone. Mono is used only
+   here, for numbers, chips and the hero panel's labels. */
+.ir-section .ir-eyebrow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 0 16px;
+  font-family: var(--ir-mono);
+  font-weight: 600;
+  font-size: 12.5px;
+  line-height: 1.5;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ir-c-eyebrow);
+}
+
+.ir-section .ir-eyebrow::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-top: calc(0.75em - 4px);
+  border-radius: 1px;
+  background: var(--ir-tone);
+}
+
+.ir-section .ir-head:not(.ir-head--start) .ir-eyebrow {
+  justify-content: center;
+}
+
+/* 700, not 800: the site only loads Figtree up to 700, and anything
+   heavier falls back to Helvetica. */
+.ir-section .ir-head__title {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(30px, 4vw, 50px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ir-c-heading);
+  text-wrap: balance;
+}
+
+.ir-section .ir-head__sub {
+  margin: 18px 0 0;
+  font-size: var(--ir-body-size);
+  line-height: 1.65;
+  color: var(--ir-c-body);
+  text-wrap: pretty;
+}
+
+/* ---- Buttons (walkthrough-cta shape) ------------------------------------
+   Only on the dark hero: the alert fill is the emergency call, the ghost
+   is its quiet twin. Both lift 2px on hover.
+   ----------------------------------------------------------------------- */
+.ir-section .ir-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 26px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: clamp(15px, 1.1vw, 16px);
+  line-height: 1.2;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: transform 0.25s ease, background-color 0.25s ease,
+              border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.ir-section .ir-btn svg {
+  flex: 0 0 auto;
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.ir-section .ir-btn--alert {
+  background: var(--ir-alert);
+  border-color: var(--ir-alert);
+  color: #ffffff;
+  box-shadow: 0 10px 26px rgba(217, 45, 45, 0.28);
+}
+
+.ir-section .ir-btn--alert:hover,
+.ir-section .ir-btn--alert:focus {
+  background: var(--ir-alert-hover);
+  border-color: var(--ir-alert-hover);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* Frosted glass over the hero photo: it reads on any image without
+   competing with the red call button. The fill alone is dark enough for
+   the white label where backdrop-filter is unsupported. */
+.ir-section .ir-btn--glass {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.34);
+  color: #ffffff;
+  /* Strong enough to smear the glitch background's bright hairlines
+     into the frost instead of showing them through the button. */
+  -webkit-backdrop-filter: blur(16px);
+          backdrop-filter: blur(16px);
+}
+
+.ir-section .ir-btn--glass:hover,
+.ir-section .ir-btn--glass:focus {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* A real hover only: a tap on a phone would leave it stuck raised. */
+@media (hover: hover) {
+  .ir-section .ir-btn:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.ir-section .ir-btn:focus-visible {
+  outline: 3px solid var(--ir-c-focus);
+  outline-offset: 3px;
+}
+
+/* ---- Live dot --------------------------------------------------------------
+   The banner's and the call bar's status light: a ring swells out of it
+   and fades. Only transform and opacity move.
+   ----------------------------------------------------------------------- */
+.ir-section .ir-live,
+.ir-callbar .ir-live {
+  position: relative;
+  flex: none;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ir-alert-on-dark);
+}
+
+.ir-section .ir-live::after,
+.ir-callbar .ir-live::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--ir-alert-on-dark);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ir-section .ir-live::after,
+  .ir-callbar .ir-live::after {
+    animation: ir-live 1.8s ease-out infinite;
+  }
+}
+
+@keyframes ir-live {
+  0%   { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(2.8); opacity: 0; }
+}
+
+/* ---- Scroll reveal ------------------------------------------------------
+   Builders mark what rises with .ir-reveal and an inline --i for the
+   stagger. The hero has its own load stagger instead (see 02).
+   ----------------------------------------------------------------------- */
+.ir-section .is-animated .ir-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--i, 0) * 0.07s);
+}
+
+.ir-section .is-animated.is-visible .ir-reveal {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ir-section .is-animated .ir-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .ir-section .ir-btn {
+    transition: none;
+  }
+  .ir-section .ir-btn:hover,
+  .ir-section .ir-btn:focus {
+    transform: none;
+  }
+}
+
+
+/* =====================================================================
+   01 · Emergency banner (.ir-banner → .ir-bn)
+   ===================================================================== */
+.ir-section.ir-banner {
+  --ir-tone: var(--ir-alert-on-dark);
+  background-color: var(--ir-night);
+  border-bottom: 1px solid rgba(255, 107, 107, 0.35);
+}
+
+/* The first section on the page, so it carries the header clearance:
+   the header sits on its night ground, then the strip itself. */
+.ir-banner .ir-bn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 24px;
+  padding-top: calc(var(--ir-header-offset) + 11px);
+  padding-bottom: 11px;
+}
+
+.ir-banner .ir-bn__text {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ir-on-dark);
+}
+
+/* Hover darkens and never moves: this is an emergency line, not a
+   promotion. */
+.ir-banner .ir-bn__cta {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: var(--ir-alert);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 14.5px;
+  line-height: 1.3;
+  white-space: nowrap;
+  color: #ffffff;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.ir-banner .ir-bn__cta:hover,
+.ir-banner .ir-bn__cta:focus {
+  background: var(--ir-alert-hover);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.ir-banner .ir-bn__cta:focus-visible {
+  outline: 3px solid var(--ir-c-focus);
+  outline-offset: 3px;
+}
+
+.ir-banner .ir-bn__cta svg {
+  flex: none;
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 760px) {
+  .ir-banner .ir-bn {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    padding-bottom: 14px;
+  }
+  .ir-banner .ir-bn__text {
+    justify-content: center;
+  }
+  .ir-banner .ir-bn__cta {
+    min-height: 44px;
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ir-banner .ir-bn__cta {
+    transition: none;
+  }
+}
+
+
+/* =====================================================================
+   Mobile call bar (.ir-callbar, appended to <body>)
+   ---------------------------------------------------------------------
+   Phones only. The script shows it (.is-shown) once the banner and the
+   hero buttons have both scrolled away; hidden, it is visibility:
+   hidden and inert, so it can't be tabbed to. It sits outside every
+   container, so its rules are scoped to its own class and it carries
+   its own copy of the tokens (declared with .ir-section above).
+   ===================================================================== */
+.ir-callbar {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  /* The page's one deliberate global rule. The bar is fixed over the
+     foot of the screen, so without this it would cover the footer's
+     last line at the bottom of the page. The script adds the class only
+     while the bar exists, and removes nothing else. */
+  body.ir-has-callbar {
+    padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .ir-callbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9990;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 56px;
+    padding: 10px 18px calc(10px + env(safe-area-inset-bottom, 0px));
+    box-sizing: border-box;
+    background: var(--ir-night);
+    border-top: 1px solid rgba(255, 107, 107, 0.35);
+    box-shadow: 0 -10px 28px rgba(8, 11, 26, 0.28);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.3;
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+    transform: translateY(100%);
+    visibility: hidden;
+    /* visibility flips after the slide out, and at once on the way in. */
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                visibility 0s linear 0.3s;
+  }
+
+  .ir-callbar.is-shown {
+    transform: none;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .ir-callbar:hover,
+  .ir-callbar:focus {
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  /* Inset: the bar touches the screen edges, where an outer ring would
+     be cut off. */
+  .ir-callbar:focus-visible {
+    outline: 3px solid rgba(110, 168, 255, 0.7);
+    outline-offset: -5px;
+  }
+
+  /* The phone glyph in an alert disc says "tap to call". */
+  .ir-callbar .ir-callbar__icon {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--ir-alert);
+    color: #ffffff;
+  }
+
+  .ir-callbar .ir-callbar__icon svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .ir-callbar {
+    transition: none;
+  }
+}
+
+
+/* =====================================================================
+   02 · Hero (.ir-hero → .ir-hr)
+   ---------------------------------------------------------------------
+   Image-led, full bleed and centred: the background fills the section
+   behind an even shade, the eyebrow, headline, copy and buttons sit
+   centred in the middle, and a ruled strip of the trust points runs
+   along the foot. Without an image (or if it fails to load) the night
+   ground and its glows stand in.
+   ===================================================================== */
+.ir-section.ir-hero {
+  --ir-tone: var(--ir-alert-on-dark);
+  overflow: hidden;
+  overflow: clip;                              /* the photo's settle never widens the page */
+  background-color: var(--ir-night);
+}
+
+.ir-hero .ir-hr {
+  position: relative;
+  display: flex;
+  min-height: 700px;
+  min-height: clamp(620px, 88svh, 900px);
+}
+
+/* ---- Backdrop (aria-hidden): photo, or the night ground ------------------- */
+.ir-hero .ir-hr__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background-color: var(--ir-night);
+}
+
+/* No photo: blue light off the top right, red off the top left, over a
+   faint line grid, so the hero still reads as a lit room at night. */
+.ir-hero .ir-hr:not(.ir-hr--photo) .ir-hr__backdrop {
+  background-image:
+    radial-gradient(55% 65% at 80% 28%, rgba(12, 104, 255, 0.24), rgba(12, 104, 255, 0) 70%),
+    radial-gradient(40% 50% at 6% 0%, rgba(217, 45, 45, 0.16), rgba(217, 45, 45, 0) 70%),
+    linear-gradient(180deg, var(--ir-night) 0%, var(--ir-night-2) 100%);
+}
+
+.ir-hero .ir-hr:not(.ir-hr--photo) .ir-hr__backdrop::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(80% 70% at 60% 35%, #000 15%, transparent 85%);
+          mask-image: radial-gradient(80% 70% at 60% 35%, #000 15%, transparent 85%);
+}
+
+.ir-hero .ir-hr__media {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.ir-hero .ir-hr__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 70% 40%;                    /* overridden by CONTENT.hero.media.position */
+}
+
+/* The shade keeps the centred copy legible on any image: an even dark
+   wash, a little deeper in the middle behind the text, so the image
+   still shows on both sides; dark under the site header and at the foot
+   behind the trust strip. A faint red bloom off the top left keeps the
+   alarm in the frame. */
+.ir-hero .ir-hr__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(45% 55% at 0% 0%, rgba(217, 45, 45, 0.16), rgba(217, 45, 45, 0) 70%),
+    linear-gradient(180deg, rgba(8, 11, 26, 0.55) 0%, rgba(8, 11, 26, 0) 18%,
+                    rgba(8, 11, 26, 0) 70%, rgba(8, 11, 26, 0.85) 100%),
+    radial-gradient(60% 55% at 50% 48%, rgba(8, 11, 26, 0.7) 0%, rgba(8, 11, 26, 0.5) 60%,
+                    rgba(8, 11, 26, 0.4) 100%);
+}
+
+/* ---- Content ------------------------------------------------------------- */
+/* Centred: the copy sits in the middle of whatever height the hero has
+   (margin: auto 0), and the trust strip rests on the foot. */
+.ir-hero .ir-hr__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: calc(var(--ir-header-offset) + clamp(40px, 4.4vw, 72px));
+  padding-bottom: clamp(24px, 2.4vw, 32px);
+  text-align: center;
+}
+
+/* Directly after the banner, the banner has already cleared the header. */
+.ir-section.ir-banner + .ir-section.ir-hero .ir-hr__inner {
+  padding-top: clamp(40px, 4.4vw, 72px);
+}
+
+.ir-hero .ir-hr__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1040px;
+  margin: auto 0;
+}
+
+.ir-hero .ir-hr__eyebrow {
+  justify-content: center;
+  margin-bottom: clamp(18px, 2vw, 28px);
+  font-size: clamp(12.5px, 0.8vw, 15px);
+}
+
+/* 500, not 700: at this size the lighter cut reads calm and editorial,
+   where a heavy one would shout. Line 1 is the alarm, line 2 the
+   promise. */
+.ir-hero .ir-hr__title {
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(44px, 7.4vw, 120px);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--ir-on-dark);
+  text-shadow: 0 2px 30px rgba(8, 11, 26, 0.35);
+}
+
+.ir-hero .ir-hr__line {
+  display: block;
+}
+
+.ir-hero .ir-hr__line--1 {
+  color: var(--ir-alert-on-dark);
+}
+
+.ir-hero .ir-hr__sub {
+  max-width: 42em;
+  margin-top: clamp(22px, 2.2vw, 32px);
+  font-size: clamp(17px, 1.45vw, 22px);
+  line-height: 1.6;
+  color: #d5dae6;                              /* a touch brighter than body-on-dark, for the photo */
+  text-wrap: pretty;
+}
+
+.ir-hero .ir-hr__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: clamp(30px, 3vw, 44px);
+}
+
+/* The hero's buttons are a size up from the house button: they are the
+   page's first and most important calls. */
+@media (min-width: 621px) {
+  .ir-hero .ir-btn {
+    padding: 17px 32px;
+    font-size: clamp(16px, 1.2vw, 18px);
+  }
+}
+
+/* The foot strip: the four trust points spread along a hairline,
+   narrower than the measure so it frames the copy above. */
+.ir-hero .ir-hr__trust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 14px 32px;
+  width: 100%;
+  max-width: 1240px;
+  margin-top: clamp(48px, 5.6vw, 96px);
+  padding-top: clamp(20px, 2vw, 26px);
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  text-align: left;
+}
+
+.ir-hero .ir-hr__trust-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-weight: 600;
+  font-size: clamp(14.5px, 1.05vw, 17px);
+  line-height: 1.4;
+  color: var(--ir-on-dark);
+}
+
+.ir-hero .ir-hr__check {
+  flex: none;
+  display: inline-flex;
+  margin-top: 2px;
+  color: var(--ir-accent-on-dark);
+}
+
+.ir-hero .ir-hr__check svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.4;
+}
+
+/* ---- Motion ---------------------------------------------------------------
+   One moment on load: the photo settles from a slight zoom while the
+   copy fades up 16px on its inline --d (eyebrow 40, H1 lines 120 and
+   220, sub 340, buttons 440, trust 560ms). Then nothing moves. None of
+   it runs under reduced motion.
+   ----------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .ir-hero .ir-hr.is-animated .ir-hr__in {
+    animation: ir-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  .ir-hero .ir-hr.is-animated .ir-hr__img {
+    animation: ir-settle 2.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+@keyframes ir-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes ir-settle {
+  from { transform: scale(1.06); }
+  to   { transform: none; }
+}
+
+/* ---- Responsive ----------------------------------------------------------- */
+@media (max-width: 767px) {
+  .ir-hero .ir-hr {
+    min-height: 600px;
+    min-height: clamp(560px, 90svh, 780px);
+  }
+  /* The copy covers most of a phone's frame, so the shade carries it from
+     a third of the way down. */
+  .ir-hero .ir-hr__shade {
+    background:
+      radial-gradient(60% 40% at 0% 0%, rgba(217, 45, 45, 0.16), rgba(217, 45, 45, 0) 70%),
+      linear-gradient(180deg, rgba(8, 11, 26, 0.62) 0%, rgba(8, 11, 26, 0.5) 22%,
+                      rgba(8, 11, 26, 0.86) 52%, rgba(8, 11, 26, 0.96) 100%);
+  }
+}
+
+/* Four across only fit on a wide screen; any narrower they would wrap
+   three and one, so the strip becomes a 2×2 grid. */
+@media (max-width: 1099px) {
+  .ir-hero .ir-hr__trust {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 16px;
+  }
+}
+
+@media (max-width: 620px) {
+  /* The centred column would shrink-wrap the buttons; stretched, they
+     run the full width as big tap targets. */
+  .ir-hero .ir-hr__actions {
+    flex-direction: column;
+    align-self: stretch;
+  }
+  .ir-hero .ir-btn {
+    width: 100%;
+    white-space: normal;
+  }
+}
+
+
+/* =====================================================================
+   03 · Why it matters (.ir-why → .ir-wy)
+   ===================================================================== */
+.ir-section.ir-why {
+  --ir-tone: var(--ir-blue);
+  background-color: var(--ir-bg);
+}
+
+.ir-why .ir-wy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(40px, 6vw, 96px);
+}
+
+.ir-why .ir-head {
+  margin-bottom: clamp(22px, 2.4vw, 30px);
+}
+
+.ir-why .ir-wy__p {
+  font-size: var(--ir-body-size);
+  line-height: 1.65;
+  color: var(--ir-text);
+  text-wrap: pretty;
+}
+
+.ir-why .ir-wy__p + .ir-wy__p {
+  margin-top: 16px;
+}
+
+.ir-why .ir-wy__p--lead {
+  font-size: clamp(17px, 1.35vw, 18px);
+  line-height: 1.6;
+  color: var(--ir-heading);
+}
+
+/* The risk register: one card of rows, not four cards. */
+.ir-why .ir-wy__register {
+  overflow: hidden;
+  border: 1px solid var(--ir-border);
+  border-radius: var(--ir-radius);
+  background: #ffffff;
+  box-shadow: var(--ir-shadow);
+}
+
+.ir-why .ir-wy__register-title {
+  padding: 18px 24px 16px 28px;
+  border-bottom: 1px solid var(--ir-rule);
+  font-family: var(--ir-mono);
+  font-weight: 600;
+  font-size: 12.5px;
+  line-height: 1.5;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ir-blue-ink);                   /* 5.4:1 on white */
+}
+
+.ir-why .ir-wy__risk {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 24px 20px 28px;
+}
+
+.ir-why .ir-wy__risk + .ir-wy__risk {
+  border-top: 1px solid var(--ir-rule);
+}
+
+/* The risk marker on the row's left edge. */
+.ir-why .ir-wy__risk::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 16px;
+  bottom: 16px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--ir-blue);
+}
+
+/* Stroke #1863DC on the blue-tinted badge is 4.8:1. */
+.ir-why .ir-wy__badge {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--ir-blue-soft);
+  color: var(--ir-blue-ink);
+}
+
+.ir-why .ir-wy__badge svg {
+  display: block;
+  width: 22px;
+  height: 22px;
+}
+
+.ir-why .ir-wy__risk-body {
+  min-width: 0;
+}
+
+.ir-why .ir-wy__risk-title {
+  display: block;
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.35;
+  color: var(--ir-heading);
+}
+
+.ir-why .ir-wy__risk-text {
+  margin-top: 4px;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--ir-text);
+}
+
+@media (max-width: 1024px) {
+  .ir-why .ir-wy {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 44px);
+  }
+}
+
+@media (max-width: 520px) {
+  .ir-why .ir-wy__risk {
+    gap: 14px;
+    padding: 18px 18px 18px 22px;
+  }
+  .ir-why .ir-wy__register-title {
+    padding: 16px 18px 14px 22px;
+  }
+}
+
+
+/* =====================================================================
+   04 · Services (.ir-services → .ir-sv)
+   ---------------------------------------------------------------------
+   A bento that shows the copy's hierarchy. ≥1100px:
+       "s1 s2 s3"
+       "s1 s4 s5"
+       "s6 s6 s6"
+   with s1 the dark anchor (emergency) and s6 the full-width readiness
+   band. 700–1099px: two columns, s1 and s6 across both. Below 700px:
+   one column in DOM order. The cards are static and never lift.
+   ===================================================================== */
+.ir-section.ir-services {
+  --ir-tone: var(--ir-accent);
+  background-color: var(--ir-bg-tint);
+  background-image:
+    radial-gradient(60% 46% at 50% 0%, rgba(12, 104, 255, 0.045), transparent 70%);
+}
+
+.ir-services .ir-sv__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ir-gap);
+}
+
+.ir-services .ir-sv__item {
+  display: flex;
+  min-width: 0;
+}
+
+.ir-services .ir-sv__card {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: clamp(24px, 2.2vw, 32px);
+  border: 1px solid var(--ir-border);
+  border-radius: var(--ir-radius);
+  background: #ffffff;
+  box-shadow: var(--ir-shadow);
+}
+
+.ir-services .ir-sv__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.ir-services .ir-sv__icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 13px;
+  background: var(--ir-accent-soft);
+  color: var(--ir-accent);
+}
+
+.ir-services .ir-sv__icon svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+.ir-services .ir-sv__num {
+  flex: none;
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: var(--ir-accent-soft);
+  font-family: var(--ir-mono);
+  font-weight: 600;
+  font-size: 12.5px;
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+  color: var(--ir-accent-ink);
+}
+
+.ir-services .ir-sv__title {
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 1.3;
+  color: var(--ir-heading);
+}
+
+.ir-services .ir-sv__text {
+  margin-top: 10px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ir-text);
+}
+
+/* ---- s1: the emergency anchor ------------------------------------------
+   Dark, red-edged, with the number and siren on top and the copy pushed
+   to the foot of its two rows.
+   ----------------------------------------------------------------------- */
+.ir-services .ir-sv__card--anchor {
+  border-color: var(--ir-night-2);
+  background: var(--ir-night-2);
+  box-shadow: inset 0 2px 0 var(--ir-alert),
+              0 20px 44px rgba(13, 19, 48, 0.18);
+}
+
+.ir-services .ir-sv__card--anchor .ir-sv__top {
+  align-items: flex-start;
+}
+
+.ir-services .ir-sv__card--anchor .ir-sv__num {
+  padding: 0;
+  background: none;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  color: var(--ir-alert-on-dark);              /* 7.0:1 on #0d1330 */
+}
+
+.ir-services .ir-sv__card--anchor .ir-sv__icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: rgba(255, 122, 122, 0.10);
+  color: var(--ir-alert-on-dark);
+}
+
+.ir-services .ir-sv__card--anchor .ir-sv__icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.ir-services .ir-sv__card--anchor .ir-sv__body {
+  margin-top: auto;
+  padding-top: clamp(28px, 4vw, 64px);
+}
+
+.ir-services .ir-sv__card--anchor .ir-sv__title {
+  font-size: clamp(22px, 2vw, 26px);
+  line-height: 1.2;
+  color: var(--ir-on-dark);
+}
+
+.ir-services .ir-sv__card--anchor .ir-sv__text {
+  margin-top: 12px;
+  font-size: 16px;
+  color: var(--ir-on-dark-body);
+}
+
+/* ---- s1 with a background photo ---------------------------------------
+   The photo fills the card behind a shade that is light at the top (so
+   the lit screens show through the empty middle) and near-solid at the
+   foot, where the title and text sit. The card's top hairline moves
+   from its inset shadow to a pseudo-element above the photo, since a
+   child layer would paint over an inset shadow.
+   ----------------------------------------------------------------------- */
+.ir-services .ir-sv__card--photo {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: 0 20px 44px rgba(13, 19, 48, 0.18);
+}
+
+.ir-services .ir-sv__card--photo::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  height: 2px;
+  background: var(--ir-alert);
+}
+
+.ir-services .ir-sv__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ir-services .ir-sv__bg-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 62%;                    /* overridden by CONTENT imagePosition */
+}
+
+.ir-services .ir-sv__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(13, 19, 48, 0.45) 0%,
+    rgba(13, 19, 48, 0.12) 30%,
+    rgba(13, 19, 48, 0.5) 58%,
+    rgba(13, 19, 48, 0.94) 80%,
+    rgba(13, 19, 48, 0.98) 100%);
+}
+
+.ir-services .ir-sv__card--photo .ir-sv__top,
+.ir-services .ir-sv__card--photo .ir-sv__body {
+  position: relative;
+  z-index: 1;
+}
+
+/* The icon tile frosts over the photo instead of tinting it. */
+.ir-services .ir-sv__card--photo .ir-sv__icon {
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+}
+
+.ir-services .ir-sv__card--photo .ir-sv__title {
+  text-shadow: 0 2px 18px rgba(8, 11, 26, 0.6);
+}
+
+/* Landscape on tablets and phones, where the card spans the row: the
+   copy covers more of it, so the shade starts earlier. */
+@media (max-width: 1099px) {
+  .ir-services .ir-sv__card--photo {
+    min-height: 380px;
+  }
+  .ir-services .ir-sv__bg::after {
+    background: linear-gradient(180deg,
+      rgba(13, 19, 48, 0.4) 0%,
+      rgba(13, 19, 48, 0.25) 25%,
+      rgba(13, 19, 48, 0.85) 62%,
+      rgba(13, 19, 48, 0.97) 100%);
+  }
+}
+
+/* ---- s6: the readiness band --------------------------------------------- */
+.ir-services .ir-sv__card--band {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px clamp(20px, 2.4vw, 32px);
+  border: 1px dashed var(--ir-blue);
+  background: rgba(47, 109, 255, 0.05);
+  box-shadow: none;
+}
+
+.ir-services .ir-sv__card--band .ir-sv__icon {
+  background: rgba(47, 109, 255, 0.10);
+  color: var(--ir-blue);
+}
+
+.ir-services .ir-sv__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.ir-services .ir-sv__card--band .ir-sv__num {
+  background: rgba(47, 109, 255, 0.10);
+  color: var(--ir-blue-ink);                   /* 4.6:1 on the chip */
+}
+
+.ir-services .ir-sv__card--band .ir-sv__text {
+  max-width: 62em;
+}
+
+/* Blue #1863DC on the band's wash is 5.0:1. */
+.ir-services .ir-sv__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.3;
+  white-space: nowrap;
+  color: var(--ir-blue-ink);
+  text-decoration: none;
+}
+
+.ir-services .ir-sv__link:hover,
+.ir-services .ir-sv__link:focus {
+  color: var(--ir-blue-ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.ir-services .ir-sv__link:focus-visible {
+  outline: 3px solid var(--ir-c-focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.ir-services .ir-sv__link svg {
+  flex: none;
+  display: block;
+  width: 18px;
+  height: 18px;
+  transition: transform 0.25s ease;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .ir-services .ir-sv__link:hover svg {
+    transform: translateX(3px);
+  }
+}
+
+/* ---- Layouts ------------------------------------------------------------- */
+@media (min-width: 700px) and (max-width: 1099px) {
+  .ir-services .ir-sv__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ir-services .ir-sv__item--s1,
+  .ir-services .ir-sv__item--s6 {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1100px) {
+  .ir-services .ir-sv__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas:
+      "s1 s2 s3"
+      "s1 s4 s5"
+      "s6 s6 s6";
+  }
+  .ir-services .ir-sv__item--s1 { grid-area: s1; }
+  .ir-services .ir-sv__item--s2 { grid-area: s2; }
+  .ir-services .ir-sv__item--s3 { grid-area: s3; }
+  .ir-services .ir-sv__item--s4 { grid-area: s4; }
+  .ir-services .ir-sv__item--s5 { grid-area: s5; }
+  .ir-services .ir-sv__item--s6 { grid-area: s6; }
+}
+
+@media (max-width: 699px) {
+  .ir-services .ir-sv__card--band {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+  }
+  .ir-services .ir-sv__link {
+    white-space: normal;
+  }
+}
+
+
+/* =====================================================================
+   05 · Response process (.ir-process → .ir-pr)
+   ---------------------------------------------------------------------
+   The signature section. Six steps on one rail that cools from alert
+   red through amber and blue to green, so the incident visibly settles
+   along it. No cards: the rail is the structure.
+
+   ≥1100px: horizontal. The rail is one pseudo-element on the <ol>, from
+   the first node's centre to the last's; its gradient stops come from
+   the script (--ir-pr-stops), one per step. It draws left to right
+   (scaleX) once the section scrolls in, and each node lights as the
+   rail reaches it (--i × 0.22s).
+
+   <1100px: vertical. Each step draws its own segment down to the next
+   node (scaleY), in a gradient from its tone to the next one's
+   (--ir-next), so the colour still runs top to bottom.
+
+   Under reduced motion, or with ANIMATE off, everything starts drawn.
+   ===================================================================== */
+.ir-section.ir-process {
+  background-color: var(--ir-night-2);
+  /* Fine diagonal hatch at 3%. */
+  background-image:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 9px);
+}
+
+/* The status light carries all four tones here. */
+.ir-process .ir-eyebrow::before {
+  background-color: var(--ir-amber-on-dark);
+  background-image: linear-gradient(135deg, var(--ir-alert-on-dark), var(--ir-amber-on-dark) 40%,
+                    var(--ir-accent-on-dark) 70%, var(--ir-green-on-dark));
+}
+
+.ir-process .ir-pr__step--alert { --ir-step: var(--ir-alert-on-dark);  --ir-step-glow: rgba(255, 122, 122, 0.25); }
+.ir-process .ir-pr__step--amber { --ir-step: var(--ir-amber-on-dark);  --ir-step-glow: rgba(245, 176, 65, 0.25); }
+.ir-process .ir-pr__step--blue  { --ir-step: var(--ir-accent-on-dark); --ir-step-glow: rgba(110, 168, 255, 0.25); }
+.ir-process .ir-pr__step--green { --ir-step: var(--ir-green-on-dark);  --ir-step-glow: rgba(52, 211, 153, 0.25); }
+
+.ir-process .ir-pr__steps {
+  --ir-pr-gap: 28px;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ir-pr-gap);
+}
+
+.ir-process .ir-pr__step {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  min-width: 0;
+}
+
+/* The node's own ring is the unlit state; ::before is the lit ring and
+   glow laid over it, so lighting it up is a fade, not a colour change. */
+.ir-process .ir-pr__node {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 2px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+  background: var(--ir-night-2);
+  box-shadow: 0 0 0 6px var(--ir-night-2);     /* a gap in the rail round each node */
+}
+
+.ir-process .ir-pr__node::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--ir-step);
+  border-radius: 50%;
+  box-shadow: 0 0 24px var(--ir-step-glow), inset 0 0 12px var(--ir-step-glow);
+}
+
+.ir-process .ir-pr__num {
+  position: relative;
+  font-family: var(--ir-mono);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: var(--ir-step);
+}
+
+.ir-process .ir-pr__body {
+  min-width: 0;
+}
+
+.ir-process .ir-pr__title {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--ir-on-dark);
+}
+
+.ir-process .ir-pr__text {
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ir-on-dark-body);
+}
+
+/* ---- Horizontal timeline (≥1100px) -------------------------------------- */
+@media (min-width: 1100px) {
+  .ir-process .ir-pr__steps {
+    grid-template-columns: repeat(var(--n, 6), minmax(0, 1fr));
+  }
+
+  /* From the first node's centre to the last's: half a column in from
+     each side. */
+  .ir-process .ir-pr__steps::before,
+  .ir-process .ir-pr__steps::after {
+    content: "";
+    position: absolute;
+    top: 21px;
+    left: calc((100% - (var(--n, 6) - 1) * var(--ir-pr-gap)) / (2 * var(--n, 6)));
+    right: calc((100% - (var(--n, 6) - 1) * var(--ir-pr-gap)) / (2 * var(--n, 6)));
+    height: 2px;
+    border-radius: 2px;
+  }
+
+  /* The drawn rail */
+  .ir-process .ir-pr__steps::before {
+    z-index: 1;
+    background-color: var(--ir-accent-on-dark);
+    background-image: linear-gradient(90deg, var(--ir-pr-stops));
+    transform-origin: left;
+  }
+
+  /* The faint track it draws over */
+  .ir-process .ir-pr__steps::after {
+    z-index: 0;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .ir-process .ir-pr__step {
+    flex-direction: column;
+    gap: 22px;
+  }
+}
+
+/* ---- Vertical timeline (<1100px) ------------------------------------------ */
+@media (max-width: 1099px) {
+  .ir-process .ir-pr__steps {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .ir-process .ir-pr__step {
+    gap: 20px;
+  }
+
+  .ir-process .ir-pr__step:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: 21px;
+    top: 22px;
+    width: 2px;
+    height: calc(100% + var(--ir-pr-gap));
+    background-color: var(--ir-step);
+    background-image: linear-gradient(180deg, var(--ir-step), var(--ir-next, var(--ir-step)));
+    transform-origin: top;
+  }
+
+  .ir-process .ir-pr__body {
+    padding-top: 10px;
+  }
+}
+
+/* ---- Draw on reveal --------------------------------------------------------
+   Only while the section is animated and not yet in view; .is-visible
+   (added once by the scroll reveal) runs the draw.
+   ----------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .ir-process .ir-pr.is-animated .ir-pr__steps::before {
+    transform: scaleX(0);
+    transition: transform 1.6s cubic-bezier(0.3, 0.6, 0.35, 1) 0.1s;
+  }
+
+  .ir-process .ir-pr.is-animated .ir-pr__step::before {
+    transform: scaleY(0);
+    transition: transform 0.32s linear;
+    transition-delay: calc(0.12s + var(--i, 0) * 0.22s);
+  }
+
+  .ir-process .ir-pr.is-animated .ir-pr__node::before {
+    opacity: 0;
+    transform: scale(0.7);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: calc(0.1s + var(--i, 0) * 0.22s);
+  }
+
+  .ir-process .ir-pr.is-animated .ir-pr__num {
+    opacity: 0.4;
+    transition: opacity 0.5s ease;
+    transition-delay: calc(0.1s + var(--i, 0) * 0.22s);
+  }
+
+  .ir-process .ir-pr.is-animated.is-visible .ir-pr__steps::before {
+    transform: scaleX(1);
+  }
+
+  .ir-process .ir-pr.is-animated.is-visible .ir-pr__step::before {
+    transform: scaleY(1);
+  }
+
+  .ir-process .ir-pr.is-animated.is-visible .ir-pr__node::before {
+    opacity: 1;
+    transform: none;
+  }
+
+  .ir-process .ir-pr.is-animated.is-visible .ir-pr__num {
+    opacity: 1;
+  }
+}
+
+
+/* =====================================================================
+   06 · Incidents we handle (.ir-incidents → .ir-ic)
+   ---------------------------------------------------------------------
+   A case-file index: rows under hairlines, two CSS columns at ≥900px so
+   the reading order runs down the left column first. Static, so no lift
+   and no pointer cursor.
+   ===================================================================== */
+.ir-section.ir-incidents {
+  --ir-tone: var(--ir-blue);
+  background-color: var(--ir-bg);
+}
+
+.ir-incidents .ir-ic__list {
+  border-top: 1px solid var(--ir-rule);
+}
+
+.ir-incidents .ir-ic__item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--ir-rule);
+  -webkit-column-break-inside: avoid;
+          break-inside: avoid;
+}
+
+/* Stroke #2F6DFF on the blue-tinted badge is 3.9:1, above the 3:1
+   graphics need. */
+.ir-incidents .ir-ic__badge {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--ir-blue-soft);
+  color: var(--ir-blue);
+}
+
+.ir-incidents .ir-ic__badge svg {
+  display: block;
+  width: 21px;
+  height: 21px;
+}
+
+.ir-incidents .ir-ic__body {
+  min-width: 0;
+}
+
+.ir-incidents .ir-ic__title {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.35;
+  color: var(--ir-heading);
+}
+
+.ir-incidents .ir-ic__text {
+  margin-top: 4px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ir-text);
+}
+
+/* Decoration only (INCIDENT_HOVER_BAR in the script): a 2px blue bar
+   grows down beside the row under a real pointer. */
+.ir-incidents .ir-ic--hover-bar .ir-ic__item::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 22px;
+  bottom: 22px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--ir-blue);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) {
+  .ir-incidents .ir-ic--hover-bar .ir-ic__item:hover::before {
+    transform: scaleY(1);
+  }
+}
+
+@media (min-width: 900px) {
+  .ir-incidents .ir-ic__list {
+    -webkit-columns: 2;
+            columns: 2;
+    -webkit-column-gap: clamp(40px, 5vw, 80px);
+            column-gap: clamp(40px, 5vw, 80px);
+  }
+}
+
+@media (max-width: 520px) {
+  .ir-incidents .ir-ic__item {
+    gap: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ir-incidents .ir-ic--hover-bar .ir-ic__item::before {
+    transition: none;
+  }
+}
+
+
+/* =====================================================================
+   07 · Platform (.ir-platform → .ir-pf)
+   ---------------------------------------------------------------------
+   The mirror of the hero: diagram on the left, copy on the right. The
+   copy comes first in the markup, so it reads first and stacks on top.
+   ===================================================================== */
+.ir-section.ir-platform {
+  --ir-tone: var(--ir-accent-on-dark);
+  overflow: hidden;
+  overflow: clip;                              /* the glow never widens the page */
+  background-color: var(--ir-night);
+}
+
+.ir-platform .ir-pf {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(40px, 5.6vw, 88px);
+}
+
+.ir-platform .ir-pf__copy {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+}
+
+.ir-platform .ir-pf__visual {
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+/* One blue glow behind the diagram. */
+.ir-platform .ir-pf__visual::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(12, 104, 255, 0.24), rgba(12, 104, 255, 0));
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.ir-platform .ir-head {
+  margin-bottom: 20px;
+}
+
+.ir-platform .ir-pf__body {
+  font-size: var(--ir-body-size);
+  line-height: 1.65;
+  color: var(--ir-on-dark-body);
+  text-wrap: pretty;
+}
+
+.ir-platform .ir-pf__features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 26px 28px;
+  margin-top: clamp(28px, 3vw, 36px);
+  padding-top: clamp(24px, 2.6vw, 32px);
+  border-top: 1px solid var(--ir-border-dark);
+}
+
+.ir-platform .ir-pf__feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  min-width: 0;
+}
+
+.ir-platform .ir-pf__feature-icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: rgba(110, 168, 255, 0.12);
+  color: var(--ir-accent-on-dark);
+}
+
+.ir-platform .ir-pf__feature-icon svg {
+  display: block;
+  width: 21px;
+  height: 21px;
+}
+
+.ir-platform .ir-pf__feature-title {
+  display: block;
+  font-weight: 700;
+  font-size: 16.5px;
+  line-height: 1.35;
+  color: var(--ir-on-dark);
+}
+
+.ir-platform .ir-pf__feature-text {
+  margin-top: 4px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ir-on-dark-body);
+}
+
+/* ---- The rapid-deployment diagram (aria-hidden) ----------------------------
+   Three columns: sources, connectors, core. The sources sit in equal
+   rows, so their centres match the connector ends the script writes in
+   the 0–100 viewBox. HawkINT hangs below the core in the stage's bottom
+   padding.
+
+   The connector SVG is laid over the middle column rather than placed
+   in it: as a grid item its intrinsic 1:1 ratio would feed back into
+   the row height.
+   ----------------------------------------------------------------------- */
+.ir-platform .ir-pf__stage {
+  --pf-src: 148px;                             /* sources column */
+  --pf-core: 120px;                            /* core column, and the core's size */
+  --pf-foot: 80px;                             /* room for HawkINT under the core */
+
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: var(--pf-src) minmax(48px, 1fr) var(--pf-core);
+  width: 100%;
+  max-width: 520px;
+  padding-bottom: var(--pf-foot);
+}
+
+.ir-platform .ir-pf__sources {
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  grid-template-rows: repeat(var(--n, 4), minmax(0, 1fr));
+  min-height: 248px;
+}
+
+.ir-platform .ir-pf__source {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 6px 14px 6px 6px;
+  border: 1px solid var(--ir-border-dark);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--ir-on-dark);
+}
+
+.ir-platform .ir-pf__source-icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(110, 168, 255, 0.14);
+  color: var(--ir-accent-on-dark);
+}
+
+.ir-platform .ir-pf__source-icon svg {
+  display: block;
+  width: 17px;
+  height: 17px;
+}
+
+.ir-platform .ir-pf__links {
+  position: absolute;
+  top: 0;
+  left: var(--pf-src);
+  display: block;
+  width: calc(100% - var(--pf-src) - var(--pf-core));
+  height: calc(100% - var(--pf-foot));
+  overflow: visible;
+}
+
+.ir-platform .ir-pf__lines line {
+  stroke: rgba(110, 168, 255, 0.35);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.ir-platform .ir-pf__signal {
+  fill: none;
+  stroke: var(--ir-accent-on-dark);
+  stroke-width: 6;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+}
+
+.ir-platform .ir-pf__hub {
+  grid-column: 3;
+  grid-row: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ir-platform .ir-pf__core {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: var(--pf-core);
+  height: var(--pf-core);
+  padding: 10px;
+  border: 1px solid rgba(110, 168, 255, 0.35);
+  border-radius: 22px;
+  background-color: #111a3d;
+  background-image: linear-gradient(160deg, #17224d, #0e1636);
+  box-shadow: 0 0 0 6px rgba(12, 104, 255, 0.08),
+              0 20px 50px rgba(2, 4, 14, 0.5);
+  text-align: center;
+}
+
+.ir-platform .ir-pf__core-icon {
+  display: inline-flex;
+  color: var(--ir-accent-on-dark);
+}
+
+.ir-platform .ir-pf__core-icon svg {
+  display: block;
+  width: 36px;
+  height: 36px;
+}
+
+.ir-platform .ir-pf__core-name {
+  font-family: var(--ir-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+  color: var(--ir-on-dark);
+}
+
+/* HawkINT enriches the core: a dotted tether up to it. */
+.ir-platform .ir-pf__intel {
+  position: absolute;
+  top: calc(50% + var(--pf-core) / 2);
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateX(-50%);
+}
+
+.ir-platform .ir-pf__tether {
+  width: 0;
+  height: 22px;
+  border-left: 2px dotted rgba(110, 168, 255, 0.55);
+}
+
+.ir-platform .ir-pf__intel-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border: 1px solid var(--ir-border-dark);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  font-weight: 600;
+  font-size: 13.5px;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--ir-on-dark);
+}
+
+.ir-platform .ir-pf__intel-chip svg {
+  flex: none;
+  display: block;
+  width: 15px;
+  height: 15px;
+  color: var(--ir-accent-on-dark);
+}
+
+/* ---- Motion ---------------------------------------------------------------
+   Each signal leaves its source, rides the connector into the core and
+   fades as it arrives. Translate lengths on SVG content are user units,
+   so --dx/--dy land it on the core in viewBox space. Paused off screen
+   and in a background tab (.is-paused); still under reduced motion.
+   ----------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .ir-platform .ir-pf__stage.is-moving .ir-pf__signal {
+    animation: ir-pf-signal var(--d, 2.8s) cubic-bezier(0.45, 0, 0.55, 1)
+               var(--delay, 0s) infinite;
+  }
+
+  .ir-platform .ir-pf__stage.is-paused .ir-pf__signal {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes ir-pf-signal {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  12%  { opacity: 1; }
+  78%  { opacity: 1; }
+  94%  { opacity: 0; }
+  100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+}
+
+/* ---- Responsive ----------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .ir-platform .ir-pf {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(40px, 6vw, 56px);
+  }
+  .ir-platform .ir-pf__copy,
+  .ir-platform .ir-pf__visual {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .ir-platform .ir-pf__copy {
+    max-width: 720px;
+  }
+  .ir-platform .ir-pf__stage {
+    max-width: 480px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ir-platform .ir-pf__features {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Too narrow for the connectors: the sources become a 2×2 grid above
+   the core, and HawkINT sits in flow beneath it. */
+@media (max-width: 560px) {
+  .ir-platform .ir-pf__stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    padding-bottom: 0;
+  }
+  .ir-platform .ir-pf__sources {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+    gap: 10px;
+    width: 100%;
+    min-height: 0;
+  }
+  .ir-platform .ir-pf__links {
+    display: none;
+  }
+  .ir-platform .ir-pf__intel {
+    position: static;
+    transform: none;
+  }
+}
+
+
+/* =====================================================================
+   08 · Industries (.ir-industries → .ir-in)
+   ---------------------------------------------------------------------
+   Hairline cards with no drop shadow (so they read differently from
+   04), each marked by a short accent tab on its top edge. Not links, so
+   no lift.
+   ===================================================================== */
+.ir-section.ir-industries {
+  --ir-tone: var(--ir-accent);
+  background-color: var(--ir-bg);
+}
+
+.ir-industries .ir-in__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ir-gap);
+}
+
+.ir-industries .ir-in__item {
+  display: flex;
+  min-width: 0;
+}
+
+.ir-industries .ir-in__card {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: clamp(24px, 2.2vw, 30px);
+  border: 1px solid var(--ir-border);
+  border-radius: var(--ir-radius);
+  background: #ffffff;
+}
+
+.ir-industries .ir-in__card::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: clamp(24px, 2.2vw, 30px);
+  width: 48px;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: var(--ir-accent);
+}
+
+.ir-industries .ir-in__icon {
+  display: inline-flex;
+  margin: 6px 0 18px;
+  color: var(--ir-accent);
+}
+
+.ir-industries .ir-in__icon svg {
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+
+.ir-industries .ir-in__title {
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 1.3;
+  color: var(--ir-heading);
+}
+
+.ir-industries .ir-in__text {
+  margin-top: 8px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ir-text);
+}
+
+@media (min-width: 600px) {
+  .ir-industries .ir-in__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 960px) {
+  .ir-industries .ir-in__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+
+/* =====================================================================
+   09 · Readiness & retainer (.ir-readiness → .ir-rd, #ir-readiness)
+   ---------------------------------------------------------------------
+   The "before" story, so the page exhales: a calm pale-blue wash, the
+   lede held sticky on desktop beside a stacked list of offerings.
+   ===================================================================== */
+.ir-section.ir-readiness {
+  --ir-tone: var(--ir-blue);
+  background-color: #eef5ff;
+  background-image: linear-gradient(135deg, #f3f8ff 0%, #eaf2ff 100%);
+}
+
+.ir-readiness .ir-rd {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: start;
+  gap: clamp(40px, 6vw, 96px);
+  /* The hero's button and service 06 land here; this keeps the heading
+     clear of a sticky site header. */
+  scroll-margin-top: 96px;
+}
+
+/* Focus only arrives here from those two links, to move the reader's
+   place; the section is not a control, so it shows no ring. */
+.ir-readiness .ir-rd:focus {
+  outline: none;
+}
+
+.ir-readiness .ir-head {
+  margin-bottom: 20px;
+}
+
+/* Blue #1863DC on the wash: 5.2:1 at its light end, 4.8:1 at its deep
+   end. The H2's accent is large text (3.9:1 needs only 3:1), so it
+   takes the brighter #2F6DFF. */
+.ir-readiness .ir-eyebrow {
+  color: var(--ir-blue-ink);
+}
+
+.ir-readiness .ir-accent {
+  color: var(--ir-blue);
+}
+
+.ir-readiness .ir-rd__body {
+  font-size: var(--ir-body-size);
+  line-height: 1.65;
+  color: var(--ir-text);                       /* 5.4:1 on the wash */
+  text-wrap: pretty;
+}
+
+.ir-readiness .ir-rd__list {
+  display: grid;
+  gap: var(--ir-gap);
+}
+
+.ir-readiness .ir-rd__card {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 18px;
+  padding: clamp(22px, 2.2vw, 30px);
+  border: 1px solid var(--ir-border);
+  border-radius: var(--ir-radius);
+  background: #ffffff;
+  box-shadow: var(--ir-shadow);
+  transition: border-color 0.2s ease;
+}
+
+.ir-readiness .ir-rd__card:focus-within {
+  border-color: var(--ir-blue);
+}
+
+/* At 0.9 opacity #2F6DFF is 3.9:1 on white; at 28px it is large
+   text, which needs 3:1. */
+.ir-readiness .ir-rd__num {
+  font-family: var(--ir-mono);
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ir-blue);
+  opacity: 0.9;
+}
+
+.ir-readiness .ir-rd__main {
+  min-width: 0;
+}
+
+.ir-readiness .ir-rd__title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ir-readiness .ir-rd__icon {
+  flex: none;
+  display: inline-flex;
+  color: var(--ir-blue);
+}
+
+.ir-readiness .ir-rd__icon svg {
+  display: block;
+  width: 22px;
+  height: 22px;
+}
+
+.ir-readiness .ir-rd__title {
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 1.3;
+  color: var(--ir-heading);
+}
+
+.ir-readiness .ir-rd__text {
+  margin-top: 8px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ir-text);
+}
+
+@media (min-width: 1025px) {
+  .ir-readiness .ir-rd__lede {
+    position: sticky;
+    top: 96px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .ir-readiness .ir-rd {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 44px);
+  }
+}
+
+@media (max-width: 520px) {
+  .ir-readiness .ir-rd__card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ir-readiness .ir-rd__card {
+    transition: none;
+  }
+}
+
+
+/* =====================================================================
+   10 · Why CybrHawk (.ir-trust → .ir-tr)
+   ---------------------------------------------------------------------
+   Editorial columns under a top rule, no icons and no cards. The last
+   section built here: it ends on white with its normal bottom padding,
+   so whatever the editor puts next joins without a seam.
+   ===================================================================== */
+.ir-section.ir-trust {
+  --ir-tone: var(--ir-accent);
+  background-color: var(--ir-bg);
+}
+
+.ir-trust .ir-tr__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px var(--ir-gap);
+}
+
+.ir-trust .ir-tr__item {
+  min-width: 0;
+  padding-top: 20px;
+  border-top: 2px solid rgba(13, 19, 48, 0.12);
+}
+
+/* A quiet nod back to where the page began. */
+.ir-trust .ir-tr__item:first-child {
+  border-top-color: var(--ir-alert);
+}
+
+.ir-trust .ir-tr__num {
+  display: block;
+  margin-bottom: 14px;
+  font-family: var(--ir-mono);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  color: var(--ir-text);
+}
+
+.ir-trust .ir-tr__title {
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 1.3;
+  color: var(--ir-heading);
+}
+
+.ir-trust .ir-tr__text {
+  margin-top: 8px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ir-text);
+}
+
+@media (min-width: 600px) and (max-width: 1099px) {
+  .ir-trust .ir-tr__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* The odd one out (the fifth) runs across both columns. */
+  .ir-trust .ir-tr__item:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1100px) {
+  .ir-trust .ir-tr__list {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--ir-gap) clamp(20px, 2vw, 32px);
+  }
+}

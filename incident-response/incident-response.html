@@ -1,0 +1,121 @@
+<!doctype html>
+<!--
+  =====================================================================
+  CybrHawk — Incident Response (CybrHawk IR One) page: local preview harness
+  ---------------------------------------------------------------------
+  For previewing incident-response.js + incident-response.css in a
+  browser. This file is not deployed; on the live site Elementor
+  supplies the containers below.
+
+  Elementor setup
+  ---------------
+  1. Create 10 containers, in this order, each with Content Width set to
+     Full Width, padding 0 and no background, and its class typed into
+     Advanced → CSS Classes:
+
+       01  ir-banner      Emergency banner
+       02  ir-hero        Hero
+       03  ir-why         Why it matters
+       04  ir-services    Services
+       05  ir-process     Response process
+       06  ir-incidents   Incidents we handle
+       07  ir-platform    Powered by the CybrHawk platform
+       08  ir-industries  Industries we serve
+       09  ir-readiness   Readiness & retainer
+       10  ir-trust       Why CybrHawk
+
+     Leave each one empty: incident-response.js builds the section inside
+     it and adds `ir-section` (and `ir-section--dark` where it applies),
+     so nothing else needs typing. The FAQ and the final call to action
+     (sections 11 and 12) are not built by these files; section 10 ends
+     on white, so whatever comes next joins without a seam.
+
+  2. Load incident-response.css and incident-response.js the same way the
+     other pages' files are loaded.
+
+  3. The hero holds the page's only <h1>. If the page template prints the
+     WordPress page title as a second H1, hide it (Page Settings → Hide
+     Title).
+
+  4. Paste Appendix B of the brief (meta title and description, slug,
+     keywords, Open Graph title) into the SEO plugin (Rank Math or Yoast).
+
+  5. If the business wants the emergency banner ABOVE the site header,
+     it has to go in the Elementor header template instead: this
+     container sits at the top of the page content. Move the ir-banner
+     container there (the script finds it by class wherever it is). With
+     no banner directly before it, the hero clears the header itself.
+
+  6. Before launch, swap in the dedicated 24/7 IR hotline if there is one,
+     and settle the other open items marked `// TODO:` in the CONTENT
+     block of incident-response.js (the "Get Help Now" target, and
+     "SIEM XDR" versus "SIEM / XDR").
+
+  Also check
+  ----------
+  - Hero photo: the hero is photo-led. Set CONTENT.hero.media.image (and
+    optionally imageMobile and position) in incident-response.js; art
+    direction, sizes and a generator prompt are in hero-image-prompts.md.
+    Until then, or if the photo fails to load, a dark lit-room ground
+    stands in, with the same layout.
+  - The site header overlays the page, so the first IR section clears
+    its measured height before any content (--ir-header-offset in the
+    tokens of incident-response.css: 90px phone, 102px tablet,
+    100px + 1.5vw desktop). If the header's height changes, update it
+    there; if this template's header does not overlay, set it to 0px.
+    The fake header below is fixed and shorter, so a little extra night
+    ground shows under it here.
+  - Click tracking: every CTA and phone link carries
+    data-ir-cta="banner | hero-primary | hero-secondary | callbar |
+    service-6" for GTM.
+  - On phones (≤767px) a call bar slides up from the foot of the screen
+    once the banner and the hero buttons have both scrolled away
+    (CONTENT.banner.mobileCallBar turns it off).
+  =====================================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Incident Response — preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="incident-response.css">
+  <style>
+    /* Preview only. */
+    body { margin: 0; font-family: "Figtree", sans-serif; }
+    .preview-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 72px; padding: 0 24px; box-sizing: border-box;
+      background: rgba(8, 11, 26, 0.85); color: #fff;
+      font-weight: 700; font-size: 18px;
+    }
+    .preview-header span { font-weight: 500; font-size: 14px; opacity: 0.7; }
+    .preview-rest {
+      display: flex; align-items: center; justify-content: center;
+      height: 400px; background: #e9ecf2; color: #5b6478;
+      font-size: 15px; font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <header class="preview-header">CybrHawk <span>Fake 72px site header</span></header>
+
+  <div class="e-con e-con-full ir-banner"></div>
+  <div class="e-con e-con-full ir-hero"></div>
+  <div class="e-con e-con-boxed ir-why"><div class="e-con-inner"></div></div>
+  <div class="e-con e-con-full ir-services"></div>
+  <div class="e-con e-con-full ir-process"></div>
+  <div class="e-con e-con-full ir-incidents"></div>
+  <div class="e-con e-con-boxed ir-platform"><div class="e-con-inner"></div></div>
+  <div class="e-con e-con-full ir-industries"></div>
+  <div class="e-con e-con-full ir-readiness"></div>
+  <div class="e-con e-con-full ir-trust"></div>
+
+  <div class="preview-rest">Rest of page (FAQ / CTA not built here)</div>
+
+  <script src="incident-response.js"></script>
+</body>
+</html>
