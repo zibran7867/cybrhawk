@@ -102,7 +102,7 @@
       //                people right of centre so the headline sits on shadow
       //   alt          "" because the photo is atmosphere; the H1 carries the meaning
       media: {
-        image: "https://cybrhawk.com/wp-content/uploads/2026/11/fast-response-scaled.webp",
+        image: "https://cybrhawk.com/wp-content/uploads/2026/11/fast-response-1.webp",
         imageMobile: "",
         position: "60% 50%",
         alt: ""

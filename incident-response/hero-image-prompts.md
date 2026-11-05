@@ -1,6 +1,6 @@
 # Incident Response hero photo — art direction
 
-**Current image:** the dark "glitched code" background, live at `https://cybrhawk.com/wp-content/uploads/2026/11/fast-response-scaled.webp` (139 KB) and set in `CONTENT.hero.media.image`. Phones use the same file (`imageMobile` is `""`). The guidance below is for any future replacement.
+**Current image:** the dark "glitched code" background, live at `https://cybrhawk.com/wp-content/uploads/2026/11/fast-response-1.webp` and set in `CONTENT.hero.media.image`. Phones use the same file (`imageMobile` is `""`). The guidance below is for any future replacement.
 
 The hero is photo-led: one full-bleed photograph sits behind the headline "Respond Fast. Recover Smarter.", under a dark shade that is deepest at the bottom left. The photo is atmosphere, not information. It should feel like a calm, capable team handling something serious, at night.
 
