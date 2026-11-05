@@ -2338,70 +2338,235 @@
     /* =====================================================================
     10 · Why CybrHawk (.ir-trust → .ir-tr)
     ---------------------------------------------------------------------
-    Editorial columns under a top rule, no icons and no cards. The last
-    section built here: it ends on white with its normal bottom padding,
-    so whatever the editor puts next joins without a seam.
+    A dark "command panel" set inside the white section: deep navy with a
+    faint grid and a blue glow off the top right, the header, then five
+    pillars under one rail. Each pillar has a glowing icon, a large
+    outlined numeral, its title and text; its stretch of the rail draws
+    in blue on reveal, one after another. The pillars are not links, so
+    nothing lifts on hover.
+
+    The last section built here: the panel sits inside the shell's
+    normal padding, so the section still ends on white and whatever the
+    editor puts next joins without a seam.
     ===================================================================== */
     .ir-section.ir-trust {
-    --ir-tone: var(--ir-accent);
+    --ir-tone: var(--ir-blue);
     background-color: var(--ir-bg);
     }
 
+    /* The panel is a dark ground inside a light section, so it swaps the
+       header's role tokens itself (as .ir-section--dark does). */
+    .ir-trust .ir-tr__panel {
+    --ir-c-heading: var(--ir-on-dark);
+    --ir-c-body: var(--ir-on-dark-body);
+    --ir-c-eyebrow: var(--ir-on-dark-body);
+    --ir-c-accent: var(--ir-accent-on-dark);     /* 7.4:1 on the panel */
+    --ir-c-focus: rgba(110, 168, 255, 0.7);
+    --ir-tr-pad: clamp(18px, 1.8vw, 28px);       /* each pillar's side padding */
+
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(36px, 4.6vw, 72px) clamp(22px, 4vw, 64px) clamp(28px, 3.4vw, 52px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 28px;
+    background-color: var(--ir-night-2);
+    background-image:
+        radial-gradient(55% 75% at 100% 0%, rgba(47, 109, 255, 0.28), rgba(47, 109, 255, 0) 70%),
+        radial-gradient(45% 60% at 0% 100%, rgba(47, 109, 255, 0.12), rgba(47, 109, 255, 0) 70%),
+        linear-gradient(180deg, #10183c 0%, #0b1029 100%);
+    box-shadow: 0 30px 70px rgba(13, 19, 48, 0.22);
+    }
+
+    /* A faint line grid, fading out toward the panel's lower left. */
+    .ir-trust .ir-tr__decor {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(70% 80% at 85% 10%, #000 10%, transparent 80%);
+            mask-image: radial-gradient(70% 80% at 85% 10%, #000 10%, transparent 80%);
+    }
+
+    .ir-trust .ir-head {
+    margin-bottom: clamp(36px, 4.2vw, 60px);
+    }
+
+    /* ---- Pillars --------------------------------------------------------- */
     .ir-trust .ir-tr__list {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 32px var(--ir-gap);
     }
 
     .ir-trust .ir-tr__item {
+    position: relative;
     min-width: 0;
-    padding-top: 20px;
-    border-top: 2px solid rgba(13, 19, 48, 0.12);
+    padding: clamp(30px, 2.8vw, 40px) 0 clamp(28px, 2.6vw, 36px);
     }
 
-    /* A quiet nod back to where the page began. */
-    .ir-trust .ir-tr__item:first-child {
-    border-top-color: var(--ir-alert);
+    /* The rail: a faint track, with the blue stretch (::after) drawn over
+       it. Every pillar has one, edge to edge, so in a row they join into
+       one line across the panel. */
+    .ir-trust .ir-tr__rail {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
     }
 
+    .ir-trust .ir-tr__rail::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, var(--ir-blue), var(--ir-accent-on-dark));
+    box-shadow: 0 0 12px rgba(47, 109, 255, 0.55);
+    transform-origin: left;
+    }
+
+    /* Outlined numerals: decoration, so faint; the <ol> numbers the list. */
     .ir-trust .ir-tr__num {
+    position: absolute;
+    top: clamp(22px, 2.2vw, 30px);
+    right: 0;
+    font-weight: 700;
+    font-size: clamp(44px, 4.2vw, 64px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: rgba(255, 255, 255, 0.07);
+    pointer-events: none;
+    }
+
+    @supports (-webkit-text-stroke: 1px #000) {
+    .ir-trust .ir-tr__num {
+        color: transparent;
+        -webkit-text-stroke: 1px rgba(110, 168, 255, 0.32);
+    }
+    }
+
+    .ir-trust .ir-tr__icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    margin-bottom: clamp(20px, 2vw, 28px);
+    border: 1px solid rgba(110, 168, 255, 0.35);
+    border-radius: 14px;
+    background: rgba(47, 109, 255, 0.14);
+    box-shadow: 0 0 0 6px rgba(47, 109, 255, 0.06),
+                0 10px 30px rgba(47, 109, 255, 0.28);
+    color: var(--ir-accent-on-dark);
+    }
+
+    .ir-trust .ir-tr__icon svg {
     display: block;
-    margin-bottom: 14px;
-    font-family: var(--ir-mono);
-    font-weight: 600;
-    font-size: 13px;
-    line-height: 1.4;
-    letter-spacing: 0.1em;
-    color: var(--ir-text);
+    width: 24px;
+    height: 24px;
     }
 
     .ir-trust .ir-tr__title {
+    position: relative;
     font-weight: 700;
     font-size: 19px;
     line-height: 1.3;
-    color: var(--ir-heading);
+    color: var(--ir-on-dark);
     }
 
     .ir-trust .ir-tr__text {
-    margin-top: 8px;
+    position: relative;
+    margin-top: 10px;
     font-size: 15.5px;
     line-height: 1.6;
-    color: var(--ir-text);
+    color: var(--ir-on-dark-body);               /* 10.9:1 on the panel */
     }
 
-    @media (min-width: 600px) and (max-width: 1099px) {
+    /* ---- Layouts ------------------------------------------------------------- */
+    /* Tablet: two columns, the fifth across both, a hairline between the
+       pair in each row. */
+    @media (min-width: 700px) and (max-width: 1099px) {
     .ir-trust .ir-tr__list {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 0;
     }
-    /* The odd one out (the fifth) runs across both columns. */
+    .ir-trust .ir-tr__item {
+        padding-left: var(--ir-tr-pad);
+        padding-right: var(--ir-tr-pad);
+    }
+    .ir-trust .ir-tr__item:nth-child(odd) {
+        padding-left: 0;
+    }
+    .ir-trust .ir-tr__item:nth-child(even) {
+        border-left: 1px solid rgba(255, 255, 255, 0.08);
+        padding-right: 0;
+    }
+    .ir-trust .ir-tr__item:nth-child(even) .ir-tr__num,
+    .ir-trust .ir-tr__item:nth-child(odd) .ir-tr__num {
+        right: var(--ir-tr-pad);
+    }
+    .ir-trust .ir-tr__item:nth-child(even) .ir-tr__num {
+        right: 0;
+    }
     .ir-trust .ir-tr__item:last-child:nth-child(odd) {
         grid-column: 1 / -1;
+        padding-right: 0;
+    }
+    .ir-trust .ir-tr__item:last-child:nth-child(odd) .ir-tr__num {
+        right: 0;
     }
     }
 
+    /* Desktop: five pillars in a row, hairlines between them, one rail
+       across the top. */
     @media (min-width: 1100px) {
     .ir-trust .ir-tr__list {
         grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: var(--ir-gap) clamp(20px, 2vw, 32px);
+    }
+    .ir-trust .ir-tr__item {
+        padding-left: var(--ir-tr-pad);
+        padding-right: var(--ir-tr-pad);
+    }
+    .ir-trust .ir-tr__item + .ir-tr__item {
+        border-left: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .ir-trust .ir-tr__item:first-child {
+        padding-left: 0;
+    }
+    .ir-trust .ir-tr__item:last-child {
+        padding-right: 0;
+    }
+    .ir-trust .ir-tr__num {
+        right: var(--ir-tr-pad);
+    }
+    .ir-trust .ir-tr__item:last-child .ir-tr__num {
+        right: 0;
+    }
+    }
+
+    @media (max-width: 520px) {
+    .ir-trust .ir-tr__panel {
+        border-radius: 20px;
+    }
+    }
+
+    /* ---- Draw on reveal ---------------------------------------------------------
+       The rail's blue stretch draws left to right on each pillar in turn
+       once the section scrolls in (.is-visible, added once). Under reduced
+       motion, or with ANIMATE off, it is drawn from the start.
+       ----------------------------------------------------------------------- */
+    @media (prefers-reduced-motion: no-preference) {
+    .ir-trust .ir-tr.is-animated .ir-tr__rail::after {
+        transform: scaleX(0);
+        transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        transition-delay: calc(0.3s + var(--i, 0) * 0.16s);
+    }
+    .ir-trust .ir-tr.is-animated.is-visible .ir-tr__rail::after {
+        transform: none;
     }
     }

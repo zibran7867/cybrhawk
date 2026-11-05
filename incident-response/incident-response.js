@@ -239,11 +239,11 @@
       eyebrow: "Why CybrHawk",
       title: "Why Organizations Trust CybrHawk [[in a Crisis]]",
       items: [
-        { title: "Always Available",       text: "24/7/365 response from experienced incident handlers." },
-        { title: "Speed With Precision",   text: "Rapid engagement combined with a disciplined, evidence-based methodology." },
-        { title: "Technology Advantage",   text: "Native access to the CybrHawk platform for faster visibility and containment." },
-        { title: "Clear Communication",    text: "Regular updates for technical teams, executives, legal counsel, and insurers." },
-        { title: "Beyond Recovery",        text: "Actionable recommendations and optional managed SOC services to keep you protected." }
+        { icon: "clock",          title: "Always Available",       text: "24/7/365 response from experienced incident handlers." },
+        { icon: "bolt",           title: "Speed With Precision",   text: "Rapid engagement combined with a disciplined, evidence-based methodology." },
+        { icon: "layers",         title: "Technology Advantage",   text: "Native access to the CybrHawk platform for faster visibility and containment." },
+        { icon: "headset",        title: "Clear Communication",    text: "Regular updates for technical teams, executives, legal counsel, and insurers." },
+        { icon: "shield-refresh", title: "Beyond Recovery",        text: "Actionable recommendations and optional managed SOC services to keep you protected." }
       ]
     }
   };
@@ -408,6 +408,24 @@
       '<path d="M2.8 3.8h2.4l2.2 11.2h10.4l2-7.8H6.2"/>' +
       '<circle cx="9.2" cy="19" r="1.5"/>' +
       '<circle cx="16.8" cy="19" r="1.5"/>',
+
+    // 10 · Why CybrHawk (copied from udc.js)
+    clock:
+      '<circle cx="12" cy="12" r="8.6"/>' +
+      '<path d="M12 7.4V12l3 1.8"/>',
+    layers:
+      '<path d="M12 3.2 21 7.8l-9 4.6-9-4.6z"/>' +
+      '<path d="m3 12.2 9 4.6 9-4.6"/>' +
+      '<path d="m3 16.4 9 4.6 9-4.6"/>',
+    headset:
+      '<path d="M4.6 13.4V12a7.4 7.4 0 0 1 14.8 0v1.4"/>' +
+      '<rect x="3.4" y="13.4" width="3.8" height="5.8" rx="1.6"/>' +
+      '<rect x="16.8" y="13.4" width="3.8" height="5.8" rx="1.6"/>' +
+      '<path d="M18.7 19.2v.2a2.4 2.4 0 0 1-2.4 2.4h-3.1"/>',
+    "shield-refresh":
+      '<path d="M12 3.2 4.8 6v5.4c0 4.4 3 7.9 7.2 9.4 4.2-1.5 7.2-5 7.2-9.4V6z"/>' +
+      '<path d="M16.4 8.6V11H14"/>' +
+      '<path d="M15.4 13a3.6 3.6 0 1 1-.85-3.74L16.4 11"/>',
 
     // 09 · Readiness
     handshake:
@@ -1117,9 +1135,11 @@
   }
 
   /* ---- 10 · Why CybrHawk --------------------------------------------------
-     Editorial columns under a top rule, no icons and no cards, so it reads
-     differently from the industries above it. The first rule is red: a
-     quiet nod back to where the page began.
+     A dark "command panel" set inside the white section: the header, then
+     five pillars side by side under one rail. Each pillar's stretch of the
+     rail draws in blue as the section scrolls in, one after another, so
+     the five read as one continuous commitment. The large outlined
+     numerals are decoration (the <ol> already numbers them).
      -------------------------------------------------------------------- */
   function buildTrust(host, c) {
     if (!host) return false;
@@ -1128,7 +1148,9 @@
     var items = (c.items || []).map(function (it, i) {
       return (
         '<li class="ir-tr__item ir-reveal"' + at(i + 1) + ">" +
+          '<span class="ir-tr__rail" aria-hidden="true"></span>' +
           '<span class="ir-tr__num" aria-hidden="true">' + pad(i + 1) + "</span>" +
+          (it.icon ? '<span class="ir-tr__icon">' + icon(it.icon) + "</span>" : "") +
           '<h3 class="ir-tr__title">' + esc(it.title) + "</h3>" +
           '<p class="ir-tr__text">' + esc(it.text) + "</p>" +
         "</li>"
@@ -1138,8 +1160,11 @@
     mount(
       host,
       '<div class="' + rootClass("ir-tr") + '">' +
-        head({ id: "ir-trust-title", eyebrow: c.eyebrow, title: c.title, align: "start" }) +
-        '<ol class="ir-tr__list">' + items + "</ol>" +
+        '<div class="ir-tr__panel">' +
+          '<span class="ir-tr__decor" aria-hidden="true"></span>' +
+          head({ id: "ir-trust-title", eyebrow: c.eyebrow, title: c.title, align: "start" }) +
+          '<ol class="ir-tr__list">' + items + "</ol>" +
+        "</div>" +
       "</div>",
       "ir-tr"
     );
