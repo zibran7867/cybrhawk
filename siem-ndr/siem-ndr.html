@@ -1,0 +1,116 @@
+<!doctype html>
+<!--
+  =====================================================================
+  CybrHawk — SIEM NDR (Network Detection & Response) page: local preview harness
+  ---------------------------------------------------------------------
+  For previewing siem-ndr.js + siem-ndr.css in a browser. This file is
+  not deployed; on the live site Elementor supplies the containers
+  below.
+
+  Elementor setup
+  ---------------
+  1. Create 11 containers, in this order, each with Content Width set to
+     Full Width, padding 0 and no background, and its class typed into
+     Advanced → CSS Classes:
+
+       01  nd-hero           Hero
+       02  nd-challenge      The challenge
+       03  nd-outcomes       Measurable outcomes
+       04  nd-engine         Detection engine (target of "Tour All Features")
+       05  nd-analyzes       What NDR analyzes
+       06  nd-response       Response & orchestration
+       07  nd-usecases       Use cases
+       08  nd-deploy         Deployment options
+       09  nd-integrations   Integrations
+       10  nd-reporting      Reporting & KPIs
+       11  nd-why            Why CybrHawk
+
+     Leave each one empty: siem-ndr.js builds the section inside it and
+     adds `nd-section` (and `nd-section--dark` where it applies), so
+     nothing else needs typing.
+
+  2. Load siem-ndr.css and siem-ndr.js the same way the other pages'
+     files are loaded.
+
+  3. The hero holds the page's only <h1>. If the page template prints the
+     WordPress page title as a second H1, hide it (Page Settings → Hide
+     Title).
+
+  4. Put the site's existing CTA container directly after Why CybrHawk, and
+     paste Appendix B of the brief (section 13: heading, body, both buttons
+     and the phone / email line) into it. Why CybrHawk ends on white with
+     its normal bottom padding, so the two join without a seam. The FAQ
+     (Appendix B, section 12) is parked for a later pass.
+
+  5. Paste Appendix C of the brief (meta title and description, slug,
+     keywords, Open Graph title) into the SEO plugin (Rank Math or Yoast).
+
+  Also check
+  ----------
+  - Three open items are marked `// TODO:` in the CONTENT block of
+    siem-ndr.js: the "Tour All Features" target (section 04), the hero
+    banner image, and the use-case direction tags (section 07).
+  - The site header overlays the page, so the hero clears its measured
+    height before any content (--nd-header-offset in the tokens of
+    siem-ndr.css: 90px phone, 102px tablet, 100px + 1.5vw desktop).
+    If this template's header does not overlay, set it to 0px. The fake
+    header below is fixed and shorter, so a little extra ground shows
+    under it here.
+  - Hero image: CONTENT.hero.visual.image in siem-ndr.js is optional: a
+    faded backdrop behind the right of the copy. The hero's visual is the
+    coded trace deck, which runs edge to edge under the headline.
+  - The hero is dark, so the transparent site header's light links read
+    on it as they are.
+  - Click tracking: the hero buttons carry
+    data-nd-cta="hero-primary | hero-secondary" for GTM.
+  - Two containers below use an inner .e-con-inner (Elementor's boxed
+    layout) so both host paths are exercised.
+  =====================================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIEM NDR — preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="siem-ndr.css">
+  <style>
+    /* Preview only. */
+    body { margin: 0; font-family: "Figtree", sans-serif; }
+    .preview-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 72px; padding: 0 24px; box-sizing: border-box;
+      background: rgba(7, 11, 24, 0.85); color: #fff;
+      font-weight: 700; font-size: 18px;
+    }
+    .preview-header span { font-weight: 500; font-size: 14px; opacity: 0.7; }
+    .preview-cta {
+      display: flex; align-items: center; justify-content: center;
+      height: 320px; padding: 0 24px; background: #e9ecf2; color: #5b6478;
+      font-size: 15px; font-weight: 600; text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header class="preview-header">CybrHawk <span>Fake 72px site header</span></header>
+
+  <div class="e-con e-con-full nd-hero"></div>
+  <div class="e-con e-con-full nd-challenge"></div>
+  <div class="e-con e-con-full nd-outcomes"></div>
+  <div class="e-con e-con-boxed nd-engine"><div class="e-con-inner"></div></div>
+  <div class="e-con e-con-full nd-analyzes"></div>
+  <div class="e-con e-con-full nd-response"></div>
+  <div class="e-con e-con-full nd-usecases"></div>
+  <div class="e-con e-con-full nd-deploy"></div>
+  <div class="e-con e-con-full nd-integrations"></div>
+  <div class="e-con e-con-boxed nd-reporting"><div class="e-con-inner"></div></div>
+  <div class="e-con e-con-full nd-why"></div>
+
+  <div class="preview-cta">Existing CTA component goes here (FAQ to be added later)</div>
+
+  <script src="siem-ndr.js"></script>
+</body>
+</html>

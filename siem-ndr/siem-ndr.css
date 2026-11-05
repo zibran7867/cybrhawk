@@ -1,0 +1,4316 @@
+/* =====================================================================
+   CybrHawk — SIEM NDR (Network Detection & Response) page styles
+   (markup injected by siem-ndr.js, sections 01–11)
+
+   Every rule is scoped under a section container. The shared tokens and
+   primitives sit on `.nd-section`, which the script adds to each
+   container it builds into (plus `.nd-section--dark` on the four dark
+   grounds, 01, 04, 06 and 09); the per-section blocks below also name the
+   container's own class (.nd-hero, .nd-challenge, …), so nothing leaks
+   onto the page.
+
+   Order: tokens, shared primitives (reset, shell, header, eyebrow,
+   button, reveal), then one block per section in page order, each with
+   its own responsive and reduced-motion rules.
+
+   The idea is the trace: a thin wire carrying short packet ticks, read
+   like a protocol analyzer. Quiet traffic is blue-grey (--nd-wire).
+   Coral (--nd-signal) means "a detection in the traffic" and appears
+   only where one is shown — the hero console, the 02 "in between" tick,
+   the end of the 04 spine, the pulse arriving at the 06 core, and the
+   last tick of the eyebrow mark — always beside its word or inside an
+   aria-hidden layer. Containment is blue with a check, never green.
+   Everything else is brand blue.
+
+   Specificity: Elementor's page CSS writes selectors up to (0,4,0), but
+   it never targets the injected markup, which carries its own classes.
+   The only Elementor wrappers styled here are the container itself and
+   its .e-con-inner, and those rules carry an extra class to win. The
+   theme's own element rules (a:hover, p margins, list bullets, button
+   fills) are beaten by the class selectors below without !important.
+
+   Background images: Elementor's lazy-load blanks background-image on
+   containers below the fold until they near the viewport, so anything
+   drawn with a gradient also declares a solid background-color first.
+
+   Contrast: ratios noted beside the tokens were measured with the WCAG
+   relative-luminance formula. Text needs 4.5:1 (3:1 at 24px and up),
+   UI parts and graphics 3:1.
+   ===================================================================== */
+
+.nd-section {
+  /* Tweak to rebrand */
+  /* Brand: the network, containment and every CTA */
+  --nd-accent: #0c68ff;                      /* fills, buttons: 4.7:1 on white; white on it 4.7:1 */
+  --nd-accent-hover: #0a58d6;                /* white on it 6.2:1 */
+  --nd-accent-ink: #0a58d6;                  /* blue AS TEXT on light grounds: 6.2:1 on white, 5.5:1 on accent-soft */
+  --nd-accent-soft: #eaf2ff;
+  --nd-accent-wash: #f5f8ff;                 /* accent-soft at 50% on white: the 05 cell hover; text on it 5.6:1 */
+  --nd-accent-line: #bcd4ff;                 /* light blue hairlines and wireframe fills; decoration only */
+  --nd-accent-on-dark: #6ea8ff;              /* blue AS TEXT on dark: 8.1:1 on #070b18, 7.6:1 on #0d1330, 7.1:1 on the console */
+
+  /* Signal: a detection in the traffic, and nothing else */
+  --nd-signal: #e5482f;                      /* fills and ticks: 4.0:1 on white, 3.7:1 on the tint, 5.0:1 on #070b18 */
+  --nd-signal-ink: #c1351d;                  /* coral AS TEXT on light: 5.5:1 on white, 5.2:1 on the tint */
+  --nd-signal-on-dark: #ff8a70;              /* 8.5:1 on #070b18, 7.9:1 on #0d1330, 6.7:1 on its 12% pill in the console */
+
+  /* Quiet traffic. Decoration only: 3.0:1 on white and 2.7:1 (as a 45%
+     wash) on night, deliberately below the graphics threshold so the
+     quiet ticks recede. Never the only carrier of meaning. */
+  --nd-wire: #8a96b3;
+  --nd-wire-on-dark: rgba(160, 176, 214, 0.45);
+
+  /* Neutrals (same values as SIEM Cloud) */
+  --nd-heading: #0d1330;                     /* 18.2:1 on white, 17.1:1 on the tint */
+  --nd-text: #5b6478;                        /* body grey: 5.9:1 on white, 5.6:1 on the tint and on #f3f7ff */
+  --nd-night: #070b18;
+  --nd-night-2: #0d1330;
+  --nd-console: #111a3a;                     /* the hero console's body */
+  --nd-on-dark: #ffffff;
+  --nd-on-dark-body: #c3cadb;                /* 12.0:1 on #070b18, 11.1:1 on #0d1330, 11.1:1 on a 4% card over night */
+  --nd-on-dark-muted: #9aa3bd;               /* 7.8:1 on #070b18, 7.2:1 on #0d1330, 6.8:1 on the console. Nothing dimmer for real copy on dark */
+  --nd-bg: #ffffff;
+  --nd-bg-tint: #f6f8fc;
+  --nd-border: #e6eaf2;
+  --nd-border-dark: rgba(255, 255, 255, 0.10);
+  --nd-rule: #edf0f6;
+
+  /* Shape and space */
+  --nd-shadow: 0 1px 2px rgba(13, 19, 48, 0.04),
+               0 8px 24px rgba(13, 19, 48, 0.05);
+  --nd-shadow-hover: 0 2px 4px rgba(13, 19, 48, 0.05),
+                     0 16px 38px rgba(13, 19, 48, 0.10);
+  --nd-radius: 16px;
+  --nd-radius-sm: 10px;
+  --nd-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+  --nd-body-size: clamp(16px, 1.3vw, 18px);
+  --nd-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Layout. The Elementor containers carry no padding of their own, so
+     the gutter is what keeps content off the screen edge below the
+     measure; it is added on top of the measure, so wide screens keep the
+     same content width. */
+  --nd-measure: 1320px;
+  --nd-gutter: 24px;                         /* 22px ≤980px, 18px ≤520px */
+  --nd-pad-y: clamp(56px, 7vw, 96px);
+  --nd-gap: clamp(16px, 1.6vw, 24px);
+
+  /* The theme header sits over the top of the page (positioned
+     absolutely, as on the UCD, HawkINT, IR and SIEM Cloud pages), so the
+     hero clears its height before any content. Measured on cybrhawk.com:
+     at most 90px on phones, 102px on tablets, 100px + 1.5vw on desktop.
+     If this template's header does not overlay, set 0px. */
+  --nd-header-offset: 90px;
+
+  /* Roles: what the shared primitives actually paint with. Light by
+     default; .nd-section--dark swaps them. */
+  --nd-c-heading: var(--nd-heading);
+  --nd-c-body: var(--nd-text);
+  --nd-c-eyebrow: var(--nd-heading);
+  --nd-c-border: var(--nd-border);
+  --nd-c-accent: var(--nd-accent-ink);       /* [[accent]] runs in titles */
+  --nd-c-wire: var(--nd-wire);               /* the eyebrow mark's quiet ticks */
+  --nd-c-signal: var(--nd-signal);           /* the eyebrow mark's last tick */
+  --nd-c-focus: rgba(12, 104, 255, 0.45);
+}
+
+.nd-section {
+  position: relative;
+  background-color: var(--nd-bg);
+}
+
+/* Dark grounds (04, 06, 09; the hero's panel paints its own). Cards on
+   them are translucent with a hairline and no drop shadow. */
+.nd-section.nd-section--dark {
+  --nd-c-heading: var(--nd-on-dark);
+  --nd-c-body: var(--nd-on-dark-body);
+  --nd-c-eyebrow: var(--nd-on-dark-body);
+  --nd-c-border: var(--nd-border-dark);
+  --nd-c-accent: var(--nd-accent-on-dark);
+  --nd-c-wire: var(--nd-wire-on-dark);
+  --nd-c-focus: rgba(110, 168, 255, 0.7);
+  background-color: var(--nd-night);
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .nd-section {
+    --nd-header-offset: 102px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .nd-section {
+    --nd-header-offset: calc(100px + 1.5vw);
+  }
+}
+
+@media (max-width: 980px) {
+  .nd-section {
+    --nd-gutter: 22px;
+  }
+}
+
+@media (max-width: 520px) {
+  .nd-section {
+    --nd-gutter: 18px;
+  }
+}
+
+/* The site's Additional CSS gives every .e-con-inner 0.5% side padding
+   and no max-width; both are reset so the shell alone sets the measure. */
+.nd-section.e-con > .e-con-inner {
+  width: 100%;
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ---- Reset -------------------------------------------------------------
+   The theme styles bare elements (p margins, list bullets, heading
+   fonts). Every section's content sits in a .nd-shell, and :where()
+   adds no weight, so this sits at (0,2,0): above any element or kit
+   rule, below every component rule that follows it.
+   ----------------------------------------------------------------------- */
+.nd-section .nd-shell :where(h1, h2, h3, p, ul, ol, li, figure, strong, article) {
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+}
+
+.nd-section .nd-shell :where(ul, ol) {
+  list-style: none;
+}
+
+/* ---- Shell ------------------------------------------------------------- */
+.nd-section .nd-shell {
+  width: 100%;
+  max-width: calc(var(--nd-measure) + 2 * var(--nd-gutter));
+  margin: 0 auto;
+  padding: var(--nd-pad-y) var(--nd-gutter);
+  box-sizing: border-box;
+  font-family: inherit;
+  text-align: left;
+}
+
+.nd-section .nd-shell *,
+.nd-section .nd-shell *::before,
+.nd-section .nd-shell *::after {
+  box-sizing: border-box;
+}
+
+/* Set by [[double brackets]] in any title. */
+.nd-section .nd-accent {
+  color: var(--nd-c-accent);
+}
+
+/* A hyphenated word in a title, kept on one line. */
+.nd-section .nd-nowrap {
+  white-space: nowrap;
+}
+
+.nd-section a:focus-visible,
+.nd-section button:focus-visible {
+  outline: 3px solid var(--nd-c-focus);
+  outline-offset: 3px;
+}
+
+/* ---- Section header ---------------------------------------------------- */
+.nd-section .nd-head {
+  max-width: 880px;
+  margin: 0 auto clamp(36px, 4vw, 56px);
+  text-align: center;
+}
+
+.nd-section .nd-head--start {
+  margin-left: 0;
+  text-align: left;
+}
+
+/* The eyebrow is the page's second voice: mono, uppercase, led by the
+   page's signature mark — a packet trace: four 5px dashes on a 1px
+   wire, the first three quiet, the last a coral detection. One
+   pseudo-element, no image: a repeating gradient lays the three quiet
+   dashes, one solid layer the coral one, one more the wire under both.
+   It is pinned to the first line, so it stays put if the eyebrow wraps
+   on a phone. */
+.nd-section .nd-eyebrow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 0 0 16px;
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 12.5px;
+  line-height: 1.5;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nd-c-eyebrow);
+}
+
+.nd-section .nd-eyebrow::before {
+  content: "";
+  flex: none;
+  width: 40px;
+  height: 3px;
+  margin-top: calc(0.75em - 1.5px);
+  background:
+    linear-gradient(var(--nd-c-signal), var(--nd-c-signal)) 27px 0 / 5px 3px no-repeat,
+    repeating-linear-gradient(90deg, var(--nd-c-wire) 0 5px, transparent 5px 9px) 0 0 / 23px 3px no-repeat,
+    linear-gradient(var(--nd-c-wire), var(--nd-c-wire)) 0 1px / 100% 1px no-repeat;
+}
+
+.nd-section .nd-head:not(.nd-head--start) .nd-eyebrow {
+  justify-content: center;
+}
+
+/* 700, not 800: the site only loads Figtree up to 700, and anything
+   heavier falls back to Helvetica. */
+.nd-section .nd-head__title {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(30px, 4vw, 50px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--nd-c-heading);
+  text-wrap: balance;
+}
+
+.nd-section .nd-head__sub {
+  margin: 18px 0 0;
+  font-size: var(--nd-body-size);
+  line-height: 1.65;
+  color: var(--nd-c-body);
+  text-wrap: pretty;
+}
+
+.nd-section .nd-head:not(.nd-head--start) .nd-head__sub {
+  max-width: 46em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---- Buttons (walkthrough-cta shape) ------------------------------------
+   Only in the hero: the solid blue is the demo request, the outline its
+   quiet twin. Both lift 2px under a real pointer.
+   ----------------------------------------------------------------------- */
+.nd-section .nd-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 26px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: clamp(15px, 1.1vw, 16px);
+  line-height: 1.2;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: transform 0.25s ease, background-color 0.25s ease,
+              border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.nd-section .nd-btn svg {
+  flex: 0 0 auto;
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.nd-section .nd-btn--primary {
+  background: var(--nd-accent);
+  border-color: var(--nd-accent);
+  color: #ffffff;
+  box-shadow: 0 10px 26px rgba(12, 104, 255, 0.32);
+}
+
+.nd-section .nd-btn--primary:hover,
+.nd-section .nd-btn--primary:focus {
+  background: var(--nd-accent-hover);
+  border-color: var(--nd-accent-hover);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* An ink hairline (18:1 on white) that fills with ink on hover; white on
+   it is 18.2:1. */
+.nd-section .nd-btn--outline {
+  background: transparent;
+  border-color: var(--nd-heading);
+  color: var(--nd-heading);
+}
+
+.nd-section .nd-btn--outline:hover,
+.nd-section .nd-btn--outline:focus {
+  background: var(--nd-heading);
+  border-color: var(--nd-heading);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* A real hover only: a tap on a phone would leave it stuck raised. */
+@media (hover: hover) {
+  .nd-section .nd-btn:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* ---- Scroll reveal ------------------------------------------------------
+   Builders mark what rises with .nd-reveal and an inline --i for the
+   stagger. The hero has its own load stagger instead (see 01), and the
+   04 spine, the 08 rollout strip and the 09 jacks have their own draws.
+   ----------------------------------------------------------------------- */
+.nd-section .is-animated .nd-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s var(--nd-ease);
+  transition-delay: calc(var(--i, 0) * 0.07s);
+}
+
+.nd-section .is-animated.is-visible .nd-reveal {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nd-section .is-animated .nd-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .nd-section .nd-btn {
+    transition: none;
+  }
+  .nd-section .nd-btn:hover,
+  .nd-section .nd-btn:focus {
+    transform: none;
+  }
+}
+
+
+/* =====================================================================
+   01 · Hero (.nd-hero → .nd-hr)
+   ---------------------------------------------------------------------
+   The analyzer. Night, full width, in three bands:
+     1. the copy across the whole measure: eyebrow, a two-line H1 (each
+        line holds one line from 1025px up), then the sub and the buttons
+        side by side;
+     2. the trace deck, edge to edge across the screen: a readout bar
+        (product label and state chip), two wires of drifting packet
+        ticks, a playhead that sweeps them, and the containment line;
+     3. the trust points as the deck's readout strip.
+
+   The deck's default styles are the FINAL state (every marker shown and
+   blue, ticks still, containment lit, "Contained"), which is what
+   reduced motion shows; the loop rules further down apply only while
+   the script is cycling it (.is-looping).
+
+   The hero is a dark section (the script adds nd-section--dark), so the
+   site header's light links read on it as they are, with no extra band.
+   ===================================================================== */
+.nd-section.nd-hero {
+  background-color: var(--nd-night);
+}
+
+.nd-hero .nd-hr {
+  position: relative;
+  overflow: clip;                            /* the playhead starts off screen; the glow never widens the page */
+  padding-top: var(--nd-header-offset);
+  background-color: var(--nd-night);
+  background-image: linear-gradient(180deg, var(--nd-night) 0%, var(--nd-night-2) 100%);
+}
+
+/* One blue glow high on the right, and the page's wire lines (1px, 5%
+   white, 36px pitch) fading in towards the deck. */
+.nd-hero .nd-hr__decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(55% 60% at 88% 8%, rgba(12, 104, 255, 0.24), rgba(12, 104, 255, 0) 70%),
+    repeating-linear-gradient(180deg,
+      transparent 0, transparent 35px,
+      rgba(255, 255, 255, 0.05) 35px, rgba(255, 255, 255, 0.05) 36px);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.35), #000 70%);
+          mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.35), #000 70%);
+}
+
+/* The optional banner: faded in from the left, behind the copy's right. */
+.nd-hero .nd-hr__backdrop {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(62%, 900px);
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.35;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 45%);
+          mask-image: linear-gradient(90deg, transparent, #000 45%);
+}
+
+/* ---- The copy ---------------------------------------------------------- */
+.nd-hero .nd-hr__inner.nd-shell {
+  position: relative;
+  padding-top: clamp(28px, min(4vw, 5vh), 64px);
+  padding-bottom: clamp(24px, min(3.2vw, 4.4vh), 44px);
+}
+
+.nd-hero .nd-hr__eyebrow {
+  margin-bottom: clamp(14px, 2.4vh, 24px);
+}
+
+/* The brief's scale (40–74px, 700, 1.02). With the full measure to run
+   in, "the Network Tells the Truth." (about 14.6em) holds one line from
+   1025px up; 9vh keeps a short laptop screen in budget. Line 2 is the
+   answer, so it alone takes the accent. */
+.nd-hero .nd-hr__title {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(40px, min(5.2vw, 9vh), 74px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--nd-on-dark);
+}
+
+.nd-hero .nd-hr__line,
+.nd-hero .nd-hr__line-in {
+  display: block;
+}
+
+.nd-hero .nd-hr__line-in {
+  text-wrap: balance;
+}
+
+.nd-hero .nd-hr__line--2 {
+  color: var(--nd-accent-on-dark);           /* 8.1:1 on night */
+}
+
+/* Sub and buttons side by side under the H1: the buttons sit on the
+   sub's last line, at the measure's right edge. */
+.nd-hero .nd-hr__lede {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 24px clamp(32px, 5vw, 80px);
+  margin-top: clamp(18px, 3.2vh, 32px);
+}
+
+.nd-hero .nd-hr__sub {
+  max-width: 44em;
+  font-size: clamp(16px, min(1.3vw, 2.4vh), 19px);
+  line-height: 1.65;
+  color: var(--nd-on-dark-body);             /* 12.0:1 on night */
+  text-wrap: pretty;
+}
+
+.nd-hero .nd-hr__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+/* The quiet twin on night: a white hairline (it is 3.9:1, above the 3:1
+   a control's edge needs) that fills white on hover; the ink on it is
+   18.2:1. */
+.nd-hero .nd-btn--ghost {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.42);
+  color: var(--nd-on-dark);
+}
+
+.nd-hero .nd-btn--ghost:hover,
+.nd-hero .nd-btn--ghost:focus {
+  background: var(--nd-on-dark);
+  border-color: var(--nd-on-dark);
+  color: var(--nd-heading);
+  text-decoration: none;
+}
+
+/* ---- The trace deck --------------------------------------------------------
+   Full bleed, between two hairlines. The readout bar and the wire
+   labels sit in the measure (.nd-shell, its vertical padding cut down);
+   the lanes run the full width of the screen.
+   ----------------------------------------------------------------------- */
+.nd-hero .nd-hr__deck {
+  position: relative;
+  border-top: 1px solid var(--nd-border-dark);
+  border-bottom: 1px solid var(--nd-border-dark);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0));
+}
+
+.nd-hero .nd-hr__deck .nd-shell {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.nd-hero .nd-hr__readout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+/* (0,3,0): beats the deck's shell padding reset above. */
+.nd-hero .nd-hr__deck .nd-hr__readout {
+  padding-top: 14px;
+}
+
+/* A small ring that pulses while the deck is recording (motion only). */
+.nd-hero .nd-hr__rec {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--nd-accent-on-dark);
+  box-shadow: 0 0 0 3px rgba(110, 168, 255, 0.18);
+}
+
+.nd-hero .nd-hr__label {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--nd-on-dark-body);
+}
+
+/* The three state words share one grid cell; only the current one is
+   opaque, so the chip never changes width mid-loop. */
+.nd-hero .nd-hr__status {
+  display: grid;
+  margin-left: auto;
+}
+
+.nd-hero .nd-hr__state {
+  grid-area: 1 / 1;
+  justify-self: end;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  font-family: var(--nd-mono);
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+  color: var(--nd-on-dark-muted);
+  opacity: 0;
+}
+
+/* Coral on its 12% chip: 7.0:1 on night. */
+.nd-hero .nd-hr__state--detected {
+  border-color: rgba(255, 138, 112, 0.4);
+  background: rgba(229, 72, 47, 0.12);
+  color: var(--nd-signal-on-dark);
+}
+
+/* Blue on its 16% chip: 6.7:1 on night. */
+.nd-hero .nd-hr__state--contained {
+  border-color: rgba(110, 168, 255, 0.4);
+  background: rgba(12, 104, 255, 0.16);
+  color: var(--nd-accent-on-dark);
+  opacity: 1;
+}
+
+.nd-hero .nd-hr__lanes {
+  position: relative;
+  overflow: hidden;                          /* the playhead waits off screen to the left */
+  padding-bottom: 6px;
+}
+
+.nd-hero .nd-hr__lane {
+  position: relative;
+}
+
+/* In the track's top-left corner, lined up with the copy: the first
+   marker sits at 34% across, clear of it. */
+.nd-hero .nd-hr__deck .nd-hr__lane-label {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  right: 0;
+  display: block;
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--nd-on-dark-muted);            /* 7.8:1 on night */
+}
+
+/* The pill zones above and below the wire are the track's own height:
+   the wire runs through the middle, so a 24px pill clears it by 12px
+   and still sits inside the track (the lanes clip). */
+.nd-hero .nd-hr__track {
+  position: relative;
+  display: block;
+  height: 80px;
+}
+
+.nd-hero .nd-hr__baseline {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  margin-top: -0.5px;
+  background: rgba(160, 176, 214, 0.3);
+  transform-origin: left center;
+}
+
+/* The packet ticks: one strip, a period wider than the screen, that
+   slides right by exactly one period and starts over, so the loop has
+   no seam. Each wire has its own rhythm (period, pattern and speed). */
+.nd-hero .nd-hr__ticks {
+  --nd-hr-period: 120px;
+  --nd-hr-speed: 2.8s;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  margin-top: -1px;
+  overflow: hidden;
+}
+
+.nd-hero .nd-hr__ticks::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(-1 * var(--nd-hr-period));
+  right: 0;
+  background: linear-gradient(90deg,
+    transparent 0 8px, var(--nd-wire-on-dark) 8px 14px,
+    transparent 14px 34px, var(--nd-wire-on-dark) 34px 46px,
+    transparent 46px 60px, var(--nd-wire-on-dark) 60px 63px,
+    transparent 63px 86px, var(--nd-wire-on-dark) 86px 96px,
+    transparent 96px) 0 0 / var(--nd-hr-period) 2px repeat-x;
+}
+
+.nd-hero .nd-hr__lane--2 .nd-hr__ticks {
+  --nd-hr-period: 96px;
+  --nd-hr-speed: 2.1s;
+}
+
+.nd-hero .nd-hr__lane--2 .nd-hr__ticks::before {
+  background: linear-gradient(90deg,
+    transparent 0 4px, var(--nd-wire-on-dark) 4px 16px,
+    transparent 16px 28px, var(--nd-wire-on-dark) 28px 32px,
+    transparent 32px 52px, var(--nd-wire-on-dark) 52px 60px,
+    transparent 60px 74px, var(--nd-wire-on-dark) 74px 78px,
+    transparent 78px) 0 0 / var(--nd-hr-period) 2px repeat-x;
+}
+
+/* ---- Detection markers -----------------------------------------------------
+   A tick across the wire and a pill naming it. Their colours run off
+   custom properties, so the loop swaps coral (a detection) for blue
+   (contained) with one transition. The defaults are the contained look.
+   ----------------------------------------------------------------------- */
+.nd-hero .nd-hr__mark {
+  --nd-mk: var(--nd-accent-on-dark);
+  --nd-mk-ink: var(--nd-accent-on-dark);
+  --nd-mk-fill: rgba(12, 104, 255, 0.10);
+  --nd-mk-line: rgba(110, 168, 255, 0.55);
+  --nd-mk-glow: rgba(12, 104, 255, 0.35);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+}
+
+.nd-hero .nd-hr__mark-tick {
+  position: absolute;
+  top: 50%;
+  left: -1px;
+  width: 2px;
+  height: 20px;
+  margin-top: -10px;
+  border-radius: 2px;
+  background: var(--nd-mk);
+  box-shadow: 0 0 12px var(--nd-mk-glow);
+}
+
+.nd-hero .nd-hr__mark-pill {
+  position: absolute;
+  padding: 3px 9px;
+  border: 1px solid var(--nd-mk-line);
+  border-radius: 6px;
+  background: var(--nd-mk-fill);
+  font-family: var(--nd-mono);
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--nd-mk-ink);
+}
+
+.nd-hero .nd-hr__mark--up .nd-hr__mark-pill {
+  bottom: calc(50% + 12px);
+}
+
+.nd-hero .nd-hr__mark--down .nd-hr__mark-pill {
+  top: calc(50% + 12px);
+}
+
+.nd-hero .nd-hr__mark--start .nd-hr__mark-pill {
+  left: -6px;
+}
+
+.nd-hero .nd-hr__mark--end .nd-hr__mark-pill {
+  right: -6px;
+}
+
+/* ---- The playhead ------------------------------------------------------------
+   A runner as wide as the deck with the cursor at its right edge and a
+   faint "already read" wash behind it: moving it from -100% to 0 puts
+   the cursor at t / SWEEP of the way across, which is how the script
+   knows when it crosses each marker. Hidden unless sweeping.
+   ----------------------------------------------------------------------- */
+.nd-hero .nd-hr__playhead {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+.nd-hero .nd-hr__playhead::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 180px;
+  background: linear-gradient(90deg, rgba(110, 168, 255, 0), rgba(110, 168, 255, 0.10));
+}
+
+.nd-hero .nd-hr__cursor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 2px;
+  background: linear-gradient(180deg,
+    rgba(150, 195, 255, 0), rgba(150, 195, 255, 0.95) 18%,
+    rgba(150, 195, 255, 0.95) 82%, rgba(150, 195, 255, 0));
+  box-shadow: 0 0 14px rgba(110, 168, 255, 0.8);
+}
+
+/* ---- Containment (in the readout bar, beside the state chip) ------------- */
+.nd-hero .nd-hr__contain {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 3px 12px 3px 4px;
+  border: 1px dashed rgba(110, 168, 255, 0.45);
+  border-radius: 999px;
+  background: rgba(12, 104, 255, 0.10);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--nd-on-dark);                  /* 15:1 on its wash */
+}
+
+.nd-hero .nd-hr__node {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--nd-accent);
+  color: #ffffff;
+}
+
+.nd-hero .nd-hr__node svg {
+  display: block;
+  width: 12px;
+  height: 12px;
+  stroke-width: 2.6;
+}
+
+.nd-hero .nd-hr__contain-text {
+  min-width: 0;
+}
+
+/* ---- The readout strip (trust) ------------------------------------------- */
+.nd-hero .nd-hr__bottom.nd-shell {
+  padding-top: clamp(18px, 2.6vh, 26px);
+  padding-bottom: clamp(24px, 3.6vh, 40px);
+}
+
+.nd-hero .nd-hr__trust {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.nd-hero .nd-hr__trust-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 2px 20px;
+  border-left: 1px solid var(--nd-border-dark);
+  font-weight: 600;
+  font-size: 14.5px;
+  line-height: 1.4;
+  color: var(--nd-on-dark-body);
+}
+
+.nd-hero .nd-hr__trust-item:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.nd-hero .nd-hr__check {
+  flex: none;
+  display: inline-flex;
+  margin-top: 1px;
+  color: var(--nd-accent-on-dark);
+}
+
+.nd-hero .nd-hr__check svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.4;
+}
+
+/* ---- Motion ---------------------------------------------------------------
+   One orchestrated entrance, about 1.1s, on each element's inline --d:
+     0ms      the eyebrow fades up and its packet-trace mark draws
+     80, 160  the two H1 lines rise out of their masks
+     240      the sub fades up
+     300      the deck fades up and its two wires draw in from the left
+     320      the buttons fade up
+     400+70n  the readout points arrive in turn, each tick popping in
+   Then the deck cycles: the playhead sweeps (SWEEP_MS), each detection
+   lights coral as it is crossed, then containment, hold, clear, again.
+   Everything below runs only without a reduced-motion preference, so
+   that preference (even one switched on mid-loop) always shows the
+   final, still state.
+   ----------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .nd-hero .nd-hr.is-animated .nd-hr__in {
+    animation: nd-rise 0.7s var(--nd-ease) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  /* The padding (cancelled by the margin) keeps descenders inside the
+     mask. */
+  .nd-hero .nd-hr.is-animated .nd-hr__line {
+    overflow: hidden;
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+  }
+
+  .nd-hero .nd-hr.is-animated .nd-hr__line-in {
+    animation: nd-line-rise 0.9s var(--nd-ease) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  .nd-hero .nd-hr.is-animated .nd-hr__eyebrow::before {
+    transform-origin: left center;
+    animation: nd-draw 0.7s var(--nd-ease) 0.12s both;
+  }
+
+  .nd-hero .nd-hr.is-animated .nd-hr__baseline {
+    animation: nd-draw 1.2s var(--nd-ease) 0.35s both;
+  }
+
+  .nd-hero .nd-hr.is-animated .nd-hr__check {
+    animation: nd-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: calc(var(--d, 0ms) + 220ms);
+  }
+
+  .nd-section .nd-btn svg {
+    transition: transform 0.25s ease;
+  }
+
+  /* ---- The cycle ------------------------------------------------------------ */
+  .nd-hero .nd-hr__deck.is-looping .nd-hr__lanes {
+    transition: opacity 0.45s ease;
+  }
+
+  .nd-hero .nd-hr__deck.is-looping .nd-hr__mark,
+  .nd-hero .nd-hr__deck.is-looping .nd-hr__contain,
+  .nd-hero .nd-hr__deck.is-looping .nd-hr__state {
+    transition: opacity 0.4s ease;
+  }
+
+  .nd-hero .nd-hr__deck.is-looping .nd-hr__mark-pill,
+  .nd-hero .nd-hr__deck.is-looping .nd-hr__mark-tick {
+    transition: transform 0.45s var(--nd-ease), background-color 0.45s ease,
+                border-color 0.45s ease, color 0.45s ease, box-shadow 0.45s ease;
+  }
+
+  .nd-hero .nd-hr__deck.is-looping .nd-hr__node,
+  .nd-hero .nd-hr__deck.is-looping .nd-hr__node svg {
+    transition: transform 0.4s var(--nd-ease), background-color 0.4s ease;
+  }
+
+  .nd-hero .nd-hr__deck.is-sweeping .nd-hr__playhead {
+    animation: nd-hr-sweep var(--sweep, 5600ms) linear both;
+  }
+
+  .nd-hero .nd-hr__deck.is-looping .nd-hr__rec {
+    animation: nd-hr-rec 1.6s ease-in-out infinite;
+  }
+
+  /* The ticks drift while there is traffic to read, freeze once it is
+     contained, and stop off screen. */
+  .nd-hero .nd-hr__deck.is-looping .nd-hr__ticks::before {
+    animation: nd-hr-drift var(--nd-hr-speed) linear infinite;
+  }
+
+  .nd-hero .nd-hr__deck.is-looping[data-state="contained"] .nd-hr__ticks::before,
+  .nd-hero .nd-hr__deck.is-looping[data-state="contained"] .nd-hr__rec,
+  .nd-hero .nd-hr__deck.is-paused .nd-hr__ticks::before,
+  .nd-hero .nd-hr__deck.is-paused .nd-hr__rec {
+    animation-play-state: paused;
+  }
+
+  /* A marker shows only once the playhead has crossed it... */
+  .nd-hero .nd-hr__deck.is-looping .nd-hr__mark:not(.is-hit) {
+    opacity: 0;
+  }
+
+  .nd-hero .nd-hr__deck.is-looping .nd-hr__mark:not(.is-hit) .nd-hr__mark-tick {
+    transform: scaleY(0.2);
+  }
+
+  .nd-hero .nd-hr__deck.is-looping .nd-hr__mark--up:not(.is-hit) .nd-hr__mark-pill {
+    transform: translateY(5px);
+  }
+
+  .nd-hero .nd-hr__deck.is-looping .nd-hr__mark--down:not(.is-hit) .nd-hr__mark-pill {
+    transform: translateY(-5px);
+  }
+
+  /* ...and is coral until the traffic is contained. */
+  .nd-hero .nd-hr__deck.is-looping:not([data-state="contained"]) .nd-hr__mark {
+    --nd-mk: var(--nd-signal);
+    --nd-mk-ink: var(--nd-signal-on-dark);
+    --nd-mk-fill: rgba(229, 72, 47, 0.12);
+    --nd-mk-line: rgba(255, 138, 112, 0.4);
+    --nd-mk-glow: rgba(229, 72, 47, 0.65);
+  }
+
+  .nd-hero .nd-hr__deck.is-looping[data-state="observing"] .nd-hr__state--observing,
+  .nd-hero .nd-hr__deck.is-looping[data-state="detected"] .nd-hr__state--detected {
+    opacity: 1;
+  }
+
+  .nd-hero .nd-hr__deck.is-looping:not([data-state="contained"]) .nd-hr__state--contained {
+    opacity: 0;
+  }
+
+  .nd-hero .nd-hr__deck.is-looping:not([data-state="contained"]) .nd-hr__contain {
+    opacity: 0.35;
+  }
+
+  .nd-hero .nd-hr__deck.is-looping:not([data-state="contained"]) .nd-hr__node {
+    background-color: rgba(110, 168, 255, 0.2);
+  }
+
+  .nd-hero .nd-hr__deck.is-looping:not([data-state="contained"]) .nd-hr__node svg {
+    transform: scale(0);
+  }
+
+  /* Clearing, between the hold and the next sweep (and before the
+     first): the wires fade out and the markers drop unseen. */
+  .nd-hero .nd-hr__deck.is-looping.is-clearing .nd-hr__lanes {
+    opacity: 0;
+  }
+}
+
+@keyframes nd-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes nd-line-rise {
+  from { transform: translateY(105%); }
+  to   { transform: none; }
+}
+
+@keyframes nd-draw {
+  from { transform: scaleX(0); }
+  to   { transform: none; }
+}
+
+@keyframes nd-pop {
+  from { opacity: 0; transform: scale(0.4); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes nd-hr-drift {
+  from { transform: none; }
+  to   { transform: translateX(var(--nd-hr-period)); }
+}
+
+@keyframes nd-hr-sweep {
+  0%   { transform: translateX(-100%); opacity: 0; }
+  4%   { opacity: 1; }
+  96%  { opacity: 1; }
+  100% { transform: none; opacity: 0; }
+}
+
+@keyframes nd-hr-rec {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .nd-section .nd-btn:hover svg {
+    transform: translateX(3px);
+  }
+}
+
+/* ---- Responsive ----------------------------------------------------------- */
+/* Stacked: the type sizes by width alone, the buttons drop under the
+   sub, the readout strip folds to two columns. */
+@media (max-width: 1024px) {
+  .nd-hero .nd-hr__title {
+    font-size: clamp(40px, 8.4vw, 64px);
+  }
+
+  .nd-hero .nd-hr__lede {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .nd-hero .nd-hr__sub {
+    font-size: clamp(16px, 2.2vw, 19px);
+  }
+
+  .nd-hero .nd-hr__backdrop {
+    width: 100%;
+    opacity: 0.2;
+  }
+
+  .nd-hero .nd-hr__trust {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 0;
+  }
+
+  .nd-hero .nd-hr__trust-item:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+/* The readout bar: label and chip on one line, containment under them. */
+@media (max-width: 620px) {
+  .nd-hero .nd-hr__status {
+    order: 3;
+  }
+
+  .nd-hero .nd-hr__contain {
+    order: 4;
+  }
+
+  .nd-hero .nd-hr__actions {
+    flex-direction: column;
+  }
+
+  .nd-hero .nd-btn {
+    width: 100%;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 520px) {
+  .nd-hero .nd-hr__trust-item {
+    padding: 2px 12px;
+    font-size: 14px;
+  }
+
+  .nd-hero .nd-hr__contain {
+    border-radius: var(--nd-radius-sm);
+  }
+}
+
+/* =====================================================================
+   02 · The challenge (.nd-challenge → .nd-ch)
+   ---------------------------------------------------------------------
+   The tint, with one 1px dashed page wire running behind the register
+   card at the height of its "in between" strip, so the strip reads as
+   one stretch of a longer line. SIEM Cloud's split (copy left), with
+   IR's risk register on the right: a single white card of rows.
+   ===================================================================== */
+.nd-section.nd-challenge {
+  background-color: var(--nd-bg-tint);
+}
+
+.nd-challenge .nd-ch {
+  position: relative;
+  overflow: clip;                            /* the page wire runs off both screen edges */
+  background-color: var(--nd-bg-tint);
+}
+
+.nd-challenge .nd-ch__inner {
+  --nd-ch-gap: clamp(40px, 6vw, 96px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--nd-ch-gap);
+}
+
+.nd-challenge .nd-ch__lede .nd-head {
+  margin-bottom: 24px;
+}
+
+.nd-challenge .nd-ch__p {
+  font-size: var(--nd-body-size);
+  line-height: 1.65;
+  color: var(--nd-text);
+  text-wrap: pretty;
+}
+
+.nd-challenge .nd-ch__p--lead {
+  font-size: clamp(17px, 1.35vw, 18px);
+  color: var(--nd-heading);
+}
+
+/* The thesis: a pull line on a blue rule, still a paragraph. */
+.nd-challenge .nd-ch__p--pull {
+  margin-top: 26px;
+  padding-left: 20px;
+  border-left: 3px solid var(--nd-accent);
+  font-weight: 600;
+  font-size: clamp(19px, 1.5vw, 20px);
+  line-height: 1.5;
+  color: var(--nd-heading);
+}
+
+/* ---- The page wire ------------------------------------------------------
+   Level with the strip's wire (46px into the card, plus its 1px
+   border). Stacked, it runs edge to edge; beside the copy it starts in
+   the column gap and fades in, so it never crosses the text.
+   ----------------------------------------------------------------------- */
+.nd-challenge .nd-ch__visual {
+  position: relative;
+  min-width: 0;
+}
+
+.nd-challenge .nd-ch__visual::before {
+  content: "";
+  position: absolute;
+  top: 46px;
+  left: -100vw;
+  right: -100vw;
+  height: 1px;
+  pointer-events: none;
+  background: repeating-linear-gradient(90deg,
+    rgba(138, 150, 179, 0.55) 0 6px, transparent 6px 12px);
+}
+
+@media (min-width: 1025px) {
+  .nd-challenge .nd-ch__visual::before {
+    left: calc(-1 * var(--nd-ch-gap));
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 var(--nd-ch-gap));
+            mask-image: linear-gradient(90deg, transparent 0, #000 var(--nd-ch-gap));
+  }
+}
+
+/* ---- The register -------------------------------------------------------- */
+.nd-challenge .nd-ch__register {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  border: 1px solid var(--nd-border);
+  border-radius: var(--nd-radius);
+  background: var(--nd-bg);
+  box-shadow: var(--nd-shadow);
+}
+
+/* The strip: three labels over one wire. Fixed in height, so the page
+   wire behind the card can line up with it. Quiet ticks along the
+   wire, a ring at each guarded end, and one coral tick where paragraph
+   1 says the attacks happen. */
+.nd-challenge .nd-ch__strip {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 8px;
+  height: 64px;
+  padding: 16px 24px 0 28px;
+  border-bottom: 1px solid var(--nd-rule);
+  background: #fafbfd;
+}
+
+.nd-challenge .nd-ch__key {
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--nd-text);                     /* 5.7:1 on #fafbfd */
+}
+
+.nd-challenge .nd-ch__key--mid {
+  color: var(--nd-heading);
+}
+
+.nd-challenge .nd-ch__key--to {
+  justify-self: end;
+}
+
+.nd-challenge .nd-ch__wire {
+  position: absolute;
+  top: 41px;
+  left: 28px;
+  right: 24px;
+  height: 10px;
+  background:
+    repeating-linear-gradient(90deg, var(--nd-wire) 0 5px, transparent 5px 14px) 12px 3.5px / calc(100% - 24px) 3px no-repeat,
+    linear-gradient(var(--nd-wire), var(--nd-wire)) 0 4.5px / 100% 1px no-repeat;
+}
+
+/* The guarded ends: Perimeter and Endpoint. */
+.nd-challenge .nd-ch__wire::before,
+.nd-challenge .nd-ch__wire::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--nd-heading);
+  border-radius: 50%;
+  background: #fafbfd;
+}
+
+.nd-challenge .nd-ch__wire::before {
+  left: -5px;
+}
+
+.nd-challenge .nd-ch__wire::after {
+  right: -5px;
+}
+
+/* The detection in between: a coral tick, on a pale halo. */
+.nd-challenge .nd-ch__hit {
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  width: 14px;
+  height: 6px;
+  margin-left: -7px;
+  border-radius: 3px;
+  background: var(--nd-signal);
+  box-shadow: 0 0 0 4px rgba(229, 72, 47, 0.14);
+}
+
+.nd-challenge .nd-ch__risk {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 24px 20px 28px;
+}
+
+.nd-challenge .nd-ch__risk + .nd-ch__risk {
+  border-top: 1px solid var(--nd-rule);
+}
+
+/* The register's marker on each row's left edge. */
+.nd-challenge .nd-ch__risk::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 16px;
+  bottom: 16px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--nd-accent);
+}
+
+/* Stroke accent-ink on accent-soft: 5.5:1. */
+.nd-challenge .nd-ch__badge {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--nd-accent-soft);
+  color: var(--nd-accent-ink);
+}
+
+.nd-challenge .nd-ch__badge svg {
+  display: block;
+  width: 21px;
+  height: 21px;
+}
+
+.nd-challenge .nd-ch__risk-body {
+  min-width: 0;
+}
+
+.nd-challenge .nd-ch__risk-title {
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.35;
+  color: var(--nd-heading);
+}
+
+.nd-challenge .nd-ch__risk-text {
+  margin-top: 4px;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--nd-text);
+}
+
+@media (max-width: 1024px) {
+  .nd-challenge .nd-ch__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 44px);
+  }
+
+  .nd-challenge .nd-ch__visual {
+    max-width: 720px;
+  }
+}
+
+@media (max-width: 520px) {
+  .nd-challenge .nd-ch__strip {
+    padding-left: 20px;
+    padding-right: 18px;
+  }
+
+  .nd-challenge .nd-ch__wire {
+    left: 20px;
+    right: 18px;
+  }
+
+  .nd-challenge .nd-ch__risk {
+    gap: 14px;
+    padding: 18px 18px 18px 22px;
+  }
+}
+
+
+/* =====================================================================
+   03 · Measurable outcomes (.nd-outcomes → .nd-oc)
+   ---------------------------------------------------------------------
+   SIEM Cloud's impact split. At ≥1025px the header and the days →
+   minutes graphic stay pinned on the left (position: sticky) while the
+   four outcomes scroll past on the right; below that they stack. The
+   rows are static: a hover tints the row, lights its number tile and
+   runs a blue bar down its left edge, but nothing lifts.
+   ===================================================================== */
+.nd-section.nd-outcomes {
+  background-color: var(--nd-bg);
+}
+
+.nd-outcomes .nd-oc {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(32px, 4vw, 48px);
+}
+
+.nd-outcomes .nd-oc__aside .nd-head {
+  margin-bottom: 0;
+}
+
+/* ---- The graphic ----------------------------------------------------------
+   Two bars from one baseline (the blue rule on the left): a long dashed
+   trace in the quiet wire colour for Days, a short solid blue bar
+   ending in a check for Minutes. The labels say it; no numbers.
+   ----------------------------------------------------------------------- */
+.nd-outcomes .nd-oc__visual {
+  position: relative;
+  display: grid;
+  gap: 18px;
+  max-width: 520px;
+  margin-top: clamp(28px, 3vw, 40px);
+  padding: 22px 24px 22px 26px;
+  border: 1px solid var(--nd-border);
+  border-radius: var(--nd-radius);
+  background-color: var(--nd-bg-tint);
+  background-image:
+    linear-gradient(rgba(13, 19, 48, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(13, 19, 48, 0.035) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.nd-outcomes .nd-oc__visual::before {
+  content: "";
+  position: absolute;
+  left: 26px;
+  top: 22px;
+  bottom: 22px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--nd-heading);
+  opacity: 0.18;
+}
+
+.nd-outcomes .nd-oc__row {
+  display: block;
+  padding-left: 12px;
+}
+
+.nd-outcomes .nd-oc__key {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nd-text);                     /* 5.6:1 on the tint */
+}
+
+.nd-outcomes .nd-oc__row--to .nd-oc__key {
+  color: var(--nd-accent-ink);               /* 5.8:1 on the tint */
+}
+
+.nd-outcomes .nd-oc__track {
+  display: flex;
+  align-items: center;
+  height: 22px;
+  margin-left: -12px;
+}
+
+.nd-outcomes .nd-oc__bar {
+  display: block;
+  height: 8px;
+  border-radius: 0 3px 3px 0;
+  transform-origin: left center;
+}
+
+/* Days: a long, slow trace of quiet packets. */
+.nd-outcomes .nd-oc__row--from .nd-oc__bar {
+  flex: 1 1 auto;
+  background: repeating-linear-gradient(90deg, var(--nd-wire) 0 12px, transparent 12px 16px);
+  opacity: 0.7;
+}
+
+/* Minutes: short, solid, and closed with a check. */
+.nd-outcomes .nd-oc__row--to .nd-oc__bar {
+  flex: 0 0 22%;
+  min-width: 48px;
+  background: var(--nd-accent);
+}
+
+.nd-outcomes .nd-oc__node {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-left: -4px;
+  border-radius: 50%;
+  background: var(--nd-accent);
+  box-shadow: 0 0 0 4px rgba(12, 104, 255, 0.14);
+  color: #ffffff;
+}
+
+.nd-outcomes .nd-oc__node svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+  stroke-width: 2.6;
+}
+
+/* ---- The outcomes ------------------------------------------------------ */
+.nd-outcomes .nd-oc__list {
+  border-top: 1px solid var(--nd-rule);
+}
+
+.nd-outcomes .nd-oc__row-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  align-items: start;
+  gap: 0 clamp(16px, 2vw, 24px);
+  padding: clamp(24px, 2.6vw, 34px) clamp(12px, 1.6vw, 20px);
+  border-bottom: 1px solid var(--nd-rule);
+  transition: background-color 0.25s ease;
+}
+
+/* The hover bar: grows down the row's left edge. */
+.nd-outcomes .nd-oc__row-item::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  left: 0;
+  width: 3px;
+  background: var(--nd-accent);
+  transform: scaleY(0);
+  transform-origin: center top;
+  transition: transform 0.35s var(--nd-ease);
+}
+
+/* A tile, not a bare number: it gives each row a fixed anchor on the
+   left, so the titles line up however their text wraps. */
+.nd-outcomes .nd-oc__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--nd-border);
+  border-radius: 12px;
+  background: var(--nd-bg);
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--nd-accent-ink);
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.nd-outcomes .nd-oc__body {
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.nd-outcomes .nd-oc__title {
+  font-weight: 700;
+  font-size: clamp(19px, 1.7vw, 22px);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--nd-heading);
+}
+
+.nd-outcomes .nd-oc__text {
+  margin-top: 6px;
+  max-width: 40em;
+  font-size: clamp(15.5px, 1.2vw, 17px);
+  line-height: 1.6;
+  color: var(--nd-text);
+  text-wrap: pretty;
+}
+
+/* White on the accent is 4.7:1. */
+@media (hover: hover) {
+  .nd-outcomes .nd-oc__row-item:hover {
+    background: var(--nd-accent-wash);
+  }
+
+  .nd-outcomes .nd-oc__row-item:hover::before {
+    transform: none;
+  }
+
+  .nd-outcomes .nd-oc__row-item:hover .nd-oc__num {
+    border-color: var(--nd-accent);
+    background: var(--nd-accent);
+    color: #ffffff;
+  }
+}
+
+/* ---- Entrance --------------------------------------------------------------
+   With the section's reveal: the Days trace crawls out over 1.4s, the
+   Minutes bar is there in a third of that, and its check pops.
+   ----------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .nd-outcomes .nd-oc.is-animated .nd-oc__row--from .nd-oc__bar {
+    transform: scaleX(0);
+    transition: transform 1.4s cubic-bezier(0.4, 0, 0.6, 1) 0.35s;
+  }
+
+  .nd-outcomes .nd-oc.is-animated .nd-oc__row--to .nd-oc__bar {
+    transform: scaleX(0);
+    transition: transform 0.4s var(--nd-ease) 0.45s;
+  }
+
+  .nd-outcomes .nd-oc.is-animated .nd-oc__node {
+    opacity: 0;
+    transform: scale(0.4);
+    transition: opacity 0.3s ease 0.8s, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.8s;
+  }
+
+  .nd-outcomes .nd-oc.is-animated.is-visible .nd-oc__bar {
+    transform: none;
+  }
+
+  .nd-outcomes .nd-oc.is-animated.is-visible .nd-oc__node {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nd-outcomes .nd-oc__row-item,
+  .nd-outcomes .nd-oc__row-item::before,
+  .nd-outcomes .nd-oc__num {
+    transition: none;
+  }
+}
+
+/* ---- Desktop: pinned header ------------------------------------------------
+   The aside sticks just under the site's fixed header while the list
+   scrolls.
+   ----------------------------------------------------------------------- */
+@media (min-width: 1025px) {
+  .nd-outcomes .nd-oc {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    align-items: start;
+    gap: clamp(48px, 6vw, 96px);
+  }
+
+  .nd-outcomes .nd-oc__aside {
+    position: sticky;
+    top: 112px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .nd-outcomes .nd-oc__visual {
+    max-width: 420px;
+  }
+}
+
+@media (max-width: 520px) {
+  .nd-outcomes .nd-oc__row-item {
+    grid-template-columns: 40px minmax(0, 1fr);
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .nd-outcomes .nd-oc__num {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 13px;
+  }
+}
+
+
+/* =====================================================================
+   04 · Detection engine (.nd-engine → .nd-en, #nd-engine)
+   ---------------------------------------------------------------------
+   The signature section, on HawkINT's vertical spine. Night, with a soft
+   blue glow behind the top of the spine and a small coral one at its
+   end. ≥1100px: the header sticky on the left, the five layers on the
+   right; below that, one column.
+
+   The spine is the filter. It starts at a "Traffic" cap above node 1
+   and ends below node 5 in the coral "Single incident" node, the only
+   coral object here. Every stretch of it belongs to the layer it leaves
+   from and is sized off that layer's box plus the list gap (--nd-en-gap),
+   so it threads the node centres however the text wraps. Each stretch
+   clips its own packet ticks; the nodes sit on top with a solid fill,
+   so a tick vanishes into a node and fewer leave it.
+   ===================================================================== */
+.nd-section.nd-engine {
+  background-color: var(--nd-night);
+}
+
+.nd-engine .nd-en {
+  position: relative;
+  overflow: clip;                            /* the glows never widen the page */
+  background-color: var(--nd-night);
+  scroll-margin-top: 96px;                   /* clears the site's fixed header when "Tour All Features" lands here */
+}
+
+.nd-engine .nd-en:focus {
+  outline: none;                             /* focus lands here only to continue from; the heading shows where */
+}
+
+.nd-engine .nd-en__decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1.4px);
+  background-size: 28px 28px;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+          mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+}
+
+.nd-engine .nd-en__inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(36px, 4vw, 56px);
+}
+
+.nd-engine .nd-en__aside .nd-head {
+  margin-bottom: 0;
+}
+
+.nd-engine .nd-en__flow {
+  position: relative;
+  min-width: 0;
+  max-width: 760px;
+}
+
+.nd-engine .nd-en__glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.nd-engine .nd-en__glow--top {
+  top: -140px;
+  left: -170px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(closest-side, rgba(12, 104, 255, 0.24), rgba(12, 104, 255, 0));
+}
+
+.nd-engine .nd-en__glow--end {
+  bottom: -130px;
+  left: -120px;
+  width: 290px;
+  height: 290px;
+  background: radial-gradient(closest-side, rgba(229, 72, 47, 0.12), rgba(229, 72, 47, 0));
+}
+
+/* --nd-en-lead: room above node 1 for the cap; --nd-en-tail: from the
+   last layer's foot to the end node's centre. */
+.nd-engine .nd-en__layers {
+  --nd-en-node: 48px;
+  --nd-en-gap: clamp(30px, 3.2vw, 44px);
+  --nd-en-lead: 28px;
+  --nd-en-tail: 72px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--nd-en-gap);
+  padding: var(--nd-en-lead) 0 calc(var(--nd-en-tail) + 16px);
+}
+
+.nd-engine .nd-en__layers.has-cap {
+  --nd-en-lead: 64px;
+}
+
+.nd-engine .nd-en__layer {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--nd-en-node) minmax(0, 1fr);
+  column-gap: clamp(18px, 2.4vw, 28px);
+  align-items: start;
+}
+
+/* ---- Nodes ------------------------------------------------------------- */
+.nd-engine .nd-en__node {
+  position: relative;
+  z-index: 2;
+  grid-column: 1;
+  grid-row: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--nd-en-node);
+  height: var(--nd-en-node);
+  border-radius: 50%;
+  background: var(--nd-night);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.14);
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--nd-on-dark);
+}
+
+/* The lit ring, which fades in when the spine reaches it. */
+.nd-engine .nd-en__node::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--nd-accent-on-dark);
+  border-radius: 50%;
+  box-shadow: 0 0 18px rgba(12, 104, 255, 0.28);
+}
+
+.nd-engine .nd-en__body {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.nd-engine .nd-en__label {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--nd-on-dark-muted);
+}
+
+.nd-engine .nd-en__title {
+  font-weight: 700;
+  font-size: clamp(18px, 1.5vw, 20px);
+  line-height: 1.3;
+  color: var(--nd-on-dark);
+}
+
+.nd-engine .nd-en__text {
+  margin-top: 8px;
+  max-width: 40em;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--nd-on-dark-body);
+  text-wrap: pretty;
+}
+
+/* ---- The spine ------------------------------------------------------------
+   The rail is the layer's own box; each stretch is a 2px column centred
+   on the node:
+     in    from the cap to node 1's centre
+     next  node centre to the next node's centre (one gap below)
+     out   node 5's centre to the end node
+   ----------------------------------------------------------------------- */
+.nd-engine .nd-en__rail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--nd-en-node);
+  pointer-events: none;
+}
+
+.nd-engine .nd-en__seg {
+  position: absolute;
+  left: calc(var(--nd-en-node) / 2 - 1px);
+  width: 2px;
+}
+
+.nd-engine .nd-en__seg--in {
+  top: calc(12px - var(--nd-en-lead));
+  height: calc(var(--nd-en-lead) - 12px + var(--nd-en-node) / 2);
+}
+
+.nd-engine .nd-en__seg--next {
+  top: calc(var(--nd-en-node) / 2);
+  height: calc(100% + var(--nd-en-gap));
+}
+
+.nd-engine .nd-en__seg--out {
+  top: calc(var(--nd-en-node) / 2);
+  height: calc(100% - var(--nd-en-node) / 2 + var(--nd-en-tail));
+}
+
+.nd-engine .nd-en__wire {
+  position: absolute;
+  inset: 0;
+  border-radius: 2px;
+  background: rgba(110, 168, 255, 0.38);
+  transform-origin: center top;
+}
+
+/* Above layer 1 it is still raw traffic: the quiet wire colour. */
+.nd-engine .nd-en__seg--in .nd-en__wire {
+  background: var(--nd-wire-on-dark);
+}
+
+/* The cap: a hollow ring where traffic enters, and its word. */
+.nd-engine .nd-en__cap {
+  position: absolute;
+  top: calc(-1 * var(--nd-en-lead));
+  left: calc(var(--nd-en-node) / 2 - 5px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 10px;
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--nd-on-dark-muted);
+}
+
+.nd-engine .nd-en__cap::before {
+  content: "";
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border: 2px solid rgba(160, 176, 214, 0.7);
+  border-radius: 50%;
+}
+
+/* The end: one coral node, the single incident. Its label is coral on
+   night, 8.5:1. */
+.nd-engine .nd-en__end {
+  position: absolute;
+  top: calc(100% + var(--nd-en-tail));
+  left: calc(var(--nd-en-node) / 2);
+  display: flex;
+  align-items: center;
+}
+
+.nd-engine .nd-en__end-node {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--nd-signal);
+  box-shadow: 0 0 0 5px rgba(229, 72, 47, 0.16), 0 0 26px rgba(229, 72, 47, 0.45);
+}
+
+/* The ping that answers each arriving coral tick (motion only). */
+.nd-engine .nd-en__end-node::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--nd-signal-on-dark);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.nd-engine .nd-en__end-label {
+  position: absolute;
+  top: 0;
+  left: 28px;
+  transform: translateY(-50%);
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.3;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--nd-signal-on-dark);
+}
+
+/* ---- Packet ticks ------------------------------------------------------------
+   Each tick is a full-height runner of its stretch with a short dash at
+   its foot. The runner moves from one height above the stretch to its
+   own place, so the dash travels top to bottom and the stretch (12px
+   wide, so the dash is not trimmed) clips it at both ends. Hidden
+   unless the script has set the flow moving.
+   ----------------------------------------------------------------------- */
+.nd-engine .nd-en__packets {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -5px;
+  right: -5px;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.nd-engine .nd-en__packet {
+  position: absolute;
+  inset: 0;
+}
+
+.nd-engine .nd-en__packet::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 4px;
+  width: 4px;
+  height: 9px;
+  border-radius: 2px;
+  background: rgba(195, 205, 230, 0.8);
+}
+
+.nd-engine .nd-en__packet--hit::after {
+  left: 3px;
+  width: 6px;
+  height: 14px;
+  border-radius: 3px;
+  background: var(--nd-signal);
+  box-shadow: 0 0 10px rgba(229, 72, 47, 0.7);
+}
+
+/* ---- Draw and flow ------------------------------------------------------------
+   Once, as the section scrolls in: the spine draws down a stretch every
+   0.25s and node i lights at i × 0.25s (--i, set per layer by the
+   script), then the end node at 1.5s. Then the packets fade in and keep
+   travelling, paused off screen and in a background tab (.is-paused).
+   ----------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .nd-engine .nd-en.is-animated .nd-en__wire {
+    transform: scaleY(0);
+    transition: transform 0.25s linear;
+    transition-delay: calc(var(--i, 0) * 0.25s);
+  }
+
+  .nd-engine .nd-en.is-animated .nd-en__seg--in .nd-en__wire {
+    transition-delay: 0s;
+  }
+
+  .nd-engine .nd-en.is-animated .nd-en__node::before {
+    opacity: 0;
+    transform: scale(0.7);
+    transition: opacity 0.35s ease, transform 0.4s var(--nd-ease);
+    transition-delay: calc(var(--i, 0) * 0.25s);
+  }
+
+  .nd-engine .nd-en.is-animated .nd-en__node {
+    color: rgba(255, 255, 255, 0.4);
+    transition: color 0.35s ease;
+    transition-delay: calc(var(--i, 0) * 0.25s);
+  }
+
+  .nd-engine .nd-en.is-animated .nd-en__cap {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .nd-engine .nd-en.is-animated .nd-en__end-node,
+  .nd-engine .nd-en.is-animated .nd-en__end-label {
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-delay: calc(var(--i, 0) * 0.25s + 0.25s);
+  }
+
+  .nd-engine .nd-en.is-animated .nd-en__end-node {
+    transform: scale(0.3);
+  }
+
+  .nd-engine .nd-en.is-animated.is-visible .nd-en__wire,
+  .nd-engine .nd-en.is-animated.is-visible .nd-en__node::before,
+  .nd-engine .nd-en.is-animated.is-visible .nd-en__end-node {
+    opacity: 1;
+    transform: none;
+  }
+
+  .nd-engine .nd-en.is-animated.is-visible .nd-en__node {
+    color: var(--nd-on-dark);
+  }
+
+  .nd-engine .nd-en.is-animated.is-visible .nd-en__cap,
+  .nd-engine .nd-en.is-animated.is-visible .nd-en__end-label {
+    opacity: 1;
+  }
+
+  .nd-engine .nd-en.is-visible .nd-en__flow.is-moving .nd-en__packets {
+    opacity: 1;
+    transition: opacity 0.6s ease 1.5s;
+  }
+
+  .nd-engine .nd-en.is-visible .nd-en__flow.is-moving .nd-en__packet {
+    animation: nd-en-fall 2.4s linear infinite;
+    animation-delay: calc(var(--p, 0) * -2.4s / var(--n, 1));
+  }
+
+  /* One ping per arriving coral tick: the tick lands every 2.4s, the
+     first time 2.4s after the flow starts. */
+  .nd-engine .nd-en.is-visible .nd-en__flow.is-moving .nd-en__end-node::after {
+    animation: nd-en-ping 2.4s ease-out 2.4s infinite;
+  }
+
+  .nd-engine .nd-en__flow.is-paused .nd-en__packet,
+  .nd-engine .nd-en__flow.is-paused .nd-en__end-node::after {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes nd-en-fall {
+  from { transform: translateY(-100%); }
+  to   { transform: none; }
+}
+
+@keyframes nd-en-ping {
+  0%   { opacity: 0.9; transform: scale(1); }
+  45%  { opacity: 0; transform: scale(2.4); }
+  100% { opacity: 0; transform: scale(2.4); }
+}
+
+/* ---- Desktop: two columns, sticky header ------------------------------------ */
+@media (min-width: 1100px) {
+  .nd-engine .nd-en__inner {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    align-items: start;
+    gap: clamp(48px, 6vw, 96px);
+  }
+
+  .nd-engine .nd-en__aside {
+    position: sticky;
+    top: 112px;
+  }
+}
+
+@media (max-width: 560px) {
+  .nd-engine .nd-en__layers {
+    --nd-en-node: 44px;
+    --nd-en-gap: 28px;
+  }
+
+  .nd-engine .nd-en__layer {
+    column-gap: 16px;
+  }
+}
+
+
+/* =====================================================================
+   05 · What NDR analyzes (.nd-analyzes → .nd-an)
+   ---------------------------------------------------------------------
+   HawkINT's datasheet: one white panel split by 1px hairlines into a
+   3×2 grid. The hairlines are each cell's right and bottom border; the
+   grid overhangs the panel by 1px on those sides, so the panel's
+   rounded clip hides the outer ones at any column count. Each cell is
+   led by a large ghosted index numeral (4% ink). Static cells: hover
+   tints, nothing lifts.
+   ===================================================================== */
+.nd-section.nd-analyzes {
+  background-color: var(--nd-bg);
+}
+
+.nd-analyzes .nd-an__panel {
+  overflow: hidden;
+  border: 1px solid var(--nd-border);
+  border-radius: var(--nd-radius);
+  background: var(--nd-bg);
+  box-shadow: var(--nd-shadow);
+}
+
+.nd-analyzes .nd-an__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0 -1px -1px 0;
+}
+
+.nd-analyzes .nd-an__item {
+  display: flex;
+  border-right: 1px solid var(--nd-border);
+  border-bottom: 1px solid var(--nd-border);
+  background: var(--nd-bg);
+  transition: background-color 0.2s ease;
+}
+
+.nd-analyzes .nd-an__cell {
+  position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  padding: clamp(26px, 2.6vw, 36px) clamp(22px, 2.2vw, 32px);
+}
+
+/* The datasheet's signature: a big index numeral, barely there. */
+.nd-analyzes .nd-an__index {
+  position: absolute;
+  top: clamp(12px, 1.4vw, 18px);
+  right: clamp(14px, 1.8vw, 22px);
+  font-family: var(--nd-mono);
+  font-weight: 700;
+  font-size: clamp(36px, 4vw, 52px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: rgba(13, 19, 48, 0.04);
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.nd-analyzes .nd-an__cellhead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-right: clamp(44px, 4.4vw, 60px);  /* clear of the numeral */
+}
+
+/* Stroke accent-ink on accent-soft: 5.5:1. */
+.nd-analyzes .nd-an__icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--nd-accent-soft);
+  color: var(--nd-accent-ink);
+}
+
+.nd-analyzes .nd-an__icon svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.nd-analyzes .nd-an__title {
+  min-width: 0;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--nd-heading);
+}
+
+.nd-analyzes .nd-an__text {
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--nd-text);
+}
+
+@media (hover: hover) {
+  .nd-analyzes .nd-an__item:hover {
+    background: var(--nd-accent-wash);
+  }
+
+  .nd-analyzes .nd-an__item:hover .nd-an__index {
+    color: rgba(10, 88, 214, 0.1);
+  }
+}
+
+@media (max-width: 1024px) {
+  .nd-analyzes .nd-an__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .nd-analyzes .nd-an__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nd-analyzes .nd-an__item,
+  .nd-analyzes .nd-an__index {
+    transition: none;
+  }
+}
+
+
+/* =====================================================================
+   06 · Response & orchestration (.nd-response → .nd-rs)
+   ---------------------------------------------------------------------
+   Night-2 with long horizontal wire lines at 4%. IR's platform stage,
+   mirrored: the core on the left, connectors in a stretched 0–100
+   viewBox, four numbered targets on the right in equal grid rows (no
+   row gap, so their centres stay at (i + .5) / n).
+
+   Three columns with fixed widths for the first two, so the connector
+   SVG can be laid over the gap without measuring: it starts at the
+   core ring's right edge (the hub's centre plus the ring's radius) and
+   ends at the targets' left edge.
+   ===================================================================== */
+.nd-section.nd-response {
+  background-color: var(--nd-night-2);
+}
+
+.nd-response .nd-rs {
+  position: relative;
+  overflow: clip;                            /* the incoming pulse runs from off screen */
+  background-color: var(--nd-night-2);
+}
+
+.nd-response .nd-rs__decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(180deg,
+    transparent 0, transparent 35px,
+    rgba(255, 255, 255, 0.04) 35px, rgba(255, 255, 255, 0.04) 36px);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 20%, #000 80%, transparent);
+          mask-image: linear-gradient(180deg, transparent, #000 20%, #000 80%, transparent);
+}
+
+.nd-response .nd-rs__inner {
+  position: relative;
+}
+
+.nd-response .nd-rs__stage {
+  --nd-rs-hub: 240px;
+  --nd-rs-core: 148px;
+  --nd-rs-wire: clamp(72px, 11vw, 168px);
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--nd-rs-hub) var(--nd-rs-wire) minmax(0, 1fr);
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+/* ---- The hub (aria-hidden) ------------------------------------------------- */
+.nd-response .nd-rs__hub {
+  position: relative;
+  z-index: 2;
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.nd-response .nd-rs__core {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--nd-rs-core);
+  height: var(--nd-rs-core);
+  padding: 20px;
+  border-radius: 50%;
+  background-color: #111a3d;
+  background-image: radial-gradient(circle at 50% 30%, #1a2756, #0e1636 70%);
+  box-shadow: 0 0 0 8px rgba(12, 104, 255, 0.06),
+              0 20px 50px rgba(2, 4, 14, 0.5);
+  text-align: center;
+}
+
+.nd-response .nd-rs__ring {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(110, 168, 255, 0.6);
+  border-radius: 50%;
+}
+
+/* The flash as each detection lands (motion only). */
+.nd-response .nd-rs__ring::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--nd-accent-on-dark);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.nd-response .nd-rs__core-name {
+  position: relative;
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 12.5px;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  color: var(--nd-on-dark);
+}
+
+/* The detection arriving: a wire from the screen's left edge into the
+   core, carrying one coral tick (motion only). */
+.nd-response .nd-rs__in {
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  width: 45vw;
+  height: 4px;
+  margin-top: -2px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.nd-response .nd-rs__in::before {
+  content: "";
+  position: absolute;
+  top: 1.5px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(160, 176, 214, 0), rgba(160, 176, 214, 0.3));
+}
+
+.nd-response .nd-rs__in-run {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.nd-response .nd-rs__in-run::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 18px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--nd-signal);
+  box-shadow: 0 0 10px rgba(229, 72, 47, 0.7);
+}
+
+/* The core's terms: approvals and guardrails, words from the paragraph. */
+.nd-response .nd-rs__gate {
+  padding: 6px 12px;
+  border: 1px dashed rgba(110, 168, 255, 0.45);
+  border-radius: 999px;
+  background: rgba(12, 104, 255, 0.08);
+  font-family: var(--nd-mono);
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  color: var(--nd-on-dark-body);
+}
+
+/* ---- Connectors ------------------------------------------------------------ */
+.nd-response .nd-rs__links {
+  position: absolute;
+  top: 0;
+  left: calc(var(--nd-rs-hub) / 2 + var(--nd-rs-core) / 2);
+  display: block;
+  width: calc(var(--nd-rs-hub) / 2 - var(--nd-rs-core) / 2 + var(--nd-rs-wire));
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.nd-response .nd-rs__lines line {
+  stroke: rgba(110, 168, 255, 0.35);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.nd-response .nd-rs__signal {
+  fill: none;
+  stroke: var(--nd-accent-on-dark);
+  stroke-width: 6;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+}
+
+/* ---- Targets ----------------------------------------------------------------- */
+.nd-response .nd-rs__targets {
+  grid-column: 3;
+  grid-row: 1;
+  display: grid;
+  grid-template-rows: repeat(var(--n, 4), minmax(0, 1fr));
+  min-width: 0;
+}
+
+/* Symmetric margins, not a row gap: the card's centre stays the row's. */
+.nd-response .nd-rs__target {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  align-items: start;
+  gap: 16px;
+  margin: 7px 0;
+  padding: 18px 22px;
+  border: 1px solid var(--nd-border-dark);
+  border-radius: var(--nd-radius);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.nd-response .nd-rs__num {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(110, 168, 255, 0.35);
+  border-radius: 10px;
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--nd-accent-on-dark);           /* 7.6:1 on the card */
+}
+
+/* Contained: a small blue check on the number. */
+.nd-response .nd-rs__tick {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--nd-accent);
+  box-shadow: 0 0 0 3px var(--nd-night-2);
+  color: #ffffff;
+}
+
+.nd-response .nd-rs__tick svg {
+  display: block;
+  width: 12px;
+  height: 12px;
+  stroke-width: 2.8;
+}
+
+.nd-response .nd-rs__body {
+  min-width: 0;
+}
+
+.nd-response .nd-rs__title {
+  font-weight: 700;
+  font-size: 17.5px;
+  line-height: 1.3;
+  color: var(--nd-on-dark);
+}
+
+.nd-response .nd-rs__text {
+  margin-top: 6px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--nd-on-dark-body);
+}
+
+/* ---- Motion ---------------------------------------------------------------
+   One cycle (--cycle, 3.6s) for everything, from the reveal on: the
+   coral tick runs in and reaches the core at 36%, the ring flashes,
+   then the blue signals leave (each 0.12s after the last), ride their
+   connectors and land at 86%, when that target's check pops (once, at
+   its --arrive). Translate lengths on SVG content are user units, so
+   --dx/--dy land each signal on its target in viewBox space. Paused off
+   screen and in a background tab; under reduced motion nothing runs
+   and the checks simply show.
+   ----------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .nd-response .nd-rs__stage.is-moving .nd-rs__tick {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+
+  .nd-response .nd-rs.is-visible .nd-rs__stage.is-moving .nd-rs__tick {
+    animation: nd-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) var(--arrive, 0s) both;
+  }
+
+  .nd-response .nd-rs.is-visible .nd-rs__stage.is-moving .nd-rs__in-run {
+    animation: nd-rs-in var(--cycle, 3.6s) linear 0.4s infinite;
+  }
+
+  .nd-response .nd-rs.is-visible .nd-rs__stage.is-moving .nd-rs__ring::after {
+    animation: nd-rs-flash var(--cycle, 3.6s) ease-out 0.4s infinite;
+  }
+
+  .nd-response .nd-rs.is-visible .nd-rs__stage.is-moving .nd-rs__signal {
+    animation: nd-rs-out var(--cycle, 3.6s) linear var(--delay, 0s) infinite;
+  }
+
+  .nd-response .nd-rs__stage.is-paused .nd-rs__tick,
+  .nd-response .nd-rs__stage.is-paused .nd-rs__in-run,
+  .nd-response .nd-rs__stage.is-paused .nd-rs__ring::after,
+  .nd-response .nd-rs__stage.is-paused .nd-rs__signal {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes nd-rs-in {
+  0%   { transform: translateX(-100%); opacity: 0; }
+  5%   { opacity: 1; }
+  34%  { opacity: 1; }
+  36%  { transform: none; opacity: 0; }
+  100% { transform: none; opacity: 0; }
+}
+
+@keyframes nd-rs-flash {
+  0%, 34% { transform: scale(1); opacity: 0; }
+  37%     { transform: scale(1); opacity: 0.9; }
+  56%     { transform: scale(1.22); opacity: 0; }
+  100%    { transform: scale(1.22); opacity: 0; }
+}
+
+@keyframes nd-rs-out {
+  0%, 38% { transform: translate(0, 0); opacity: 0; }
+  42%     { opacity: 1; }
+  80%     { opacity: 1; }
+  86%     { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+  100%    { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+}
+
+/* ---- Stacked (<1025px) ---------------------------------------------------------
+   The core becomes a pill on top, its node at the left, and the targets
+   stack below on one vertical blue line with a branch to each (IR's
+   stacked layout). The line is drawn in pieces, each owned by the
+   element it passes: core → gate → each target, so it never needs
+   measuring.
+   ----------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .nd-response .nd-rs__stage {
+    --nd-rs-x: 21px;                         /* the line's left edge, from the stage's */
+    display: block;
+    max-width: 680px;
+  }
+
+  .nd-response .nd-rs__hub {
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .nd-response .nd-rs__core {
+    width: auto;
+    height: auto;
+    padding: 11px 18px 11px 44px;
+    border-radius: 999px;
+    text-align: left;
+    box-shadow: 0 12px 30px rgba(2, 4, 14, 0.45);
+  }
+
+  .nd-response .nd-rs__ring {
+    inset: auto;
+    top: 50%;
+    left: 12px;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    border-color: var(--nd-accent-on-dark);
+  }
+
+  /* Core node → down to the gate. */
+  .nd-response .nd-rs__core::after {
+    content: "";
+    position: absolute;
+    top: calc(50% + 10px);
+    left: var(--nd-rs-x);
+    width: 2px;
+    height: calc(50% - 10px + 14px);
+    background: var(--nd-accent-on-dark);
+    opacity: 0.6;
+  }
+
+  /* The gate sits on the line, indented to the targets' column. */
+  .nd-response .nd-rs__gate {
+    position: relative;
+    margin-left: 44px;
+  }
+
+  .nd-response .nd-rs__gate::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: calc(var(--nd-rs-x) - 44px);
+    width: 2px;
+    height: calc(100% + 18px);
+    background: var(--nd-accent-on-dark);
+    opacity: 0.6;
+  }
+
+  .nd-response .nd-rs__links {
+    display: none;
+  }
+
+  .nd-response .nd-rs__targets {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 18px;
+    padding-left: 44px;
+  }
+
+  .nd-response .nd-rs__target {
+    position: relative;
+    margin: 0;
+  }
+
+  /* Each target carries the line past itself, and its own branch. */
+  .nd-response .nd-rs__target::before {
+    content: "";
+    position: absolute;
+    top: -15px;
+    bottom: -15px;
+    left: calc(var(--nd-rs-x) - 44px);
+    width: 2px;
+    background: var(--nd-accent-on-dark);
+    opacity: 0.6;
+  }
+
+  .nd-response .nd-rs__target:last-child::before {
+    bottom: 50%;
+  }
+
+  .nd-response .nd-rs__target::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: calc(var(--nd-rs-x) - 44px);
+    width: calc(44px - var(--nd-rs-x));
+    height: 2px;
+    margin-top: -1px;
+    background: var(--nd-accent-on-dark);
+    opacity: 0.6;
+  }
+}
+
+@media (max-width: 520px) {
+  .nd-response .nd-rs__target {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    padding: 16px 16px 18px;
+  }
+
+  .nd-response .nd-rs__gate {
+    white-space: normal;
+  }
+}
+
+
+/* =====================================================================
+   07 · Use cases (.nd-usecases → .nd-uc)
+   ---------------------------------------------------------------------
+   The tint, with one soft blue radial at the top. SIEM Cloud's
+   detection cards on a light ground: white, hairline, soft shadow, a
+   2px blue top line, a blue icon tile, and the traffic direction as a
+   mono tag top right with an arrow glyph (shape, not colour, tells
+   East-West from North-South). A legend beside the H2 lists the two
+   once. Coral never appears here.
+
+   Static cards, so nothing lifts. Under a mouse the border warms to
+   blue and a soft blue spotlight follows the pointer (moved by
+   transform; --nd-mx / --nd-my come from the script).
+
+   Tag contrast: accent-ink on accent-soft, 5.5:1.
+   ===================================================================== */
+.nd-section.nd-usecases {
+  background-color: var(--nd-bg-tint);
+}
+
+.nd-usecases .nd-uc {
+  position: relative;
+  overflow: clip;
+  background-color: var(--nd-bg-tint);
+}
+
+.nd-usecases .nd-uc__decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(60% 50% at 50% 0%, rgba(12, 104, 255, 0.06), transparent 70%);
+}
+
+.nd-usecases .nd-uc__inner {
+  position: relative;
+}
+
+/* ---- Header and legend --------------------------------------------------- */
+.nd-usecases .nd-uc__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px 40px;
+  margin-bottom: clamp(36px, 4vw, 56px);
+}
+
+.nd-usecases .nd-uc__header .nd-head {
+  margin-bottom: 0;
+}
+
+.nd-usecases .nd-uc__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.nd-usecases .nd-uc__key,
+.nd-usecases .nd-uc__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid rgba(12, 104, 255, 0.22);
+  border-radius: 999px;
+  background: var(--nd-accent-soft);
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--nd-accent-ink);
+}
+
+.nd-usecases .nd-uc__key {
+  padding: 6px 12px 6px 10px;
+}
+
+.nd-usecases .nd-uc__dir {
+  display: inline-flex;
+}
+
+.nd-usecases .nd-uc__dir svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
+}
+
+/* ---- Cards ----------------------------------------------------------------- */
+.nd-usecases .nd-uc__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--nd-gap);
+}
+
+.nd-usecases .nd-uc__item {
+  display: flex;
+}
+
+.nd-usecases .nd-uc__card {
+  --nd-uc-pad: clamp(24px, 2.4vw, 30px);
+  position: relative;
+  isolation: isolate;                        /* keeps the spotlight under the text */
+  flex: 1 1 auto;
+  overflow: hidden;
+  padding: var(--nd-uc-pad);
+  border: 1px solid var(--nd-border);
+  border-radius: var(--nd-radius);
+  background: var(--nd-bg);
+  box-shadow: var(--nd-shadow);
+  transition: border-color 0.3s ease;
+}
+
+/* The top line. */
+.nd-usecases .nd-uc__card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--nd-accent);
+}
+
+.nd-usecases .nd-uc__spot {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 440px;
+  height: 440px;
+  margin: -220px 0 0 -220px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgba(12, 104, 255, 0.08), rgba(12, 104, 255, 0));
+  opacity: 0;
+  transform: translate(var(--nd-mx, 50%), var(--nd-my, 0px));
+  transition: opacity 0.35s ease;
+}
+
+.nd-usecases .nd-uc__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(12, 104, 255, 0.16);
+  border-radius: 12px;
+  background: var(--nd-accent-soft);
+  color: var(--nd-accent-ink);
+}
+
+.nd-usecases .nd-uc__icon svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+/* After the title in the DOM, top right on screen, centred on the icon. */
+.nd-usecases .nd-uc__tag {
+  position: absolute;
+  top: calc(var(--nd-uc-pad) + 11px);
+  right: var(--nd-uc-pad);
+  padding: 3px 9px 3px 8px;
+}
+
+.nd-usecases .nd-uc__title {
+  margin-top: 22px;
+  font-weight: 700;
+  font-size: 18.5px;
+  line-height: 1.3;
+  color: var(--nd-heading);
+}
+
+.nd-usecases .nd-uc__text {
+  margin-top: 10px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--nd-text);
+}
+
+@media (hover: hover) {
+  .nd-usecases .nd-uc__card:hover {
+    border-color: rgba(12, 104, 255, 0.32);
+  }
+
+  .nd-usecases .nd-uc__card:hover .nd-uc__spot {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nd-usecases .nd-uc__card,
+  .nd-usecases .nd-uc__spot {
+    transition: none;
+  }
+
+  .nd-usecases .nd-uc__spot {
+    display: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .nd-usecases .nd-uc__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .nd-usecases .nd-uc__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* A narrow card puts the tag on its own line under the icon, so it
+   never runs into the tile. */
+@media (max-width: 380px) {
+  .nd-usecases .nd-uc__card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nd-usecases .nd-uc__tag {
+    position: static;
+    order: -1;
+    margin-bottom: 14px;
+  }
+
+  .nd-usecases .nd-uc__icon {
+    order: -2;
+    margin-bottom: 14px;
+  }
+
+  .nd-usecases .nd-uc__title {
+    margin-top: 0;
+  }
+}
+
+
+/* =====================================================================
+   08 · Deployment options (.nd-deploy → .nd-dp)
+   ---------------------------------------------------------------------
+   HawkINT's console panel, re-skinned light: white body, a night chrome
+   bar labelled "Deploy", and the four options as rows split by
+   hairlines (an "inspector" look, unlike the 05 datasheet or the 07
+   cards). Title and text share one inner grid at ≥900px, so the texts
+   line up down the list. Row 3 carries the rollout strip.
+   ===================================================================== */
+.nd-section.nd-deploy {
+  background-color: var(--nd-bg);
+}
+
+.nd-deploy .nd-dp__console {
+  overflow: hidden;
+  border: 1px solid var(--nd-border);
+  border-radius: var(--nd-radius);
+  background: var(--nd-bg);
+  box-shadow: var(--nd-shadow);
+}
+
+.nd-deploy .nd-dp__bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 18px;
+  background: var(--nd-night-2);
+}
+
+.nd-deploy .nd-dp__dots {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.nd-deploy .nd-dp__dots i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.nd-deploy .nd-dp__label {
+  font-family: var(--nd-mono);
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  color: var(--nd-on-dark-muted);            /* 7.2:1 on night-2 */
+}
+
+.nd-deploy .nd-dp__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 40px minmax(0, 1fr);
+  align-items: start;
+  gap: 0 18px;
+  padding: clamp(20px, 2.2vw, 26px) clamp(18px, 2.4vw, 30px);
+  transition: background-color 0.2s ease;
+}
+
+.nd-deploy .nd-dp__row + .nd-dp__row {
+  border-top: 1px solid var(--nd-rule);
+}
+
+/* Hover: a wash and a lit left edge, like selecting a line. */
+.nd-deploy .nd-dp__row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  background: var(--nd-accent);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.nd-deploy .nd-dp__idx {
+  padding-top: 12px;
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+  color: var(--nd-text);
+}
+
+.nd-deploy .nd-dp__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--nd-accent-soft);
+  color: var(--nd-accent-ink);
+}
+
+.nd-deploy .nd-dp__icon svg {
+  display: block;
+  width: 21px;
+  height: 21px;
+}
+
+.nd-deploy .nd-dp__copy {
+  min-width: 0;
+  padding-top: 8px;
+}
+
+.nd-deploy .nd-dp__title {
+  font-weight: 700;
+  font-size: 17.5px;
+  line-height: 1.35;
+  color: var(--nd-heading);
+}
+
+.nd-deploy .nd-dp__detail {
+  min-width: 0;
+  margin-top: 4px;
+}
+
+.nd-deploy .nd-dp__text {
+  max-width: 44em;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--nd-text);
+}
+
+@media (hover: hover) {
+  .nd-deploy .nd-dp__row:hover {
+    background: var(--nd-accent-wash);
+  }
+
+  .nd-deploy .nd-dp__row:hover::before {
+    opacity: 1;
+  }
+}
+
+@media (min-width: 900px) {
+  .nd-deploy .nd-dp__copy {
+    display: grid;
+    grid-template-columns: minmax(200px, 290px) minmax(0, 1fr);
+    align-items: baseline;
+    gap: 4px 32px;
+  }
+
+  .nd-deploy .nd-dp__detail {
+    margin-top: 0;
+  }
+}
+
+/* ---- The rollout strip ------------------------------------------------------
+   Three chips joined by short wires: what you start with, then what you
+   add. Filled (blue) by default; with motion they start empty and fill
+   left to right as the section scrolls in.
+   ----------------------------------------------------------------------- */
+.nd-deploy .nd-dp__rollout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 8px;
+  margin-top: 14px;
+}
+
+.nd-deploy .nd-dp__step {
+  padding: 5px 11px;
+  border: 1px solid var(--nd-accent);
+  border-radius: 999px;
+  background: var(--nd-accent-soft);
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--nd-accent-ink);               /* 5.5:1 on accent-soft */
+}
+
+.nd-deploy .nd-dp__link {
+  flex: 0 0 22px;
+  height: 2px;
+  background: var(--nd-accent);
+  transform-origin: left center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nd-deploy .nd-dp.is-animated .nd-dp__step {
+    border-color: var(--nd-border);
+    background: var(--nd-bg);
+    color: var(--nd-text);
+    transition: border-color 0.35s ease, background-color 0.35s ease, color 0.35s ease;
+    transition-delay: calc(0.7s + var(--k, 0) * 0.4s);
+  }
+
+  .nd-deploy .nd-dp.is-animated .nd-dp__link {
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+    transition-delay: calc(0.45s + var(--k, 0) * 0.4s);
+  }
+
+  .nd-deploy .nd-dp.is-animated.is-visible .nd-dp__step {
+    border-color: var(--nd-accent);
+    background: var(--nd-accent-soft);
+    color: var(--nd-accent-ink);
+  }
+
+  .nd-deploy .nd-dp.is-animated.is-visible .nd-dp__link {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nd-deploy .nd-dp__row,
+  .nd-deploy .nd-dp__row::before {
+    transition: none;
+  }
+}
+
+/* Too narrow for the chips in a row: they run down, the wires turn. */
+@media (max-width: 600px) {
+  .nd-deploy .nd-dp__row {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 0 14px;
+  }
+
+  .nd-deploy .nd-dp__idx {
+    display: none;
+  }
+
+  .nd-deploy .nd-dp__rollout {
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 0;
+  }
+
+  .nd-deploy .nd-dp__link {
+    flex: none;
+    width: 2px;
+    height: 12px;
+    margin-left: 18px;
+    transform-origin: center top;
+  }
+}
+
+@media (max-width: 600px) and (prefers-reduced-motion: no-preference) {
+  .nd-deploy .nd-dp.is-animated .nd-dp__link {
+    transform: scaleY(0);
+  }
+}
+
+
+/* =====================================================================
+   09 · Integrations (.nd-integrations → .nd-ig)
+   ---------------------------------------------------------------------
+   Night, with the signal bus's glow along the top. HawkINT's patch-bay:
+   a thin bus labelled with the product drops a lead into the jack on
+   each of four port cards. The jacks light blue in turn as the section
+   scrolls in, then hold (lit is the default, for reduced motion). The
+   vendors are mono text chips: no logos, no brand colours; our own
+   product is the one chip in blue.
+
+   ≥1025px: four columns, the bus spanning the first card's centre to
+   the last's. 640–1024px: 2×2, the bus over the top row (the bottom
+   row's jacks have no lead). <640px: one column, the bus a vertical
+   line on the left with a branch into each card.
+   ===================================================================== */
+.nd-section.nd-integrations {
+  background-color: var(--nd-night);
+}
+
+.nd-integrations .nd-ig {
+  position: relative;
+  overflow: clip;
+  background-color: var(--nd-night);
+}
+
+.nd-integrations .nd-ig__decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(60% 260px at 50% 0%, rgba(12, 104, 255, 0.2), transparent 75%),
+    radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1.4px);
+  background-size: auto, 28px 28px;
+}
+
+.nd-integrations .nd-ig__inner {
+  position: relative;
+}
+
+.nd-integrations .nd-ig__bay {
+  --nd-ig-cols: 4;
+  --nd-ig-gap: clamp(14px, 1.6vw, 20px);
+  --nd-ig-lead: 34px;
+  position: relative;
+}
+
+/* ---- The bus ------------------------------------------------------------- */
+.nd-integrations .nd-ig__bus {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--nd-ig-lead);
+}
+
+/* From the first column's centre to the last's. */
+.nd-integrations .nd-ig__bus-line {
+  position: absolute;
+  top: 50%;
+  left: calc((100% - (var(--nd-ig-cols) - 1) * var(--nd-ig-gap)) / var(--nd-ig-cols) / 2);
+  right: calc((100% - (var(--nd-ig-cols) - 1) * var(--nd-ig-gap)) / var(--nd-ig-cols) / 2);
+  height: 2px;
+  margin-top: -1px;
+  border-radius: 2px;
+  background: var(--nd-accent-on-dark);
+  box-shadow: 0 0 14px rgba(12, 104, 255, 0.7);
+}
+
+.nd-integrations .nd-ig__bus-label {
+  position: relative;
+  padding: 7px 14px;
+  border: 1px solid rgba(110, 168, 255, 0.55);
+  border-radius: 999px;
+  background: var(--nd-night);
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--nd-accent-on-dark);           /* 8.1:1 on night */
+}
+
+/* ---- Ports --------------------------------------------------------------- */
+.nd-integrations .nd-ig__ports {
+  display: grid;
+  grid-template-columns: repeat(var(--nd-ig-cols), minmax(0, 1fr));
+  gap: var(--nd-ig-gap);
+}
+
+.nd-integrations .nd-ig__port {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 24px 20px 22px;
+  border: 1px solid var(--nd-border-dark);
+  border-radius: var(--nd-radius);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* The lead: down from the bus into the jack on the card's top edge. */
+.nd-integrations .nd-ig__lead {
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  width: 2px;
+  height: calc(var(--nd-ig-lead) - 7px);
+  margin-left: -1px;
+  background: var(--nd-accent-on-dark);
+  transform-origin: center top;
+}
+
+.nd-integrations .nd-ig__port-head {
+  display: block;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--nd-border-dark);
+}
+
+/* The jack: a ringed port on the top edge, lit when wired. */
+.nd-integrations .nd-ig__jack {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  border: 2px solid var(--nd-accent-on-dark);
+  border-radius: 50%;
+  background: var(--nd-accent);
+  box-shadow: 0 0 0 3px var(--nd-night), 0 0 14px rgba(12, 104, 255, 0.8);
+}
+
+.nd-integrations .nd-ig__port-tag {
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--nd-on-dark-muted);            /* 7.2:1 on the card */
+}
+
+.nd-integrations .nd-ig__title {
+  font-weight: 700;
+  font-size: 17.5px;
+  line-height: 1.3;
+  color: var(--nd-on-dark);
+}
+
+.nd-integrations .nd-ig__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.nd-integrations .nd-ig__chip {
+  padding: 4px 9px;
+  border: 1px solid var(--nd-border-dark);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  font-family: var(--nd-mono);
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--nd-on-dark-body);
+}
+
+/* Ours: blue on its 16% wash, 6.4:1. */
+.nd-integrations .nd-ig__chip--own {
+  border-color: rgba(110, 168, 255, 0.5);
+  background: rgba(12, 104, 255, 0.16);
+  color: var(--nd-accent-on-dark);
+}
+
+.nd-integrations .nd-ig__tail {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--nd-on-dark-muted);
+}
+
+/* ---- Wiring up ---------------------------------------------------------------
+   As the section scrolls in, the bus draws out from the middle, then
+   each lead drops and its jack lights, one port at a time (--i from the
+   script), and they hold.
+   ----------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .nd-integrations .nd-ig.is-animated .nd-ig__bus-line {
+    transform: scaleX(0);
+    transition: transform 0.6s var(--nd-ease) 0.2s;
+  }
+
+  .nd-integrations .nd-ig.is-animated .nd-ig__lead {
+    transform: scaleY(0);
+    transition: transform 0.25s ease;
+    transition-delay: calc(0.3s + var(--i, 0) * 0.3s);
+  }
+
+  .nd-integrations .nd-ig.is-animated .nd-ig__jack {
+    border-color: rgba(110, 168, 255, 0.4);
+    background: var(--nd-night);
+    box-shadow: 0 0 0 3px var(--nd-night);
+    transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    transition-delay: calc(0.55s + var(--i, 0) * 0.3s);
+  }
+
+  .nd-integrations .nd-ig.is-animated.is-visible .nd-ig__bus-line,
+  .nd-integrations .nd-ig.is-animated.is-visible .nd-ig__lead {
+    transform: none;
+  }
+
+  .nd-integrations .nd-ig.is-animated.is-visible .nd-ig__jack {
+    border-color: var(--nd-accent-on-dark);
+    background: var(--nd-accent);
+    box-shadow: 0 0 0 3px var(--nd-night), 0 0 14px rgba(12, 104, 255, 0.8);
+  }
+}
+
+@media (max-width: 1024px) {
+  .nd-integrations .nd-ig__bay {
+    --nd-ig-cols: 2;
+  }
+
+  .nd-integrations .nd-ig__ports {
+    row-gap: calc(var(--nd-ig-gap) + 12px); /* room for the jacks on the second row */
+  }
+
+  .nd-integrations .nd-ig__port:nth-child(n + 3) .nd-ig__lead {
+    display: none;
+  }
+}
+
+/* One column: the bus runs down the left, a branch into each card's
+   jack, which moves to the card's left edge. The line is drawn in
+   pieces owned by each card (its lead reaches up across the gap above),
+   so it never needs measuring. */
+@media (max-width: 639px) {
+  .nd-integrations .nd-ig__bay {
+    --nd-ig-cols: 1;
+    --nd-ig-x: 10px;                         /* the bus line's centre */
+  }
+
+  .nd-integrations .nd-ig__bus {
+    justify-content: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .nd-integrations .nd-ig__bus-line {
+    display: none;
+  }
+
+  .nd-integrations .nd-ig__bus-label {
+    white-space: normal;
+  }
+
+  .nd-integrations .nd-ig__ports {
+    row-gap: 16px;
+    padding-left: 34px;
+  }
+
+  .nd-integrations .nd-ig__port:nth-child(n + 3) .nd-ig__lead {
+    display: block;
+  }
+
+  .nd-integrations .nd-ig__jack {
+    top: 30px;
+    left: -8px;
+    margin-left: 0;
+  }
+
+  /* Down the left from the gap above (from the label, for the first),
+     then a branch in to the jack. */
+  .nd-integrations .nd-ig__lead {
+    top: -17px;
+    bottom: auto;
+    left: calc(var(--nd-ig-x) - 34px - 1px);
+    width: calc(34px - var(--nd-ig-x) - 7px);
+    height: calc(17px + 39px);
+    margin-left: 0;
+    border-left: 2px solid var(--nd-accent-on-dark);
+    border-bottom: 2px solid var(--nd-accent-on-dark);
+    border-bottom-left-radius: 8px;
+    background: none;
+  }
+
+  .nd-integrations .nd-ig__port:first-child .nd-ig__lead {
+    top: -24px;
+    height: calc(24px + 39px);
+  }
+
+  /* The bus carries on past this card to the next one. */
+  .nd-integrations .nd-ig__port:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    top: 30px;
+    bottom: -17px;
+    left: calc(var(--nd-ig-x) - 34px - 1px);
+    width: 2px;
+    background: var(--nd-accent-on-dark);
+  }
+}
+
+@media (max-width: 639px) and (prefers-reduced-motion: no-preference) {
+  .nd-integrations .nd-ig.is-animated .nd-ig__lead {
+    transform: scaleY(1);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    transition-delay: calc(0.3s + var(--i, 0) * 0.3s);
+  }
+
+  .nd-integrations .nd-ig.is-animated.is-visible .nd-ig__lead {
+    opacity: 1;
+  }
+}
+
+
+/* =====================================================================
+   10 · Reporting & KPIs (.nd-reporting → .nd-rp)
+   ---------------------------------------------------------------------
+   White, with a very faint hairline grid behind the detail panel only.
+   HawkINT's sector selector: a rail of four tabs on the left drives one
+   large panel on the right. The panels share one grid cell, so the
+   stage is always as tall as the tallest and a swap never moves the
+   page; a swap is a 200ms fade (instant under reduced motion).
+
+   The script sets data-mode="tabs" or "accordion" (below 860px) and
+   moves the panels to suit: in the accordion each sits under its own
+   header, which joins it seamlessly while open.
+   ===================================================================== */
+.nd-section.nd-reporting {
+  overflow: clip;                            /* the hairline grid reaches past the panel's edges */
+  background-color: var(--nd-bg);
+}
+
+.nd-reporting .nd-rp__selector {
+  display: grid;
+  grid-template-columns: clamp(250px, 28vw, 320px) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(20px, 2.4vw, 34px);
+}
+
+.nd-reporting .nd-rp__rail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* ---- Tabs ---------------------------------------------------------------
+   (0,3,0), so the theme's own button rules (fills, borders and colours
+   on [type=button]:hover) never reach them.
+   ----------------------------------------------------------------------- */
+.nd-reporting .nd-rp .nd-rp__tab {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--nd-border);
+  border-radius: 13px;
+  background: var(--nd-bg);
+  box-shadow: var(--nd-shadow);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 15.5px;
+  line-height: 1.3;
+  letter-spacing: normal;
+  text-align: left;
+  text-transform: none;
+  color: var(--nd-heading);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+              color 0.2s ease, box-shadow 0.25s ease;
+}
+
+.nd-reporting .nd-rp .nd-rp__tab:hover,
+.nd-reporting .nd-rp .nd-rp__tab:focus {
+  border-color: var(--nd-accent-line);
+  background: var(--nd-bg);
+  color: var(--nd-heading);
+  box-shadow: var(--nd-shadow-hover);
+}
+
+/* Selected (or open): accent fill, white ink (4.7:1). */
+.nd-reporting .nd-rp .nd-rp__tab.is-active,
+.nd-reporting .nd-rp .nd-rp__tab.is-active:hover,
+.nd-reporting .nd-rp .nd-rp__tab.is-active:focus {
+  border-color: var(--nd-accent);
+  background: var(--nd-accent);
+  color: #ffffff;
+  box-shadow: 0 10px 26px rgba(12, 104, 255, 0.25);
+}
+
+.nd-reporting .nd-rp__tab-icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--nd-accent-soft);
+  color: var(--nd-accent-ink);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.nd-reporting .nd-rp__tab-icon svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.nd-reporting .nd-rp__tab.is-active .nd-rp__tab-icon {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.nd-reporting .nd-rp__tab-label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.nd-reporting .nd-rp__tab-caret {
+  flex: none;
+  display: inline-flex;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.nd-reporting .nd-rp__tab-caret svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.nd-reporting .nd-rp__tab.is-active .nd-rp__tab-caret {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- The stage and its panels ------------------------------------------- */
+.nd-reporting .nd-rp__stage {
+  position: relative;
+  display: grid;
+  min-width: 0;
+}
+
+/* The hairline grid, behind the panel only. */
+.nd-reporting .nd-rp__stage::before {
+  content: "";
+  position: absolute;
+  inset: -28px -28px -28px -28px;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(13, 19, 48, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(13, 19, 48, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-mask-image: radial-gradient(closest-side, #000 60%, transparent);
+          mask-image: radial-gradient(closest-side, #000 60%, transparent);
+}
+
+.nd-reporting .nd-rp__panel {
+  position: relative;
+  z-index: 1;
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  min-width: 0;
+  padding: clamp(24px, 3vw, 40px);
+  border: 1px solid var(--nd-border);
+  border-radius: 20px;
+  background-color: var(--nd-bg);
+  background-image: radial-gradient(120% 90% at 100% 0%, rgba(12, 104, 255, 0.05), transparent 60%);
+  box-shadow: var(--nd-shadow);
+}
+
+/* Tabs: every panel stays in the cell; only the selected one is seen
+   (visibility also takes the rest out of the accessibility tree). */
+.nd-reporting .nd-rp[data-mode="tabs"] .nd-rp__panel {
+  transition: opacity 0.2s ease, visibility 0s linear 0s;
+}
+
+.nd-reporting .nd-rp[data-mode="tabs"] .nd-rp__panel:not(.is-active) {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+}
+
+.nd-reporting .nd-rp__panel-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nd-reporting .nd-rp__badge {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: var(--nd-accent-soft);
+  color: var(--nd-accent-ink);
+}
+
+.nd-reporting .nd-rp__badge svg {
+  display: block;
+  width: 28px;
+  height: 28px;
+}
+
+.nd-reporting .nd-rp__title {
+  font-weight: 700;
+  font-size: clamp(22px, 2.4vw, 28px);
+  line-height: 1.2;
+  color: var(--nd-heading);
+}
+
+.nd-reporting .nd-rp__text {
+  max-width: 60ch;
+  font-size: clamp(15.5px, 1.4vw, 17px);
+  line-height: 1.62;
+  color: var(--nd-text);
+}
+
+/* ---- Report wireframes (aria-hidden) ----------------------------------------
+   Bars and blocks in the border grey and the soft blue, outlined in the
+   light accent line; labelled only with phrases from the report's own
+   text. No numbers anywhere.
+   ----------------------------------------------------------------------- */
+.nd-reporting .nd-rp__wire {
+  width: 100%;
+  margin-top: 6px;
+  padding: 16px;
+  border: 1px dashed var(--nd-border);
+  border-radius: 12px;
+  background: #fbfcfe;
+}
+
+.nd-reporting .nd-rp__wl {
+  display: block;
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.35;
+  letter-spacing: 0.04em;
+  color: var(--nd-text);                     /* 5.8:1 on #fbfcfe */
+}
+
+/* Executive Dashboards: a 2×2 of tiles. */
+.nd-reporting .nd-rp__wire--tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.nd-reporting .nd-rp__tile {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--nd-border);
+  border-radius: 10px;
+  background: var(--nd-bg);
+}
+
+.nd-reporting .nd-rp__shape {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.nd-reporting .nd-rp__shape i {
+  display: block;
+  height: 7px;
+  border-radius: 3px;
+  background: var(--nd-accent-soft);
+  box-shadow: inset 0 0 0 1px var(--nd-accent-line);
+}
+
+/* Top talkers: ranked bars. */
+.nd-reporting .nd-rp__tile--1 .nd-rp__shape i:nth-child(1) { width: 92%; }
+.nd-reporting .nd-rp__tile--1 .nd-rp__shape i:nth-child(2) { width: 64%; }
+.nd-reporting .nd-rp__tile--1 .nd-rp__shape i:nth-child(3) { width: 38%; }
+
+/* Risky destinations: rows, each led by a dot. */
+.nd-reporting .nd-rp__tile--2 .nd-rp__shape i {
+  position: relative;
+  margin-left: 12px;
+  background: var(--nd-border);
+  box-shadow: none;
+}
+
+.nd-reporting .nd-rp__tile--2 .nd-rp__shape i::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -12px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--nd-accent-line);
+}
+
+/* Blocked versus allowed traffic: one split bar. */
+.nd-reporting .nd-rp__tile--3 .nd-rp__shape {
+  flex-direction: row;
+  gap: 3px;
+}
+
+.nd-reporting .nd-rp__tile--3 .nd-rp__shape i {
+  height: 12px;
+}
+
+.nd-reporting .nd-rp__tile--3 .nd-rp__shape i:nth-child(1) { flex: 3; }
+.nd-reporting .nd-rp__tile--3 .nd-rp__shape i:nth-child(2) { flex: 5; background: var(--nd-border); box-shadow: none; }
+.nd-reporting .nd-rp__tile--3 .nd-rp__shape i:nth-child(3) { display: none; }
+
+/* Critical incidents: a short stack of blocks. */
+.nd-reporting .nd-rp__tile--4 .nd-rp__shape {
+  flex-direction: row;
+  gap: 5px;
+}
+
+.nd-reporting .nd-rp__tile--4 .nd-rp__shape i {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+}
+
+/* Incident Workbench: a timeline of blocks over a line, then a row of
+   ATT&CK mapping cells. */
+.nd-reporting .nd-rp__lanes {
+  position: relative;
+  display: block;
+  height: 70px;
+}
+
+.nd-reporting .nd-rp__lanes::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--nd-accent-line);
+}
+
+.nd-reporting .nd-rp__lanes i {
+  position: absolute;
+  height: 18px;
+  border-radius: 5px;
+  background: var(--nd-accent-soft);
+  box-shadow: inset 0 0 0 1px var(--nd-accent-line);
+}
+
+.nd-reporting .nd-rp__lanes i:nth-child(1) { left: 2%;  top: 8px;  width: 16%; }
+.nd-reporting .nd-rp__lanes i:nth-child(2) { left: 14%; top: 44px; width: 12%; background: var(--nd-border); box-shadow: none; }
+.nd-reporting .nd-rp__lanes i:nth-child(3) { left: 30%; top: 8px;  width: 22%; }
+.nd-reporting .nd-rp__lanes i:nth-child(4) { left: 48%; top: 44px; width: 18%; background: var(--nd-border); box-shadow: none; }
+.nd-reporting .nd-rp__lanes i:nth-child(5) { left: 64%; top: 8px;  width: 14%; }
+.nd-reporting .nd-rp__lanes i:nth-child(6) { left: 80%; top: 44px; width: 18%; }
+
+.nd-reporting .nd-rp__attack {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--nd-border);
+}
+
+.nd-reporting .nd-rp__cells {
+  display: flex;
+  gap: 5px;
+}
+
+.nd-reporting .nd-rp__cells i {
+  display: block;
+  width: 26px;
+  height: 14px;
+  border-radius: 4px;
+  background: var(--nd-border);
+}
+
+.nd-reporting .nd-rp__cells i:nth-child(2),
+.nd-reporting .nd-rp__cells i:nth-child(4) {
+  background: var(--nd-accent-soft);
+  box-shadow: inset 0 0 0 1px var(--nd-accent-line);
+}
+
+/* Compliance Scorecards: three labelled meters. */
+.nd-reporting .nd-rp__wire--progress {
+  display: grid;
+  gap: 14px;
+}
+
+.nd-reporting .nd-rp__meter {
+  display: grid;
+  grid-template-columns: minmax(0, 150px) minmax(0, 1fr);
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.nd-reporting .nd-rp__meter-track {
+  display: block;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--nd-border);
+}
+
+.nd-reporting .nd-rp__meter-track i {
+  display: block;
+  height: 100%;
+  border-radius: 5px;
+  background: var(--nd-accent-soft);
+  box-shadow: inset 0 0 0 1px var(--nd-accent-line);
+}
+
+.nd-reporting .nd-rp__meter--1 i { width: 72%; }
+.nd-reporting .nd-rp__meter--2 i { width: 88%; }
+.nd-reporting .nd-rp__meter--3 i { width: 60%; }
+
+/* Operational KPIs: four ring gauges, arcs only. The arc is a conic
+   gradient masked to a ring. */
+.nd-reporting .nd-rp__wire--gauges {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px 10px;
+}
+
+.nd-reporting .nd-rp__gauge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  text-align: center;
+}
+
+.nd-reporting .nd-rp__ring {
+  --nd-rp-arc: 240deg;
+  display: block;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: conic-gradient(var(--nd-accent-line) 0 var(--nd-rp-arc), var(--nd-border) var(--nd-rp-arc) 360deg);
+  -webkit-mask-image: radial-gradient(farthest-side, transparent calc(100% - 8px), #000 calc(100% - 7px));
+          mask-image: radial-gradient(farthest-side, transparent calc(100% - 8px), #000 calc(100% - 7px));
+}
+
+.nd-reporting .nd-rp__gauge--2 .nd-rp__ring { --nd-rp-arc: 150deg; }
+.nd-reporting .nd-rp__gauge--3 .nd-rp__ring { --nd-rp-arc: 290deg; }
+.nd-reporting .nd-rp__gauge--4 .nd-rp__ring { --nd-rp-arc: 80deg; }
+
+/* ---- Accordion (below 860px) ---------------------------------------------- */
+.nd-reporting .nd-rp[data-mode="accordion"] .nd-rp__selector {
+  display: block;
+}
+
+.nd-reporting .nd-rp[data-mode="accordion"] .nd-rp__stage {
+  display: none;                             /* emptied: every panel sits under its header */
+}
+
+.nd-reporting .nd-rp[data-mode="accordion"] .nd-rp__panel {
+  display: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: 0;
+}
+
+.nd-reporting .nd-rp[data-mode="accordion"] .nd-rp__panel.is-active {
+  display: flex;
+  margin: -8px 0 4px;                        /* joins its header, across the rail gap */
+}
+
+.nd-reporting .nd-rp[data-mode="accordion"] .nd-rp__tab.is-active {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  box-shadow: none;
+}
+
+.nd-reporting .nd-rp[data-mode="accordion"] .nd-rp__tab-caret {
+  transform: rotate(90deg);
+  opacity: 0.6;
+}
+
+.nd-reporting .nd-rp[data-mode="accordion"] .nd-rp__tab.is-active .nd-rp__tab-caret {
+  transform: rotate(-90deg);
+  opacity: 1;
+}
+
+@media (max-width: 520px) {
+  .nd-reporting .nd-rp__panel-head {
+    gap: 12px;
+  }
+
+  .nd-reporting .nd-rp__badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+  }
+
+  .nd-reporting .nd-rp__badge svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .nd-reporting .nd-rp__wire {
+    padding: 12px;
+  }
+
+  .nd-reporting .nd-rp__meter {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nd-reporting .nd-rp__wire--gauges {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nd-reporting .nd-rp.is-animated .nd-rp__tab {
+    opacity: 0;
+    transform: translateX(-14px);
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease,
+                box-shadow 0.25s ease,
+                opacity 0.5s ease, transform 0.5s var(--nd-ease);
+    transition-delay: 0s, 0s, 0s, 0s, calc(var(--i, 0) * 60ms), calc(var(--i, 0) * 60ms);
+  }
+
+  .nd-reporting .nd-rp.is-animated.is-visible .nd-rp__tab {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nd-reporting .nd-rp .nd-rp__tab,
+  .nd-reporting .nd-rp__tab-icon,
+  .nd-reporting .nd-rp__tab-caret,
+  .nd-reporting .nd-rp[data-mode="tabs"] .nd-rp__panel,
+  .nd-reporting .nd-rp[data-mode="tabs"] .nd-rp__panel:not(.is-active) {
+    transition: none;
+  }
+}
+
+
+/* =====================================================================
+   11 · Why CybrHawk (.nd-why → .nd-wy)
+   ---------------------------------------------------------------------
+   A calm gradient ground and SIEM Cloud's bento: the first
+   differentiator is the dark anchor card, carrying a labelled, static
+   diagram of four lines merging into one; the other four are white
+   cards with an icon badge. The last section built here: its gradient
+   ends on white, with its normal bottom padding, so the site's CTA
+   component (or a FAQ added later) follows without a seam.
+   ===================================================================== */
+.nd-section.nd-why {
+  background-color: #f3f7ff;
+  background-image: linear-gradient(180deg, #f3f7ff 0%, #ffffff 100%);
+}
+
+.nd-why .nd-wy__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--nd-gap);
+}
+
+.nd-why .nd-wy__item {
+  display: flex;
+}
+
+.nd-why .nd-wy__card {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(24px, 2.4vw, 32px);
+  border: 1px solid var(--nd-border);
+  border-radius: var(--nd-radius);
+  background: var(--nd-bg);
+  box-shadow: var(--nd-shadow);
+}
+
+.nd-why .nd-wy__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 20px;
+  border-radius: 11px;
+  background: var(--nd-accent-soft);
+  color: var(--nd-accent-ink);
+}
+
+.nd-why .nd-wy__icon svg {
+  display: block;
+  width: 21px;
+  height: 21px;
+}
+
+.nd-why .nd-wy__title {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--nd-heading);
+}
+
+.nd-why .nd-wy__text {
+  margin-top: 8px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--nd-text);
+}
+
+/* The anchor: night, white type. A blue glow sits low right, where the
+   lines merge, and a faint dot grid (::before) fills the lower half
+   under the diagram; both are decoration behind the text. */
+.nd-why .nd-wy__card--anchor {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-color: var(--nd-night-2);
+  background-color: var(--nd-night-2);
+  background-image:
+    radial-gradient(70% 55% at 88% 82%, rgba(12, 104, 255, 0.30), rgba(12, 104, 255, 0) 70%),
+    radial-gradient(60% 40% at 0% 0%, rgba(110, 168, 255, 0.08), rgba(110, 168, 255, 0) 70%);
+  box-shadow: 0 18px 44px rgba(13, 19, 48, 0.18);
+}
+
+.nd-why .nd-wy__card--anchor::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.4px);
+  background-size: 20px 20px;
+  -webkit-mask-image: linear-gradient(180deg, transparent 35%, #000 85%);
+          mask-image: linear-gradient(180deg, transparent 35%, #000 85%);
+}
+
+.nd-why .nd-wy__card--anchor .nd-wy__title {
+  font-size: clamp(22px, 2vw, 26px);
+  line-height: 1.2;
+  color: var(--nd-on-dark);
+}
+
+/* Clear of the text above, with room for the first label; on a tall
+   card the flow's auto margin takes the rest. */
+.nd-why .nd-wy__card--anchor .nd-wy__text {
+  margin-top: 12px;
+  margin-bottom: 44px;
+  font-size: 16.5px;
+  color: var(--nd-on-dark-body);
+}
+
+/* ---- The anchor's diagram ------------------------------------------------
+   Pushed to the card's foot, however tall the bento row makes it, and
+   as wide as the card; the strokes stay 2px at any scale. The labels
+   are HTML on top of the SVG: each line's word sits just above it (top
+   from the script, as a share of the 150-unit viewBox), and "SIEM XDR"
+   under the node. The Network line is solid blue (this product); the
+   other three are quiet wire, their words muted.
+
+   Label contrast on night-2: blue 7.6:1, muted 7.2:1.
+   ----------------------------------------------------------------------- */
+.nd-why .nd-wy__flow {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  margin-top: auto;
+}
+
+.nd-why .nd-wy__diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+  fill: none;
+  overflow: visible;
+}
+
+.nd-why .nd-wy__diagram path {
+  stroke: rgba(160, 176, 214, 0.55);
+  stroke-width: 2;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.nd-why .nd-wy__diagram .nd-wy__lane--own,
+.nd-why .nd-wy__diagram .nd-wy__diagram-story {
+  stroke: var(--nd-accent-on-dark);
+}
+
+.nd-why .nd-wy__diagram .nd-wy__diagram-story {
+  stroke-width: 3;
+}
+
+.nd-why .nd-wy__diagram-halo {
+  fill: var(--nd-accent);
+  fill-opacity: 0.22;
+}
+
+.nd-why .nd-wy__diagram-node {
+  fill: var(--nd-accent);
+  stroke: var(--nd-accent-on-dark);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.nd-why .nd-wy__flow-key,
+.nd-why .nd-wy__flow-end {
+  position: absolute;
+  font-family: var(--nd-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.25;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.nd-why .nd-wy__flow-key {
+  left: 0;
+  transform: translateY(calc(-100% - 3px));
+  color: var(--nd-on-dark-muted);
+}
+
+.nd-why .nd-wy__flow-key--own {
+  color: var(--nd-accent-on-dark);
+}
+
+.nd-why .nd-wy__flow-end {
+  right: 0;
+  top: calc(50% + 18px);
+  color: var(--nd-accent-on-dark);
+}
+
+@media (min-width: 700px) {
+  .nd-why .nd-wy__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "a a"
+      "b c"
+      "d e";
+  }
+
+  .nd-why .nd-wy__item--a { grid-area: a; }
+  .nd-why .nd-wy__item--b { grid-area: b; }
+  .nd-why .nd-wy__item--c { grid-area: c; }
+  .nd-why .nd-wy__item--d { grid-area: d; }
+  .nd-why .nd-wy__item--e { grid-area: e; }
+}
+
+@media (min-width: 1100px) {
+  .nd-why .nd-wy__grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "a b c"
+      "a d e";
+  }
+}
