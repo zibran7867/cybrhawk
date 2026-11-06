@@ -283,8 +283,19 @@
       eyebrow: "",   // "Why CybrHawk" would repeat the H2
       title: "Why Security Leaders Choose [[CybrHawk SIEM XDR]]",
       sub: "A single breach can cause severe, lasting damage to revenue, reputation, and customer trust. CybrHawk is built to stop attacks before they reach that point by pairing advanced technology with expert human defenders.",
-      // Family hub (aria-hidden), from differentiator 5.
-      hub: { centre: "SIEM XDR", nodes: ["NDR", "Cloud", "ITDR", "OT Security", "HawkINT", "IR One"] },
+      // Family hub (aria-hidden), from differentiator 5. A node may be a
+      // plain label or { label, icon } (a glyph name from ICONS).
+      hub: {
+        centre: "SIEM XDR",
+        nodes: [
+          { label: "NDR",         icon: "pulse" },
+          { label: "Cloud",       icon: "cloud" },
+          { label: "ITDR",        icon: "identity" },
+          { label: "OT Security", icon: "shield" },
+          { label: "HawkINT",     icon: "radar" },
+          { label: "IR One",      icon: "shield-refresh" }
+        ]
+      },
       items: [
         { icon: "headset",     title: "Fusion SOC Model",
           text: "Detection, response, and proactive threat hunting operate as one team and one workflow, backed by CybrHawk security experts around the clock." },
@@ -315,8 +326,9 @@
   // the mouse on desktop. Off under reduced motion.
   var HERO_AMBIENT = true;
 
-  // The 05 core's slow orbit and ring pulse. Pauses off screen and in a
-  // background tab; still under reduced motion.
+  // The 05 core's slow orbit and ring pulse, and the 09 hub's sweep and
+  // spoke pulses. Pause off screen and in a background tab; still under
+  // reduced motion.
   var CORE_MOTION = true;
 
   /* Section 02's "separate consoles": each window's own offset (px) and
@@ -1834,42 +1846,66 @@
   }
 
   /* ---- 09 · Why CybrHawk --------------------------------------------------
-     HawkINT's reasons ledger: on desktop a header panel stays pinned on
-     the left beside the five differentiators, set as one framed ledger of
-     numbered rows (mono index, icon tile, claim, supporting line).
+     The header on the left, pinned on a tall desktop screen, ending in the
+     family hub; on the right the five differentiators as a grid of cards
+     (index, icon tile, claim, supporting line). The last one, "Part of
+     Unified Cyber Defense", is the feature: a night card, and when the
+     count is odd it spans the grid's full width.
 
-     The header panel ends in the family hub (aria-hidden), the close of
-     the family story the SIEM Cloud and SIEM NDR pages start with their
-     lines merging into "SIEM XDR": here every line arrives. "SIEM XDR" is
-     a solid blue centre node with the six products of differentiator 5
-     ringed around it, each joined by a spoke. Static. The spokes live in
-     a square 0–100 viewBox, so the HTML labels sit on them by percentage
-     (r = HUB_R, clockwise from the top).
+     The hub (aria-hidden) closes the family story the SIEM Cloud and SIEM
+     NDR pages start with their lines merging into "SIEM XDR": here every
+     line arrives. The centre is a glowing blue orb with the CybrHawk logo
+     and "SIEM XDR"; the six products of differentiator 5 are ringed
+     around it as icon nodes, each joined by a spoke. Spokes and orbits
+     live in a square 0–100 viewBox, so the HTML nodes sit on them by
+     percentage (r = HUB_R, clockwise from the top).
+
+     With motion allowed, a soft radar sweep turns inside the orbit and a
+     small pulse runs down each spoke into the centre, one product after
+     another; paused off screen and in a background tab. Still otherwise.
      -------------------------------------------------------------------- */
-  var HUB_R = 35;
+  var HUB_R = 36;
 
   function whyHub(h) {
     var nodes = (h && h.nodes) || [];
     if (!h || !h.centre || !nodes.length) return "";
     var spokes = "";
+    var pulses = "";
     var keys = "";
 
-    nodes.forEach(function (label, k) {
+    nodes.forEach(function (n, k) {
+      var label = typeof n === "string" ? n : n.label;
+      var glyph = typeof n === "string" ? "" : n.icon;
       var a = ((-90 + (360 / nodes.length) * k) * Math.PI) / 180;
       var x = round(50 + HUB_R * Math.cos(a));
       var y = round(50 + HUB_R * Math.sin(a));
-      spokes += '<line x1="50" y1="50" x2="' + x + '" y2="' + y + '"/>';
-      keys += '<span class="xd-wy__node" style="left:' + x + "%;top:" + y + '%">' + esc(label) + "</span>";
+      var ends = 'x1="' + x + '" y1="' + y + '" x2="50" y2="50"';
+      spokes += "<line " + ends + "/>";
+      pulses += '<line class="xd-wy__pulse" style="--k:' + k + '" ' + ends + ' pathLength="100"/>';
+      keys +=
+        '<span class="xd-wy__node" style="left:' + x + "%;top:" + y + '%">' +
+          '<span class="xd-wy__node-ico">' + (glyph ? icon(glyph) : "") + "</span>" +
+          '<span class="xd-wy__node-label">' + esc(label) + "</span>" +
+        "</span>";
     });
 
     return (
       '<div class="xd-wy__hub xd-reveal" aria-hidden="true"' + at(2) + ">" +
+        '<span class="xd-wy__sweep"></span>' +
         '<svg class="xd-wy__spokes" viewBox="0 0 100 100" focusable="false">' +
           '<circle class="xd-wy__orbit" cx="50" cy="50" r="' + HUB_R + '"/>' +
+          '<circle class="xd-wy__orbit xd-wy__orbit--inner" cx="50" cy="50" r="' + round(HUB_R * 0.62) + '"/>' +
           spokes +
+          pulses +
         "</svg>" +
         keys +
-        '<span class="xd-wy__centre">' + esc(h.centre) + "</span>" +
+        '<span class="xd-wy__centre">' +
+          // Its own box, so a failed logo's fallback icon replaces only it.
+          '<span class="xd-wy__mark">' +
+            '<img class="xd-wy__logo" src="' + LOGO + '" alt="" loading="lazy" decoding="async">' +
+          "</span>" +
+          '<span class="xd-wy__centre-label">' + esc(h.centre) + "</span>" +
+        "</span>" +
       "</div>"
     );
   }
@@ -1878,30 +1914,40 @@
     if (!host) return false;
     if (host.querySelector(".xd-wy")) return true;
 
-    var rows = (c.items || []).map(function (it, i) {
+    var list = c.items || [];
+    var cards = list.map(function (it, i) {
       return (
-        '<li class="xd-wy__row xd-reveal"' + at(i + 1) + ">" +
-          '<span class="xd-wy__idx" aria-hidden="true">' + pad(i + 1) + "</span>" +
-          '<span class="xd-wy__tile">' + icon(it.icon) + "</span>" +
-          '<div class="xd-wy__copy">' +
-            '<h3 class="xd-wy__title">' + esc(it.title) + "</h3>" +
-            '<p class="xd-wy__text">' + esc(it.text) + "</p>" +
+        '<li class="xd-wy__card' + (i === list.length - 1 && i > 0 ? " xd-wy__card--feature" : "") +
+          ' xd-reveal"' + at(i + 1) + ">" +
+          '<div class="xd-wy__card-top">' +
+            '<span class="xd-wy__tile">' + icon(it.icon) + "</span>" +
+            '<span class="xd-wy__idx" aria-hidden="true">' + pad(i + 1) + "</span>" +
           "</div>" +
+          '<h3 class="xd-wy__title">' + esc(it.title) + "</h3>" +
+          '<p class="xd-wy__text">' + esc(it.text) + "</p>" +
         "</li>"
       );
     }).join("");
 
-    mount(
+    var root = mount(
       host,
       '<div class="' + rootClass("xd-wy") + '">' +
         '<div class="xd-wy__aside">' +
           head({ id: "xd-why-title", eyebrow: c.eyebrow, title: c.title, sub: c.sub, align: "start" }) +
           whyHub(c.hub) +
         "</div>" +
-        (rows ? '<ol class="xd-wy__ledger">' + rows + "</ol>" : "") +
+        (cards ? '<ol class="xd-wy__grid">' + cards + "</ol>" : "") +
       "</div>",
       "xd-wy"
     );
+
+    iconFallback(root.querySelector(".xd-wy__logo"), "shield");
+
+    var hub = root.querySelector(".xd-wy__hub");
+    if (hub && CORE_MOTION && ANIMATE && !reducedMotion()) {
+      hub.classList.add("is-moving");
+      pauseOffscreen(hub);
+    }
 
     return true;
   }

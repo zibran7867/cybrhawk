@@ -4092,9 +4092,14 @@
    ---------------------------------------------------------------------
    A calm gradient, #f3f7ff into white, ending on white with the normal
    bottom padding, so the site's CTA component joins without a seam.
-   HawkINT's reasons ledger: the header panel pinned on the left on
-   desktop, ending in the family hub; the five differentiators as one
-   framed ledger of numbered rows on the right.
+   The header on the left (pinned on a tall desktop screen), ending in
+   the family hub; the five differentiators as a grid of cards on the
+   right, two across, the last a night "feature" card spanning both
+   columns. One column of cards on a phone.
+
+   The hub is a size container: its nodes, labels and centre scale with
+   its width (cqi), down to a 320px phone, with fixed sizes declared
+   first for browsers without container units.
    ===================================================================== */
 .xd-section.xd-why {
   background-color: var(--xd-bg);
@@ -4103,7 +4108,7 @@
 
 .xd-why .xd-wy {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.25fr);
   gap: clamp(36px, 5vw, 80px);
   align-items: start;
 }
@@ -4117,16 +4122,43 @@
 }
 
 /* ---- The family hub (aria-hidden) -------------------------------------
-   Square, so the spokes' 0–100 viewBox and the labels' percentages
-   agree. The centre is the solid blue "SIEM XDR"; the six products are
-   white pills ringed in blue (the ring 4.7:1 on white).
+   Square, so the spokes' 0–100 viewBox and the nodes' percentages agree.
+   Behind it a faint dot field, masked to a circle.
    ----------------------------------------------------------------------- */
 .xd-why .xd-wy__hub {
+  --xd-wy-node: 44px;
   position: relative;
   width: 100%;
-  max-width: 340px;
+  max-width: 400px;
   aspect-ratio: 1;
-  margin-top: clamp(28px, 3vw, 44px);
+  margin: clamp(28px, 3vw, 44px) 0 28px;     /* the bottom node's label hangs a little below */
+  container-type: inline-size;
+}
+
+@supports (width: 1cqi) {
+  .xd-why .xd-wy__hub {
+    --xd-wy-node: clamp(34px, 11.5cqi, 46px);
+  }
+}
+
+.xd-why .xd-wy__hub::before {
+  content: "";
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  background-image: radial-gradient(rgba(12, 104, 255, 0.16) 1px, transparent 1.5px);
+  background-size: 16px 16px;
+  -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent);
+          mask-image: radial-gradient(closest-side, #000 55%, transparent);
+}
+
+/* The radar sweep: a soft blue wedge inside the orbit (r = 36%), still
+   unless the hub is moving. */
+.xd-why .xd-wy__sweep {
+  position: absolute;
+  inset: 14%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(12, 104, 255, 0.16), rgba(12, 104, 255, 0) 24%, transparent 100%);
 }
 
 .xd-why .xd-wy__spokes {
@@ -4138,142 +4170,368 @@
   overflow: visible;
 }
 
+/* The viewBox scales evenly (the hub is square), so strokes are in its
+   units: 0.45 is about 1.5px on a 340px hub. */
 .xd-why .xd-wy__orbit {
   fill: none;
   stroke: var(--xd-accent-line);
-  stroke-width: 1;
-  stroke-dasharray: 2 4;
-  vector-effect: non-scaling-stroke;
+  stroke-width: 0.4;
+  stroke-dasharray: 0.8 1.6;
+}
+
+.xd-why .xd-wy__orbit--inner {
+  stroke: rgba(12, 104, 255, 0.14);
+  stroke-dasharray: none;
 }
 
 .xd-why .xd-wy__spokes line {
   stroke: var(--xd-accent);
-  stroke-width: 1.5;
-  stroke-opacity: 0.55;
-  vector-effect: non-scaling-stroke;
+  stroke-width: 0.45;
+  stroke-opacity: 0.45;
 }
 
+/* A short bright dash that runs down a spoke into the centre (moving
+   hubs only). The spoke runs from the node to the centre and is 100
+   long (pathLength), so the dash travels from offset 8 (just before the
+   node) to -100 (past the centre, under the orb). */
+.xd-why .xd-wy__spokes .xd-wy__pulse {
+  stroke: var(--xd-accent);
+  stroke-width: 1.1;
+  stroke-opacity: 1;
+  stroke-linecap: round;
+  stroke-dasharray: 8 200;
+  stroke-dashoffset: 8;
+  opacity: 0;
+}
+
+/* A product: an icon disc centred on its point of the orbit, its name
+   under it on a white pill. Ink on white 18.2:1; the icon's blue 6.2:1. */
 .xd-why .xd-wy__node {
   position: absolute;
   z-index: 1;
-  transform: translate(-50%, -50%);
-  padding: 5px 11px;
-  border: 1.5px solid var(--xd-accent);
-  border-radius: 999px;
-  background: var(--xd-bg);
-  box-shadow: var(--xd-shadow);
-  font-family: var(--xd-mono);
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 1.3;
-  white-space: nowrap;
-  color: var(--xd-heading);                  /* 18.2:1 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transform: translate(-50%, calc(var(--xd-wy-node) / -2));
 }
 
-/* White on the accent: 4.7:1. */
+.xd-why .xd-wy__node-ico {
+  display: grid;
+  place-items: center;
+  width: var(--xd-wy-node);
+  height: var(--xd-wy-node);
+  border: 1.5px solid var(--xd-accent-line);
+  border-radius: 50%;
+  background: var(--xd-bg);
+  color: var(--xd-accent-ink);
+  box-shadow: 0 6px 16px rgba(13, 19, 48, 0.08), 0 0 0 4px rgba(12, 104, 255, 0.06);
+}
+
+.xd-why .xd-wy__node-ico svg {
+  display: block;
+  width: 46%;
+  height: 46%;
+}
+
+.xd-why .xd-wy__node-label {
+  padding: 2px 8px;
+  border: 1px solid var(--xd-border);
+  border-radius: 999px;
+  background: var(--xd-bg);
+  font-family: var(--xd-mono);
+  font-weight: 600;
+  font-size: 11.5px;
+  line-height: 1.35;
+  white-space: nowrap;
+  color: var(--xd-heading);
+}
+
+@supports (width: 1cqi) {
+  .xd-why .xd-wy__node-label {
+    font-size: clamp(10.5px, 3.2cqi, 12px);
+  }
+}
+
+/* The centre: a blue orb (white on it 4.7:1 at its darkest) with the
+   CybrHawk logo over "SIEM XDR", in a soft halo. */
 .xd-why .xd-wy__centre {
   position: absolute;
   top: 50%;
   left: 50%;
   z-index: 2;
-  display: grid;
-  place-items: center;
-  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6%;
+  width: 34%;
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: var(--xd-accent);
+  background-color: var(--xd-accent);
+  background-image: radial-gradient(circle at 32% 28%, #4b8fff 0%, var(--xd-accent) 55%, #0a58d6 100%);
   box-shadow: 0 0 0 8px rgba(12, 104, 255, 0.10),
-              0 14px 32px rgba(12, 104, 255, 0.30);
-  font-family: var(--xd-mono);
-  font-weight: 700;
-  font-size: 12.5px;
-  line-height: 1.2;
-  letter-spacing: 0.04em;
-  text-align: center;
+              0 0 0 18px rgba(12, 104, 255, 0.05),
+              0 18px 40px rgba(12, 104, 255, 0.35);
   color: #ffffff;
 }
 
-/* ---- The ledger ------------------------------------------------------------ */
-.xd-why .xd-wy__ledger {
+/* A ring that breathes out of the orb (moving hubs only). */
+.xd-why .xd-wy__centre::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid rgba(12, 104, 255, 0.45);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.xd-why .xd-wy__mark {
+  display: flex;
+  justify-content: center;
+  width: 62%;
+}
+
+.xd-why .xd-wy__logo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.xd-why .xd-wy__mark svg {
+  display: block;
+  width: 42%;
+  height: auto;
+}
+
+.xd-why .xd-wy__centre-label {
+  font-family: var(--xd-mono);
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+@supports (width: 1cqi) {
+  .xd-why .xd-wy__centre-label {
+    font-size: clamp(10.5px, 3.3cqi, 13px);
+  }
+}
+
+/* ---- The cards ------------------------------------------------------------ */
+.xd-why .xd-wy__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(14px, 1.4vw, 20px);
+}
+
+/* A hairline of blue draws across the top on hover. */
+.xd-why .xd-wy__card {
+  position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: clamp(22px, 2.2vw, 28px);
   border: 1px solid var(--xd-border);
-  border-radius: var(--xd-radius);
+  border-radius: 20px;
   background: var(--xd-bg);
   box-shadow: var(--xd-shadow);
 }
 
-.xd-why .xd-wy__row {
-  display: grid;
-  grid-template-columns: 26px 40px minmax(0, 1fr);
-  column-gap: 16px;
-  align-items: start;
-  padding: clamp(20px, 2.2vw, 28px) clamp(20px, 2.4vw, 32px);
-  border-top: 1px solid var(--xd-rule);
+.xd-why .xd-wy__card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--xd-accent), var(--xd-accent-on-dark));
+  transform: scaleX(0);
+  transform-origin: left center;
 }
 
-.xd-why .xd-wy__row:first-child {
-  border-top: 0;
+.xd-why .xd-wy__card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
 }
 
-.xd-why .xd-wy__idx {
-  padding-top: 11px;
-  font-family: var(--xd-mono);
-  font-weight: 600;
-  font-size: 13px;
-  line-height: 1;
-  letter-spacing: 0.04em;
-  font-variant-numeric: tabular-nums;
-  color: var(--xd-text);
-}
-
-/* Stroke accent-ink on accent-soft: 5.5:1. */
+/* Stroke accent-ink on the soft blue: 5.5:1. */
 .xd-why .xd-wy__tile {
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 11px;
-  background: var(--xd-accent-soft);
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--xd-accent-line);
+  border-radius: 13px;
+  background: linear-gradient(135deg, var(--xd-accent-soft) 0%, var(--xd-bg) 100%);
   color: var(--xd-accent-ink);
 }
 
 .xd-why .xd-wy__tile svg {
   display: block;
-  width: 21px;
-  height: 21px;
+  width: 22px;
+  height: 22px;
 }
 
-.xd-why .xd-wy__copy {
-  min-width: 0;
-  padding-top: 2px;
+/* Body grey: 5.9:1 on white. */
+.xd-why .xd-wy__idx {
+  font-family: var(--xd-mono);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--xd-text);
 }
 
 .xd-why .xd-wy__title {
   font-weight: 700;
-  font-size: 18px;
+  font-size: clamp(17px, 1.4vw, 19px);
   line-height: 1.3;
   color: var(--xd-heading);
 }
 
 .xd-why .xd-wy__text {
-  margin-top: 6px;
-  font-size: 15.5px;
+  margin-top: 8px;
+  font-size: 15px;
   line-height: 1.6;
   color: var(--xd-text);                     /* 5.9:1 on white */
 }
 
-@media (min-width: 1025px) {
+/* The feature: a night card with a blue light in its top-right corner;
+   the solid colour first, for Elementor's lazy-load. White 17:1, body
+   11.1:1, index 7.2:1 on #0d1330. Spans the grid when the count is
+   odd. */
+.xd-why .xd-wy__card--feature {
+  border-color: var(--xd-night-2);
+  background-color: var(--xd-night-2);
+  background-image:
+    radial-gradient(420px 240px at 100% 0%, rgba(12, 104, 255, 0.35), transparent 70%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 48px);
+  box-shadow: 0 18px 40px rgba(13, 19, 48, 0.18);
+}
+
+.xd-why .xd-wy__card--feature:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.xd-why .xd-wy__card--feature .xd-wy__tile {
+  border-color: var(--xd-accent);
+  background: var(--xd-accent);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(12, 104, 255, 0.4);
+}
+
+.xd-why .xd-wy__card--feature .xd-wy__idx {
+  color: var(--xd-on-dark-muted);
+}
+
+.xd-why .xd-wy__card--feature .xd-wy__title {
+  color: var(--xd-on-dark);
+}
+
+.xd-why .xd-wy__card--feature .xd-wy__text {
+  color: var(--xd-on-dark-body);
+}
+
+@media (hover: hover) {
+  .xd-why .xd-wy__card:hover {
+    border-color: var(--xd-accent-line);
+    box-shadow: var(--xd-shadow-hover);
+  }
+
+  .xd-why .xd-wy__card--feature:hover {
+    border-color: rgba(110, 168, 255, 0.5);
+  }
+
+  .xd-why .xd-wy__card:hover::before {
+    transform: none;
+  }
+
+  .xd-why .xd-wy__card:not(.xd-wy__card--feature):hover .xd-wy__tile {
+    border-color: var(--xd-accent);
+    background: var(--xd-accent);
+    color: #ffffff;
+  }
+}
+
+/* ---- Motion ----------------------------------------------------------------
+   Hover changes ease in. On a moving hub the sweep turns once every 9s,
+   a pulse runs down each spoke in turn (one every 0.6s, each 1.4s, the
+   cycle 3.6s), and a ring breathes out of the orb.
+   ----------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .xd-why .xd-wy__card::before {
+    transition: transform 0.45s var(--xd-ease);
+  }
+
+  .xd-why .xd-wy__tile {
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  }
+
+  /* With the reveal's own fade and rise, staggered, kept beside the
+     hover's undelayed border and shadow. */
+  .xd-why .xd-wy.is-animated .xd-wy__card {
+    transition: opacity 0.6s ease calc(var(--i, 0) * 0.07s),
+                transform 0.6s var(--xd-ease) calc(var(--i, 0) * 0.07s),
+                border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .xd-why .xd-wy__hub.is-moving .xd-wy__sweep {
+    animation: xd-wy-spin 9s linear infinite;
+  }
+
+  .xd-why .xd-wy__hub.is-moving .xd-wy__pulse {
+    animation: xd-wy-pulse 3.6s linear infinite;
+    animation-delay: calc(var(--k, 0) * 0.6s);
+  }
+
+  .xd-why .xd-wy__hub.is-moving .xd-wy__centre::before {
+    animation: xd-wy-breathe 3.6s ease-out infinite;
+  }
+
+  .xd-why .xd-wy__hub.is-paused * {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes xd-wy-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Runs in the first 40% of the cycle, then rests. */
+@keyframes xd-wy-pulse {
+  0%   { stroke-dashoffset: 8;    opacity: 0; }
+  5%   { opacity: 1; }
+  35%  { opacity: 1; }
+  40%  { stroke-dashoffset: -100; opacity: 0; }
+  100% { stroke-dashoffset: -100; opacity: 0; }
+}
+
+@keyframes xd-wy-breathe {
+  0%   { opacity: 0.8; transform: scale(1); }
+  100% { opacity: 0;   transform: scale(1.55); }
+}
+
+/* ---- Responsive ----------------------------------------------------------- */
+/* Pinned only where the whole column fits under the header. */
+@media (min-width: 1025px) and (min-height: 860px) {
   .xd-why .xd-wy__aside {
     position: sticky;
     top: 96px;
   }
 }
 
+/* Stacked: the header, the hub centred, then the cards. */
 @media (max-width: 1024px) {
   .xd-why .xd-wy {
     grid-template-columns: minmax(0, 1fr);
-    gap: clamp(32px, 5vw, 48px);
+    gap: clamp(28px, 5vw, 44px);
   }
 
   .xd-why .xd-wy__hub {
@@ -4282,19 +4540,19 @@
   }
 }
 
-/* Phones: the index is decoration, and its column is better spent on
-   the copy. */
-@media (max-width: 520px) {
-  .xd-why .xd-wy__row {
-    grid-template-columns: 40px minmax(0, 1fr);
-    column-gap: 14px;
+/* One column of cards. */
+@media (max-width: 639px) {
+  .xd-why .xd-wy__grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .xd-why .xd-wy__idx {
-    display: none;
+  .xd-why .xd-wy__card-top {
+    margin-bottom: 14px;
   }
 
-  .xd-why .xd-wy__node {
-    padding: 4px 8px;
+  .xd-why .xd-wy__tile {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
   }
 }
