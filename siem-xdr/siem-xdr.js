@@ -196,8 +196,10 @@
     usecases: {
       eyebrow: "Use Cases",
       title: "Built for the Threats [[You Face Every Day]]",
-      // trail + end drive the aria-hidden storyline strip; every word is from
-      // that item's own text. end.kind: "act" = check node, "find" = ring node.
+      // The storyline console's chrome label (aria-hidden), as on the hero.
+      console: "CybrHawk SIEM XDR",
+      // trail + end drive the console's steps; every word is from that
+      // item's own text. end.kind: "act" = check node, "find" = ring node.
       items: [
         { icon: "ransom",     title: "Ransomware Detection & Containment",
           text: "Spot early indicators such as credential dumping, mass file changes, and shadow-copy deletion, then isolate affected hosts automatically before encryption spreads.",
@@ -1508,34 +1510,48 @@
      for tabs, or straight after its own button for the accordion. One
      selection survives the switch.
 
-     Each panel ends in a storyline strip (aria-hidden): the use case's
-     own words as mono chips on a blue thread, left to right, ending in a
-     check node (a response, end.kind "act") or a ring node (what the
-     signals point to, "find"), or simply stopping. When a panel is
-     shown, the chips fade in one by one and the thread draws behind
-     them (siem-xdr.css).
+     Each panel ends in a small console (aria-hidden), the hero canvas's
+     idiom: the use case's own words as steps on a blue thread, ending in
+     a check node (a response, end.kind "act") or a ring node (what the
+     signals point to, "find"), or simply stopping. siem-xdr.css runs the
+     steps across the console when it is wide enough and down it when it
+     is not (a container query), and draws them in, one by one, whenever
+     a panel is shown.
      -------------------------------------------------------------------- */
   var UC_ACCORDION = "(max-width: 860px)";
 
-  function storyStrip(it) {
+  function storyConsole(it, label) {
     var trail = it.trail || [];
     if (!trail.length) return "";
 
-    var chips = trail.map(function (t, k) {
-      return '<span class="xd-uc__chip" style="--k:' + k + '">' + esc(t) + "</span>";
+    var steps = trail.map(function (t, k) {
+      return (
+        '<li class="xd-uc__step" style="--k:' + k + '">' +
+          '<span class="xd-uc__node"></span>' +
+          '<span class="xd-uc__step-text">' + esc(t) + "</span>" +
+        "</li>"
+      );
     }).join("");
 
     var end = it.end || null;
     var kind = end && end.text && (end.kind === "act" || end.kind === "find") ? end.kind : "";
-    var tail = kind
-      ? '<span class="xd-uc__end xd-uc__end--' + kind + '" style="--k:' + trail.length + '">' +
-          '<span class="xd-uc__end-node">' + (kind === "act" ? icon("check") : "") + "</span>" +
-          '<span class="xd-uc__end-label">' + esc(end.text) + "</span>" +
-        "</span>"
-      // No end: the thread stops a gap after the last chip.
-      : '<span class="xd-uc__stop"></span>';
+    if (kind) {
+      steps +=
+        '<li class="xd-uc__step xd-uc__step--' + kind + '" style="--k:' + trail.length + '">' +
+          '<span class="xd-uc__node">' + (kind === "act" ? icon("check") : "") + "</span>" +
+          '<span class="xd-uc__step-text">' + esc(end.text) + "</span>" +
+        "</li>";
+    }
 
-    return '<div class="xd-uc__strip" aria-hidden="true">' + chips + tail + "</div>";
+    return (
+      '<div class="xd-uc__console" aria-hidden="true">' +
+        '<div class="xd-uc__bar">' +
+          '<span class="xd-uc__dots"><i></i><i></i><i></i></span>' +
+          (label ? '<span class="xd-uc__label">' + esc(label) + "</span>" : "") +
+        "</div>" +
+        '<ol class="xd-uc__steps">' + steps + "</ol>" +
+      "</div>"
+    );
   }
 
   function buildUsecases(host, c) {
@@ -1544,13 +1560,18 @@
 
     var list = c.items || [];
     if (!list.length) return true;
+    var count = pad(list.length);
 
+    // The index and the caret are aria-hidden, so each tab's name is its
+    // title alone. The index shows in the tab rail, the caret in the
+    // accordion (siem-xdr.css).
     var tabs = list.map(function (it, i) {
       return (
         '<button class="xd-uc__tab" type="button" id="xd-uc-tab-' + i + '" ' +
           'aria-controls="xd-uc-panel-' + i + '"' + at(i + 2) + ">" +
           '<span class="xd-uc__tab-icon" aria-hidden="true">' + icon(it.icon) + "</span>" +
           '<span class="xd-uc__tab-label">' + esc(it.title) + "</span>" +
+          '<span class="xd-uc__tab-num" aria-hidden="true">' + pad(i + 1) + "</span>" +
           '<span class="xd-uc__tab-caret" aria-hidden="true">' + ARROW + "</span>" +
         "</button>"
       );
@@ -1561,10 +1582,13 @@
         '<div class="xd-uc__panel" id="xd-uc-panel-' + i + '" aria-labelledby="xd-uc-tab-' + i + '">' +
           '<div class="xd-uc__panel-head">' +
             '<span class="xd-uc__badge" aria-hidden="true">' + icon(it.icon) + "</span>" +
-            '<h3 class="xd-uc__title">' + esc(it.title) + "</h3>" +
+            '<div class="xd-uc__heading">' +
+              '<span class="xd-uc__count" aria-hidden="true">' + pad(i + 1) + " / " + count + "</span>" +
+              '<h3 class="xd-uc__title">' + esc(it.title) + "</h3>" +
+            "</div>" +
           "</div>" +
           '<p class="xd-uc__text">' + esc(it.text) + "</p>" +
-          storyStrip(it) +
+          storyConsole(it, c.console) +
         "</div>"
       );
     }).join("");

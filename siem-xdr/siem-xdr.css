@@ -2993,23 +2993,29 @@
    06 · Use cases (.xd-usecases → .xd-uc)
    ---------------------------------------------------------------------
    White, with a very faint hairline grid behind the detail panel only.
-   HawkINT's sector selector, as SIEM NDR ships it: a rail of six tabs on
-   the left drives one large panel on the right. The panels share one
-   grid cell, so the stage is always as tall as the tallest and a swap
-   never moves the page; a swap is a 200ms fade (instant under reduced
-   motion).
+   HawkINT's sector selector, as SIEM NDR ships it, restyled: the six
+   tabs sit in one tinted tray on the left, numbered, and the selected
+   one lifts out of it as a white card with a blue bar and a solid blue
+   icon. It drives one large panel on the right: a numbered head, the
+   copy, and at its foot a small dark console (the hero canvas's idiom)
+   with the use case's storyline. The panels share one grid cell, so the
+   stage is always as tall as the tallest and a swap never moves the
+   page; a swap is a 200ms fade (instant under reduced motion). The tray
+   stretches to the panel's height and its tabs share it.
 
    The script sets data-mode="tabs" or "accordion" (below 860px) and
    moves the panels to suit: in the accordion each sits under its own
-   header, which joins it seamlessly while open.
+   header, which joins it seamlessly while open, and the panel's own
+   head is kept for screen readers only (the header already shows it).
 
-   Each panel ends in a storyline strip: mono chips on a 1px blue thread,
-   ending in a check node (a response) or a ring node (what the signals
-   point to). Rows of chips are a fixed 30px with a 10px gap, so one
-   repeating gradient draws the thread through the middle of every row,
-   and a left rule (zero height on one row) joins the rows when they
-   wrap. The panel is flat white, so the end node's own white fill can
-   cover the thread beyond it. Below 600px the strip runs down instead.
+   The storyline: the use case's words as steps on a blue thread, each a
+   node and a label, ending in a check node (a response), a ring node
+   (what the signals point to), or simply stopping. Each step draws the
+   thread to the next node itself, so a label may wrap to any height.
+   The panel is a size container: at 660px of content and up the steps
+   run across the console, below that down it, so the strip can never
+   wrap into a muddle. Browsers without container queries get the
+   vertical one.
    ===================================================================== */
 .xd-section.xd-usecases {
   overflow: clip;                            /* the hairline grid reaches past the panel's edges */
@@ -3018,36 +3024,44 @@
 
 .xd-usecases .xd-uc__selector {
   display: grid;
-  grid-template-columns: clamp(260px, 28vw, 340px) minmax(0, 1fr);
-  align-items: start;
-  gap: clamp(20px, 2.4vw, 34px);
+  grid-template-columns: clamp(250px, 30vw, 360px) minmax(0, 1fr);
+  align-items: stretch;
+  gap: clamp(20px, 2.4vw, 32px);
 }
 
+/* The tray. */
 .xd-usecases .xd-uc__rail {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   min-width: 0;
+  padding: 8px;
+  border: 1px solid var(--xd-border);
+  border-radius: 22px;
+  background: var(--xd-bg-tint);
 }
 
 /* ---- Tabs ---------------------------------------------------------------
    (0,3,0), so the theme's own button rules (fills, borders and colours
-   on [type=button]:hover) never reach them.
+   on [type=button]:hover) never reach them. Each shares the tray's
+   height. Ink on the tint is 17.1:1, on white 18.2:1.
    ----------------------------------------------------------------------- */
 .xd-usecases .xd-uc .xd-uc__tab {
+  position: relative;
+  flex: 1 0 auto;
   display: flex;
   align-items: center;
-  gap: 13px;
+  gap: 14px;
   width: 100%;
   margin: 0;
-  padding: 13px 16px;
-  border: 1px solid var(--xd-border);
-  border-radius: 13px;
-  background: var(--xd-bg);
-  box-shadow: var(--xd-shadow);
+  padding: 12px 14px 12px 12px;
+  border: 1px solid transparent;
+  border-radius: 15px;
+  background: transparent;
+  box-shadow: none;
   font-family: inherit;
   font-weight: 600;
-  font-size: 15.5px;
+  font-size: 15px;
   line-height: 1.3;
   letter-spacing: normal;
   text-align: left;
@@ -3061,20 +3075,38 @@
 
 .xd-usecases .xd-uc .xd-uc__tab:hover,
 .xd-usecases .xd-uc .xd-uc__tab:focus {
+  border-color: var(--xd-border);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--xd-heading);
+  box-shadow: none;
+}
+
+/* Selected (or open): a white card lifted out of the tray. */
+.xd-usecases .xd-uc .xd-uc__tab.is-active,
+.xd-usecases .xd-uc .xd-uc__tab.is-active:hover,
+.xd-usecases .xd-uc .xd-uc__tab.is-active:focus {
   border-color: var(--xd-accent-line);
   background: var(--xd-bg);
   color: var(--xd-heading);
   box-shadow: var(--xd-shadow-hover);
 }
 
-/* Selected (or open): accent fill, white ink (4.7:1). */
-.xd-usecases .xd-uc .xd-uc__tab.is-active,
-.xd-usecases .xd-uc .xd-uc__tab.is-active:hover,
-.xd-usecases .xd-uc .xd-uc__tab.is-active:focus {
-  border-color: var(--xd-accent);
+/* The blue bar on the selected tab's left edge. */
+.xd-usecases .xd-uc__tab::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  bottom: 14px;
+  left: -1px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
   background: var(--xd-accent);
-  color: #ffffff;
-  box-shadow: 0 10px 26px rgba(12, 104, 255, 0.25);
+  transform: scaleY(0);
+  transition: transform 0.25s var(--xd-ease);
+}
+
+.xd-usecases .xd-uc__tab.is-active::before {
+  transform: none;
 }
 
 .xd-usecases .xd-uc__tab-icon {
@@ -3082,12 +3114,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  background: var(--xd-accent-soft);
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--xd-border);
+  border-radius: 11px;
+  background: var(--xd-bg);
   color: var(--xd-accent-ink);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+              color 0.2s ease, box-shadow 0.25s ease;
 }
 
 .xd-usecases .xd-uc__tab-icon svg {
@@ -3097,8 +3131,10 @@
 }
 
 .xd-usecases .xd-uc__tab.is-active .xd-uc__tab-icon {
-  background: rgba(255, 255, 255, 0.18);
+  border-color: var(--xd-accent);
+  background: var(--xd-accent);
   color: #ffffff;
+  box-shadow: 0 6px 14px rgba(12, 104, 255, 0.3);
 }
 
 .xd-usecases .xd-uc__tab-label {
@@ -3106,23 +3142,33 @@
   min-width: 0;
 }
 
+/* The index: body grey (5.6:1 on the tint), blue once selected (6.2:1
+   on white). */
+.xd-usecases .xd-uc__tab-num {
+  flex: none;
+  font-family: var(--xd-mono);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--xd-text);
+  transition: color 0.2s ease;
+}
+
+.xd-usecases .xd-uc__tab.is-active .xd-uc__tab-num {
+  color: var(--xd-accent-ink);
+}
+
+/* The caret belongs to the accordion. */
 .xd-usecases .xd-uc__tab-caret {
   flex: none;
-  display: inline-flex;
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  display: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .xd-usecases .xd-uc__tab-caret svg {
   display: block;
   width: 18px;
   height: 18px;
-}
-
-.xd-usecases .xd-uc__tab.is-active .xd-uc__tab-caret {
-  opacity: 1;
-  transform: none;
 }
 
 /* ---- The stage and its panels ------------------------------------------- */
@@ -3146,20 +3192,24 @@
           mask-image: radial-gradient(closest-side, #000 60%, transparent);
 }
 
+/* A size container, for the storyline's direction. A faint blue light
+   in the top-right corner; the solid white first, for Elementor's
+   lazy-load. */
 .xd-usecases .xd-uc__panel {
   position: relative;
   z-index: 1;
   grid-area: 1 / 1;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
+  gap: 18px;
   min-width: 0;
   padding: clamp(24px, 3vw, 40px);
   border: 1px solid var(--xd-border);
-  border-radius: 20px;
+  border-radius: 24px;
   background-color: var(--xd-bg);
+  background-image: radial-gradient(520px 260px at 100% 0%, rgba(12, 104, 255, 0.07), transparent 70%);
   box-shadow: var(--xd-shadow);
+  container-type: inline-size;
 }
 
 /* Tabs: every panel stays in the cell; only the selected one is seen
@@ -3187,9 +3237,11 @@
   justify-content: center;
   width: 56px;
   height: 56px;
-  border-radius: 14px;
-  background: var(--xd-accent-soft);
-  color: var(--xd-accent-ink);
+  border-radius: 16px;
+  background-color: var(--xd-accent);
+  background-image: linear-gradient(135deg, var(--xd-accent) 0%, #4b8fff 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(12, 104, 255, 0.28);
 }
 
 .xd-usecases .xd-uc__badge svg {
@@ -3198,115 +3250,152 @@
   height: 28px;
 }
 
-.xd-usecases .xd-uc__title {
-  font-weight: 700;
-  font-size: clamp(22px, 2.4vw, 28px);
-  line-height: 1.2;
-  color: var(--xd-heading);
+.xd-usecases .xd-uc__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
 }
 
-.xd-usecases .xd-uc__text {
-  max-width: 60ch;
-  font-size: clamp(15.5px, 1.4vw, 17px);
-  line-height: 1.62;
+/* "01 / 06": body grey, 5.9:1 on white. */
+.xd-usecases .xd-uc__count {
+  font-family: var(--xd-mono);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.14em;
   color: var(--xd-text);
 }
 
-/* ---- The storyline strip (aria-hidden) ------------------------------------ */
-.xd-usecases .xd-uc__strip {
-  position: relative;
-  overflow: hidden;                          /* the drawing veil leaves through the right edge */
+.xd-usecases .xd-uc__title {
+  font-weight: 700;
+  font-size: clamp(22px, 2.3vw, 28px);
+  line-height: 1.2;
+  color: var(--xd-heading);
+  text-wrap: balance;
+}
+
+.xd-usecases .xd-uc__text {
+  max-width: 64ch;
+  font-size: clamp(15.5px, 1.35vw, 17px);
+  line-height: 1.65;
+  color: var(--xd-text);
+  text-wrap: pretty;
+}
+
+/* ---- The storyline console (aria-hidden) ----------------------------------
+   Night, with a blue light in its top-left corner and faint time
+   gridlines; it sits at the panel's foot whatever the copy's length.
+   ----------------------------------------------------------------------- */
+.xd-usecases .xd-uc__console {
+  margin-top: auto;
+  overflow: hidden;
+  border: 1px solid rgba(13, 19, 48, 0.9);
+  border-radius: 16px;
+  background-color: var(--xd-console);
+  background-image:
+    radial-gradient(60% 140% at 0% 0%, rgba(12, 104, 255, 0.22), transparent 60%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 48px);
+  box-shadow: 0 18px 40px rgba(13, 19, 48, 0.16);
+}
+
+.xd-usecases .xd-uc__bar {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 10px 12px;
-  width: 100%;
-  margin-top: 10px;
-  padding-left: 16px;
-  /* One 1.5px line through the middle of every 40px row (30px + gap). */
-  background-image: repeating-linear-gradient(180deg,
-    transparent 0 14.25px,
-    var(--xd-accent) 14.25px 15.75px,
-    transparent 15.75px 40px);
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--xd-border-dark);
+  background: rgba(255, 255, 255, 0.03);
 }
 
-/* Joins wrapped rows: first row's middle to the last's; nothing on one. */
-.xd-usecases .xd-uc__strip::before {
+.xd-usecases .xd-uc__dots {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.xd-usecases .xd-uc__dots i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* 6.8:1 on the console. */
+.xd-usecases .xd-uc__label {
+  min-width: 0;
+  font-family: var(--xd-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--xd-on-dark-muted);
+}
+
+/* Down (the default): each step is a node column (24px) and its label;
+   a step's ::before runs the thread from its own node's centre to the
+   next one's, through its bottom padding. */
+.xd-usecases .xd-uc__steps {
+  display: grid;
+  padding: 18px 18px 20px;
+}
+
+.xd-usecases .xd-uc__step {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+  padding-bottom: 14px;
+}
+
+.xd-usecases .xd-uc__step:last-child {
+  padding-bottom: 0;
+}
+
+.xd-usecases .xd-uc__step:not(:last-child)::before {
   content: "";
   position: absolute;
-  top: 15px;
-  bottom: 15px;
-  left: 0;
-  width: 1.5px;
-  background: var(--xd-accent);
+  top: 12px;
+  bottom: -12px;
+  left: 11px;
+  width: 2px;
+  background: var(--xd-accent-on-dark);
 }
 
-/* The veil that draws the thread: flat white, sliding off to the right,
-   above the thread and below the chips. Default: gone. */
-.xd-usecases .xd-uc__strip::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--xd-bg);
-  transform: translateX(101%);
-}
-
-.xd-usecases .xd-uc__chip,
-.xd-usecases .xd-uc__end,
-.xd-usecases .xd-uc__stop {
+/* A signal: a blue ring filled with the console, so the thread stops at
+   its edge. */
+.xd-usecases .xd-uc__node {
   position: relative;
   z-index: 1;
-  height: 30px;
-}
-
-.xd-usecases .xd-uc__chip {
   flex: none;
-  padding: 0 10px;
-  border: 1px solid var(--xd-accent-line);
-  border-radius: 7px;
-  background: var(--xd-bg);
-  font-family: var(--xd-mono);
-  font-weight: 600;
-  font-size: 12.5px;
-  line-height: 28px;
-  white-space: nowrap;
-  color: var(--xd-heading);                  /* 18.2:1 on white */
-}
-
-/* The end grows to the row's end, so its white fill hides the thread
-   past the node. */
-.xd-usecases .xd-uc__end {
-  flex: 1 1 auto;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding-right: 4px;
-  background: var(--xd-bg);
-}
-
-.xd-usecases .xd-uc__stop {
-  flex: 1 1 0;
-  min-width: 1px;
-  background: var(--xd-bg);
-}
-
-.xd-usecases .xd-uc__end-node {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
 }
 
-/* A response: blue with a check. */
-.xd-usecases .xd-uc__end--act .xd-uc__end-node {
-  background: var(--xd-accent);
-  color: #ffffff;
+.xd-usecases .xd-uc__node::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--xd-console);
+  box-shadow: inset 0 0 0 2px var(--xd-accent-on-dark), 0 0 0 4px rgba(110, 168, 255, 0.14);
 }
 
-.xd-usecases .xd-uc__end--act .xd-uc__end-node svg {
+/* A response: solid blue with a check. */
+.xd-usecases .xd-uc__step--act .xd-uc__node {
+  background: var(--xd-accent);
+  color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(12, 104, 255, 0.25), 0 0 16px rgba(12, 104, 255, 0.5);
+}
+
+.xd-usecases .xd-uc__step--act .xd-uc__node::before {
+  display: none;
+}
+
+.xd-usecases .xd-uc__step--act .xd-uc__node svg {
   display: block;
   width: 14px;
   height: 14px;
@@ -3314,110 +3403,109 @@
 }
 
 /* What the signals point to: a blue ring with a dot. */
-.xd-usecases .xd-uc__end--find .xd-uc__end-node {
-  border: 2px solid var(--xd-accent);
-  background: var(--xd-bg);
+.xd-usecases .xd-uc__step--find .xd-uc__node {
+  background: var(--xd-console);
+  box-shadow: inset 0 0 0 2px var(--xd-accent-on-dark), 0 0 0 4px rgba(110, 168, 255, 0.18);
 }
 
-.xd-usecases .xd-uc__end--find .xd-uc__end-node::after {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--xd-accent);
+.xd-usecases .xd-uc__step--find .xd-uc__node::before {
+  width: 8px;
+  height: 8px;
+  background: var(--xd-accent-on-dark);
+  box-shadow: none;
 }
 
-.xd-usecases .xd-uc__end-label {
+/* Signals 10.4:1 on the console; the end, bolder and blue, 7.1:1. */
+.xd-usecases .xd-uc__step-text {
   min-width: 0;
-  font-family: var(--xd-mono);
+  padding-top: 2px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--xd-on-dark-body);
+}
+
+.xd-usecases .xd-uc__step--act .xd-uc__step-text,
+.xd-usecases .xd-uc__step--find .xd-uc__step-text {
   font-weight: 600;
-  font-size: 12.5px;
-  line-height: 1.35;
-  white-space: nowrap;
-  color: var(--xd-accent-ink);               /* 6.2:1 on white */
+  color: var(--xd-accent-on-dark);
 }
 
-/* Below 600px: down, not across. One left rule from the first item to
-   the last, a stub out to each; items may wrap their own text. */
-@media (max-width: 599px) {
-  .xd-usecases .xd-uc__strip {
+/* Across, on a wide panel: one column per step, the node on the thread
+   and its label under it; each step's ::before runs to the next node. */
+@container (min-width: 660px) {
+  .xd-usecases .xd-uc__steps {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    padding: 28px 22px 30px;
+  }
+
+  .xd-usecases .xd-uc__step {
     flex-direction: column;
-    flex-wrap: nowrap;
-    align-items: flex-start;
-    gap: 8px;
-    padding-left: 18px;
-    background: none;
+    gap: 12px;
+    padding: 0 14px 0 0;
   }
 
-  .xd-usecases .xd-uc__chip,
-  .xd-usecases .xd-uc__end {
-    flex: none;
-    height: auto;
-    min-height: 30px;
-    max-width: 100%;
+  .xd-usecases .xd-uc__step:last-child {
+    padding-right: 0;
   }
 
-  .xd-usecases .xd-uc__chip {
-    padding: 5px 10px;
-    font-size: 12px;
-    line-height: 1.4;
-    white-space: normal;
+  .xd-usecases .xd-uc__step:not(:last-child)::before {
+    top: 11px;
+    bottom: auto;
+    left: 12px;
+    width: 100%;
+    height: 2px;
   }
 
-  .xd-usecases .xd-uc__end-label {
-    white-space: normal;
-  }
-
-  .xd-usecases .xd-uc__chip::before,
-  .xd-usecases .xd-uc__end::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: -18px;
-    width: 17px;
-    height: 1.5px;
-    margin-top: -0.75px;
-    background: var(--xd-accent);
-  }
-
-  .xd-usecases .xd-uc__end::before {
-    left: -18px;
-    width: 18px;
-  }
-
-  .xd-usecases .xd-uc__stop {
-    display: none;
+  .xd-usecases .xd-uc__step-text {
+    padding-top: 0;
+    font-size: 13.5px;
+    line-height: 1.45;
   }
 }
 
-/* ---- Accordion (below 860px) ---------------------------------------------- */
+/* ---- Accordion (below 860px) ----------------------------------------------
+   No tray: each header is a card of its own, and the open one joins its
+   panel. The index gives way to the caret.
+   ----------------------------------------------------------------------- */
 .xd-usecases .xd-uc[data-mode="accordion"] .xd-uc__selector {
   display: block;
+}
+
+.xd-usecases .xd-uc[data-mode="accordion"] .xd-uc__rail {
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
 }
 
 .xd-usecases .xd-uc[data-mode="accordion"] .xd-uc__stage {
   display: none;                             /* emptied: every panel sits under its header */
 }
 
-.xd-usecases .xd-uc[data-mode="accordion"] .xd-uc__panel {
-  display: none;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-top: 0;
-}
-
-.xd-usecases .xd-uc[data-mode="accordion"] .xd-uc__panel.is-active {
-  display: flex;
-  margin: -8px 0 4px;                        /* joins its header, across the rail gap */
+.xd-usecases .xd-uc[data-mode="accordion"] .xd-uc__tab {
+  flex: none;
+  border-color: var(--xd-border);
+  background: var(--xd-bg);
+  box-shadow: var(--xd-shadow);
 }
 
 .xd-usecases .xd-uc[data-mode="accordion"] .xd-uc__tab.is-active {
+  border-color: var(--xd-accent-line);
+  border-bottom-color: transparent;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   box-shadow: none;
 }
 
+.xd-usecases .xd-uc[data-mode="accordion"] .xd-uc__tab-num {
+  display: none;
+}
+
 .xd-usecases .xd-uc[data-mode="accordion"] .xd-uc__tab-caret {
+  display: inline-flex;
   transform: rotate(90deg);
   opacity: 0.6;
 }
@@ -3427,7 +3515,63 @@
   opacity: 1;
 }
 
+.xd-usecases .xd-uc[data-mode="accordion"] .xd-uc__panel {
+  display: none;
+  padding-top: 4px;
+  border-color: var(--xd-accent-line);
+  border-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  background-image: none;
+}
+
+.xd-usecases .xd-uc[data-mode="accordion"] .xd-uc__panel.is-active {
+  display: flex;
+  margin: -8px 0 4px;                        /* joins its header, across the rail gap */
+}
+
+/* The header above already shows the title: kept for screen readers. */
+.xd-usecases .xd-uc[data-mode="accordion"] .xd-uc__panel-head {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* A narrower rail beside the panel: the index goes, so the labels keep
+   two lines. */
+@media (max-width: 1099px) {
+  .xd-usecases .xd-uc__tab-num {
+    display: none;
+  }
+
+  .xd-usecases .xd-uc .xd-uc__tab {
+    gap: 12px;
+    font-size: 14.5px;
+  }
+
+  .xd-usecases .xd-uc__tab-icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
 @media (max-width: 520px) {
+  .xd-usecases .xd-uc .xd-uc__tab {
+    padding: 11px 12px 11px 11px;
+  }
+
+  .xd-usecases .xd-uc__panel {
+    padding: 20px 18px 18px;
+  }
+
+  .xd-usecases .xd-uc[data-mode="accordion"] .xd-uc__panel {
+    padding-top: 4px;
+  }
+
   .xd-usecases .xd-uc__panel-head {
     gap: 12px;
   }
@@ -3442,12 +3586,17 @@
     width: 22px;
     height: 22px;
   }
+
+  .xd-usecases .xd-uc__steps {
+    padding: 16px 14px 18px;
+  }
 }
 
-/* The rail slides in on reveal; a shown panel's strip fills left to
-   right once (chips at k × 90ms, the veil drawing the thread behind
-   them). Animations, not transitions, so they also run when an
-   accordion panel goes from display: none to shown. */
+/* The rail slides in on reveal; a shown panel's storyline draws once:
+   each step rises in at k × 140ms and its thread then grows to the next
+   node (down, or across on a wide panel). Animations, not transitions,
+   so they also run when an accordion panel goes from display: none to
+   shown, and again on every tab switch. */
 @media (prefers-reduced-motion: no-preference) {
   .xd-usecases .xd-uc.is-animated .xd-uc__tab {
     opacity: 0;
@@ -3463,35 +3612,40 @@
     transform: none;
   }
 
-  .xd-usecases .xd-uc.is-animated .xd-uc__chip,
-  .xd-usecases .xd-uc.is-animated .xd-uc__end {
+  .xd-usecases .xd-uc.is-animated .xd-uc__step {
     opacity: 0;
   }
 
-  .xd-usecases .xd-uc.is-animated.is-visible .xd-uc__panel.is-active .xd-uc__chip,
-  .xd-usecases .xd-uc.is-animated.is-visible .xd-uc__panel.is-active .xd-uc__end {
-    animation: xd-uc-chip 0.45s var(--xd-ease) both;
-    animation-delay: calc(0.15s + var(--k, 0) * 90ms);
+  .xd-usecases .xd-uc.is-animated.is-visible .xd-uc__panel.is-active .xd-uc__step {
+    animation: xd-uc-step 0.45s var(--xd-ease) both;
+    animation-delay: calc(0.15s + var(--k, 0) * 140ms);
   }
 
-  .xd-usecases .xd-uc.is-animated.is-visible .xd-uc__panel.is-active .xd-uc__strip::after {
-    animation: xd-uc-draw 0.7s cubic-bezier(0.45, 0, 0.3, 1) 0.1s both;
+  /* One keyframe for both directions: the clip opens from the top-left
+     corner, which on a 2px-wide line reads as growing down and on a
+     2px-tall one as growing across. (Swapping animation-name inside the
+     @container rule left the finished line unpainted in Chrome.) */
+  .xd-usecases .xd-uc.is-animated.is-visible .xd-uc__panel.is-active .xd-uc__step:not(:last-child)::before {
+    animation: xd-uc-grow 0.35s ease both;
+    animation-delay: calc(0.3s + var(--k, 0) * 140ms);
   }
 }
 
-@keyframes xd-uc-chip {
-  from { opacity: 0; transform: translateX(-6px); }
+@keyframes xd-uc-step {
+  from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: none; }
 }
 
-@keyframes xd-uc-draw {
-  from { transform: none; }
-  to   { transform: translateX(101%); }
+@keyframes xd-uc-grow {
+  from { clip-path: inset(0 100% 100% 0); }
+  to   { clip-path: inset(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .xd-usecases .xd-uc .xd-uc__tab,
+  .xd-usecases .xd-uc__tab::before,
   .xd-usecases .xd-uc__tab-icon,
+  .xd-usecases .xd-uc__tab-num,
   .xd-usecases .xd-uc__tab-caret,
   .xd-usecases .xd-uc[data-mode="tabs"] .xd-uc__panel,
   .xd-usecases .xd-uc[data-mode="tabs"] .xd-uc__panel:not(.is-active) {
