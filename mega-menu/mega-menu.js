@@ -1,8 +1,8 @@
-	/* ============================================================
-   Mega Menu — Lightweight Enhancements
-   Requires: jQuery
-   Scope: #mega-menu-wrap-main-menu
-   ============================================================ */
+/* ============================================================
+ Mega Menu — Lightweight Enhancements
+ Requires: jQuery
+ Scope: #mega-menu-wrap-main-menu
+ ============================================================ */
 
 (function () {
   "use strict";
@@ -10,44 +10,44 @@
   // Resolved once jQuery is available; init()/isEmpty() close over it.
   var $;
 
-//   var CTA_BY_PANEL = {
-//     "solutions": {
-//       title: "Not sure which solution fits?",
-//       sub:   "Talk to a security advisor and get a tailored XDR walkthrough.",
-//       btn:   "Book a demo",
-//       href:  "https://cybrhawk.com/request-for-demo/"
-//     },
-//     "the platform": {
-//       title: "See the platform in action",
-//       sub:   "Watch a 5-minute product tour of CybrHawk XDR.",
-//       btn:   "Watch demo",
-//       href:  "https://cybrhawk.com/request-for-demo/"
-//     },
-//     "services": {
-//       title: "Need help operationalizing security?",
-//       sub:   "Our experts plug into your team with 24/7 SOC coverage.",
-//       btn:   "Contact us",
-//       href:  "https://cybrhawk.com/contact/"
-//     },
-//     "resources": {
-//       title: "Stay ahead of the threat curve",
-//       sub:   "Read the latest CybrHawk research, blogs, and whitepapers.",
-//       btn:   "Browse resources",
-//       href:  "https://cybrhawk.com/blogs/"
-//     },
-//     "company": {
-//       title: "Build the future of cybersecurity",
-//       sub:   "Learn about our mission, team, and open roles.",
-//       btn:   "Get in touch",
-//       href:  "https://cybrhawk.com/contact/"
-//     }
-//   };
+  //   var CTA_BY_PANEL = {
+  //     "solutions": {
+  //       title: "Not sure which solution fits?",
+  //       sub:   "Talk to a security advisor and get a tailored XDR walkthrough.",
+  //       btn:   "Book a demo",
+  //       href:  "https://cybrhawk.com/request-for-demo/"
+  //     },
+  //     "the platform": {
+  //       title: "See the platform in action",
+  //       sub:   "Watch a 5-minute product tour of CybrHawk XDR.",
+  //       btn:   "Watch demo",
+  //       href:  "https://cybrhawk.com/request-for-demo/"
+  //     },
+  //     "services": {
+  //       title: "Need help operationalizing security?",
+  //       sub:   "Our experts plug into your team with 24/7 SOC coverage.",
+  //       btn:   "Contact us",
+  //       href:  "https://cybrhawk.com/contact/"
+  //     },
+  //     "resources": {
+  //       title: "Stay ahead of the threat curve",
+  //       sub:   "Read the latest CybrHawk research, blogs, and whitepapers.",
+  //       btn:   "Browse resources",
+  //       href:  "https://cybrhawk.com/blogs/"
+  //     },
+  //     "company": {
+  //       title: "Build the future of cybersecurity",
+  //       sub:   "Learn about our mission, team, and open roles.",
+  //       btn:   "Get in touch",
+  //       href:  "https://cybrhawk.com/contact/"
+  //     }
+  //   };
 
-//   var ARROW_SVG =
-//     '<svg class="mega-cta-arrow" width="14" height="14" viewBox="0 0 24 24"' +
-//     ' fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"' +
-//     ' stroke-linejoin="round" aria-hidden="true">' +
-//     '<path d="M5 12h14M13 5l7 7-7 7"></path></svg>';
+  //   var ARROW_SVG =
+  //     '<svg class="mega-cta-arrow" width="14" height="14" viewBox="0 0 24 24"' +
+  //     ' fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"' +
+  //     ' stroke-linejoin="round" aria-hidden="true">' +
+  //     '<path d="M5 12h14M13 5l7 7-7 7"></path></svg>';
 
   function isEmpty($el) {
     if (!$el.length) return true;
@@ -69,7 +69,7 @@
        "identity threat detection" is ITDR's old WordPress label.          */
     var PLATFORM_ORDER = ["unified cyber defense", "hawkint", "hawkstrike", "hawkops"];
     var UCD_ORDER = ["siem xdr", "siem ndr", "siem cloud", "incident response",
-                     "itdr", "identity threat detection", "ot security monitoring"];
+      "itdr", "identity threat detection", "ot security monitoring"];
 
     /* 0. Re-tag block titles: Max Mega Menu prints them as <h4>, which injects
           nav labels into the page's heading outline. Swap the element for a <p>
@@ -520,9 +520,9 @@
       }
     });
 
-	/* 2b. Align column tops: if any column in a row has a .mega-block-title,
-          inject an invisible spacer caption into the columns that don't,
-          so every column's first link starts on the same baseline. */
+    /* 2b. Align column tops: if any column in a row has a .mega-block-title,
+            inject an invisible spacer caption into the columns that don't,
+            so every column's first link starts on the same baseline. */
     $wrap.find(".mega-menu-row > .mega-sub-menu").each(function () {
       var $cols = $(this).children(".mega-menu-column");
       var hasTitle = false;
@@ -582,8 +582,8 @@
 
       var html =
         '<li class="mega-trust-band" aria-label="Awards">' +
-          '<span class="mega-trust-band-title">Awards</span>' +
-          '<div class="mega-trust-badges">';
+        '<span class="mega-trust-band-title">Awards</span>' +
+        '<div class="mega-trust-badges">';
       var IMG_STYLE = "display:block !important;" +
         "height:44px !important;width:auto !important;" +
         "max-width:130px !important;max-height:44px !important;" +
@@ -593,9 +593,9 @@
         var b = TRUST_BADGES[i];
         html +=
           '<span class="mega-trust-badge mega-trust-badge--image">' +
-            '<img class="mega-trust-badge-logo" src="' + escapeAttr(b.src) +
-            '" alt="' + escapeAttr(b.alt) + '" loading="lazy"' +
-            ' style="' + IMG_STYLE + '" />' +
+          '<img class="mega-trust-badge-logo" src="' + escapeAttr(b.src) +
+          '" alt="' + escapeAttr(b.alt) + '" loading="lazy"' +
+          ' style="' + IMG_STYLE + '" />' +
           '</span>';
       }
       html += '</div></li>';
@@ -638,34 +638,34 @@
     $wrap.find("> ul > .mega-menu-megamenu").on("mouseenter.mega focusin.mega", positionPanels);
 
     /* 4. (legacy) Inject CTA card at the bottom of each top-level mega panel */
-//     $wrap.find("> ul > .mega-menu-megamenu").each(function () {
-//       var $li = $(this);
-//       var $panel = $li.children(".mega-sub-menu").first();
-//       if (!$panel.length || $panel.find(".mega-cta-card").length) return;
+    //     $wrap.find("> ul > .mega-menu-megamenu").each(function () {
+    //       var $li = $(this);
+    //       var $panel = $li.children(".mega-sub-menu").first();
+    //       if (!$panel.length || $panel.find(".mega-cta-card").length) return;
 
-//       var label = $.trim($li.children("a.mega-menu-link").first().text())
-//         .toLowerCase();
-//       var cta = CTA_BY_PANEL[label];
-//       if (!cta) return;
+    //       var label = $.trim($li.children("a.mega-menu-link").first().text())
+    //         .toLowerCase();
+    //       var cta = CTA_BY_PANEL[label];
+    //       if (!cta) return;
 
-//       var $card = $(
-//         '<div class="mega-cta-card">' +
-//           '<div class="mega-cta-text">' +
-//             '<span class="mega-cta-title"></span>' +
-//             '<span class="mega-cta-sub"></span>' +
-//           '</div>' +
-//           '<a class="mega-cta-btn" href="' + cta.href + '">' +
-//             '<span></span>' +
-//             ARROW_SVG +
-//           '</a>' +
-//         '</div>'
-//       );
-//       $card.find(".mega-cta-title").text(cta.title);
-//       $card.find(".mega-cta-sub").text(cta.sub);
-//       $card.find(".mega-cta-btn > span").text(cta.btn);
+    //       var $card = $(
+    //         '<div class="mega-cta-card">' +
+    //           '<div class="mega-cta-text">' +
+    //             '<span class="mega-cta-title"></span>' +
+    //             '<span class="mega-cta-sub"></span>' +
+    //           '</div>' +
+    //           '<a class="mega-cta-btn" href="' + cta.href + '">' +
+    //             '<span></span>' +
+    //             ARROW_SVG +
+    //           '</a>' +
+    //         '</div>'
+    //       );
+    //       $card.find(".mega-cta-title").text(cta.title);
+    //       $card.find(".mega-cta-sub").text(cta.sub);
+    //       $card.find(".mega-cta-btn > span").text(cta.btn);
 
-//       $panel.append($card);
-//     });
+    //       $panel.append($card);
+    //     });
   }
 
   function run() {

@@ -1,0 +1,1058 @@
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item>.mega-menu-link,
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item:hover>.mega-menu-link,
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-toggle-on>.mega-menu-link,
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item:focus>.mega-menu-link,
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item:focus-within>.mega-menu-link {
+    text-decoration: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item>.mega-menu-link {
+    position: relative;
+    /* The plugin makes this a 40px border-box with a 40px line-height, so
+     vertical padding would push the label below the logo's midline. */
+    padding: 0 18px !important;
+    height: 40px !important;
+    line-height: 40px !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0 !important;
+    color: rgba(226, 232, 240, 0.92) !important;
+    background: transparent !important;
+    transition: color 0.25s ease !important;
+    text-align: left !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item:hover>.mega-menu-link,
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-toggle-on>.mega-menu-link {
+    color: #7dd3fc !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item>.mega-menu-link .mega-indicator {
+    margin-left: 6px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.65;
+}
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-toggle-on>.mega-menu-link .mega-indicator {
+    transform: rotate(180deg);
+    opacity: 1;
+}
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-menu-megamenu>.mega-sub-menu {
+    background: #0b1226 !important;
+    background-image:
+        radial-gradient(ellipse 35% 30% at 0% 0%, rgba(56, 189, 248, 0.08), transparent 70%),
+        radial-gradient(ellipse 35% 30% at 100% 100%, rgba(129, 140, 248, 0.08), transparent 70%) !important;
+    border: 1px solid rgba(148, 163, 184, 0.15) !important;
+    border-radius: 16px !important;
+    padding: 22px 32px !important;
+    margin-top: 12px !important;
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.03),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+    position: absolute !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: 100vw !important;
+    max-width: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-menu-megamenu>.mega-sub-menu::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 22%;
+    right: 22%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(129, 140, 248, 0.55), transparent);
+    pointer-events: none;
+}
+
+#mega-menu-wrap-main-menu .mega-menu .mega-menu-row {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu .mega-menu-row>.mega-sub-menu {
+    display: grid !important;
+    grid-template-columns: repeat(var(--mega-cols, 3), 1fr) !important;
+    gap: 28px !important;
+    align-items: start !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu .mega-menu-row:empty,
+#mega-menu-wrap-main-menu .mega-menu .mega-menu-row .mega-sub-menu:empty {
+    display: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu .mega-menu-column {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    background: transparent !important;
+    list-style: none !important;
+    position: relative;
+}
+
+#mega-menu-wrap-main-menu .mega-menu .mega-menu-column+.mega-menu-column::before {
+    content: "";
+    position: absolute;
+    left: -20px;
+    top: 6px;
+    bottom: 6px;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, rgba(148, 163, 184, 0.18), transparent);
+}
+
+#mega-menu-wrap-main-menu .mega-menu .mega-menu-column>.mega-sub-menu {
+    display: block !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu .mega-menu-column .mega-menu-item {
+    list-style: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    text-align: left !important;
+}
+
+#mega-menu-wrap-main-menu .mega-block-title {
+    position: relative;
+    display: block;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 1.6px !important;
+    text-transform: uppercase !important;
+    color: #7dd3fc !important;
+    margin: 0 0 14px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12) !important;
+    text-align: left !important;
+}
+
+#mega-menu-wrap-main-menu .mega-block-title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 28px;
+    height: 2px;
+    background: linear-gradient(90deg, #38bdf8, #818cf8);
+    border-radius: 2px;
+}
+
+#mega-menu-wrap-main-menu .mega-auto-caption {
+    visibility: hidden;
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    margin: 0 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid transparent;
+    height: 0;
+    overflow: hidden;
+}
+
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-menu-item-has-children>.mega-menu-link {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    padding: 8px 10px !important;
+    margin: 0 -10px 4px !important;
+    border-radius: 8px !important;
+    text-align: left !important;
+    background: transparent !important;
+    transition: background 0.2s ease, color 0.2s ease !important;
+    line-height: 1.35 !important;
+}
+
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-menu-item-has-children>.mega-menu-link:hover {
+    background: rgba(56, 189, 248, 0.08) !important;
+    color: #7dd3fc !important;
+}
+
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-menu-item-has-children>.mega-menu-link .mega-indicator {
+    display: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-sub-menu .mega-menu-link,
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-menu-item:not(.mega-menu-item-has-children)>.mega-menu-link {
+    position: relative;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 7px 10px !important;
+    margin: 0 -10px !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    color: rgba(203, 213, 225, 0.82) !important;
+    background: transparent !important;
+    border-radius: 8px !important;
+    text-align: left !important;
+    line-height: 1.4 !important;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease !important;
+}
+
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-sub-menu .mega-menu-link:hover,
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-menu-item:not(.mega-menu-item-has-children)>.mega-menu-link:hover {
+    background: rgba(56, 189, 248, 0.06) !important;
+    color: #ffffff !important;
+    transform: translateX(3px);
+}
+
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-sub-menu .mega-indicator {
+    display: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu-item.widget_text:empty,
+#mega-menu-wrap-main-menu .mega-menu-item.mhp-removed {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#mega-menu-wrap-main-menu .textwidget:empty {
+    display: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-menu-megamenu.mega-toggle-on>.mega-sub-menu {
+    animation: megaPanelIn 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes megaPanelIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@media (max-width: 1200px) {
+    #mega-menu-wrap-main-menu .mega-menu>.mega-menu-item>.mega-menu-link {
+        padding: 12px 14px !important;
+        font-size: 14px !important;
+    }
+
+    #mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-menu-megamenu>.mega-sub-menu {
+        padding: 20px !important;
+    }
+
+    #mega-menu-wrap-main-menu .mega-menu .mega-menu-row>.mega-sub-menu {
+        gap: 20px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    #mega-menu-wrap-main-menu .mega-menu .mega-menu-row>.mega-sub-menu {
+        grid-template-columns: 1fr !important;
+        gap: 18px !important;
+    }
+
+    #mega-menu-wrap-main-menu .mega-menu .mega-menu-column+.mega-menu-column::before {
+        left: 0;
+        right: 0;
+        top: -10px;
+        bottom: auto;
+        width: auto;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.18), transparent);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    #mega-menu-wrap-main-menu *,
+    #mega-menu-wrap-main-menu *::before,
+    #mega-menu-wrap-main-menu *::after {
+        animation: none !important;
+        transition-duration: 0.15s !important;
+    }
+}
+
+/* ============================================================
+   (Duplicate block below — kept untouched per request)
+   ============================================================ */
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item>.mega-menu-link,
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item:hover>.mega-menu-link,
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-toggle-on>.mega-menu-link,
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item:focus>.mega-menu-link,
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item:focus-within>.mega-menu-link {
+    text-decoration: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item>.mega-menu-link {
+    position: relative;
+    /* The plugin makes this a 40px border-box with a 40px line-height, so
+     vertical padding would push the label below the logo's midline. */
+    padding: 0 18px !important;
+    height: 40px !important;
+    line-height: 40px !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0 !important;
+    color: rgba(226, 232, 240, 0.92) !important;
+    background: transparent !important;
+    transition: color 0.25s ease !important;
+    text-align: left !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item:hover>.mega-menu-link,
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-toggle-on>.mega-menu-link {
+    color: #7dd3fc !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item>.mega-menu-link .mega-indicator {
+    margin-left: 6px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.65;
+}
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-toggle-on>.mega-menu-link .mega-indicator {
+    transform: rotate(180deg);
+    opacity: 1;
+}
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-menu-megamenu>.mega-sub-menu {
+    background: #0b1226 !important;
+    background-image:
+        radial-gradient(ellipse 35% 30% at 0% 0%, rgba(56, 189, 248, 0.08), transparent 70%),
+        radial-gradient(ellipse 35% 30% at 100% 100%, rgba(129, 140, 248, 0.08), transparent 70%) !important;
+    border: 1px solid rgba(148, 163, 184, 0.15) !important;
+    border-radius: 16px !important;
+    padding: 22px 32px !important;
+    margin-top: 12px !important;
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.03),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+    position: absolute !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: 100vw !important;
+    max-width: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-menu-megamenu>.mega-sub-menu::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 22%;
+    right: 22%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(129, 140, 248, 0.55), transparent);
+    pointer-events: none;
+}
+
+#mega-menu-wrap-main-menu .mega-menu .mega-menu-row {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu .mega-menu-row>.mega-sub-menu {
+    display: grid !important;
+    grid-template-columns: repeat(var(--mega-cols, 3), 1fr) !important;
+    column-gap: 28px !important;
+    row-gap: 32px !important;
+    align-items: start !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu .mega-menu-row:empty,
+#mega-menu-wrap-main-menu .mega-menu .mega-menu-row .mega-sub-menu:empty {
+    display: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu .mega-menu-column {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    background: transparent !important;
+    list-style: none !important;
+    position: relative;
+}
+
+#mega-menu-wrap-main-menu .mega-menu .mega-menu-column+.mega-menu-column::before {
+    content: "";
+    position: absolute;
+    left: -20px;
+    top: 6px;
+    bottom: 6px;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, rgba(148, 163, 184, 0.18), transparent);
+}
+
+#mega-menu-wrap-main-menu .mega-menu .mega-menu-column>.mega-sub-menu {
+    display: block !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu .mega-menu-column .mega-menu-item {
+    list-style: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    text-align: left !important;
+}
+
+#mega-menu-wrap-main-menu .mega-block-title {
+    position: relative;
+    display: block;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 1.6px !important;
+    text-transform: uppercase !important;
+    color: #7dd3fc !important;
+    margin: 0 0 14px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12) !important;
+    text-align: left !important;
+}
+
+#mega-menu-wrap-main-menu .mega-block-title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 28px;
+    height: 2px;
+    background: linear-gradient(90deg, #38bdf8, #818cf8);
+    border-radius: 2px;
+}
+
+#mega-menu-wrap-main-menu .mega-auto-caption {
+    visibility: hidden;
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    margin: 0 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid transparent;
+    height: 0;
+    overflow: hidden;
+}
+
+
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-menu-item-has-children>.mega-menu-link {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    padding: 8px 10px !important;
+    margin: 0 -10px 4px !important;
+    border-radius: 8px !important;
+    text-align: left !important;
+    background: transparent !important;
+    transition: background 0.2s ease, color 0.2s ease !important;
+    line-height: 1.35 !important;
+}
+
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-menu-item-has-children>.mega-menu-link:hover {
+    background: rgba(56, 189, 248, 0.08) !important;
+    color: #7dd3fc !important;
+}
+
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-menu-item-has-children>.mega-menu-link .mega-indicator {
+    display: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-sub-menu .mega-menu-link,
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-menu-item:not(.mega-menu-item-has-children)>.mega-menu-link {
+    position: relative;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 7px 10px !important;
+    margin: 0 -10px !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    color: rgba(203, 213, 225, 0.82) !important;
+    background: transparent !important;
+    border-radius: 8px !important;
+    text-align: left !important;
+    line-height: 1.4 !important;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease !important;
+}
+
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-sub-menu .mega-menu-link:hover,
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-menu-item:not(.mega-menu-item-has-children)>.mega-menu-link:hover {
+    background: rgba(56, 189, 248, 0.06) !important;
+    color: #ffffff !important;
+    transform: translateX(3px);
+}
+
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-sub-menu .mega-indicator {
+    display: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu-item.widget_text:empty,
+#mega-menu-wrap-main-menu .mega-menu-item.mhp-removed {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#mega-menu-wrap-main-menu .textwidget:empty {
+    display: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-menu-megamenu.mega-toggle-on>.mega-sub-menu {
+    animation: megaPanelIn 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes megaPanelIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@media (max-width: 1200px) {
+    #mega-menu-wrap-main-menu .mega-menu>.mega-menu-item>.mega-menu-link {
+        padding: 12px 14px !important;
+        font-size: 14px !important;
+    }
+
+    #mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-menu-megamenu>.mega-sub-menu {
+        padding: 20px !important;
+    }
+
+    #mega-menu-wrap-main-menu .mega-menu .mega-menu-row>.mega-sub-menu {
+        gap: 20px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    #mega-menu-wrap-main-menu .mega-menu .mega-menu-row>.mega-sub-menu {
+        grid-template-columns: 1fr !important;
+        gap: 18px !important;
+    }
+
+    #mega-menu-wrap-main-menu .mega-menu .mega-menu-column+.mega-menu-column::before {
+        left: 0;
+        right: 0;
+        top: -10px;
+        bottom: auto;
+        width: auto;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.18), transparent);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    #mega-menu-wrap-main-menu *,
+    #mega-menu-wrap-main-menu *::before,
+    #mega-menu-wrap-main-menu *::after {
+        animation: none !important;
+        transition-duration: 0.15s !important;
+    }
+}
+
+#mega-menu-wrap-main-menu .mega-menu-column>.mega-sub-menu>.mega-menu-item>.mega-menu-link {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    padding: 8px 10px !important;
+    margin: 0 -10px 4px !important;
+    border-radius: 8px !important;
+    text-align: left !important;
+    background: transparent !important;
+    line-height: 1.35 !important;
+    transform: none !important;
+    transition: background 0.2s ease, color 0.2s ease !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu-column>.mega-sub-menu>.mega-menu-item>.mega-menu-link:hover {
+    background: rgba(56, 189, 248, 0.08) !important;
+    color: #7dd3fc !important;
+    transform: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu-column>.mega-sub-menu>.mega-menu-item>.mega-menu-link>.mega-indicator {
+    display: none !important;
+}
+
+#mega-menu-wrap-main-menu .mega-trust-band {
+    list-style: none !important;
+    margin: 22px -10px 0 !important;
+    padding: 18px 10px 4px !important;
+    border-top: 1px solid rgba(148, 163, 184, 0.15) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 18px !important;
+    flex-wrap: wrap !important;
+    background: transparent !important;
+}
+
+#mega-menu-wrap-main-menu .mega-trust-band-title {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 1.6px !important;
+    text-transform: uppercase !important;
+    color: #7dd3fc !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+#mega-menu-wrap-main-menu .mega-trust-band-title::after {
+    content: "" !important;
+    display: inline-block !important;
+    width: 28px !important;
+    height: 1px !important;
+    background: linear-gradient(90deg, rgba(125, 211, 252, 0.7), transparent) !important;
+}
+
+#mega-menu-wrap-main-menu .mega-trust-badges {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    align-items: center !important;
+    flex: 1 1 auto !important;
+}
+
+#mega-menu-wrap-main-menu .mega-trust-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    padding: 6px 12px !important;
+    font-size: 11.5px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.4px !important;
+    color: rgba(226, 232, 240, 0.88) !important;
+    background: rgba(148, 163, 184, 0.06) !important;
+    border: 1px solid rgba(148, 163, 184, 0.18) !important;
+    border-radius: 999px !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease !important;
+    cursor: default !important;
+}
+
+#mega-menu-wrap-main-menu .mega-trust-badge:hover {
+    background: rgba(56, 189, 248, 0.10) !important;
+    border-color: rgba(56, 189, 248, 0.45) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px) !important;
+}
+
+#mega-menu-wrap-main-menu .mega-trust-badge-dot {
+    width: 6px !important;
+    height: 6px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #38bdf8, #818cf8) !important;
+    box-shadow: 0 0 6px rgba(56, 189, 248, 0.6) !important;
+    flex-shrink: 0 !important;
+}
+
+@media (max-width: 768px) {
+    #mega-menu-wrap-main-menu .mega-trust-band {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+    }
+}
+
+
+#mega-menu-wrap-main-menu #mega-menu-main-menu>li.mega-menu-megamenu>ul.mega-sub-menu li.mega-menu-column>ul.mega-sub-menu>li.mega-menu-item li.mega-menu-item>a.mega-menu-link {
+    padding-left: 20px !important;
+}
+
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-menu-megamenu>.mega-sub-menu {
+    background: #f1f5f9 !important;
+    background-image:
+        radial-gradient(ellipse 35% 30% at 0% 0%, rgba(56, 189, 248, 0.10), transparent 70%),
+        radial-gradient(ellipse 35% 30% at 100% 100%, rgba(129, 140, 248, 0.10), transparent 70%) !important;
+    border-color: rgba(15, 23, 42, 0.10) !important;
+    box-shadow:
+        0 24px 60px rgba(15, 23, 42, 0.20),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+#mega-menu-wrap-main-menu .mega-block-title {
+    color: #0284c7 !important;
+    border-bottom-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-menu-item-has-children>.mega-menu-link {
+    color: #0f172a !important;
+}
+
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-menu-item-has-children>.mega-menu-link:hover {
+    background: rgba(2, 132, 199, 0.08) !important;
+    color: #0369a1 !important;
+}
+
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-sub-menu .mega-menu-link,
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-menu-item:not(.mega-menu-item-has-children)>.mega-menu-link {
+    color: #475569 !important;
+}
+
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-sub-menu .mega-menu-link:hover,
+#mega-menu-wrap-main-menu .mega-sub-menu .mega-menu-item:not(.mega-menu-item-has-children)>.mega-menu-link:hover {
+    background: rgba(2, 132, 199, 0.07) !important;
+    color: #0f172a !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu-column>.mega-sub-menu>.mega-menu-item>.mega-menu-link {
+    color: #0f172a !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu-column>.mega-sub-menu>.mega-menu-item>.mega-menu-link:hover {
+    background: rgba(2, 132, 199, 0.08) !important;
+    color: #0369a1 !important;
+}
+
+#mega-menu-wrap-main-menu .mega-trust-band {
+    border-top-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+#mega-menu-wrap-main-menu .mega-trust-band-title {
+    color: #0284c7 !important;
+}
+
+#mega-menu-wrap-main-menu .mega-trust-badge {
+    color: #334155 !important;
+    background: rgba(15, 23, 42, 0.04) !important;
+    border-color: rgba(15, 23, 42, 0.14) !important;
+}
+
+#mega-menu-wrap-main-menu .mega-trust-badge:hover {
+    background: rgba(2, 132, 199, 0.10) !important;
+    border-color: rgba(2, 132, 199, 0.45) !important;
+    color: #0f172a !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-menu-megamenu>.mega-sub-menu {
+    padding-top: 22px !important;
+    padding-bottom: 22px !important;
+    padding-left: clamp(32px, 6vw, 120px) !important;
+    padding-right: clamp(32px, 6vw, 120px) !important;
+}
+
+@media (max-width: 1200px) {
+    #mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-menu-megamenu>.mega-sub-menu {
+        padding-left: clamp(24px, 5vw, 60px) !important;
+        padding-right: clamp(24px, 5vw, 60px) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    #mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-menu-megamenu>.mega-sub-menu {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+}
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-menu-megamenu>.mega-sub-menu {
+    box-sizing: border-box !important;
+    border-radius: 0 !important;
+    left: var(--mega-left, 50%) !important;
+    width: var(--mega-width, 100vw) !important;
+    transform: translateX(var(--mega-tx, -50%)) !important;
+}
+
+#mega-menu-wrap-main-menu .mega-menu>.mega-menu-item.mega-menu-megamenu.mega-toggle-on>.mega-sub-menu {
+    animation: megaPanelInFixed 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+@keyframes megaPanelInFixed {
+    from {
+        opacity: 0;
+        transform: translateX(var(--mega-tx, -50%)) translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(var(--mega-tx, -50%)) translateY(0);
+    }
+}
+
+
+/* ============================================================
+   Platform panel (step 1c in mega-menu.js)
+   Laid out like the other panels: one column per product (UCD,
+   HawkINT, HawkStrike, HawkOps), each a heading with its items
+   listed beneath. An item with pages of its own (UCD's
+   capabilities) has a ☰ that opens them as an accordion under it.
+   Colours, radii and timings are reused from the light theme above.
+   Selectors include #mega-menu-main-menu so they outrank the 1-id
+   rules above; the one 2-id rule they would still lose to
+   (nested-link padding-left) has its own override.
+   ============================================================ */
+
+/* No translateX hover nudge in this panel: the ☰ sits beside its
+   label, not in it, and an open item shouldn't stay shifted. A label
+   that wraps splits evenly rather than leaving one word on a line. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree a.mega-menu-link {
+    transform: none !important;
+    text-wrap: balance;
+}
+
+/* A product with "Disable link" on (no href, e.g. HawkStrike) is a
+   plain heading: no link cursor and no hover, since it goes nowhere. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-menu-column>.mega-sub-menu>.mega-menu-item>a.mega-menu-link:not([href]) {
+    cursor: default !important;
+    background: transparent !important;
+    color: #0f172a !important;
+}
+
+/* An item with pages: label and ☰ on one line, its pages beneath. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+}
+
+/* 0% basis: a long label wraps instead of pushing its ☰ onto a new
+   line. The right padding leaves room for the ☰. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent>a.mega-menu-link {
+    flex: 1 1 0% !important;
+    min-width: 0 !important;
+    padding-right: 38px !important;
+}
+
+/* Hover and open look the same, so the open item stays lit. A
+   closed item's pages are display:none, so li:hover is the row. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent:hover>a.mega-menu-link,
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent.is-active>a.mega-menu-link {
+    background: rgba(2, 132, 199, 0.08) !important;
+    color: #0f172a !important;
+}
+
+/* An item's pages hang off a guide line that starts under the
+   item's text, so the hierarchy reads at a glance. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent>ul.mega-sub-menu {
+    display: block !important;
+    flex: 0 0 100% !important;
+    position: static !important;
+    width: auto !important;
+    margin: 0 0 0 10px !important;
+    padding: 0 0 0 4px !important;
+    border-left: 1px solid rgba(15, 23, 42, 0.10) !important;
+    background: transparent !important;
+    list-style: none !important;
+    /* !important: the plugin sets opacity: 1 on nested lists at higher
+     specificity. */
+    opacity: 0 !important;
+    /* JS slides the height (slide() in mega-menu.js) and reads the first
+     duration here to know when a slide ends, so keep height first. Not
+     !important, so the reduced-motion rule above still shortens it. */
+    transition: height 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
+}
+
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent>ul.mega-sub-menu[hidden] {
+    display: none !important;
+}
+
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent.is-active>ul.mega-sub-menu {
+    opacity: 1 !important;
+}
+
+/* Clip only while the list moves, so focus rings and hover backgrounds
+   aren't cut off once it's open. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent>ul.mega-sub-menu.is-sliding {
+    overflow: hidden !important;
+}
+
+/* The pages settle down into place as the list opens. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent>ul.mega-sub-menu>li {
+    transform: translateY(-6px);
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent.is-active>ul.mega-sub-menu>li {
+    transform: none;
+}
+
+/* The gap above and below the pages lives inside the list (not in its
+   margins), so it opens and closes with the slide instead of popping. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent>ul.mega-sub-menu>li:first-child {
+    padding-top: 2px !important;
+}
+
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent>ul.mega-sub-menu>li:last-child {
+    padding-bottom: 6px !important;
+}
+
+/* The pages: one step quieter than the items above them. Long enough
+   to outrank the nested-link `padding-left: 20px` rule above. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu>li.mega-menu-megamenu>ul.mega-sub-menu.mega-platform-tree li.mega-menu-column>ul.mega-sub-menu>li.mega-menu-item li.mega-menu-item li.mega-menu-item>a.mega-menu-link {
+    margin: 0 -10px 0 0 !important;
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    color: #64748b !important;
+}
+
+#mega-menu-wrap-main-menu #mega-menu-main-menu>li.mega-menu-megamenu>ul.mega-sub-menu.mega-platform-tree li.mega-menu-column>ul.mega-sub-menu>li.mega-menu-item li.mega-menu-item li.mega-menu-item>a.mega-menu-link:hover {
+    background: rgba(2, 132, 199, 0.07) !important;
+    color: #0f172a !important;
+}
+
+/* The ☰ button overlaps the right end of its label link, so the row's
+   hover background runs underneath it. Its negative left margin equals
+   its width plus the right margin, so it takes no room in the row.
+   position: relative paints it above the (also relative) link. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-toggle {
+    position: relative !important;
+    flex: none !important;
+    align-self: center !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    margin: 0 10px 0 -38px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: #475569 !important;
+    opacity: 0.65 !important;
+    line-height: 0 !important;
+    cursor: pointer !important;
+    transition: opacity 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-toggle svg {
+    display: block !important;
+    width: 16px !important;
+    height: 16px !important;
+    pointer-events: none !important;
+}
+
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent:hover>.mega-tree-toggle,
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent.is-active>.mega-tree-toggle {
+    color: #0369a1 !important;
+    opacity: 1 !important;
+}
+
+/* The ☰ toggles and the label navigates, so the ☰ marks itself out as
+   its own target under the pointer. */
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-toggle:hover {
+    background: rgba(2, 132, 199, 0.10) !important;
+}
+
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree a.mega-menu-link:focus-visible,
+#mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-toggle:focus-visible {
+    outline: 3px solid rgba(12, 104, 255, 0.4) !important;
+    outline-offset: 3px !important;
+    opacity: 1 !important;
+}
+
+/* Touch and the mobile menu: 44px ☰ targets. */
+@media (hover: none),
+(pointer: coarse),
+(max-width: 768px) {
+    #mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree .mega-tree-toggle {
+        width: 44px !important;
+        height: 44px !important;
+        margin: 0 10px 0 -54px !important;
+    }
+
+    #mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree li.mega-tree-parent>a.mega-menu-link {
+        padding-right: 54px !important;
+    }
+}
+
+/* ≤768px: the products stack into one column, with 44px rows.
+   The full-bleed panel rules above have no breakpoint, so in the
+   plugin's 300px off-canvas menu the panel would be viewport-wide and
+   clip the ☰ buttons; this panel returns to the plugin's own static
+   mobile layout instead. */
+@media (max-width: 768px) {
+    #mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree {
+        position: static !important;
+        left: auto !important;
+        width: auto !important;
+        transform: none !important;
+    }
+
+    #mega-menu-wrap-main-menu #mega-menu-main-menu .mega-platform-tree a.mega-menu-link {
+        min-height: 44px !important;
+    }
+}
+
+/* Desktop header row: logo | menu | right slot. Two equal 1fr side
+   columns put the menu on the true center of the header, whatever the
+   logo's width. Desktop only, since this row is display:none on tablet
+   and mobile and these rules would override that. A side column never
+   shrinks below its content, so on narrow desktops the menu shifts
+   right rather than overlapping the logo. */
+@media (min-width: 1025px) {
+    .elementor-element-f1a8763 .elementor-element-9a7bede.e-con {
+        display: grid !important;
+        grid-template-columns: 1fr auto 1fr !important;
+        align-items: center !important;
+    }
+
+    .elementor-element-f1a8763 .elementor-element-9a7bede>.elementor-element-dba713b.e-con {
+        justify-self: start !important;
+        width: auto !important;
+    }
+
+    .elementor-element-f1a8763 .elementor-element-9a7bede>.elementor-element-bdbe3bf.e-con {
+        justify-self: center !important;
+        width: auto !important;
+    }
+
+    .elementor-element-f1a8763 .elementor-element-9a7bede>.elementor-element-8dd5ceb.e-con {
+        justify-self: end !important;
+    }
+}
