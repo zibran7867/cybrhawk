@@ -1,0 +1,63 @@
+/* ============================================================
+   Sticky Navbar on Scroll
+   Targets the outer nav container: .elementor-element-f1a8763
+   ============================================================ */
+
+/* Base — keep original Elementor behavior (absolute on hero) */
+.elementor-element-f1a8763 {
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform;
+}
+
+/* Spacer that JS injects to prevent layout jump when nav becomes fixed */
+.nav-sticky-spacer {
+    width: 100%;
+    pointer-events: none;
+}
+
+/* Stuck state */
+.elementor-element-f1a8763.is-stuck {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 9999;
+    background: rgba(8, 11, 26, 0.85);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.06),
+        0 10px 30px rgba(0, 0, 0, 0.35);
+    animation: navSlideDown 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Trim the inner padding a touch when stuck for a tighter feel */
+.elementor-element-f1a8763.is-stuck>.elementor-element-99d2af0 {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    transition: padding 0.3s ease;
+}
+
+
+@keyframes navSlideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .elementor-element-f1a8763,
+    .elementor-element-f1a8763.is-stuck {
+        transition: none !important;
+        animation: none !important;
+    }
+}
