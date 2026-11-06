@@ -2827,6 +2827,111 @@
   to { transform: rotate(360deg); }
 }
 
+/* ---- Sticky core (desktop) -------------------------------------------------
+   From 1100px wide the layers are roomier cards, so their column runs
+   well past the left one; on a screen at least 640px tall the left
+   column (header, core and output) then sticks 96px from the top, as in
+   07 and 09, while the layers scroll past. The core also scales with the
+   screen's height there, so the whole column always fits under the
+   header. siem-xdr.js redraws the leads as it scrolls and marks the
+   layer level with the core .is-active: a blue card, a glowing node and
+   a bright lead.
+   ----------------------------------------------------------------------- */
+@media (min-width: 1100px) {
+  .xd-detection .xd-dt__pills {
+    gap: 18px;
+  }
+
+  .xd-detection .xd-dt__pill {
+    gap: 18px;
+    padding: 26px 28px;
+    border-radius: 16px;
+  }
+
+  .xd-detection .xd-dt__pill-ico {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+  }
+
+  .xd-detection .xd-dt__pill-ico svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .xd-detection .xd-dt__pill-title {
+    font-size: 19px;
+  }
+
+  .xd-detection .xd-dt__pill-text {
+    margin-top: 6px;
+    font-size: 15.5px;
+    line-height: 1.6;
+  }
+}
+
+@media (min-width: 1100px) and (min-height: 640px) {
+  .xd-detection .xd-dt__inner {
+    --xd-dt-core: clamp(160px, min(18vw, 24vh), 240px);
+  }
+
+  .xd-detection .xd-dt__aside {
+    position: sticky;
+    top: 96px;
+  }
+
+  /* --xd-dt-lift / --xd-dt-drop from the script: the first layer starts
+     level with the core and the last ends level with it. */
+  .xd-detection .xd-dt__layers {
+    margin-top: var(--xd-dt-lift, 0px);
+    margin-bottom: var(--xd-dt-drop, 0px);
+  }
+
+  .xd-detection .xd-dt__aside .xd-head {
+    margin-bottom: clamp(24px, 3.4vh, 48px);
+  }
+}
+
+/* White on the active card's blue wash is 13:1, the body grey 10:1. */
+.xd-detection .xd-dt__pill.is-active {
+  border-color: rgba(110, 168, 255, 0.55);
+  background: rgba(12, 104, 255, 0.12);
+  box-shadow: 0 18px 40px rgba(2, 6, 20, 0.35);
+}
+
+.xd-detection .xd-dt__pill.is-active .xd-dt__pill-ico {
+  background: var(--xd-accent);
+  color: #ffffff;
+}
+
+.xd-detection .xd-dt__pill.is-active::before {
+  box-shadow: 0 0 0 3px var(--xd-night), 0 0 12px 3px rgba(110, 168, 255, 0.75);
+}
+
+.xd-detection .xd-dt__leads path.is-active {
+  stroke: var(--xd-accent-on-dark);
+  stroke-width: 2.5;
+}
+
+/* The pills also rise in on reveal (.xd-reveal, whose rule outranks a
+   plain one), so the animated pill's list keeps the reveal's opacity and
+   transform, with its stagger, beside the colour change, which runs
+   undelayed. */
+@media (prefers-reduced-motion: no-preference) {
+  .xd-detection .xd-dt__pill,
+  .xd-detection .xd-dt__pill-ico {
+    transition: border-color 0.35s ease, background-color 0.35s ease,
+                box-shadow 0.35s ease, color 0.35s ease;
+  }
+
+  .xd-detection .xd-dt.is-animated .xd-dt__pill {
+    transition: opacity 0.6s ease calc(var(--i, 0) * 0.07s),
+                transform 0.6s var(--xd-ease) calc(var(--i, 0) * 0.07s),
+                border-color 0.35s ease, background-color 0.35s ease,
+                box-shadow 0.35s ease;
+  }
+}
+
 /* ---- Stacked (<1100px) --------------------------------------------------- */
 @media (max-width: 1099px) {
   .xd-detection .xd-dt__inner {

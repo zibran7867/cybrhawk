@@ -1295,6 +1295,10 @@
      translate cannot skew it), again whenever the section resizes. A
      short feed line carries the converged leads across to the core.
 
+     On a desktop screen at least 640px tall the left column is sticky:
+     the header and core hold still while the layers scroll past, each
+     lighting up as it comes level with the core (detectionLeads).
+
      Below 1100px the diagram stacks: header, core, then the pills with a
      single blue line down their left instead of the leads. The core,
      leads, feed and output pill are decoration (aria-hidden).
@@ -1308,26 +1312,88 @@
     return y;
   }
 
+  /* On a tall enough desktop screen the left column is sticky (see
+     siem-xdr.css), so the core holds still while the layers scroll past
+     it: the leads are redrawn on every scrolled frame while the section
+     is on screen (offsetTop follows a sticky element's stuck position),
+     and the layer level with the core is marked .is-active, with its
+     lead, as it feeds the core. Static layouts mark none. */
   function detectionLeads(root) {
     var inner = root.querySelector(".xd-dt__inner");
+    var aside = root.querySelector(".xd-dt__aside");
     var svg = root.querySelector(".xd-dt__leads");
     var feed = root.querySelector(".xd-dt__feed");
     var list = root.querySelector(".xd-dt__pills");
-    if (!inner || !svg || !feed || !list) return;
+    if (!inner || !aside || !svg || !feed || !list) return;
 
     var paths = svg.querySelectorAll("path");
     var pills = list.children;
     var frame = 0;
+    var active = -1;
+
+    // SVG elements have no classList in older browsers.
+    function mark(i, on) {
+      if (i < 0 || i >= pills.length) return;
+      pills[i].classList.toggle("is-active", on);
+      if (paths[i]) paths[i].setAttribute("class", on ? "is-active" : "");
+    }
+
+    /* While sticky, the layers' column is lifted so its first layer
+       starts level with the core, and given room below so its last layer
+       ends level with it when the column comes unstuck: every layer then
+       passes the core in turn. Measured inside each column, so the stuck
+       offset cancels out; written only on a change, so the resize it
+       causes settles at once. */
+    var lift = -1;
+    var drop = -1;
+
+    function align(sticky) {
+      var l = 0;
+      var d = 0;
+      if (sticky && pills.length) {
+        var asideTop = offsetY(aside, inner);
+        var listTop = offsetY(list, inner);
+        var first = pills[0];
+        var last = pills[pills.length - 1];
+        var coreY = offsetY(feed, inner) + feed.offsetHeight / 2 - asideTop;
+        var firstY = offsetY(first, inner) + first.offsetHeight / 2 - listTop;
+        var lastBelow = list.offsetHeight - (offsetY(last, inner) + last.offsetHeight / 2 - listTop);
+        l = Math.max(0, Math.round(coreY - firstY));
+        d = Math.max(0, Math.round(aside.offsetHeight - coreY - lastBelow));
+      }
+      if (l !== lift || d !== drop) {
+        lift = l;
+        drop = d;
+        inner.style.setProperty("--xd-dt-lift", l + "px");
+        inner.style.setProperty("--xd-dt-drop", d + "px");
+      }
+    }
 
     function draw() {
       frame = 0;
       var h = list.offsetHeight;
       if (!h || !feed.offsetHeight) return;          // stacked: the leads are hidden
+      var sticky = window.getComputedStyle(aside).position === "sticky";
+      align(sticky);
       var top = offsetY(list, inner);
       var cy = round(((offsetY(feed, inner) + feed.offsetHeight / 2 - top) / h) * 100);
+      var best = -1;
+      var bestGap = Infinity;
+
       for (var i = 0; i < paths.length && i < pills.length; i++) {
         var y = round(((offsetY(pills[i], inner) + pills[i].offsetHeight / 2 - top) / h) * 100);
         paths[i].setAttribute("d", "M0 " + cy + "C50 " + cy + " 50 " + y + " 100 " + y);
+        if (Math.abs(y - cy) < bestGap) {
+          bestGap = Math.abs(y - cy);
+          best = i;
+        }
+      }
+
+      if (!sticky) best = -1;
+      if (best !== active) {
+        mark(active, false);
+        mark(best, true);
+        active = best;
       }
     }
 
@@ -1340,6 +1406,21 @@
     } else {
       window.addEventListener("resize", queue);
     }
+
+    // Scroll only moves the core against the list while it is stuck, and
+    // only matters while the section is on screen.
+    var listening = false;
+    whileVisible(root, function (on) {
+      if (on === listening) return;
+      listening = on;
+      if (on) {
+        window.addEventListener("scroll", queue, { passive: true });
+        queue();
+      } else {
+        window.removeEventListener("scroll", queue, { passive: true });
+      }
+    });
+
     queue();
   }
 
