@@ -486,13 +486,13 @@
 
 /* ---- Layout -------------------------------------------------------------- */
 .xd-section .xd-hr__inner.xd-shell {
-  padding-top: clamp(32px, min(4vw, 6vh), 72px);
-  padding-bottom: clamp(48px, min(5.5vw, 8vh), 96px);
+  padding-top: clamp(12px, min(4vw, 3.6vh), 72px);
+  padding-bottom: clamp(24px, min(5.5vw, 5.5vh), 96px);
 }
 
 .xd-hero .xd-hr__inner {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
   align-items: center;
   gap: clamp(32px, 4vw, 64px);
 }
@@ -503,17 +503,17 @@
 }
 
 .xd-hero .xd-hr__eyebrow {
-  margin-bottom: clamp(12px, 2.4vh, 22px);
+  margin-bottom: clamp(8px, 1.8vh, 22px);
 }
 
 /* The page's one H1, at the family's display scale. Each sentence holds
    one line on desktop: the longest ("Faster Response.") is about 8.3em,
-   and 5.2vw keeps that inside the copy column from 1025px up; 8.4vh
+   and 5.2vw keeps that inside the copy column from 1025px up; 7.6vh
    keeps the three lines short enough for a short laptop screen. */
 .xd-hero .xd-hr__title {
   margin: 0;
   font-weight: 700;
-  font-size: clamp(40px, min(5.2vw, 8.4vh), 74px);
+  font-size: clamp(40px, min(5.2vw, 7.6vh), 74px);
   line-height: 1.02;
   letter-spacing: -0.03em;
   color: var(--xd-c-heading);
@@ -553,10 +553,10 @@
 }
 
 .xd-hero .xd-hr__sub {
-  max-width: 36em;
-  margin-top: clamp(14px, 2.6vh, 24px);
-  font-size: clamp(16px, min(1.35vw, 2.6vh), 20px);
-  line-height: 1.65;
+  max-width: 38em;
+  margin-top: clamp(10px, 2.2vh, 24px);
+  font-size: clamp(15px, min(1.35vw, 2.5vh), 20px);
+  line-height: 1.6;
   color: var(--xd-c-body);                   /* 12.0:1 on night */
   text-wrap: pretty;
 }
@@ -565,7 +565,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  margin-top: clamp(18px, 3.4vh, 32px);
+  margin-top: clamp(14px, 3vh, 32px);
 }
 
 .xd-hero .xd-btn--primary {
@@ -593,8 +593,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px 24px;
-  margin-top: clamp(18px, 3.6vh, 36px);
-  padding-top: clamp(12px, 2.2vh, 22px);
+  margin-top: clamp(12px, 2.8vh, 36px);
+  padding-top: clamp(8px, 1.8vh, 22px);
 }
 
 .xd-hero .xd-hr__trust::before {
@@ -706,8 +706,12 @@
    Geometry, shared by the lanes, the thread and the incident's port:
      --xd-hr-lc    the lane-name column
      --xd-hr-lg    the gap between it and the lanes
-     --xd-hr-lane  each lane's height (fixed, so the thread's numbers
-                   hold without measuring)
+     --xd-hr-lane  each lane's height (the same for every lane, so the
+                   thread's numbers hold without measuring)
+     --xd-hr-drop  the gap the thread drops across into the incident
+   On desktop the lane height and the canvas's spacing follow the
+   viewport's height (see Responsive), so the canvas fits the first
+   screen beside the copy.
    ----------------------------------------------------------------------- */
 .xd-hero .xd-hr__stage {
   position: relative;
@@ -820,6 +824,7 @@
   --xd-hr-lc: 96px;
   --xd-hr-lg: 12px;
   --xd-hr-lane: 46px;
+  --xd-hr-drop: 16px;
   padding: 14px 18px 18px;
 }
 
@@ -1007,7 +1012,7 @@
   background: #10285d;
   font-size: 13px;
   font-weight: 500;
-  line-height: 1.3;
+  line-height: 1.25;
   color: var(--xd-on-dark);
   white-space: normal;
   width: max-content;
@@ -1024,7 +1029,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 12px;
-  margin-top: 16px;
+  margin-top: var(--xd-hr-drop);
   padding: 11px 12px 11px 14px;
   border: 1px solid rgba(110, 168, 255, 0.5);
   border-radius: var(--xd-radius-sm);
@@ -1033,10 +1038,10 @@
 
 .xd-hero .xd-hr__port {
   position: absolute;
-  top: -17px;
+  top: calc(-1px - var(--xd-hr-drop));
   left: calc(var(--xd-hr-lc) + var(--xd-hr-lg) + (100% - var(--xd-hr-lc) - var(--xd-hr-lg)) * var(--end, 0) - 1px);
   width: 2px;
-  height: 17px;
+  height: calc(var(--xd-hr-drop) + 1px);
   background: var(--xd-accent-on-dark);
   box-shadow: 0 0 6px rgba(110, 168, 255, 0.55);
 }
@@ -1455,6 +1460,66 @@
 }
 
 /* ---- Responsive ----------------------------------------------------------- */
+/* Desktop: the hero fits the first screen. The copy's clamps above
+   already follow the viewport's height; here the buttons and the
+   canvas do too. Lanes run from 46px (a 900px-tall window and up) down
+   to 30px (about 580px), and each label shrinks with them so it still
+   clears the lane above; the ruler's margin keeps clearing the first
+   lane's label. Everything reaches its full size at about 900px tall. */
+@media (min-width: 1025px) {
+  /* At least the first screen (capped, for a portrait monitor), with
+     the content centred in what is left under the header. */
+  .xd-hero .xd-hr {
+    box-sizing: border-box;                  /* the header clearance counts toward the screen */
+    display: flex;
+    flex-direction: column;
+    min-height: min(100vh, 1100px);
+    min-height: min(100svh, 1100px);
+  }
+
+  .xd-hero .xd-hr__inner {
+    flex: 1 0 auto;
+    align-content: center;
+  }
+
+  .xd-hero .xd-btn {
+    padding-top: clamp(11px, 1.6vh, 14px);
+    padding-bottom: clamp(11px, 1.6vh, 14px);
+  }
+
+  .xd-hero .xd-hr__bar {
+    padding-top: clamp(8px, 1.4vh, 12px);
+    padding-bottom: clamp(8px, 1.4vh, 12px);
+  }
+
+  .xd-hero .xd-hr__body {
+    --xd-hr-lane: clamp(30px, 5.2vh, 46px);
+    --xd-hr-drop: clamp(10px, 1.8vh, 16px);
+    padding: clamp(10px, 1.6vh, 14px) 18px clamp(12px, 2vh, 18px);
+  }
+
+  .xd-hero .xd-hr__ruler {
+    margin-bottom: clamp(14px, 2vh, 16px);
+  }
+
+  .xd-hero .xd-hr__ev {
+    bottom: clamp(7px, 1.25vh, 11px);
+    padding: clamp(2px, 0.34vh, 3px) 8px;
+    font-size: clamp(11.5px, 1.45vh, 13px);
+  }
+
+  .xd-hero .xd-hr__incident {
+    padding-top: clamp(8px, 1.25vh, 11px);
+    padding-bottom: clamp(8px, 1.25vh, 11px);
+  }
+
+  .xd-hero .xd-hr__playbook {
+    margin-top: clamp(6px, 1.1vh, 10px);
+    padding-top: clamp(6px, 1vh, 9px);
+    padding-bottom: clamp(6px, 1vh, 9px);
+  }
+}
+
 /* Stacked: the copy, then the canvas, both within the gutters. The type
    goes back to sizing by width alone, since the stacked hero scrolls
    anyway; 9vw keeps each sentence on one line down to a 320px phone.
