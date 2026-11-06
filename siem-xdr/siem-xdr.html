@@ -1,0 +1,112 @@
+<!doctype html>
+<!--
+  =====================================================================
+  CybrHawk — SIEM XDR (Fusion Analytic Threat Platform) page: local preview harness
+  ---------------------------------------------------------------------
+  For previewing siem-xdr.js + siem-xdr.css in a browser. This file is
+  not deployed; on the live site Elementor supplies the containers
+  below.
+
+  Elementor setup
+  ---------------
+  1. Create 9 containers, in this order, each with Content Width set to
+     Full Width, padding 0 and no background, and its class typed into
+     Advanced → CSS Classes:
+
+       01  xd-hero           Hero
+       02  xd-challenge      The challenge
+       03  xd-platform       Platform overview
+       04  xd-capabilities   Key capabilities (target of "Tour All Features")
+       05  xd-detection      Detection deep dive
+       06  xd-usecases       Use cases
+       07  xd-impact         Business impact
+       08  xd-integrations   Integrations
+       09  xd-why            Why CybrHawk
+
+     Leave each one empty: siem-xdr.js builds the section inside it and
+     adds `xd-section` (and `xd-section--dark` where it applies), so
+     nothing else needs typing.
+
+  2. Load siem-xdr.css and siem-xdr.js the same way the other pages'
+     files are loaded.
+
+  3. The hero holds the page's only <h1>. If the page template prints the
+     WordPress page title as a second H1, hide it (Page Settings → Hide
+     Title).
+
+  4. Put the site's existing CTA container directly after Why CybrHawk,
+     and paste Appendix B.2 of the brief (CTA heading, body, both buttons
+     and the phone / email line) into it. Why CybrHawk ends on white with
+     its normal bottom padding, so the two join without a seam. The FAQ
+     (Appendix B.1) is parked for a later pass.
+
+  5. Paste Appendix C of the brief (meta title and description, slug,
+     keywords, Open Graph title) into the SEO plugin (Rank Math or Yoast).
+
+  Also check
+  ----------
+  - Two open items are marked `// TODO:` in the CONTENT block of
+    siem-xdr.js: the optional hero banner image, and the live HawkINT
+    page URL for its chip in Integrations (the chip is plain text until
+    the href is set).
+  - The site header overlays the page, so the hero clears its measured
+    height before any content (--xd-header-offset in the tokens of
+    siem-xdr.css: 90px phone, 102px tablet, 100px + 1.5vw desktop).
+    If this template's header does not overlay, set it to 0px. The fake
+    header below is fixed and shorter, so a little extra ground shows
+    under it here.
+  - Hero image: with CONTENT.hero.visual.image empty, the hero shows
+    the coded investigation canvas. Set a URL and the banner shows
+    instead (whole, never cropped), with a scan line and a mouse drift;
+    an image that fails to load falls back to the canvas.
+  - Click tracking: the hero buttons carry
+    data-xd-cta="hero-primary | hero-secondary" for GTM.
+  - Two containers below use an inner .e-con-inner (Elementor's boxed
+    layout) so both host paths are exercised.
+  =====================================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIEM XDR — preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="siem-xdr.css">
+  <style>
+    /* Preview only. */
+    body { margin: 0; font-family: "Figtree", sans-serif; }
+    .preview-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 72px; padding: 0 24px; box-sizing: border-box;
+      background: rgba(7, 11, 24, 0.85); color: #fff;
+      font-weight: 700; font-size: 18px;
+    }
+    .preview-header span { font-weight: 500; font-size: 14px; opacity: 0.7; }
+    .preview-cta {
+      display: flex; align-items: center; justify-content: center;
+      height: 320px; padding: 0 24px; background: #e9ecf2; color: #5b6478;
+      font-size: 15px; font-weight: 600; text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header class="preview-header">CybrHawk <span>Fake 72px site header</span></header>
+
+  <div class="e-con e-con-full xd-hero"></div>
+  <div class="e-con e-con-full xd-challenge"></div>
+  <div class="e-con e-con-full xd-platform"></div>
+  <div class="e-con e-con-boxed xd-capabilities"><div class="e-con-inner"></div></div>
+  <div class="e-con e-con-full xd-detection"></div>
+  <div class="e-con e-con-boxed xd-usecases"><div class="e-con-inner"></div></div>
+  <div class="e-con e-con-full xd-impact"></div>
+  <div class="e-con e-con-full xd-integrations"></div>
+  <div class="e-con e-con-full xd-why"></div>
+
+  <div class="preview-cta">Existing CTA component goes here (FAQ to be added later)</div>
+
+  <script src="siem-xdr.js"></script>
+</body>
+</html>
