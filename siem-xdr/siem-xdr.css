@@ -18,8 +18,8 @@
    single incident, which is scored and resolved. Domains never get
    their own colours; the thread is what turns them blue. Amber
    (--xd-risk) means "this threat has been scored and prioritized" and
-   appears in three places only — the hero's "Highest risk" pill, node 3
-   of the 03 rail and the 05 core's "Scored by risk" output — always as
+   appears in two places only — node 3 of the 03 rail and the 05 core's
+   "Scored by risk" output — always as
    a written label or inside an aria-hidden layer. Resolution is blue
    with a check, never green. Everything else is brand blue.
 
@@ -66,7 +66,7 @@
   --xd-text: #5b6478;                        /* body grey: 5.9:1 on white, 5.6:1 on the tint and on #f3f7ff */
   --xd-night: #070b18;
   --xd-night-2: #0d1330;
-  --xd-console: #111a3a;                     /* the hero console's body */
+  --xd-console: #111a3a;                     /* the 06 storyline console's body */
   --xd-on-dark: #ffffff;
   --xd-on-dark-body: #c3cadb;                /* 12.0:1 on #070b18, 11.1:1 on #0d1330, 10.4:1 on the console, 11.1:1 on a 4% card over night */
   --xd-on-dark-muted: #9aa3bd;               /* 7.8:1 on #070b18, 7.2:1 on #0d1330, 6.8:1 on the console. Nothing dimmer for real copy on dark */
@@ -404,17 +404,21 @@
 /* =====================================================================
    01 · Hero (.xd-hero → .xd-hr)
    ---------------------------------------------------------------------
-   A night ground the full width of the page (the script adds
-   xd-section--dark, so the shared roles turn light): the copy on the
-   left, its edge on the same line as every other section's content; on
-   the right the investigation canvas. Behind both, faint vertical time
-   gridlines that gather around the canvas, two blue glows, and a blue
-   horizon hairline along the foot. Below 1025px the canvas drops under
-   the copy.
+   "Signal convergence". A night ground the full width of the page (the
+   script adds xd-section--dark, so the shared roles turn light), the
+   copy centred on it, and behind the copy the signal field: six streams
+   entering from the screen edges, labelled and dotted with alerts, that
+   merge into one blue thread running into the glowing node between the
+   subheadline and the buttons. The script draws the field in the lede's
+   own pixels and keeps it out of the copy; below 1025px it is a compact
+   fan inside the rail. Faint vertical time gridlines, a glow behind the
+   headline and another round the node complete the ground, with a blue
+   horizon hairline along the foot.
 
-   On desktop the copy's type and spacing scale with the viewport's
-   height as well as its width (min(vw, vh) clamps), so a short laptop
-   screen shows all of it without the fold cutting through.
+   On desktop the hero fills the first screen (capped for a portrait
+   monitor) with its content centred, and the type, spacing and the
+   rail scale with the viewport's height as well as its width, so a
+   short laptop screen still shows all of it.
 
    The theme header sits over the top of this section. On desktop it is
    transparent with light links, which read on this night ground as they
@@ -424,13 +428,13 @@
 .xd-hero .xd-hr {
   position: relative;
   isolation: isolate;                        /* the decor's z-index stays inside the hero */
-  overflow: clip;                            /* the glows and the drift never widen the page */
+  overflow: clip;                            /* the field runs edge to edge and never widens the page */
   padding-top: var(--xd-header-offset);
   background-color: var(--xd-night);
   background-image: linear-gradient(180deg, var(--xd-night) 0%, #0a1129 100%);
 }
 
-/* The horizon: a blue hairline, brightest under the canvas. */
+/* The horizon: a blue hairline, brightest in the middle. */
 .xd-hero .xd-hr::after {
   content: "";
   position: absolute;
@@ -438,14 +442,10 @@
   right: 0;
   bottom: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(110, 168, 255, 0.18) 30%, rgba(110, 168, 255, 0.45) 70%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(110, 168, 255, 0.4) 50%, transparent 100%);
 }
 
-/* ---- The ground ------------------------------------------------------------
-   Time gridlines (1px every 48px, every fourth brighter), masked to an
-   ellipse round the canvas so the copy sits on plain night; a wide blue
-   glow behind the canvas and a fainter one up by the eyebrow.
-   ----------------------------------------------------------------------- */
+/* ---- The ground ------------------------------------------------------------ */
 .xd-hero .xd-hr__decor {
   position: absolute;
   inset: 0;
@@ -454,6 +454,8 @@
   pointer-events: none;
 }
 
+/* Time gridlines (1px every 48px, every fourth brighter), faded out at
+   the top and bottom and thinned behind the headline. */
 .xd-hero .xd-hr__decor::before {
   content: "";
   position: absolute;
@@ -461,67 +463,105 @@
   background-image:
     repeating-linear-gradient(90deg, var(--xd-tick-major) 0 1px, transparent 1px 192px),
     repeating-linear-gradient(90deg, var(--xd-tick) 0 1px, transparent 1px 48px);
-  -webkit-mask-image: radial-gradient(ellipse 55% 75% at 74% 55%, #000 20%, transparent 100%);
-          mask-image: radial-gradient(ellipse 55% 75% at 74% 55%, #000 20%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 55%, rgba(0, 0, 0, 0.35) 0%, #000 45%, transparent 100%);
+          mask-image: radial-gradient(ellipse 80% 70% at 50% 55%, rgba(0, 0, 0, 0.35) 0%, #000 45%, transparent 100%);
 }
 
 .xd-hero .xd-hr__glow {
   position: absolute;
-  top: 56%;
-  left: 74%;
-  width: 1000px;
-  height: 820px;
+  top: 34%;
+  left: 50%;
+  width: 1100px;
+  height: 640px;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  background: radial-gradient(closest-side, rgba(12, 104, 255, 0.26), rgba(12, 104, 255, 0.08) 55%, transparent);
+  background: radial-gradient(closest-side, rgba(12, 104, 255, 0.16), transparent);
 }
 
-.xd-hero .xd-hr__glow--soft {
-  top: 8%;
-  left: 14%;
-  width: 760px;
+.xd-hero .xd-hr__glow--node {
+  top: 100%;
+  width: 1400px;
   height: 520px;
-  background: radial-gradient(closest-side, rgba(12, 104, 255, 0.10), transparent);
+  background: radial-gradient(closest-side, rgba(12, 104, 255, 0.18), transparent);
 }
 
-/* ---- Layout -------------------------------------------------------------- */
+/* ---- Layout ------------------------------------------------------------------
+   One centred column. The lede (eyebrow, H1, sub, rail) is the field's
+   frame: the SVG spans it top to bottom and the page edge to edge, and
+   its own width is the column the streams keep out of. On desktop that
+   column leaves at least 200px of margin a side for the streams.
+   ----------------------------------------------------------------------- */
 .xd-section .xd-hr__inner.xd-shell {
   padding-top: clamp(12px, min(4vw, 3.6vh), 72px);
-  padding-bottom: clamp(24px, min(5.5vw, 5.5vh), 96px);
+  padding-bottom: clamp(18px, min(5.5vw, 5vh), 96px);
 }
 
 .xd-hero .xd-hr__inner {
-  display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: clamp(32px, 4vw, 64px);
+  text-align: center;
 }
 
-.xd-hero .xd-hr__copy {
-  min-width: 0;
-  max-width: 660px;
+.xd-hero .xd-hr__lede {
+  position: relative;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 820px;
 }
 
-.xd-hero .xd-hr__eyebrow {
-  margin-bottom: clamp(8px, 1.8vh, 22px);
+/* The field and its labels: page-wide, behind the copy. */
+.xd-hero .xd-hr__field,
+.xd-hero .xd-hr__tags {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  height: 100%;
+  pointer-events: none;
+}
+
+.xd-hero .xd-hr__field {
+  display: block;
+  overflow: visible;
+}
+
+.xd-hero .xd-hr__eyebrow,
+.xd-hero .xd-hr__title,
+.xd-hero .xd-hr__sub,
+.xd-hero .xd-hr__rail,
+.xd-hero .xd-hr__actions,
+.xd-hero .xd-hr__trust {
+  position: relative;
+  z-index: 1;
+}
+
+/* Balanced, so a phone's wrapped eyebrow splits evenly. */
+.xd-section .xd-hr__eyebrow.xd-eyebrow {
+  justify-content: center;
+  text-wrap: balance;
+  margin-bottom: clamp(10px, 2vh, 22px);
 }
 
 /* The page's one H1, at the family's display scale. Each sentence holds
    one line on desktop: the longest ("Faster Response.") is about 8.3em,
-   and 5.2vw keeps that inside the copy column from 1025px up; 7.6vh
-   keeps the three lines short enough for a short laptop screen. */
+   which 5.6vw keeps inside the column from 1025px up; 7.6vh keeps the
+   three lines short enough for a short laptop screen. */
 .xd-hero .xd-hr__title {
   margin: 0;
   font-weight: 700;
-  font-size: clamp(40px, min(5.2vw, 7.6vh), 74px);
+  font-size: clamp(40px, min(5.6vw, 7.6vh), 80px);
   line-height: 1.02;
   letter-spacing: -0.03em;
   color: var(--xd-c-heading);
 }
 
 /* Each line is a block (the mask for its entrance) around a block of
-   text. On phones a sentence may wrap; balance keeps its two halves
-   even. */
+   text. On phones a sentence may wrap; balance keeps its halves even. */
 .xd-hero .xd-hr__line,
 .xd-hero .xd-hr__line-in {
   display: block;
@@ -532,12 +572,14 @@
 }
 
 /* Line 3 is the resolution, so it alone takes the blue, as a gradient
-   across the words themselves (fit-content, so the gradient spans the
-   text and not the column). Both ends are 7:1 and up on night; the
-   solid colour is the fallback, and forced colours get plain text. */
+   across the words themselves (fit-content, centred, so the gradient
+   spans the text and not the column). Both ends are 7:1 and up on
+   night; the solid colour is the fallback, and forced colours get plain
+   text. */
 .xd-hero .xd-hr__line--3 .xd-hr__line-in {
   width: fit-content;
   max-width: 100%;
+  margin: 0 auto;
   color: var(--xd-accent-on-dark);
   background-image: linear-gradient(90deg, #5c9cff 0%, #9cc4ff 100%);
   -webkit-background-clip: text;
@@ -553,19 +595,142 @@
 }
 
 .xd-hero .xd-hr__sub {
-  max-width: 38em;
-  margin-top: clamp(10px, 2.2vh, 24px);
-  font-size: clamp(15px, min(1.35vw, 2.5vh), 20px);
+  max-width: 40em;
+  margin: clamp(12px, 2.4vh, 26px) auto 0;
+  font-size: clamp(16px, min(1.3vw, 2.5vh), 19px);
   line-height: 1.6;
   color: var(--xd-c-body);                   /* 12.0:1 on night */
   text-wrap: pretty;
 }
 
+/* ---- The rail and its node ---------------------------------------------------
+   An empty band between the sub and the buttons: the threads run along
+   its middle into the node, and below 1025px the fan lives in its upper
+   half. A wide blue glow sits behind the node.
+   ----------------------------------------------------------------------- */
+.xd-hero .xd-hr__rail {
+  width: 100%;
+  height: clamp(40px, 7vh, 72px);
+  margin-top: clamp(4px, 1vh, 12px);
+}
+
+.xd-hero .xd-hr__rail::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(560px, 90vw);
+  height: 150px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(12, 104, 255, 0.28), transparent);
+  pointer-events: none;
+}
+
+/* 18px across: siem-xdr.js stops the threads at its 9px rim. */
+.xd-hero .xd-hr__node {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #cfe1ff 0%, var(--xd-accent-on-dark) 45%, var(--xd-accent) 100%);
+  box-shadow: 0 0 0 4px rgba(110, 168, 255, 0.22),
+              0 0 18px 4px rgba(12, 104, 255, 0.7),
+              0 0 60px 12px rgba(12, 104, 255, 0.35);
+}
+
+/* A ring that breathes out of the node while the field flows. */
+.xd-hero .xd-hr__node::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 1.5px solid rgba(110, 168, 255, 0.6);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+/* ---- The signal field (aria-hidden) ----------------------------------------
+   In the lede's own pixels, so strokes are in px. Leads in quiet event
+   grey with hollow alert rings on them; the thread in blue with a glow.
+   Pulses are hidden until the field flows.
+   ----------------------------------------------------------------------- */
+.xd-hero .xd-hr__lead {
+  fill: none;
+  stroke: rgba(160, 176, 214, 0.34);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.xd-hero .xd-hr__thread {
+  fill: none;
+  stroke: var(--xd-accent-on-dark);
+  stroke-width: 2;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px rgba(110, 168, 255, 0.7));
+}
+
+.xd-hero .xd-hr__alert {
+  fill: var(--xd-night);
+  stroke: rgba(160, 176, 214, 0.65);
+  stroke-width: 1.5;
+}
+
+.xd-hero .xd-hr__pulse,
+.xd-hero .xd-hr__flow {
+  fill: none;
+  stroke-linecap: round;
+  opacity: 0;
+}
+
+/* Each path is 100 long (pathLength): a short dash parked just before
+   its start, travelling to past its end. */
+.xd-hero .xd-hr__pulse {
+  stroke: rgba(214, 228, 255, 0.95);
+  stroke-width: 2;
+  stroke-dasharray: 5 200;
+  stroke-dashoffset: 5;
+}
+
+.xd-hero .xd-hr__flow {
+  stroke: #b5d2ff;
+  stroke-width: 3;
+  stroke-dasharray: 12 200;
+  stroke-dashoffset: 12;
+  filter: drop-shadow(0 0 4px rgba(110, 168, 255, 0.9));
+}
+
+/* Each stream's name, at the screen edge just above its line. Muted on
+   night: 7.8:1. */
+.xd-hero .xd-hr__tag {
+  position: absolute;
+  transform: translateY(calc(-100% - 9px));
+  font-family: var(--xd-mono);
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--xd-on-dark-muted);
+}
+
+.xd-hero .xd-hr__tag--right {
+  text-align: right;
+}
+
+.xd-hero .xd-hr.is-compact .xd-hr__tags {
+  display: none;
+}
+
+/* ---- Buttons and trust -------------------------------------------------------- */
 .xd-hero .xd-hr__actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 14px;
-  margin-top: clamp(14px, 3vh, 32px);
+  margin-top: clamp(4px, 1vh, 12px);
 }
 
 .xd-hero .xd-btn--primary {
@@ -587,14 +752,17 @@
   color: var(--xd-heading);
 }
 
-/* The hairline above is a pseudo-element, so it can draw in on load. */
+/* The hairline above fades out at both ends and draws out from the
+   middle on load. */
 .xd-hero .xd-hr__trust {
-  position: relative;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px 24px;
-  margin-top: clamp(12px, 2.8vh, 36px);
-  padding-top: clamp(8px, 1.8vh, 22px);
+  justify-content: center;
+  gap: 10px clamp(18px, 2vw, 28px);
+  width: 100%;
+  max-width: 1040px;
+  margin-top: clamp(12px, 2.6vh, 36px);
+  padding-top: clamp(10px, 1.8vh, 22px);
 }
 
 .xd-hero .xd-hr__trust::before {
@@ -604,7 +772,7 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: var(--xd-border-dark);
+  background: linear-gradient(90deg, transparent, var(--xd-border-dark) 20%, var(--xd-border-dark) 80%, transparent);
 }
 
 .xd-hero .xd-hr__trust-item {
@@ -614,6 +782,7 @@
   font-weight: 600;
   font-size: 14.5px;
   line-height: 1.4;
+  text-align: left;
   color: var(--xd-on-dark);
 }
 
@@ -631,544 +800,21 @@
   stroke-width: 2.4;
 }
 
-/* ---- The visual column ---------------------------------------------------- */
-.xd-hero .xd-hr__visual {
-  position: relative;
-  min-width: 0;
-  display: flex;
-  justify-content: center;
-}
-
-.xd-hero .xd-hr__float {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-/* svh where supported, so a phone's collapsing toolbar does not change
-   it; vh before it as the fallback. */
-.xd-hero .xd-hr__media {
-  flex: none;
-  position: relative;
-  display: block;
-  width: 100%;
-  max-width: max(420px, calc(100vh - var(--xd-header-offset) - 80px));
-  max-width: max(420px, calc(100svh - var(--xd-header-offset) - 80px));
-  overflow: hidden;
-}
-
-/* Every edge fades over 6% into the night. */
-.xd-hero .xd-hr__img {
-  display: block;
-  width: 100%;
-  height: auto;
-  -webkit-mask-image:
-    linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%),
-    linear-gradient(180deg, transparent 0, #000 6%, #000 94%, transparent 100%);
-  -webkit-mask-composite: source-in;
-          mask-image:
-    linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%),
-    linear-gradient(180deg, transparent 0, #000 6%, #000 94%, transparent 100%);
-          mask-composite: intersect;
-}
-
-/* A soft blue band with a bright leading edge that sweeps down the
-   banner now and then. Screen blend, so it only ever lightens. Hidden
-   (opacity 0) unless the ambient animation runs. */
-.xd-hero .xd-hr__scan {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  height: 28%;
-  pointer-events: none;
-  opacity: 0;
-  background: linear-gradient(180deg,
-    rgba(110, 168, 255, 0) 0%,
-    rgba(110, 168, 255, 0.10) 72%,
-    rgba(150, 195, 255, 0.45) 99%,
-    rgba(150, 195, 255, 0) 100%);
-  mix-blend-mode: screen;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
-          mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
-}
-
-/* ---- The investigation canvas --------------------------------------------
-   A console on night: chrome bar, then a time ruler, six swimlanes of
-   alerts, the incident card and the playbook row. Its default styles
-   are the FINAL state (thread drawn, the four events blue and their
-   lanes lit, the noise fallen back, card, pill and playbook shown,
-   "Contained"), which is what reduced motion shows; the loop's step
-   rules further down only apply while the script is stepping it.
-
-   Geometry, shared by the lanes, the thread and the incident's port:
-     --xd-hr-lc    the lane-name column
-     --xd-hr-lg    the gap between it and the lanes
-     --xd-hr-lane  each lane's height (the same for every lane, so the
-                   thread's numbers hold without measuring)
-     --xd-hr-drop  the gap the thread drops across into the incident
-   On desktop the lane height and the canvas's spacing follow the
-   viewport's height (see Responsive), so the canvas fits the first
-   screen beside the copy.
-   ----------------------------------------------------------------------- */
-.xd-hero .xd-hr__stage {
-  position: relative;
-  width: 100%;
-  max-width: 580px;
-}
-
-/* A pool of blue light under the canvas, so it sits on the ground rather
-   than floating over it. */
-.xd-hero .xd-hr__stage::before {
-  content: "";
-  position: absolute;
-  left: 8%;
-  right: 8%;
-  bottom: -40px;
-  height: 120px;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(12, 104, 255, 0.35), transparent);
-  pointer-events: none;
-}
-
-/* A gradient hairline border: brightest at the top-left corner, where
-   the light comes from. Two backgrounds, one clipped to the padding box
-   (the body) and one to the border box (the hairline); the solid colour
-   first, for Elementor's lazy-load. */
-.xd-hero .xd-hr__console {
-  position: relative;
-  overflow: hidden;
-  border: 1px solid transparent;
-  border-radius: 18px;
-  background-color: var(--xd-console);
-  background:
-    linear-gradient(var(--xd-console), var(--xd-console)) padding-box,
-    linear-gradient(150deg, rgba(110, 168, 255, 0.65) 0%, rgba(255, 255, 255, 0.12) 30%, rgba(255, 255, 255, 0.06) 65%, rgba(110, 168, 255, 0.35) 100%) border-box;
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.06) inset,
-    0 40px 90px rgba(2, 6, 20, 0.6);
-}
-
-/* Wraps on a narrow canvas: the status chip drops under the label
-   rather than squeezing it. */
-.xd-hero .xd-hr__bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 10px;
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border-bottom: 1px solid var(--xd-border-dark);
-}
-
-/* Neutral dots, not traffic lights: amber means "scored" here. */
-.xd-hero .xd-hr__dots {
-  display: inline-flex;
-  gap: 6px;
-}
-
-.xd-hero .xd-hr__dots i {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.18);
-}
-
-.xd-hero .xd-hr__label {
-  flex: 1 1 auto;
-  min-width: 0;
-  font-family: var(--xd-mono);
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  color: var(--xd-on-dark-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* The three state words share one grid cell; only the current one is
-   opaque, so the chip never changes width mid-loop. */
-.xd-hero .xd-hr__status {
-  display: grid;
-  margin-left: auto;
-}
-
-.xd-hero .xd-hr__state {
-  grid-area: 1 / 1;
-  justify-self: end;
-  padding: 4px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 999px;
-  font-family: var(--xd-mono);
-  font-size: 12px;
-  line-height: 1.3;
-  white-space: nowrap;
-  color: var(--xd-on-dark-muted);
-  opacity: 0;
-}
-
-.xd-hero .xd-hr__state--correlated,
-.xd-hero .xd-hr__state--contained {
-  border-color: rgba(110, 168, 255, 0.4);
-  background: rgba(12, 104, 255, 0.16);
-  color: var(--xd-accent-on-dark);
-}
-
-.xd-hero .xd-hr__state--contained {
-  opacity: 1;
-}
-
-.xd-hero .xd-hr__body {
-  --xd-hr-lc: 96px;
-  --xd-hr-lg: 12px;
-  --xd-hr-lane: 46px;
-  --xd-hr-drop: 16px;
-  padding: 14px 18px 18px;
-}
-
-/* A time ruler with no numbers over the lanes: ticks every 24px on a
-   hairline. Its bottom margin clears the first lane's label. */
-.xd-hero .xd-hr__ruler {
-  display: block;
-  height: 7px;
-  margin: 0 0 16px calc(var(--xd-hr-lc) + var(--xd-hr-lg));
-  background:
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.16) 0 1px, transparent 1px 24px) 0 0 / 100% 6px no-repeat,
-    linear-gradient(rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.10)) 0 100% / 100% 1px no-repeat;
-}
-
-/* Stacking inside the lanes: the thread at the bottom (so its veil, a
-   flat console-coloured block, never hides anything else), then the
-   rows with their hairlines, alerts and events, then the sweep. */
-.xd-hero .xd-hr__lanes {
-  position: relative;
-}
-
-.xd-hero .xd-hr__thread,
-.xd-hero .xd-hr__sweep {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: calc(var(--xd-hr-lc) + var(--xd-hr-lg));
-  right: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.xd-hero .xd-hr__thread {
-  z-index: 0;
-}
-
-.xd-hero .xd-hr__thread svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  fill: none;
-}
-
-.xd-hero .xd-hr__thread path {
-  stroke: var(--xd-accent-on-dark);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
-  filter: drop-shadow(0 0 5px rgba(110, 168, 255, 0.55));
-}
-
-/* Draws the thread by sliding off it (transform only). Default: gone,
-   the thread drawn. */
-.xd-hero .xd-hr__veil {
-  position: absolute;
-  inset: -4px;
-  background: var(--xd-console);
-  transform: translateX(101%);
-}
-
-.xd-hero .xd-hr__row {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: var(--xd-hr-lc) minmax(0, 1fr);
-  column-gap: var(--xd-hr-lg);
-  align-items: center;
-  height: var(--xd-hr-lane);
-}
-
-/* The lane's name, led by a small ring that fills blue once the thread
-   joins its lane (only joined lanes have an event). Muted is 6.8:1 on
-   the console, the blue 7.1:1. */
-.xd-hero .xd-hr__name {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  min-width: 0;
-  overflow: hidden;
-  font-family: var(--xd-mono);
-  font-weight: 600;
-  font-size: 11px;
-  line-height: 1.2;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: var(--xd-on-dark-muted);
-}
-
-.xd-hero .xd-hr__name::before {
-  content: "";
-  flex: none;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1.5px var(--xd-event-on-dark);
-}
-
-.xd-hero .xd-hr__row.is-joined .xd-hr__name {
-  color: var(--xd-accent-on-dark);
-}
-
-.xd-hero .xd-hr__row.is-joined .xd-hr__name::before {
-  background: var(--xd-accent-on-dark);
-  box-shadow: inset 0 0 0 1.5px var(--xd-accent-on-dark);
-}
-
-.xd-hero .xd-hr__lane {
-  position: relative;
-  align-self: stretch;
-}
-
-.xd-hero .xd-hr__lane::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.07);
-}
-
-/* The everyday alerts: small grey dots on the lane line, fallen back
-   once the storyline is found. */
-.xd-hero .xd-hr__noise {
-  position: absolute;
-  top: 50%;
-  left: calc(var(--x, 0) * 1%);
-  width: 6px;
-  height: 6px;
-  margin: -3px 0 0 -3px;
-  border-radius: 50%;
-  background: rgba(160, 176, 214, 0.7);
-  opacity: 0.4;
-}
-
-/* An event: a zero-height box from its dot to the lane's right end, on
-   the lane line. Its dot sits at the box's left end; its label above and
-   to the right, and as wide as the box allows (wrapping, upwards, on a
-   narrow canvas). */
-.xd-hero .xd-hr__event {
-  position: absolute;
-  top: 50%;
-  left: calc(var(--x, 0) * 1%);
-  right: 0;
-  height: 0;
-}
-
-/* Grey ring underneath, blue on top once stitched (a crossfade, so only
-   opacity changes). */
-.xd-hero .xd-hr__dot {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 12px;
-  height: 12px;
-  margin: -6px 0 0 -6px;
-  border-radius: 50%;
-  background: var(--xd-console);
-  box-shadow: inset 0 0 0 2px rgba(160, 176, 214, 0.75);
-}
-
-.xd-hero .xd-hr__dot::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: var(--xd-accent-on-dark);
-  box-shadow: 0 0 0 4px rgba(110, 168, 255, 0.2), 0 0 14px rgba(110, 168, 255, 0.6);
-}
-
-/* Solid fills (the console blended with the blue, or with white), so
-   nothing behind shows through. White on the joined fill is 13:1; the
-   unjoined text is 9.6:1 on its fill. */
-.xd-hero .xd-hr__ev {
-  position: absolute;
-  left: -4px;
-  bottom: 11px;
-  max-width: calc(100% + 4px);
-  padding: 3px 8px;
-  border: 1px solid rgba(110, 168, 255, 0.5);
-  border-radius: 6px;
-  background: #10285d;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.25;
-  color: var(--xd-on-dark);
-  white-space: normal;
-  width: max-content;
-}
-
-/* The stitched incident. White on this blue wash is 14:1; the amber
-   pill's text is 9.6:1 on it. The port is where the thread arrives: a
-   2px drop from the foot of the lanes across the gap to a dot on the
-   card's top edge, at the last event's x (--end, from the script),
-   measured with the same geometry as the lanes. */
-.xd-hero .xd-hr__incident {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 12px;
-  margin-top: var(--xd-hr-drop);
-  padding: 11px 12px 11px 14px;
-  border: 1px solid rgba(110, 168, 255, 0.5);
-  border-radius: var(--xd-radius-sm);
-  background: rgba(12, 104, 255, 0.18);
-}
-
-.xd-hero .xd-hr__port {
-  position: absolute;
-  top: calc(-1px - var(--xd-hr-drop));
-  left: calc(var(--xd-hr-lc) + var(--xd-hr-lg) + (100% - var(--xd-hr-lc) - var(--xd-hr-lg)) * var(--end, 0) - 1px);
-  width: 2px;
-  height: calc(var(--xd-hr-drop) + 1px);
-  background: var(--xd-accent-on-dark);
-  box-shadow: 0 0 6px rgba(110, 168, 255, 0.55);
-}
-
-.xd-hero .xd-hr__port::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -4px;
-  width: 8px;
-  height: 8px;
-  margin-left: -4px;
-  border-radius: 50%;
-  background: var(--xd-accent-on-dark);
-  box-shadow: 0 0 0 3px rgba(110, 168, 255, 0.25);
-}
-
-.xd-hero .xd-hr__incident-text {
-  flex: 1 1 12em;
-  min-width: 0;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 1.35;
-  color: var(--xd-on-dark);
-}
-
-.xd-hero .xd-hr__risk {
-  flex: none;
-  padding: 3px 9px;
-  border: 1px solid rgba(242, 165, 22, 0.55);
-  border-radius: 999px;
-  background: rgba(242, 165, 22, 0.14);
-  font-family: var(--xd-mono);
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 1.3;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-  color: var(--xd-risk-on-dark);
-}
-
-.xd-hero .xd-hr__playbook {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 10px;
-  padding: 9px 12px;
-  border: 1px dashed rgba(110, 168, 255, 0.4);
-  border-radius: var(--xd-radius-sm);
-  font-size: 13.5px;
-  line-height: 1.4;
-  color: var(--xd-on-dark-body);
-}
-
-.xd-hero .xd-hr__node {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--xd-accent);
-  color: #ffffff;
-}
-
-.xd-hero .xd-hr__node svg {
-  display: block;
-  width: 14px;
-  height: 14px;
-  stroke-width: 2.6;
-}
-
-.xd-hero .xd-hr__playbook-text {
-  min-width: 0;
-}
-
-/* The time cursor: a bright 1px line with a faint wash trailing it,
-   sweeping the lanes in step 0 only. The box is the lanes' width, its
-   line on the right edge, so translateX(-100%) parks the line at the
-   lanes' start and none puts it at their end. Default: hidden. */
-.xd-hero .xd-hr__sweep {
-  z-index: 2;
-}
-
-.xd-hero .xd-hr__cursor {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transform: translateX(-100%);
-  background: linear-gradient(90deg, transparent 70%, rgba(110, 168, 255, 0.08));
-}
-
-.xd-hero .xd-hr__cursor::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 1px;
-  background: rgba(150, 195, 255, 0.85);
-  box-shadow: 0 0 12px 1px rgba(110, 168, 255, 0.6);
-}
-
 /* ---- Motion ---------------------------------------------------------------
-   One orchestrated entrance, about 1.2s, on each element's inline --d:
-     0ms      the eyebrow fades up and its stitch draws
-     80-240   the three H1 lines rise out of their masks, one by one
-     150      the glows fade up
-     300      the canvas rises and settles (or the banner, from a 1.1 zoom)
-     320-400  the sub and the buttons fade up; the trust hairline draws
-     480+70n  the trust points arrive in turn, each tick popping in
-   Then the canvas loops (or the banner lives quietly: the scan line
-   every 7s), and either drifts with the mouse. Everything below runs
-   only without a reduced-motion preference, so that preference (even
-   one switched on mid-loop) always shows the final, still state.
-
-   The loop, on data-step:
-     0 · Separate alerts  the cursor sweeps the lanes in 2s and every
-                          alert arrives as it passes (delay from its own
-                          --x); the four events are grey rings.
-     1 · Correlated       the noise falls back; the thread draws left to
-                          right, each event and its lane turning blue as
-                          it is reached; the incident card, then its amber
-                          "Highest risk" pill.
-     2 · Contained        the playbook row and its check.
-     3 · hold             the defaults.
+   One orchestrated entrance, about 2s:
+     0ms        the eyebrow fades up and its stitch draws
+     80-240     the three H1 lines rise out of their masks, one by one
+     250+120k   each stream draws in from the screen edge (1.1s), its
+                label and alerts fading in behind it
+     320-420    the sub and the buttons fade up
+     520+70n    the trust points arrive in turn, each tick popping in
+     1250       the two threads draw in toward the node
+     1700       the node pops in
+   Then, while the hero is on screen, the field flows: a pale pulse runs
+   down each stream in turn and a blue one carries on along the thread
+   into the node, which breathes out a ring. Everything below runs only
+   without a reduced-motion preference, so that preference (even one
+   switched on mid-flow) always shows the still, drawn field.
    ----------------------------------------------------------------------- */
 @media (prefers-reduced-motion: no-preference) {
   .xd-hero .xd-hr.is-animated .xd-hr__in {
@@ -1195,8 +841,8 @@
   }
 
   .xd-hero .xd-hr.is-animated .xd-hr__trust::before {
-    transform-origin: left center;
-    animation: xd-draw 0.9s var(--xd-ease) 0.45s both;
+    transform-origin: center;
+    animation: xd-draw 0.9s var(--xd-ease) 0.5s both;
   }
 
   .xd-hero .xd-hr.is-animated .xd-hr__check {
@@ -1208,195 +854,54 @@
     animation: xd-fade 1.6s ease 0.15s both;
   }
 
-  .xd-hero .xd-hr.is-animated .xd-hr__stage {
-    animation: xd-canvas-in 0.9s var(--xd-ease) 300ms both;
+  .xd-hero .xd-hr.is-animated .xd-hr__lead {
+    stroke-dasharray: 100;
+    animation: xd-hr-draw 1.1s cubic-bezier(0.45, 0, 0.25, 1) both;
+    animation-delay: calc(0.25s + var(--k, 0) * 0.12s);
   }
 
-  .xd-hero .xd-hr.is-animated .xd-hr__img {
-    animation: xd-settle 2s var(--xd-ease) 0.15s both;
+  .xd-hero .xd-hr.is-animated .xd-hr__alert,
+  .xd-hero .xd-hr.is-animated .xd-hr__tag {
+    animation: xd-fade 0.6s ease both;
+    animation-delay: calc(0.6s + var(--k, 0) * 0.12s);
   }
 
-  .xd-hero .xd-hr.is-animated .xd-hr__scan {
-    animation: xd-scan 7s ease-in-out 2.2s infinite;
+  .xd-hero .xd-hr.is-animated .xd-hr__thread {
+    stroke-dasharray: 100;
+    animation: xd-hr-draw 0.6s var(--xd-ease) 1.25s both;
   }
 
-  .xd-hero .xd-hr.is-paused .xd-hr__scan {
+  .xd-hero .xd-hr.is-animated .xd-hr__rail::before {
+    animation: xd-fade 1.2s ease 1.4s both;
+  }
+
+  .xd-hero .xd-hr.is-animated .xd-hr__node {
+    animation: xd-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1.7s both;
+  }
+
+  /* The flow: a 4.2s cycle per stream, the six a beat apart. */
+  .xd-hero .xd-hr.is-flowing .xd-hr__pulse {
+    animation: xd-hr-pulse 4.2s linear infinite;
+    animation-delay: calc(2.4s + var(--k, 0) * 0.7s);
+  }
+
+  .xd-hero .xd-hr.is-flowing .xd-hr__flow {
+    animation: xd-hr-flow 4.2s linear infinite;
+    animation-delay: calc(2.4s + var(--k, 0) * 0.7s);
+  }
+
+  .xd-hero .xd-hr.is-flowing .xd-hr__node::after {
+    animation: xd-hr-breathe 0.7s ease-out 2.4s infinite;
+  }
+
+  .xd-hero .xd-hr.is-paused .xd-hr__pulse,
+  .xd-hero .xd-hr.is-paused .xd-hr__flow,
+  .xd-hero .xd-hr.is-paused .xd-hr__node::after {
     animation-play-state: paused;
   }
 
   .xd-section .xd-btn svg {
     transition: transform 0.25s ease;
-  }
-
-  .xd-hero .xd-hr__stage.is-looping .xd-hr__body {
-    transition: opacity 0.45s ease;
-  }
-
-  .xd-hero .xd-hr__stage.is-looping .xd-hr__noise,
-  .xd-hero .xd-hr__stage.is-looping .xd-hr__event,
-  .xd-hero .xd-hr__stage.is-looping .xd-hr__dot::after,
-  .xd-hero .xd-hr__stage.is-looping .xd-hr__ev,
-  .xd-hero .xd-hr__stage.is-looping .xd-hr__name,
-  .xd-hero .xd-hr__stage.is-looping .xd-hr__name::before,
-  .xd-hero .xd-hr__stage.is-looping .xd-hr__incident,
-  .xd-hero .xd-hr__stage.is-looping .xd-hr__risk,
-  .xd-hero .xd-hr__stage.is-looping .xd-hr__playbook,
-  .xd-hero .xd-hr__stage.is-looping .xd-hr__state,
-  .xd-hero .xd-hr__stage.is-looping .xd-hr__cursor {
-    transition: opacity 0.5s ease, transform 0.6s var(--xd-ease),
-                color 0.4s ease, background-color 0.4s ease,
-                border-color 0.4s ease, box-shadow 0.4s ease;
-  }
-
-  .xd-hero .xd-hr__stage.is-looping .xd-hr__veil {
-    transition: transform 1.2s cubic-bezier(0.4, 0, 0.6, 1) 0.1s;
-  }
-
-  .xd-hero .xd-hr__stage.is-looping .xd-hr__node svg {
-    transition: transform 0.4s var(--xd-ease) 0.25s;
-  }
-
-  /* While looping, the cursor rests at the lanes' end, hidden. */
-  .xd-hero .xd-hr__stage.is-looping .xd-hr__cursor {
-    transform: none;
-  }
-
-  /* 0 · Separate alerts. */
-  .xd-hero .xd-hr__stage.is-looping[data-step="0"] .xd-hr__cursor {
-    opacity: 1;
-    transition: opacity 0.3s ease, transform 2s linear 0.15s;
-  }
-
-  .xd-hero .xd-hr__stage.is-looping[data-step="0"] .xd-hr__noise,
-  .xd-hero .xd-hr__stage.is-looping[data-step="0"] .xd-hr__event {
-    transition-delay: calc(0.15s + var(--x, 0) * 0.02s);
-  }
-
-  .xd-hero .xd-hr__stage.is-looping[data-step="0"] .xd-hr__noise {
-    opacity: 1;
-  }
-
-  .xd-hero .xd-hr__stage.is-looping[data-step="0"] .xd-hr__dot::after {
-    opacity: 0;
-  }
-
-  .xd-hero .xd-hr__stage.is-looping[data-step="0"] .xd-hr__veil {
-    transform: none;
-  }
-
-  .xd-hero .xd-hr__stage.is-looping[data-step="0"] .xd-hr__incident,
-  .xd-hero .xd-hr__stage.is-looping[data-step="0"] .xd-hr__playbook,
-  .xd-hero .xd-hr__stage.is-looping[data-step="1"] .xd-hr__playbook {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-
-  .xd-hero .xd-hr__stage.is-looping[data-step="0"] .xd-hr__risk {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-
-  .xd-hero .xd-hr__stage.is-looping[data-step="0"] .xd-hr__node svg,
-  .xd-hero .xd-hr__stage.is-looping[data-step="1"] .xd-hr__node svg {
-    transform: scale(0);
-  }
-
-  .xd-hero .xd-hr__stage.is-looping[data-step="0"] .xd-hr__state--separate,
-  .xd-hero .xd-hr__stage.is-looping[data-step="1"] .xd-hr__state--correlated {
-    opacity: 1;
-  }
-
-  .xd-hero .xd-hr__stage.is-looping[data-step="0"] .xd-hr__state--contained,
-  .xd-hero .xd-hr__stage.is-looping[data-step="1"] .xd-hr__state--contained {
-    opacity: 0;
-  }
-
-  /* Unjoined looks, shared by step 0 and the clearing below. */
-  .xd-hero .xd-hr__stage.is-looping[data-step="0"] .xd-hr__ev,
-  .xd-hero .xd-hr__stage.is-looping.is-clearing .xd-hr__ev {
-    border-color: rgba(255, 255, 255, 0.14);
-    background-color: #182143;
-    color: var(--xd-on-dark-body);
-  }
-
-  .xd-hero .xd-hr__stage.is-looping[data-step="0"] .xd-hr__row.is-joined .xd-hr__name,
-  .xd-hero .xd-hr__stage.is-looping.is-clearing .xd-hr__row.is-joined .xd-hr__name {
-    color: var(--xd-on-dark-muted);
-  }
-
-  .xd-hero .xd-hr__stage.is-looping[data-step="0"] .xd-hr__row.is-joined .xd-hr__name::before,
-  .xd-hero .xd-hr__stage.is-looping.is-clearing .xd-hr__row.is-joined .xd-hr__name::before {
-    background-color: transparent;
-    box-shadow: inset 0 0 0 1.5px var(--xd-event-on-dark);
-  }
-
-  /* 1 · Correlated: the veil leaves over 1.2s, so the thread reaches x%
-     at about 0.1s + x × 12ms; each event, its label and its lane's
-     name turn at that moment. */
-  .xd-hero .xd-hr__stage.is-looping[data-step="1"] .xd-hr__noise {
-    transition-delay: 0.2s;
-  }
-
-  .xd-hero .xd-hr__stage.is-looping[data-step="1"] .xd-hr__dot::after,
-  .xd-hero .xd-hr__stage.is-looping[data-step="1"] .xd-hr__ev,
-  .xd-hero .xd-hr__stage.is-looping[data-step="1"] .xd-hr__name,
-  .xd-hero .xd-hr__stage.is-looping[data-step="1"] .xd-hr__name::before {
-    transition-delay: calc(0.1s + var(--x, 0) * 0.012s);
-  }
-
-  .xd-hero .xd-hr__stage.is-looping[data-step="1"] .xd-hr__incident {
-    transition-delay: 1.3s;
-  }
-
-  .xd-hero .xd-hr__stage.is-looping[data-step="1"] .xd-hr__risk {
-    transition-delay: 1.75s;
-  }
-
-  /* 2 · Contained, and 3 · hold: the defaults. */
-
-  /* Clearing, between the hold and the next start (and before the first
-     one): the body fades out, then everything jumps back to its step-0
-     place while unseen, so step 0 only has to bring the alerts in.
-     After the step rules, so it wins at equal weight. */
-  .xd-hero .xd-hr__stage.is-looping.is-clearing .xd-hr__body {
-    opacity: 0;
-  }
-
-  .xd-hero .xd-hr__stage.is-looping.is-clearing .xd-hr__event,
-  .xd-hero .xd-hr__stage.is-looping.is-clearing .xd-hr__noise {
-    opacity: 0;
-    transform: scale(0.4);
-    transition: opacity 0.45s ease, transform 0s linear 0.45s;
-  }
-
-  .xd-hero .xd-hr__stage.is-looping.is-clearing .xd-hr__event {
-    transform: translateY(6px);
-  }
-
-  .xd-hero .xd-hr__stage.is-looping.is-clearing .xd-hr__dot::after,
-  .xd-hero .xd-hr__stage.is-looping.is-clearing .xd-hr__incident,
-  .xd-hero .xd-hr__stage.is-looping.is-clearing .xd-hr__risk,
-  .xd-hero .xd-hr__stage.is-looping.is-clearing .xd-hr__playbook {
-    opacity: 0;
-    transition: opacity 0s linear 0.45s;
-  }
-
-  .xd-hero .xd-hr__stage.is-looping.is-clearing .xd-hr__ev,
-  .xd-hero .xd-hr__stage.is-looping.is-clearing .xd-hr__name,
-  .xd-hero .xd-hr__stage.is-looping.is-clearing .xd-hr__name::before {
-    transition: color 0s linear 0.45s, background-color 0s linear 0.45s,
-                border-color 0s linear 0.45s, box-shadow 0s linear 0.45s;
-  }
-
-  .xd-hero .xd-hr__stage.is-looping.is-clearing .xd-hr__veil {
-    transform: none;
-    transition: transform 0s linear 0.45s;
-  }
-
-  .xd-hero .xd-hr__stage.is-looping.is-clearing .xd-hr__cursor {
-    opacity: 0;
-    transform: translateX(-100%);
-    transition: none;
   }
 }
 
@@ -1405,19 +910,9 @@
   to   { opacity: 1; transform: none; }
 }
 
-@keyframes xd-canvas-in {
-  from { opacity: 0; transform: translateY(28px) scale(0.97); }
-  to   { opacity: 1; transform: none; }
-}
-
 @keyframes xd-fade {
   from { opacity: 0; }
   to   { opacity: 1; }
-}
-
-@keyframes xd-settle {
-  from { transform: scale(1.1); }
-  to   { transform: none; }
 }
 
 @keyframes xd-line-rise {
@@ -1435,40 +930,46 @@
   to   { opacity: 1; transform: none; }
 }
 
-/* Down the image in about 3s, then rest; translateY is in the band's
-   own height (28% of the image), so 360% clears the foot. */
-@keyframes xd-scan {
-  0%   { transform: translateY(-100%); opacity: 0; }
-  6%   { opacity: 1; }
-  40%  { opacity: 1; }
-  46%  { transform: translateY(360%); opacity: 0; }
-  100% { transform: translateY(360%); opacity: 0; }
+@keyframes xd-hr-draw {
+  from { stroke-dashoffset: 100; }
+  to   { stroke-dashoffset: 0; }
 }
 
-/* The mouse drift (--xd-px / --xd-py from the script, -1 to 1): the
-   image or canvas moves a few pixels against the pointer, eased, so it
-   seems to sit a little behind the page. Mouse only. */
-@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
-  .xd-hero .xd-hr__float {
-    transform: translate3d(calc(var(--xd-px, 0) * -12px), calc(var(--xd-py, 0) * -10px), 0);
-    transition: transform 0.9s var(--xd-ease);
-  }
+/* In along the stream over the first half of the cycle... */
+@keyframes xd-hr-pulse {
+  0%   { stroke-dashoffset: 5;    opacity: 0; }
+  4%   { opacity: 1; }
+  48%  { opacity: 1; }
+  52%  { stroke-dashoffset: -100; opacity: 0; }
+  100% { stroke-dashoffset: -100; opacity: 0; }
+}
 
+/* ...then on along the thread into the node, blue. */
+@keyframes xd-hr-flow {
+  0%, 50% { stroke-dashoffset: 12;   opacity: 0; }
+  53%     { opacity: 1; }
+  78%     { opacity: 1; }
+  82%     { stroke-dashoffset: -100; opacity: 0; }
+  100%    { stroke-dashoffset: -100; opacity: 0; }
+}
+
+/* A pulse reaches the node every 0.7s (six streams in a 4.2s cycle). */
+@keyframes xd-hr-breathe {
+  0%   { opacity: 0.8; transform: scale(1); }
+  100% { opacity: 0;   transform: scale(2.4); }
+}
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
   .xd-section .xd-btn:hover svg {
     transform: translateX(3px);
   }
 }
 
 /* ---- Responsive ----------------------------------------------------------- */
-/* Desktop: the hero fits the first screen. The copy's clamps above
-   already follow the viewport's height; here the buttons and the
-   canvas do too. Lanes run from 46px (a 900px-tall window and up) down
-   to 30px (about 580px), and each label shrinks with them so it still
-   clears the lane above; the ruler's margin keeps clearing the first
-   lane's label. Everything reaches its full size at about 900px tall. */
+/* Desktop: at least the first screen (capped, for a portrait monitor),
+   the content centred in what is left under the header, and a column
+   that leaves the streams 200px of margin a side. */
 @media (min-width: 1025px) {
-  /* At least the first screen (capped, for a portrait monitor), with
-     the content centred in what is left under the header. */
   .xd-hero .xd-hr {
     box-sizing: border-box;                  /* the header clearance counts toward the screen */
     display: flex;
@@ -1479,64 +980,25 @@
 
   .xd-hero .xd-hr__inner {
     flex: 1 0 auto;
-    align-content: center;
+    justify-content: center;
+  }
+
+  .xd-hero .xd-hr__lede {
+    max-width: min(820px, calc(100vw - 400px));
   }
 
   .xd-hero .xd-btn {
     padding-top: clamp(11px, 1.6vh, 14px);
     padding-bottom: clamp(11px, 1.6vh, 14px);
   }
-
-  .xd-hero .xd-hr__bar {
-    padding-top: clamp(8px, 1.4vh, 12px);
-    padding-bottom: clamp(8px, 1.4vh, 12px);
-  }
-
-  .xd-hero .xd-hr__body {
-    --xd-hr-lane: clamp(30px, 5.2vh, 46px);
-    --xd-hr-drop: clamp(10px, 1.8vh, 16px);
-    padding: clamp(10px, 1.6vh, 14px) 18px clamp(12px, 2vh, 18px);
-  }
-
-  .xd-hero .xd-hr__ruler {
-    margin-bottom: clamp(14px, 2vh, 16px);
-  }
-
-  .xd-hero .xd-hr__ev {
-    bottom: clamp(7px, 1.25vh, 11px);
-    padding: clamp(2px, 0.34vh, 3px) 8px;
-    font-size: clamp(11.5px, 1.45vh, 13px);
-  }
-
-  .xd-hero .xd-hr__incident {
-    padding-top: clamp(8px, 1.25vh, 11px);
-    padding-bottom: clamp(8px, 1.25vh, 11px);
-  }
-
-  .xd-hero .xd-hr__playbook {
-    margin-top: clamp(6px, 1.1vh, 10px);
-    padding-top: clamp(6px, 1vh, 9px);
-    padding-bottom: clamp(6px, 1vh, 9px);
-  }
 }
 
-/* Stacked: the copy, then the canvas, both within the gutters. The type
-   goes back to sizing by width alone, since the stacked hero scrolls
-   anyway; 9vw keeps each sentence on one line down to a 320px phone.
-   The gridlines and glow re-centre under the canvas. */
+/* Stacked type sizes by width alone; 9vw keeps each sentence on one line
+   down to a 320px phone. The rail is a little taller, for the fan. */
 @media (max-width: 1024px) {
-  .xd-hero .xd-hr__inner {
-    grid-template-columns: minmax(0, 1fr);
-    gap: clamp(40px, 7vw, 56px);
-  }
-
   .xd-section .xd-hr__inner.xd-shell {
     padding-top: clamp(40px, 6vw, 64px);
-    padding-bottom: clamp(56px, 8vw, 80px);
-  }
-
-  .xd-hero .xd-hr__copy {
-    max-width: 720px;
+    padding-bottom: clamp(48px, 8vw, 72px);
   }
 
   .xd-hero .xd-hr__title {
@@ -1544,33 +1006,23 @@
   }
 
   .xd-hero .xd-hr__sub {
-    font-size: clamp(17px, 2.2vw, 19px);
+    font-size: clamp(16px, 2.2vw, 19px);
   }
 
-  .xd-hero .xd-hr__stage {
-    max-width: 600px;
+  .xd-hero .xd-hr__rail {
+    height: 76px;
+    margin-top: 12px;
   }
 
-  .xd-hero .xd-hr__media {
-    max-width: 600px;
-  }
-
-  .xd-hero .xd-hr__decor::before {
-    -webkit-mask-image: radial-gradient(ellipse 90% 45% at 50% 75%, #000 20%, transparent 100%);
-            mask-image: radial-gradient(ellipse 90% 45% at 50% 75%, #000 20%, transparent 100%);
-  }
-
-  .xd-hero .xd-hr__glow {
-    top: 74%;
-    left: 50%;
-    width: 900px;
-    height: 700px;
+  .xd-hero .xd-hr__actions {
+    margin-top: 16px;
   }
 }
 
 @media (max-width: 620px) {
   .xd-hero .xd-hr__actions {
     flex-direction: column;
+    width: 100%;
   }
 
   .xd-hero .xd-btn {
@@ -1579,53 +1031,11 @@
   }
 }
 
-/* A narrow canvas: a slimmer name column and smaller labels. Lanes are a
-   little taller, so a label that wraps to two lines still clears the
-   lane above. */
 @media (max-width: 520px) {
   .xd-hero .xd-hr__trust {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .xd-hero .xd-hr__bar {
-    padding: 10px 12px;
-  }
-
-  .xd-hero .xd-hr__body {
-    --xd-hr-lc: 76px;
-    --xd-hr-lg: 8px;
-    --xd-hr-lane: 50px;
-    padding: 12px 12px 14px;
-  }
-
-  .xd-hero .xd-hr__name {
-    gap: 5px;
-    font-size: 10px;
-    letter-spacing: 0.03em;
-  }
-
-  .xd-hero .xd-hr__name::before {
-    width: 5px;
-    height: 5px;
-  }
-
-  .xd-hero .xd-hr__ev {
-    padding: 2px 6px;
-    font-size: 11.5px;
-    line-height: 1.25;
-  }
-
-  .xd-hero .xd-hr__incident-text,
-  .xd-hero .xd-hr__playbook {
-    font-size: 13px;
-  }
-}
-
-/* The narrowest phones wrap two labels; taller lanes keep them clear. */
-@media (max-width: 360px) {
-  .xd-hero .xd-hr__body {
-    --xd-hr-lane: 54px;
+    gap: 12px 16px;
   }
 }
 
@@ -2997,7 +2407,7 @@
    tabs sit in one tinted tray on the left, numbered, and the selected
    one lifts out of it as a white card with a blue bar and a solid blue
    icon. It drives one large panel on the right: a numbered head, the
-   copy, and at its foot a small dark console (the hero canvas's idiom)
+   copy, and at its foot a small dark console
    with the use case's storyline. The panels share one grid cell, so the
    stage is always as tall as the tallest and a swap never moves the
    page; a swap is a 200ms fade (instant under reduced motion). The tray

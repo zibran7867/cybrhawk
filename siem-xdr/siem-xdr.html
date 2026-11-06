@@ -45,20 +45,18 @@
 
   Also check
   ----------
-  - Two open items are marked `// TODO:` in the CONTENT block of
-    siem-xdr.js: the optional hero banner image, and the live HawkINT
-    page URL for its chip in Integrations (the chip is plain text until
-    the href is set).
+  - One open item is marked `// TODO:` in the CONTENT block of
+    siem-xdr.js: the live HawkINT page URL for its chip in Integrations
+    (the chip is plain text until the href is set).
   - The site header overlays the page, so the hero clears its measured
     height before any content (--xd-header-offset in the tokens of
     siem-xdr.css: 90px phone, 102px tablet, 100px + 1.5vw desktop).
     If this template's header does not overlay, set it to 0px. The fake
     header below is fixed and shorter, so a little extra ground shows
     under it here.
-  - Hero image: with CONTENT.hero.visual.image empty, the hero shows
-    the coded investigation canvas. Set a URL and the banner shows
-    instead (whole, never cropped), with a scan line and a mouse drift;
-    an image that fails to load falls back to the canvas.
+  - Hero: the signal field behind the copy is drawn by siem-xdr.js in
+    the copy's own pixels and redrawn whenever it resizes; its six
+    stream labels are CONTENT.hero.field.
   - Click tracking: the hero buttons carry
     data-xd-cta="hero-primary | hero-secondary" for GTM.
   - Two containers below use an inner .e-con-inner (Elementor's boxed

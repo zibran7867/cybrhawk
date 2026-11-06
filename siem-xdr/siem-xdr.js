@@ -23,15 +23,16 @@
    The page reads like an investigation timeline: scattered events from
    different domains (quiet blue-grey) get stitched together by one blue
    thread into a single incident, which is scored and then resolved. The
-   hero and section 02 are the scatter, 03–05 the stitching, 06–07 the
-   resolution, 08–09 the family plugging into one hub. Amber means "this
-   threat has been scored and prioritized" and appears in three places
-   only: the hero's "Highest risk" pill, node 3 of the 03 rail and the
-   05 core's "Scored by risk" output.
+   hero states the idea in one picture (six domain streams converging
+   into one thread), section 02 is the scatter, 03–05 the stitching,
+   06–07 the resolution, 08–09 the family plugging into one hub. Amber
+   means "this threat has been scored and prioritized" and appears in
+   two places only: node 3 of the 03 rail and the 05 core's "Scored by
+   risk" output.
 
-   The hero is this page's own: a night ground with the investigation
-   canvas (its copy column and image mode come from siem-cloud.js). The
-   rest reuse designs that already ship: 02, 03 and 08 come from
+   The hero is this page's own: "signal convergence", the copy centred
+   on a night ground over a full-width signal field. The rest reuse
+   designs that already ship: 02, 03 and 08 come from
    siem-cloud.js; 04 and 06 from siem-ndr.js (HawkINT's datasheet and
    sector selector); 05, 07 and 09 from hawk-int.js (the core diagram,
    the outputs readout and the reasons ledger).
@@ -67,7 +68,7 @@
      a link or button with an empty href is not rendered either.
 
      Icons are named per item; the glyphs are in ICONS further down.
-     Labels inside decorative visuals (the hero console, the 02 tab bar,
+     Labels inside decorative visuals (the hero's signal field, the 02 tab bar,
      the 03 rail, the 05 core, the 06 storyline strips, the 08 two-way
      strip and the 09 hub) are aria-hidden, and every one is a word
      already in the copy. Every CTA carries data-xd-cta="<placement>"
@@ -88,28 +89,12 @@
         "Cloud-native and multi-tenant",
         "Backed by a 24/7 Fusion SOC"
       ],
-      // The investigation canvas. Lanes and domains from the subheadline;
-      // events from section 05 ("unusual logins", "lateral movement") and
-      // use case 1 ("credential dumping", "mass file changes"); the
-      // incident line from capability 3; "Highest risk" from capability
-      // 4; the playbook from section 03 step 4. State words are UI labels.
-      // Each event's domain names its lane, and each event must sit on a
-      // lower lane than the one before it.
-      visual: {
-        label: "CybrHawk SIEM XDR",
-        lanes: ["Identity", "Cloud", "Endpoint", "Network", "Application", "Server"],
-        events: [
-          { domain: "Identity", text: "Unusual login" },
-          { domain: "Endpoint", text: "Credential dumping" },
-          { domain: "Network",  text: "Lateral movement" },
-          { domain: "Server",   text: "Mass file changes" }
-        ],
-        incident: "A single incident with a clear attack storyline",
-        risk: "Highest risk",
-        playbook: "Playbook: Isolate hosts · Disable accounts",
-        states: { separate: "Separate alerts", correlated: "Correlated", contained: "Contained" },
-        image: "",     // TODO: optional banner image URL (the console shows until one is set)
-        imageAlt: ""
+      // The signal field (aria-hidden): one stream per domain the
+      // subheadline names, three entering from each screen edge, top to
+      // bottom. Labels are the subheadline's own words.
+      field: {
+        left: ["Identity", "Endpoint", "Server"],
+        right: ["Cloud", "Network", "Application"]
       }
     },
 
@@ -196,7 +181,7 @@
     usecases: {
       eyebrow: "Use Cases",
       title: "Built for the Threats [[You Face Every Day]]",
-      // The storyline console's chrome label (aria-hidden), as on the hero.
+      // The storyline console's chrome label (aria-hidden).
       console: "CybrHawk SIEM XDR",
       // trail + end drive the console's steps; every word is from that
       // item's own text. end.kind: "act" = check node, "find" = ring node.
@@ -316,15 +301,10 @@
   // leads, 06 storyline strips).
   var ANIMATE = true;
 
-  // The hero console's separate → correlated → contained loop. Paused
-  // off screen and in a background tab; static in its final state under
-  // reduced motion.
-  var HERO_LOOP = true;
-
-  // The hero banner's life after load (only with an image): a soft scan
-  // line sweeping it every few seconds, and a small drift that follows
-  // the mouse on desktop. Off under reduced motion.
-  var HERO_AMBIENT = true;
+  // The pulses that keep travelling down the hero's signal field after
+  // it draws in. Paused off screen and in a background tab; off under
+  // reduced motion (the field is then still).
+  var HERO_FLOW = true;
 
   // The 05 core's slow orbit and ring pulse, and the 09 hub's sweep and
   // spoke pulses. Pause off screen and in a background tab; still under
@@ -348,22 +328,6 @@
     { dy: -1, pad: 20 },
     { dy: 5,  pad: 12 },
     { dy: -4, pad: 17 }
-  ];
-
-  /* The hero canvas. Where each event sits across the timeline (% of
-     its width), in CONTENT order, earlier on the left; each must be on a
-     lower lane than the one before (see 01). Then each lane's background
-     alerts, in CONTENT.hero.visual.lanes order, kept clear of the events
-     and of the two points where the thread crosses a lane (Cloud at 15.5,
-     Application at 49.5). */
-  var HERO_EVENT_X = [7, 24, 41, 58];
-  var HERO_NOISE = [
-    [31, 52, 78, 90],
-    [6, 27, 44, 66, 85],
-    [12, 47, 72, 94],
-    [9, 29, 61, 82],
-    [18, 36, 63, 76, 91],
-    [14, 33, 75, 88]
   ];
 
   /* Section 03: six threads leave Collect; small event dots ride a few of
@@ -691,269 +655,204 @@
   }
 
   /* ---- 01 · Hero ----------------------------------------------------------
-     A night ground the full width of the page: the copy on the left, its
-     edge on the same line as every other section's content; on the right
-     the "investigation canvas", the page's idea in one picture. Behind
-     both, faint time gridlines and a blue glow. Below 1025px the canvas
-     drops under the copy.
+     "Signal convergence": a night ground the full width of the page, the
+     copy centred on it, and behind the copy the signal field (aria-hidden),
+     the page's idea at full scale. Six streams, one per domain the
+     subheadline names, enter from the two screen edges (three a side),
+     each labelled at the edge and dotted with alerts. They run level
+     through the margins beside the copy, curve down past it, and merge
+     into one blue thread that runs under the copy into a glowing node in
+     the rail between the subheadline and the buttons: every signal, one
+     storyline. With motion allowed, pulses then keep travelling down the
+     streams, pale on the way in and blue along the thread.
 
-     The canvas is a timeline in swimlanes, one lane per domain the
-     subheadline names, each speckled with the everyday alerts every tool
-     raises. A time cursor sweeps across it and the alerts arrive as it
-     passes ("Separate alerts"). Four of them, on four different lanes,
-     are one attack: a blue thread stitches those four together in time
-     order, their lanes light up, the rest of the noise falls back, and
-     the thread runs down into a single incident, scored "Highest risk"
-     in amber ("Correlated"); then a playbook contains it ("Contained").
+     The field never crosses the copy. It is an SVG drawn in the lede's
+     own pixels (the lede: eyebrow, H1, sub and rail; the SVG spans it
+     top to bottom and the page edge to edge), and the script measures
+     the lede's column and the rail on build and whenever the lede
+     resizes: every stream stays level outside the column and only joins
+     the thread at the rail's height, where there is no text. Where the
+     margins are too narrow for that (below 1025px, where the column is
+     the full width), the streams become a compact fan inside the rail
+     itself, and their labels go.
 
-     The canvas is decoration (aria-hidden): the H1 and the copy already
-     say all of it. The script only steps data-step 0–3 on the stage;
-     siem-xdr.css owns every visual change. Its default (no data-step
-     rules) is the final state, which is what reduced motion shows.
-
-     Nothing is measured. Every lane is the same fixed height, so lane l's
-     line sits at (l + .5) / n down the lanes, and an event at
-     HERO_EVENT_X across them; the thread's SVG uses the same numbers in a
-     0–100 viewBox stretched over the lanes (preserveAspectRatio="none",
-     with a non-scaling stroke). Each event's label sits above and to the
-     right of its dot, the one side the thread never takes, since each
-     event is on a lower lane than the one before. The thread is drawn by
-     a veil sliding off it, so only transform animates.
-
-     With CONTENT.hero.visual.image set, the banner takes the canvas's
-     place, whole (never cropped), with the scan line and mouse drift; an
-     image that fails to load falls back to the canvas.
+     The node, the H1's line masks and the rest of the load stagger are
+     CSS (siem-xdr.css), which also draws the streams in on load. The
+     paths are built once and only their geometry is rewritten on a
+     resize, so nothing restarts.
      -------------------------------------------------------------------- */
 
-  // Step lengths (ms): separate, correlated, contained, hold. Then the
-  // canvas clears for CLEAR_MS and starts over.
-  var STEP_MS = [2600, 2400, 1800, 2800];
-  var CLEAR_MS = 600;
-  // The canvas's load reveal (300ms delay + 0.9s); the loop waits it out.
-  var LOOP_START_MS = 1100;
+  // Where each stream enters, as a share of the lede's height, top to
+  // bottom: left edge, then right; staggered so no two sides mirror.
+  var FIELD_Y = { left: [0.14, 0.4, 0.64], right: [0.24, 0.5, 0.72] };
+  // Below this margin (px, from the page edge to the column) the field is
+  // the compact fan in the rail.
+  var FIELD_MIN_MARGIN = 160;
+  var SVG_NS = "http://www.w3.org/2000/svg";
 
   // Inline delay for the hero's load stagger.
   function after(ms) {
     return ' style="--d:' + ms + 'ms"';
   }
 
-  // The lane a domain runs in, or -1.
-  function laneOf(lanes, domain) {
-    var want = String(domain || "").toLowerCase();
-    for (var i = 0; i < lanes.length; i++) {
-      if (String(lanes[i]).toLowerCase() === want) return i;
+  function svgEl(name, attrs) {
+    var el = document.createElementNS(SVG_NS, name);
+    for (var k in attrs) {
+      if (Object.prototype.hasOwnProperty.call(attrs, k)) el.setAttribute(k, attrs[k]);
     }
-    return -1;
+    return el;
   }
 
-  /* The thread: from each event to the next, an S-curve that leaves and
-     arrives level (both control points halfway across), then straight
-     down from the last event to the foot of the lanes, where the
-     incident card's port picks it up. */
-  function threadPath(points) {
-    var d = "";
-    points.forEach(function (p, i) {
-      if (!i) {
-        d = "M" + p[0] + " " + p[1];
-        return;
-      }
-      var q = points[i - 1];
-      var mid = round((q[0] + p[0]) / 2);
-      d += " C" + mid + " " + q[1] + " " + mid + " " + p[1] + " " + p[0] + " " + p[1];
+  /* Builds the field's paths and labels once, then lays them out against
+     the lede on every resize. Each stream gets: its lead (edge to rail,
+     event grey), two alert dots, a pale pulse riding the lead, and a blue
+     pulse riding its side's thread; each side gets one thread (rail to
+     the node). --k on every piece staggers the draw-in and the pulses. */
+  function heroField(root, f) {
+    var lede = root.querySelector(".xd-hr__lede");
+    var svg = root.querySelector(".xd-hr__field");
+    var tags = root.querySelector(".xd-hr__tags");
+    var rail = root.querySelector(".xd-hr__rail");
+    if (!lede || !svg || !tags || !rail || !f) return;
+
+    var streams = [];
+    var threads = {};
+
+    ["left", "right"].forEach(function (side) {
+      var thread = svgEl("path", { "class": "xd-hr__thread", pathLength: "100" });
+      threads[side] = thread;
+      svg.appendChild(thread);
+
+      (f[side] || []).slice(0, FIELD_Y[side].length).forEach(function (label, i) {
+        var k = streams.length;
+        var s = {
+          side: side,
+          i: i,
+          lead: svgEl("path", { "class": "xd-hr__lead", pathLength: "100", style: "--k:" + k }),
+          pulse: svgEl("path", { "class": "xd-hr__pulse", pathLength: "100", style: "--k:" + k }),
+          flow: svgEl("path", { "class": "xd-hr__flow", pathLength: "100", style: "--k:" + k }),
+          dots: [
+            svgEl("circle", { "class": "xd-hr__alert", r: "3", style: "--k:" + k }),
+            svgEl("circle", { "class": "xd-hr__alert", r: "3", style: "--k:" + k })
+          ],
+          tag: document.createElement("span")
+        };
+        s.tag.className = "xd-hr__tag xd-hr__tag--" + side;
+        s.tag.style.setProperty("--k", k);
+        s.tag.textContent = label;
+        svg.insertBefore(s.lead, svg.firstChild);
+        s.dots.forEach(function (d) {
+          svg.appendChild(d);
+        });
+        svg.appendChild(s.pulse);
+        svg.appendChild(s.flow);
+        tags.appendChild(s.tag);
+        streams.push(s);
+      });
     });
-    var last = points[points.length - 1];
-    return last ? d + " L" + last[0] + " 100" : "";
-  }
 
-  function heroCanvas(v) {
-    var states = v.states || {};
-    var lanes = v.lanes || [];
-    var n = Math.max(lanes.length, 1);
-    var byLane = {};
-    var points = [];
+    if (!streams.length) return;
 
-    (v.events || []).forEach(function (e, k) {
-      var l = laneOf(lanes, e.domain);
-      if (l < 0 || byLane[l]) return;
-      var x = HERO_EVENT_X[k % HERO_EVENT_X.length];
-      byLane[l] = { x: x, text: e.text };
-      points.push([x, round(((l + 0.5) * 100) / n)]);
-    });
+    var frame = 0;
 
-    var last = points[points.length - 1];
+    function draw() {
+      frame = 0;
+      var W = svg.clientWidth || svg.getBoundingClientRect().width;
+      var H = lede.offsetHeight;
+      if (!W || !H) return;
 
-    // A joined lane carries its event's x, so its name lights up as the
-    // thread reaches it.
-    var rows = lanes.map(function (name, l) {
-      var ev = byLane[l];
-      var noise = (HERO_NOISE[l] || []).map(function (x) {
-        return '<span class="xd-hr__noise" style="--x:' + x + '"></span>';
-      }).join("");
+      var cx = W / 2;
+      var colL = cx - lede.clientWidth / 2;
+      var colR = cx + lede.clientWidth / 2;
+      var railTop = rail.offsetTop;
+      var railH = rail.offsetHeight;
+      var mergeY = railTop + railH / 2;
+      var node = 9;                                  // the node's radius, so the threads stop at its rim
+      var compact = colL < FIELD_MIN_MARGIN;
+      var edge = compact ? 0 : Math.min(32, colL * 0.12);
 
-      return (
-        '<div class="xd-hr__row' + (ev ? " is-joined" : "") + '"' +
-          (ev ? ' style="--x:' + ev.x + '"' : "") + ">" +
-          '<span class="xd-hr__name">' + esc(name) + "</span>" +
-          '<span class="xd-hr__lane">' +
-            noise +
-            (ev
-              ? '<span class="xd-hr__event" style="--x:' + ev.x + '">' +
-                  '<span class="xd-hr__dot"></span>' +
-                  '<span class="xd-hr__ev">' + esc(ev.text) + "</span>" +
-                "</span>"
-              : "") +
-          "</span>" +
-        "</div>"
-      );
-    }).join("");
+      root.classList.toggle("is-compact", compact);
+      svg.setAttribute("viewBox", "0 0 " + round(W) + " " + round(H));
 
-    function state(key) {
-      return states[key]
-        ? '<span class="xd-hr__state xd-hr__state--' + key + '">' + esc(states[key]) + "</span>"
-        : "";
-    }
+      // Where the leads land on the rail: just outside the column, or on
+      // the fan's inner end.
+      var land = { left: compact ? W * 0.24 : colL - 12, right: compact ? W * 0.76 : colR + 12 };
 
-    return (
-      '<div class="xd-hr__stage" aria-hidden="true">' +
-        '<div class="xd-hr__console">' +
-          '<div class="xd-hr__bar">' +
-            '<span class="xd-hr__dots"><i></i><i></i><i></i></span>' +
-            '<span class="xd-hr__label">' + esc(v.label || "") + "</span>" +
-            '<span class="xd-hr__status">' +
-              state("separate") + state("correlated") + state("contained") +
-            "</span>" +
-          "</div>" +
-          '<div class="xd-hr__body"' + (last ? ' style="--end:' + last[0] / 100 + '"' : "") + ">" +
-            '<span class="xd-hr__ruler"></span>' +
-            (rows
-              ? '<div class="xd-hr__lanes" style="--n:' + n + '">' +
-                  (last
-                    ? '<span class="xd-hr__thread">' +
-                        '<svg viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false">' +
-                          '<path d="' + threadPath(points) + '"/>' +
-                        "</svg>" +
-                        '<span class="xd-hr__veil"></span>' +
-                      "</span>"
-                    : "") +
-                  rows +
-                  '<span class="xd-hr__sweep"><span class="xd-hr__cursor"></span></span>' +
-                "</div>"
-              : "") +
-            (v.incident
-              ? '<div class="xd-hr__incident">' +
-                  (last ? '<span class="xd-hr__port"></span>' : "") +
-                  '<span class="xd-hr__incident-text">' + esc(v.incident) + "</span>" +
-                  (v.risk ? '<span class="xd-hr__risk">' + esc(v.risk) + "</span>" : "") +
-                "</div>"
-              : "") +
-            (v.playbook
-              ? '<div class="xd-hr__playbook">' +
-                  '<span class="xd-hr__node">' + icon("check") + "</span>" +
-                  '<span class="xd-hr__playbook-text">' + esc(v.playbook) + "</span>" +
-                "</div>"
-              : "") +
-          "</div>" +
-        "</div>" +
-      "</div>"
-    );
-  }
+      threads.left.setAttribute("d", "M" + round(land.left) + " " + round(mergeY) + "H" + round(cx - node));
+      threads.right.setAttribute("d", "M" + round(land.right) + " " + round(mergeY) + "H" + round(cx + node));
 
-  /* separate → correlated → contained → hold, then clear and start over.
-     Waits for the canvas's load reveal, stops its timer while the canvas
-     is off screen or the tab is hidden, and never starts under reduced
-     motion (the CSS default is the final state). */
-  function heroLoop(stage) {
-    if (!HERO_LOOP || !stage || reducedMotion()) return;
+      streams.forEach(function (s) {
+        var dir = s.side === "left" ? 1 : -1;        // +1 runs rightward from the left edge
+        var x0 = s.side === "left" ? 0 : W;
+        var xm = land[s.side];
+        var y;
+        var drop;
 
-    var step = 0;
-    var timer = null;
-    var running = false;
-    var ready = false;
+        if (compact) {
+          // A fan inside the rail's upper half, highest stream outermost.
+          y = railTop + 4 + s.i * Math.max(4, (railH / 2 - 10) / 3);
+          drop = Math.abs(xm - x0) * (0.55 - s.i * 0.1);
+        } else {
+          y = H * FIELD_Y[s.side][s.i];
+          y = Math.min(y, mergeY - 48);
+          // The descent's run grows with its height, but always leaves the
+          // level stretch long enough for the label.
+          drop = Math.min((mergeY - y) * 0.9, Math.abs(xm - x0) - edge - 120);
+          drop = Math.max(drop, 40);
+        }
 
-    // Starts empty: the alerts arrive with the sweep once step 0 begins.
-    stage.classList.add("is-looping");
-    stage.classList.add("is-clearing");
-    stage.setAttribute("data-step", "0");
+        var xd = xm - dir * drop;                    // where the level stretch turns down
+        var c1 = xd + dir * drop * 0.55;
+        var c2 = xm - dir * drop * 0.45;
+        var d = "M" + round(x0) + " " + round(y) +
+                "H" + round(xd) +
+                "C" + round(c1) + " " + round(y) + " " + round(c2) + " " + round(mergeY) + " " + round(xm) + " " + round(mergeY);
 
-    function wait(ms, fn) {
-      clearTimeout(timer);
-      timer = setTimeout(fn, ms);
-    }
+        s.lead.setAttribute("d", d);
+        s.pulse.setAttribute("d", d);
+        s.flow.setAttribute("d", threads[s.side].getAttribute("d"));
 
-    function show(n) {
-      step = n;
-      stage.setAttribute("data-step", String(n));
-      stage.classList.remove("is-clearing");
-      wait(STEP_MS[n], next);
-    }
+        // Two alerts on the level stretch, clear of the label.
+        var run = Math.abs(xd - x0);
+        s.dots.forEach(function (dot, j) {
+          var at = compact ? 0.45 + j * 0.3 : 0.55 + j * 0.3;
+          dot.setAttribute("cx", round(x0 + dir * run * at));
+          dot.setAttribute("cy", round(y));
+          dot.style.display = run > 60 ? "" : "none";
+        });
 
-    function next() {
-      if (step < STEP_MS.length - 1) {
-        show(step + 1);
-        return;
-      }
-      stage.classList.add("is-clearing");
-      wait(CLEAR_MS, function () {
-        show(0);
+        s.tag.style.top = round(y) + "px";
+        s.tag.style[s.side] = round(edge) + "px";
       });
     }
 
-    function resume() {
-      if (stage.classList.contains("is-clearing")) {
-        show(0);
-      } else {
-        wait(STEP_MS[step], next);
-      }
+    function queue() {
+      if (!frame) frame = window.requestAnimationFrame(draw);
     }
 
-    whileVisible(stage, function (on) {
-      if (on === running) return;
-      running = on;
-      if (!ready) return;
-      if (on) {
-        resume();
-      } else {
-        clearTimeout(timer);
-      }
-    });
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(queue).observe(lede);
+    } else {
+      window.addEventListener("resize", queue);
+    }
 
-    setTimeout(function () {
-      ready = true;
-      if (running) show(0);
-    }, LOOP_START_MS);
-  }
+    // Figtree loading late can rewrap the copy and move the rail.
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(queue);
 
-  // The banner is the page's largest paint, so it loads eagerly at high
-  // priority; width and height are its export size, so phones reserve the
-  // right box before it arrives.
-  function heroMedia(v) {
-    return (
-      '<div class="xd-hr__media xd-hr__float">' +
-        '<img class="xd-hr__img" src="' + esc(v.image) + '" alt="' + esc(v.imageAlt || "") + '" ' +
-          'width="1254" height="1254" decoding="async" fetchpriority="high">' +
-        (HERO_AMBIENT ? '<span class="xd-hr__scan" aria-hidden="true"></span>' : "") +
-      "</div>"
-    );
-  }
-
-  function heroVisual(v) {
-    return v.image
-      ? heroMedia(v)
-      : '<div class="xd-hr__float">' + heroCanvas(v) + "</div>";
+    draw();
   }
 
   function buildHero(host, c) {
     if (!host) return false;                         // container not ready
     if (host.querySelector(".xd-hr")) return true;   // already built
 
-    var v = c.visual || {};
     var title = c.title || [];
     if (typeof title === "string") title = [title];
 
     // Each point arrives on its own beat after the buttons.
     var trust = (c.trust || []).map(function (t, i) {
       return (
-        '<li class="xd-hr__trust-item xd-hr__in"' + after(480 + i * 70) + ">" +
+        '<li class="xd-hr__trust-item xd-hr__in"' + after(520 + i * 70) + ">" +
           '<span class="xd-hr__check">' + icon("check") + "</span>" +
           esc(t) +
         "</li>"
@@ -977,96 +876,43 @@
 
     var root = mount(
       host,
-      '<div class="' + bleedClass("xd-hr") + (v.image ? " xd-hr--image" : "") + '">' +
-        // The ground's gridlines and glow, edge to edge behind everything.
+      '<div class="' + bleedClass("xd-hr") + '">' +
+        // The ground's gridlines and glows, edge to edge behind everything.
         '<div class="xd-hr__decor" aria-hidden="true">' +
           '<span class="xd-hr__glow"></span>' +
-          '<span class="xd-hr__glow xd-hr__glow--soft"></span>' +
+          '<span class="xd-hr__glow xd-hr__glow--node"></span>' +
         "</div>" +
         '<div class="xd-shell xd-hr__inner">' +
-          '<div class="xd-hr__copy">' +
+          '<div class="xd-hr__lede">' +
+            '<svg class="xd-hr__field" aria-hidden="true" focusable="false"></svg>' +
+            '<div class="xd-hr__tags" aria-hidden="true"></div>' +
             (c.eyebrow
               ? '<p class="xd-eyebrow xd-hr__eyebrow xd-hr__in"' + after(0) + ">" + esc(c.eyebrow) + "</p>"
               : "") +
             '<h1 class="xd-hr__title">' + lines + "</h1>" +
             (c.sub ? '<p class="xd-hr__sub xd-hr__in"' + after(320) + ">" + esc(c.sub) + "</p>" : "") +
-            (actions
-              ? '<div class="xd-hr__actions xd-hr__in"' + after(400) + ">" + actions + "</div>"
-              : "") +
-            (trust ? '<ul class="xd-hr__trust">' + trust + "</ul>" : "") +
+            '<div class="xd-hr__rail" aria-hidden="true"><span class="xd-hr__node"></span></div>' +
           "</div>" +
-          '<div class="xd-hr__visual">' + heroVisual(v) + "</div>" +
+          (actions
+            ? '<div class="xd-hr__actions xd-hr__in"' + after(420) + ">" + actions + "</div>"
+            : "") +
+          (trust ? '<ul class="xd-hr__trust">' + trust + "</ul>" : "") +
         "</div>" +
       "</div>",
       "xd-hr"
     );
 
-    // Artwork that fails to load gives way to the coded canvas, so the
-    // column is never a broken-image icon.
-    var img = root.querySelector(".xd-hr__img");
-    if (img) {
-      img.addEventListener("error", function () {
-        var media = root.querySelector(".xd-hr__media");
-        if (!media) return;
-        media.insertAdjacentHTML("afterend", '<div class="xd-hr__float">' + heroCanvas(v) + "</div>");
-        media.parentNode.removeChild(media);
-        root.classList.remove("xd-hr--image");
-        heroLoop(root.querySelector(".xd-hr__stage"));
-      });
+    heroField(root, c.field);
+
+    // The pulses only run while the hero is on screen and the tab is in
+    // front (and never under reduced motion: siem-xdr.css).
+    if (HERO_FLOW && ANIMATE && !reducedMotion()) {
+      root.classList.add("is-flowing");
+      pauseOffscreen(root);
     }
 
-    heroLoop(root.querySelector(".xd-hr__stage"));
-    heroAmbient(root);
     bindAnchors(root);
     return true;
-  }
-
-  /* The visual's ambient motion. The scan line (image only) is a CSS
-     animation; this only pauses it while the visual is off screen or the
-     tab is hidden. The drift follows the mouse (never touch) as two
-     custom properties, -1 to 1 across the hero, written once per frame;
-     the CSS turns them into a small eased translate of the image or the
-     canvas. Neither starts under reduced motion. */
-  function heroAmbient(root) {
-    if (!HERO_AMBIENT || !ANIMATE || reducedMotion()) return;
-
-    var visual = root.querySelector(".xd-hr__visual");
-    if (visual) {
-      whileVisible(visual, function (on) {
-        root.classList.toggle("is-paused", !on);
-      });
-    }
-
-    if (!window.matchMedia ||
-        !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-
-    var frame = 0;
-    var x = 0;
-    var y = 0;
-
-    function paint() {
-      frame = 0;
-      root.style.setProperty("--xd-px", x.toFixed(3));
-      root.style.setProperty("--xd-py", y.toFixed(3));
-    }
-
-    function queue() {
-      if (!frame) frame = window.requestAnimationFrame(paint);
-    }
-
-    root.addEventListener("mousemove", function (e) {
-      var r = root.getBoundingClientRect();
-      if (!r.width || !r.height) return;
-      x = ((e.clientX - r.left) / r.width) * 2 - 1;
-      y = ((e.clientY - r.top) / r.height) * 2 - 1;
-      queue();
-    });
-
-    root.addEventListener("mouseleave", function () {
-      x = 0;
-      y = 0;
-      queue();
-    });
   }
 
   /* ---- 02 · The challenge -------------------------------------------------
@@ -1522,7 +1368,7 @@
      for tabs, or straight after its own button for the accordion. One
      selection survives the switch.
 
-     Each panel ends in a small console (aria-hidden), the hero canvas's
+     Each panel ends in a small console (aria-hidden), a dark console
      idiom: the use case's own words as steps on a blue thread, ending in
      a check node (a response, end.kind "act") or a ring node (what the
      signals point to, "find"), or simply stopping. siem-xdr.css runs the
