@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Popup Preview</title>
 <!-- PREVIEW ONLY. Snapshot of home-page-popup.css + home-page-popup.js, generated
-     2026-11-11 12:47. Do not upload to WordPress. -->
+     2026-11-11 12:54. Do not upload to WordPress. -->
 <style>
     :root { --pv-bg: #050a18; --pv-text: #aeb8d2; --pv-head: #ffffff; --pv-line: rgba(120,150,255,.16); }
     html, body { margin: 0; }
@@ -439,12 +439,10 @@
     var CTA = { label: "SOC Analyst", href: "https://cybrhawk.com/soc-analyst/" };
     var DOWNLOAD_REPORT = { label: "Download Fortibleed Report", href: "https://cybrhawk.com/download-report/" };
 
-    // GigaOm brief button. Points at the gated form page; the WordPress form
-    // there delivers the PDF after submit:
-    // https://cybrhawk.com/wp-content/uploads/2026/11/CybrHawk-Perspective-Brief.pdf
-    // If href is pointed straight at a .pdf instead, the link automatically
-    // gets download + target="_blank" + rel="noopener".
-    var BRIEF = { label: "Download GigaOm Brief", href: "https://cybrhawk.com/perspective-brief/" };
+    // GigaOm brief button. Links straight to the PDF; because href ends in
+    // .pdf, the link automatically gets download + target="_blank" +
+    // rel="noopener" (see pdfAttrs()).
+    var BRIEF = { label: "Download GigaOm Brief", href: "https://cybrhawk.com/wp-content/uploads/2026/11/CybrHawk-Perspective-Brief.pdf" };
 
     var DISMISS_LABEL = "Maybe later";
 
@@ -667,8 +665,15 @@
     document.addEventListener("click", function (e) {
         var a = e.target.closest && e.target.closest(".cybrhawk-pop__cta");
         if (!a) return;
-        e.preventDefault();
         var dl = window.dataLayer || [];
+        if (a.hasAttribute("download")) {
+            // Opened from disk, the PDF is cross-origin, so browsers ignore the download attribute and open it in a tab.
+            // On cybrhawk.com it is same-origin and downloads directly.
+            e.preventDefault();
+            say("On the live site this downloads " + a.href.split("/").pop() + " directly. (Preview from disk can't force a download.)  |  dataLayer: " + JSON.stringify(dl[dl.length - 1]));
+            return;
+        }
+        e.preventDefault();
         say("Would go to " + a.href + "  |  dataLayer: " + JSON.stringify(dl[dl.length - 1]));
     });
 })();

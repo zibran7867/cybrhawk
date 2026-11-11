@@ -44,12 +44,10 @@
     var CTA = { label: "SOC Analyst", href: "https://cybrhawk.com/soc-analyst/" };
     var DOWNLOAD_REPORT = { label: "Download Fortibleed Report", href: "https://cybrhawk.com/download-report/" };
 
-    // GigaOm brief button. Points at the gated form page; the WordPress form
-    // there delivers the PDF after submit:
-    // https://cybrhawk.com/wp-content/uploads/2026/11/CybrHawk-Perspective-Brief.pdf
-    // If href is pointed straight at a .pdf instead, the link automatically
-    // gets download + target="_blank" + rel="noopener".
-    var BRIEF = { label: "Download GigaOm Brief", href: "https://cybrhawk.com/perspective-brief/" };
+    // GigaOm brief button. Links straight to the PDF; because href ends in
+    // .pdf, the link automatically gets download + target="_blank" +
+    // rel="noopener" (see pdfAttrs()).
+    var BRIEF = { label: "Download GigaOm Brief", href: "https://cybrhawk.com/wp-content/uploads/2026/11/CybrHawk-Perspective-Brief.pdf" };
 
     var DISMISS_LABEL = "Maybe later";
 
