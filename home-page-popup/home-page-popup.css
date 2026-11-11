@@ -1,0 +1,343 @@
+/* =====================================================================
+   First-visit popup styles
+   Markup injected by popup.js. All rules scoped under .cybrhawk-pop-portal.
+   CybrHawk theme: deep navy card + bright blue accents (matches 1–6).
+   ---------------------------------------------------------------------
+   popup.js appends `.cybrhawk-pop-portal` directly to <body> (a "portal"),
+   NOT inside the Elementor `.popup` container. Elementor adds
+   transforms/will-change to its containers, which would make a
+   position:fixed child measure against that container instead of the
+   viewport (the popup ends up in the wrong corner). Living on <body>
+   sidesteps that entirely, so the card pins to the real bottom-right.
+
+   It is a non-blocking corner popup: no page dimming, no scroll lock,
+   and only the card is interactive — the rest of the page stays usable.
+   ===================================================================== */
+
+/* ---- Portal (fixed layer, pinned bottom-right) --------------------- */
+.cybrhawk-pop-portal {
+    /* Tokens — tweak to rebrand (mirrors section-1) */
+    --cybrhawk-accent: #2f6dff;
+    --cybrhawk-accent-2: #7089ff;
+    --cybrhawk-accent-hover: #245bdd;
+    --cybrhawk-accent-soft: rgba(47, 109, 255, 0.14);
+    --cybrhawk-heading: #ffffff;
+    --cybrhawk-text: #aeb8d2;
+    --cybrhawk-muted: #8b96b5;
+    --cybrhawk-green: #3fb950;
+    --cybrhawk-card-bg: #0b1327;
+    --cybrhawk-inset: #060b1a;
+    --cybrhawk-border: rgba(120, 150, 255, 0.16);
+    --cybrhawk-display: "Barlow Condensed", "Oswald", "Arial Narrow", sans-serif;
+    --cybrhawk-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", "Menlo",
+        "Consolas", monospace;
+
+    position: fixed !important;
+    right: 28px !important;
+    bottom: 28px !important;
+    top: auto !important;
+    left: auto !important;
+    z-index: 2147483000 !important;
+    width: 400px;
+    max-width: calc(100vw - 56px);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    /* Only the card is interactive; the portal box itself is barely larger
+     than the card, and clicks outside it fall through to the page. */
+    pointer-events: none;
+
+    /* Hidden by default — before JS runs and whenever not open. */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.32s ease, visibility 0.32s ease;
+}
+
+.cybrhawk-pop-portal.cybrhawk-pop-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cybrhawk-pop-portal * {
+    box-sizing: border-box;
+}
+
+/* ---- Card ---------------------------------------------------------- */
+.cybrhawk-pop-portal .cybrhawk-pop {
+    position: relative;
+    pointer-events: auto;
+    /* the card itself is interactive */
+    width: 100%;
+    max-width: 400px;
+    margin: 0;
+    max-height: calc(100vh - 56px);
+    overflow-y: auto;
+    border: 1px solid var(--cybrhawk-border);
+    border-radius: 16px;
+    background: var(--cybrhawk-card-bg);
+    background-image:
+        radial-gradient(80% 60% at 100% 0%, rgba(47, 109, 255, 0.14), transparent 70%);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+    font-family: var(--cybrhawk-mono);
+    /* Entry animation: slide the card up into the corner as it fades in. */
+    transform: translateY(24px);
+    opacity: 0;
+    transition: transform 0.36s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.36s ease;
+}
+
+.cybrhawk-pop-portal.cybrhawk-pop-open .cybrhawk-pop {
+    transform: none;
+    opacity: 1;
+}
+
+/* Thin accent line across the very top of the card. */
+.cybrhawk-pop-portal .cybrhawk-pop::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+    background: linear-gradient(90deg, var(--cybrhawk-accent), rgba(47, 109, 255, 0));
+}
+
+.cybrhawk-pop-portal .cybrhawk-pop__body {
+    padding: 40px 34px 30px;
+}
+
+/* ---- Close button -------------------------------------------------- */
+.cybrhawk-pop-portal .cybrhawk-pop__close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid var(--cybrhawk-border);
+    border-radius: 8px;
+    background: rgba(120, 150, 255, 0.05);
+    color: var(--cybrhawk-muted);
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.cybrhawk-pop-portal .cybrhawk-pop__close svg {
+    width: 18px;
+    height: 18px;
+}
+
+.cybrhawk-pop-portal .cybrhawk-pop__close:hover {
+    color: var(--cybrhawk-heading);
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.cybrhawk-pop-portal .cybrhawk-pop__close:focus-visible {
+    outline: 2px solid var(--cybrhawk-accent);
+    outline-offset: 2px;
+}
+
+/* ---- Eyebrow ------------------------------------------------------- */
+.cybrhawk-pop-portal .cybrhawk-pop__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 18px;
+    font-family: var(--cybrhawk-mono);
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--cybrhawk-accent);
+}
+
+.cybrhawk-pop-portal .cybrhawk-pop__eyebrow-line {
+    width: 28px;
+    height: 2px;
+    background: var(--cybrhawk-accent);
+}
+
+/* ---- Title --------------------------------------------------------- */
+.cybrhawk-pop-portal .cybrhawk-pop__title {
+    margin: 0 0 16px;
+    font-family: var(--cybrhawk-display);
+    font-style: italic;
+    font-weight: 800;
+    font-size: clamp(30px, 6vw, 40px);
+    line-height: 0.98;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: var(--cybrhawk-heading);
+}
+
+.cybrhawk-pop-portal .cybrhawk-pop__title-accent {
+    color: var(--cybrhawk-accent-2);
+}
+
+/* ---- Lead ---------------------------------------------------------- */
+.cybrhawk-pop-portal .cybrhawk-pop__lead {
+    margin: 0 0 22px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--cybrhawk-text);
+}
+
+/* ---- CTA buttons (links, side by side) ----------------------------- */
+.cybrhawk-pop-portal .cybrhawk-pop__actions {
+    display: flex;
+    flex-wrap: wrap;
+    /* let a long button drop to its own row */
+    gap: 10px;
+}
+
+.cybrhawk-pop-portal .cybrhawk-pop__cta {
+    position: relative;
+    flex: 1 1 auto;
+    /* size to content, share leftover space */
+    min-width: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 50px;
+    /* grow taller if the label wraps */
+    padding: 10px 14px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    font-family: var(--cybrhawk-mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    line-height: 1.25;
+    /* readable when it wraps to two lines */
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease,
+        color 0.2s ease, transform 0.08s ease;
+}
+
+.cybrhawk-pop-portal .cybrhawk-pop__cta:active {
+    transform: translateY(1px);
+}
+
+.cybrhawk-pop-portal .cybrhawk-pop__cta:focus-visible {
+    outline: 2px solid var(--cybrhawk-accent-2);
+    outline-offset: 2px;
+}
+
+/* Primary — filled blue */
+.cybrhawk-pop-portal .cybrhawk-pop__cta--primary {
+    background: var(--cybrhawk-accent);
+    border-color: var(--cybrhawk-accent);
+    color: #ffffff;
+}
+
+.cybrhawk-pop-portal .cybrhawk-pop__cta--primary:hover {
+    background: var(--cybrhawk-accent-hover);
+    border-color: var(--cybrhawk-accent-hover);
+}
+
+/* Secondary — outline */
+.cybrhawk-pop-portal .cybrhawk-pop__cta--ghost {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.22);
+    color: var(--cybrhawk-heading);
+}
+
+.cybrhawk-pop-portal .cybrhawk-pop__cta--ghost:hover {
+    border-color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.cybrhawk-pop-portal .cybrhawk-pop__cta-arrow {
+    display: inline-flex;
+    transition: transform 0.2s ease;
+}
+
+.cybrhawk-pop-portal .cybrhawk-pop__cta-arrow svg {
+    width: 15px;
+    height: 15px;
+}
+
+.cybrhawk-pop-portal .cybrhawk-pop__cta--primary:hover .cybrhawk-pop__cta-arrow {
+    transform: translateX(3px);
+}
+
+/* ---- Footer (dismiss) ---------------------------------------------- */
+.cybrhawk-pop-portal .cybrhawk-pop__foot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.cybrhawk-pop-portal .cybrhawk-pop__dismiss {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-family: var(--cybrhawk-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: var(--cybrhawk-muted);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease;
+}
+
+.cybrhawk-pop-portal .cybrhawk-pop__dismiss:hover {
+    color: var(--cybrhawk-heading);
+}
+
+/* ---- Motion -------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+
+    .cybrhawk-pop-portal,
+    .cybrhawk-pop-portal .cybrhawk-pop {
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+
+    .cybrhawk-pop-portal .cybrhawk-pop {
+        transform: none;
+    }
+}
+
+/* ---- Responsive ---------------------------------------------------- */
+@media (max-width: 480px) {
+    .cybrhawk-pop-portal {
+        right: 14px !important;
+        bottom: 14px !important;
+        left: 14px !important;
+        /* full-width strip along the bottom */
+        width: auto;
+        max-width: none;
+    }
+
+    .cybrhawk-pop-portal .cybrhawk-pop {
+        max-width: 100%;
+        max-height: calc(100vh - 28px);
+    }
+
+    .cybrhawk-pop-portal .cybrhawk-pop__body {
+        padding: 36px 22px 24px;
+    }
+
+    .cybrhawk-pop-portal .cybrhawk-pop__actions {
+        flex-direction: column;
+        /* stack the buttons on small screens */
+    }
+
+    .cybrhawk-pop-portal .cybrhawk-pop__cta {
+        height: 52px;
+        font-size: 13px;
+    }
+}
