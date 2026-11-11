@@ -44,6 +44,13 @@
     var CTA = { label: "SOC Analyst", href: "https://cybrhawk.com/soc-analyst/" };
     var DOWNLOAD_REPORT = { label: "Download Fortibleed Report", href: "https://cybrhawk.com/download-report/" };
 
+    // GigaOm brief button. Points at the gated form page; the WordPress form
+    // there delivers the PDF after submit:
+    // https://cybrhawk.com/wp-content/uploads/2026/11/CybrHawk-Perspective-Brief.pdf
+    // If href is pointed straight at a .pdf instead, the link automatically
+    // gets download + target="_blank" + rel="noopener".
+    var BRIEF = { label: "Download GigaOm Brief", href: "https://cybrhawk.com/perspective-brief/" };
+
     var DISMISS_LABEL = "Maybe later";
 
     var LOAD_FONT = true;
@@ -65,6 +72,13 @@
         return String(s).replace(/[&<>"]/g, function (c) {
             return "&#" + c.charCodeAt(0) + ";";
         });
+    }
+
+    // Direct PDF links download in a new tab so visitors don't leave the site.
+    function pdfAttrs(href) {
+        return /\.pdf(?:[?#]|$)/i.test(href)
+            ? ' target="_blank" rel="noopener" download'
+            : "";
     }
 
     function loadFont() {
@@ -133,6 +147,12 @@
             '<span class="cybrhawk-pop__cta-label">' + esc(DOWNLOAD_REPORT.label) +
             "</span>" +
             "</a>" +
+            '<a class="cybrhawk-pop__cta cybrhawk-pop__cta--ghost" href="' +
+            esc(BRIEF.href) + '"' + pdfAttrs(BRIEF.href) +
+            ' data-cybrhawk-cta="gigaom_brief">' +
+            '<span class="cybrhawk-pop__cta-label">' + esc(BRIEF.label) +
+            "</span>" +
+            "</a>" +
             "</div>" +
 
             '<div class="cybrhawk-pop__foot">' +
@@ -177,6 +197,18 @@
 
         if (closeBtn) closeBtn.addEventListener("click", close);
         if (dismissBtn) dismissBtn.addEventListener("click", close);
+
+        // Analytics: push a GTM / GA4 event when the brief button is clicked.
+        // Harmless if no tag manager is loaded.
+        var briefBtn = card.querySelector('[data-cybrhawk-cta="gigaom_brief"]');
+        if (briefBtn) briefBtn.addEventListener("click", function () {
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: "cybrhawk_popup_click",
+                popup_cta: "gigaom_brief",
+                popup_href: briefBtn.href
+            });
+        });
 
         // Esc closes the popup while it's open.
         document.addEventListener("keydown", function (e) {
