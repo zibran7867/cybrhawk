@@ -1,0 +1,1983 @@
+/* ============================================================
+   Modern Home Hero — Refined Enterprise Section
+   Scope: .modern-home-page-hero-section
+   ============================================================ */
+
+.modern-home-page-hero-section {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+
+.modern-home-page-hero-section .hero7 {
+    position: relative;
+    z-index: 2;
+    padding: 80px 0 100px !important;
+}
+
+/* ---------- Subtle background depth ---------- */
+.modern-home-page-hero-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 60% 50% at 20% 30%, rgba(56, 189, 248, 0.10), transparent 70%),
+        radial-gradient(ellipse 50% 50% at 80% 70%, rgba(99, 102, 241, 0.10), transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Fine grid pattern, masked */
+.modern-home-page-hero-section::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse at 30% 50%, #000 20%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at 30% 50%, #000 20%, transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ---------- Main heading area ---------- */
+.modern-home-page-hero-section .main-heading {
+    position: relative;
+    z-index: 3;
+}
+
+/* Eyebrow badge (injected via JS) */
+.modern-home-page-hero-section .mhp-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 16px 7px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #cbd5e1;
+    background: rgba(148, 163, 184, 0.06);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 999px;
+    margin-bottom: 24px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.modern-home-page-hero-section .mhp-eyebrow.is-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.modern-home-page-hero-section .mhp-eyebrow .mhp-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ffffff;
+}
+
+/* H1 */
+.modern-home-page-hero-section .main-heading h1 {
+    position: relative;
+    font-size: clamp(34px, 4.5vw, 56px) !important;
+    font-weight: 700 !important;
+    line-height: 1.12 !important;
+    letter-spacing: -0.8px !important;
+    margin: 0 0 20px !important;
+    color: #ffffff !important;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.7s ease 0.05s, transform 0.7s ease 0.05s;
+}
+
+.modern-home-page-hero-section .main-heading h1.is-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Gradient highlight on last clause (wrapped by JS) — no animation */
+.modern-home-page-hero-section .main-heading h1 .mhp-highlight {
+    background: linear-gradient(120deg, #60a5fa 0%, #818cf8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline;
+}
+
+/* Paragraph */
+.modern-home-page-hero-section .main-heading p {
+    font-size: 17px !important;
+    line-height: 1.65 !important;
+    color: rgba(203, 213, 225, 0.85) !important;
+    max-width: 560px;
+    margin: 0 0 32px !important;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.7s ease 0.15s, transform 0.7s ease 0.15s;
+}
+
+.modern-home-page-hero-section .main-heading p.is-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ---------- Buttons ---------- */
+.modern-home-page-hero-section .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.7s ease 0.25s, transform 0.7s ease 0.25s;
+}
+
+.modern-home-page-hero-section .buttons.is-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.modern-home-page-hero-section .buttons .theme-btn13,
+.modern-home-page-hero-section .buttons .theme-btn12 {
+    position: relative;
+    transition:
+        transform 0.25s ease,
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+/* Primary button — solid indigo */
+.modern-home-page-hero-section .buttons .theme-btn13 {
+    background: #4f46e5 !important;
+    border: 1px solid #4f46e5 !important;
+    box-shadow: 0 6px 18px rgba(79, 70, 229, 0.28) !important;
+}
+
+.modern-home-page-hero-section .buttons .theme-btn13:hover {
+    background: #4338ca !important;
+    border-color: #4338ca !important;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(79, 70, 229, 0.38) !important;
+}
+
+/* Secondary button — outline */
+.modern-home-page-hero-section .buttons .theme-btn12 {
+    background: transparent !important;
+    border: 1px solid rgba(148, 163, 184, 0.3) !important;
+}
+
+.modern-home-page-hero-section .buttons .theme-btn12:hover {
+    background: rgba(148, 163, 184, 0.08) !important;
+    border-color: rgba(148, 163, 184, 0.5) !important;
+    transform: translateY(-2px);
+}
+
+/* Arrow nudge on hover (kept subtle) */
+.modern-home-page-hero-section .buttons .arrows {
+    transition: transform 0.25s ease;
+}
+
+.modern-home-page-hero-section .buttons .theme-btn13:hover .arrows,
+.modern-home-page-hero-section .buttons .theme-btn12:hover .arrows {
+    transform: translateX(3px);
+}
+
+/* ---------- Feature badges row (injected via JS) ---------- */
+.modern-home-page-hero-section .mhp-stats {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    margin-top: 48px;
+    /*   padding: 16px 28px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(148, 163, 184, 0.16); */
+    /*   border-radius: 999px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: translateY(14px); */
+    transition: opacity 0.7s ease 0.35s, transform 0.7s ease 0.35s;
+}
+
+.modern-home-page-hero-section .mhp-stats.is-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.modern-home-page-hero-section .mhp-feature {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 22px;
+    position: relative;
+}
+
+/* Vertical divider between features */
+.modern-home-page-hero-section .mhp-feature+.mhp-feature::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 28px;
+    background: rgba(148, 163, 184, 0.25);
+}
+
+.modern-home-page-hero-section .mhp-feature-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(59, 130, 246, 0.10);
+    border: 1.5px solid rgba(96, 165, 250, 0.55);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #60a5fa;
+    flex-shrink: 0;
+}
+
+.modern-home-page-hero-section .mhp-feature-icon svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2.2;
+}
+
+.modern-home-page-hero-section .mhp-feature-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e2e8f0;
+    letter-spacing: 0.1px;
+    white-space: nowrap;
+}
+
+/* ---------- Responsive ---------- */
+
+/* Tablet landscape / small desktop */
+@media (max-width: 1199px) {
+    .modern-home-page-hero-section .mhp-feature {
+        padding: 0 22px;
+    }
+}
+
+/* Tablet */
+@media (max-width: 991px) {
+    .modern-home-page-hero-section .hero7 {
+        padding: 60px 0 80px !important;
+    }
+
+    .modern-home-page-hero-section .main-heading p {
+        font-size: 16px !important;
+    }
+
+    .modern-home-page-hero-section .mhp-stats {
+        margin-top: 36px;
+        padding: 14px 18px;
+        row-gap: 12px;
+    }
+
+    .modern-home-page-hero-section .mhp-feature {
+        padding: 0 16px;
+    }
+
+    /* When features wrap to a new row, hide the divider that now sits at row start */
+    .modern-home-page-hero-section .mhp-feature-icon {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* Large phone / small tablet */
+@media (max-width: 768px) {
+    .modern-home-page-hero-section .hero7 {
+        padding: 50px 0 64px !important;
+    }
+
+    .modern-home-page-hero-section .mhp-stats {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        margin-top: 30px;
+        gap: 16px;
+        padding: 18px 22px;
+        border-radius: 18px;
+    }
+
+    .modern-home-page-hero-section .mhp-feature {
+        padding: 0;
+        width: 100%;
+    }
+
+    /* dividers are for the horizontal layout only */
+    .modern-home-page-hero-section .mhp-feature+.mhp-feature::before {
+        display: none;
+    }
+
+    .modern-home-page-hero-section .mhp-feature-label {
+        white-space: normal;
+    }
+}
+
+/* Phone */
+@media (max-width: 576px) {
+    .modern-home-page-hero-section .hero7 {
+        padding: 44px 0 56px !important;
+    }
+
+    .modern-home-page-hero-section .mhp-eyebrow {
+        font-size: 11px;
+        letter-spacing: 1px;
+        margin-bottom: 18px;
+    }
+
+    .modern-home-page-hero-section .main-heading p {
+        font-size: 15.5px !important;
+        margin: 0 0 26px !important;
+    }
+
+    .modern-home-page-hero-section .buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .modern-home-page-hero-section .buttons .theme-btn13,
+    .modern-home-page-hero-section .buttons .theme-btn12 {
+        justify-content: center;
+        text-align: center;
+        width: 45%;
+    }
+}
+
+/* Small phone */
+@media (max-width: 380px) {
+    .modern-home-page-hero-section .mhp-feature-icon {
+        width: 38px;
+        height: 38px;
+    }
+
+    .modern-home-page-hero-section .mhp-feature-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .modern-home-page-hero-section .mhp-stats {
+        padding: 16px 18px;
+    }
+}
+/* =====================================================================
+   CybrHawk — "Five solutions" cards styles
+   (markup injected by five-solution-cards.js)
+   All rules are scoped under .five-solution-cards.
+   ===================================================================== */
+
+.five-solution-cards {
+    /* Tweak to rebrand */
+    --uc-accent: #3b52f6;
+    --uc-accent-soft: #eef1ff;
+    /* icon badge fill */
+    --uc-bg: #f8f9fd;
+    --uc-heading: #0d1330;
+    /* near-black navy */
+    --uc-text: #5b6478;
+    /* body grey */
+    --uc-card-bg: #ffffff;
+    --uc-border: #e8ebf3;
+    --uc-rule: #edf0f6;
+    /* divider above frameworks */
+    --uc-thumb-a: #f1f5ff;
+    /* thumbnail gradient */
+    --uc-thumb-b: #e3eaff;
+    --uc-shadow: 0 1px 2px rgba(13, 19, 48, 0.03),
+        0 10px 30px rgba(13, 19, 48, 0.04);
+    --uc-shadow-hover: 0 2px 4px rgba(13, 19, 48, 0.05),
+        0 22px 46px rgba(13, 19, 48, 0.11);
+
+    background-color: var(--uc-bg);
+    background-image:
+        radial-gradient(60% 46% at 50% 0%, rgba(59, 82, 246, 0.05), transparent 70%);
+}
+
+/* ---- Shell ----------------------------------------------------------- */
+.five-solution-cards .wei-uc {
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: clamp(56px, 7vw, 92px) 0;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+/* With SHOW_HEADER off, the image above is the heading, so the cards
+   sit close under it instead of a full section's distance away. The
+   Elementor widget padding and container gap still add 40px on top. */
+.five-solution-cards .wei-uc:not(:has(.wei-uc__head-block)) {
+    padding-top: clamp(8px, 2vw, 24px);
+}
+
+.five-solution-cards .wei-uc * {
+    box-sizing: border-box;
+}
+
+/* Gradient library referenced by the thumbnail artwork. */
+.five-solution-cards .wei-uc__defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+/* ---- Header ---------------------------------------------------------- */
+.five-solution-cards .wei-uc__head-block {
+    max-width: 900px;
+    margin: 0 auto clamp(34px, 4vw, 52px);
+    text-align: center;
+}
+
+.five-solution-cards .wei-uc__bar {
+    display: block;
+    width: 64px;
+    height: 4px;
+    margin: 0 auto 20px;
+    border-radius: 2px;
+    background: var(--uc-accent);
+}
+
+.five-solution-cards .wei-uc__eyebrow {
+    margin: 0 0 14px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--uc-accent);
+}
+
+.five-solution-cards .wei-uc__title {
+    margin: 0 0 18px;
+    font-weight: 700;
+    font-size: clamp(30px, 4vw, 48px);
+    line-height: 1.12;
+    letter-spacing: -1.2px;
+    color: var(--uc-heading);
+}
+
+.five-solution-cards .wei-uc__sub {
+    margin: 0;
+    font-size: clamp(16px, 1.35vw, 18px);
+    line-height: 1.62;
+    color: var(--uc-text);
+}
+
+/* ---- Grid ------------------------------------------------------------ */
+.five-solution-cards .wei-uc__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(16px, 1.6vw, 24px);
+}
+
+/* ---- Card (a real <button>, so it resets browser chrome) -------------- */
+.five-solution-cards .wei-uc__card {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 1.1vw, 15px);
+    margin: 0;
+    padding: clamp(18px, 1.6vw, 24px);
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    background: var(--uc-card-bg);
+    border: 1px solid var(--uc-border);
+    border-radius: 16px;
+    box-shadow: var(--uc-shadow);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.five-solution-cards .wei-uc__card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(59, 82, 246, 0.26);
+    box-shadow: var(--uc-shadow-hover);
+}
+
+.five-solution-cards .wei-uc__card:focus-visible {
+    outline: 3px solid rgba(59, 82, 246, 0.45);
+    outline-offset: 3px;
+}
+
+/* ---- Card head: badge + copy ----------------------------------------- */
+.five-solution-cards .wei-uc__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.five-solution-cards .wei-uc__badge {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 13px;
+    background: var(--uc-accent-soft);
+    color: var(--uc-accent);
+}
+
+.five-solution-cards .wei-uc__badge svg {
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+.five-solution-cards .wei-uc__copy {
+    min-width: 0;
+    padding-top: 2px;
+}
+
+.five-solution-cards .wei-uc__card-title {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 700;
+    font-size: clamp(17px, 1.35vw, 19px);
+    line-height: 1.25;
+    letter-spacing: -0.3px;
+    color: var(--uc-heading);
+}
+
+/* The line after the em dash — the promise, not the description. */
+.five-solution-cards .wei-uc__card-tagline {
+    display: block;
+    font-weight: 600;
+    font-size: 14.5px;
+    line-height: 1.4;
+    color: var(--uc-accent);
+}
+
+.five-solution-cards .wei-uc__card-text {
+    display: block;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--uc-text);
+}
+
+/* ---- Frameworks line -------------------------------------------------- */
+.five-solution-cards .wei-uc__frameworks {
+    display: block;
+    padding-top: clamp(12px, 1.1vw, 15px);
+    border-top: 1px solid var(--uc-rule);
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--uc-text);
+}
+
+.five-solution-cards .wei-uc__frameworks-label {
+    font-weight: 700;
+    color: var(--uc-heading);
+}
+
+/* ---- Thumbnail ------------------------------------------------------- */
+.five-solution-cards .wei-uc__thumb {
+    position: relative;
+    display: block;
+    margin-top: auto;
+    aspect-ratio: 16 / 10;
+    border-radius: 12px;
+    overflow: hidden;
+    background: linear-gradient(150deg, var(--uc-thumb-a), var(--uc-thumb-b));
+}
+
+/* Fallback for browsers without aspect-ratio. */
+@supports not (aspect-ratio: 16 / 10) {
+    .five-solution-cards .wei-uc__thumb {
+        height: 0;
+        padding-bottom: 62.5%;
+    }
+}
+
+.five-solution-cards .wei-uc__art,
+.five-solution-cards .wei-uc__poster,
+.five-solution-cards .wei-uc__still {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.five-solution-cards .wei-uc__poster,
+.five-solution-cards .wei-uc__still {
+    object-fit: cover;
+    /* Shows through while the first frame is still being fetched. */
+    background: #0d1330;
+    pointer-events: none;
+}
+
+/* A scrim over real footage only — the built-in artwork is light enough
+   for the play button to read against on its own. */
+.five-solution-cards .wei-uc__thumb:has(.wei-uc__still)::after,
+.five-solution-cards .wei-uc__thumb:has(.wei-uc__poster)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg,
+            rgba(13, 19, 48, 0.1) 0%,
+            rgba(13, 19, 48, 0.32) 100%);
+}
+
+.five-solution-cards .wei-uc__play {
+    position: absolute;
+    z-index: 2;
+    /* above the scrim */
+    top: 50%;
+    left: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--uc-accent);
+    color: #ffffff;
+    box-shadow: 0 6px 18px rgba(59, 82, 246, 0.4);
+    transform: translate(-50%, -50%);
+    transition: transform 0.25s ease, background-color 0.25s ease;
+}
+
+.five-solution-cards .wei-uc__play svg {
+    display: block;
+    width: 26px;
+    height: 26px;
+}
+
+.five-solution-cards .wei-uc__card:hover .wei-uc__play {
+    transform: translate(-50%, -50%) scale(1.1);
+    background: #2b40e0;
+}
+
+.five-solution-cards .wei-uc__time {
+    position: absolute;
+    z-index: 2;
+    /* above the scrim */
+    right: 10px;
+    bottom: 10px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(13, 19, 48, 0.82);
+    font-weight: 600;
+    font-size: 12.5px;
+    line-height: 1.4;
+    letter-spacing: 0.2px;
+    color: #ffffff;
+}
+
+/* ---- Call to action --------------------------------------------------- */
+.five-solution-cards .wei-uc__cta-row {
+    margin-top: clamp(30px, 3.4vw, 46px);
+    text-align: center;
+}
+
+.five-solution-cards .wei-uc__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 30px;
+    border-radius: 999px;
+    background: var(--uc-accent);
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.2;
+    color: #ffffff;
+    text-decoration: none;
+    box-shadow: 0 10px 26px rgba(59, 82, 246, 0.28);
+    transition: transform 0.25s ease, background-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.five-solution-cards .wei-uc__cta:hover,
+.five-solution-cards .wei-uc__cta:focus {
+    background: #2b40e0;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 16px 34px rgba(59, 82, 246, 0.36);
+}
+
+.five-solution-cards .wei-uc__cta:focus-visible {
+    outline: 3px solid rgba(59, 82, 246, 0.45);
+    outline-offset: 3px;
+}
+
+.five-solution-cards .wei-uc__cta svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    transition: transform 0.25s ease;
+}
+
+.five-solution-cards .wei-uc__cta:hover svg {
+    transform: translateX(3px);
+}
+
+/* ---- Modal ----------------------------------------------------------- */
+
+/* The modal is portalled to <body> inside a .five-solution-cards wrapper so the
+   scoped rules and custom properties above still reach it. The wrapper
+   itself must not paint or take up space. */
+.five-solution-cards.wei-uc__portal {
+    display: contents;
+    background: none;
+}
+
+.five-solution-cards .wei-uc__modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(14px, 3vw, 40px);
+}
+
+.five-solution-cards .wei-uc__modal[hidden] {
+    display: none;
+}
+
+.five-solution-cards .wei-uc__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(9, 13, 35, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.22s ease;
+}
+
+.five-solution-cards .wei-uc__modal.is-open .wei-uc__backdrop {
+    opacity: 1;
+}
+
+.five-solution-cards .wei-uc__dialog {
+    position: relative;
+    width: min(880px, 100%);
+    max-height: calc(100vh - clamp(28px, 6vw, 80px));
+    overflow-y: auto;
+    padding: clamp(16px, 1.6vw, 22px);
+    background: var(--uc-card-bg);
+    border-radius: 16px;
+    box-shadow: 0 30px 80px rgba(9, 13, 35, 0.38);
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+    transition: opacity 0.22s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.five-solution-cards .wei-uc__modal.is-open .wei-uc__dialog {
+    opacity: 1;
+    transform: none;
+}
+
+.five-solution-cards .wei-uc__dialog-head {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: clamp(12px, 1.2vw, 16px);
+    padding-right: 40px;
+}
+
+.five-solution-cards .wei-uc__badge--lg {
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+}
+
+.five-solution-cards .wei-uc__badge--lg svg {
+    width: 24px;
+    height: 24px;
+}
+
+.five-solution-cards .wei-uc__dialog-copy {
+    min-width: 0;
+}
+
+.five-solution-cards .wei-uc__dialog-title {
+    margin: 0 0 3px;
+    font-weight: 700;
+    font-size: clamp(18px, 1.5vw, 20px);
+    line-height: 1.25;
+    letter-spacing: -0.4px;
+    color: var(--uc-heading);
+}
+
+.five-solution-cards .wei-uc__dialog-text {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--uc-text);
+}
+
+.five-solution-cards .wei-uc__close {
+    position: absolute;
+    top: clamp(14px, 1.4vw, 20px);
+    right: clamp(14px, 1.4vw, 20px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--uc-heading);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.five-solution-cards .wei-uc__close:hover {
+    background: var(--uc-accent-soft);
+    color: var(--uc-accent);
+}
+
+.five-solution-cards .wei-uc__close:focus-visible {
+    outline: 3px solid rgba(59, 82, 246, 0.45);
+    outline-offset: 2px;
+}
+
+.five-solution-cards .wei-uc__close svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+}
+
+/* ---- Player ---------------------------------------------------------- */
+.five-solution-cards .wei-uc__player {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0d1330;
+}
+
+@supports not (aspect-ratio: 16 / 9) {
+    .five-solution-cards .wei-uc__player {
+        height: 0;
+        padding-bottom: 56.25%;
+    }
+}
+
+.five-solution-cards .wei-uc__frame,
+.five-solution-cards .wei-uc__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    background: #0d1330;
+}
+
+.five-solution-cards .wei-uc__empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 24px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.five-solution-cards .wei-uc__empty span {
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.five-solution-cards .wei-uc__empty small {
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.66);
+}
+
+.five-solution-cards .wei-uc__empty code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12.5px;
+}
+
+/* ---- Scroll reveal ---------------------------------------------------- */
+.five-solution-cards .wei-uc.is-animated .wei-uc__head-block,
+.five-solution-cards .wei-uc.is-animated .wei-uc__card,
+.five-solution-cards .wei-uc.is-animated .wei-uc__cta-row {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.five-solution-cards .wei-uc.is-animated.is-visible .wei-uc__head-block,
+.five-solution-cards .wei-uc.is-animated.is-visible .wei-uc__card,
+.five-solution-cards .wei-uc.is-animated.is-visible .wei-uc__cta-row {
+    opacity: 1;
+    transform: none;
+}
+
+.five-solution-cards .wei-uc.is-animated .wei-uc__card,
+.five-solution-cards .wei-uc.is-animated .wei-uc__cta-row {
+    transition-delay: calc(0.12s + var(--uc-i) * 0.08s);
+}
+
+/* Once revealed, hover must win over the reveal transform. */
+.five-solution-cards .wei-uc.is-visible .wei-uc__card:hover {
+    transform: translateY(-4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .five-solution-cards .wei-uc.is-animated .wei-uc__head-block,
+    .five-solution-cards .wei-uc.is-animated .wei-uc__card {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .five-solution-cards .wei-uc__card:hover,
+    .five-solution-cards .wei-uc.is-visible .wei-uc__card:hover {
+        transform: none;
+    }
+
+    .five-solution-cards .wei-uc__card:hover .wei-uc__play {
+        transform: translate(-50%, -50%);
+    }
+
+    .five-solution-cards .wei-uc__dialog,
+    .five-solution-cards .wei-uc__backdrop,
+    .five-solution-cards .wei-uc__cta,
+    .five-solution-cards .wei-uc__cta svg {
+        transition: none;
+    }
+
+    .five-solution-cards .wei-uc__cta:hover {
+        transform: none;
+    }
+}
+
+/* ---- Responsive ------------------------------------------------------- */
+@media (max-width: 1080px) {
+    .five-solution-cards .wei-uc__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* All five cards sit side by side in a single row on desktop. */
+@media (min-width: 1081px) {
+    .five-solution-cards .wei-uc__grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 621px) and (max-width: 1080px) {
+    .five-solution-cards .wei-uc__grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .five-solution-cards .wei-uc__card {
+        grid-column: span 2;
+    }
+
+    .five-solution-cards .wei-uc__card:nth-child(2n + 1):last-child {
+        grid-column: 2 / span 2;
+    }
+}
+
+@media (max-width: 620px) {
+    .five-solution-cards .wei-uc__grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .five-solution-cards .wei-uc__dialog-head {
+        padding-right: 40px;
+    }
+
+    .five-solution-cards .wei-uc__badge--lg {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+/* ============================================================
+   Badges Showcase — Professional Animated Grid
+   Scope: .modern-badges (apply this class on the outer wrapper)
+   ============================================================ */
+
+.modern-badges {
+    position: relative;
+    overflow: hidden;
+    padding: 80px 20px !important;
+    isolation: isolate;
+}
+
+/* Animated gradient + subtle grid backdrop */
+.modern-badges::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.22), transparent 45%),
+        radial-gradient(circle at 80% 80%, rgba(56, 189, 248, 0.22), transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.14), transparent 60%);
+    z-index: -2;
+    animation: modernBadgesAura 14s ease-in-out infinite alternate;
+}
+
+.modern-badges::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(99, 102, 241, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.07) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at center, #000 40%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 40%, transparent 80%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes modernBadgesAura {
+    0% {
+        transform: scale(1) rotate(0deg);
+        opacity: 0.9;
+    }
+
+    50% {
+        transform: scale(1.08) rotate(2deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1) rotate(-2deg);
+        opacity: 0.85;
+    }
+}
+
+/* Floating orbs (injected via JS) */
+.modern-badges .bd-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.45;
+    pointer-events: none;
+    z-index: -1;
+    animation: modernBadgesOrbFloat 18s ease-in-out infinite;
+}
+
+@keyframes modernBadgesOrbFloat {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+        transform: translate(40px, -30px) scale(1.15);
+    }
+
+    66% {
+        transform: translate(-30px, 40px) scale(0.9);
+    }
+}
+
+/* Section heading injected by JS */
+.modern-badges .bd-heading {
+    text-align: center;
+    margin: 0 auto 50px;
+    max-width: 720px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.modern-badges .bd-heading.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.modern-badges .bd-heading .bd-eyebrow {
+    display: inline-block;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #4338ca;
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px solid rgba(99, 102, 241, 0.45);
+    border-radius: 999px;
+    margin-bottom: 16px;
+}
+
+.modern-badges .bd-heading .bd-title {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    margin: 0 0 14px;
+    background: linear-gradient(135deg, #0f172a 0%, #4338ca 55%, #0369a1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+}
+
+.modern-badges .bd-heading .bd-subtitle {
+    font-size: 16px;
+    color: #475569;
+    margin: 0;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+/* Grid container override (scoped to .modern-badges) */
+.modern-badges .elementor-element-a9defb2,
+.modern-badges .bd-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 28px !important;
+    max-width: 1280px;
+    margin: 0 auto !important;
+    padding: 20px 0 !important;
+    perspective: 1500px;
+}
+
+/* Individual badge cards */
+.modern-badges .elementor-element-a9defb2>.elementor-widget-image,
+.modern-badges .bd-grid>.elementor-widget-image {
+    position: relative;
+    padding: 28px 20px !important;
+    border-radius: 24px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.55));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(99, 102, 241, 0.18);
+    box-shadow:
+        0 10px 30px rgba(30, 41, 59, 0.12),
+        0 2px 6px rgba(30, 41, 59, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transition:
+        transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+        box-shadow 0.5s ease,
+        border-color 0.5s ease;
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+    animation: modernBadgesFloat 6s ease-in-out infinite;
+    animation-play-state: paused;
+}
+
+/* Reveal state (added by JS via IntersectionObserver) */
+.modern-badges .elementor-widget-image.is-revealed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition:
+        opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+        transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+        box-shadow 0.5s ease,
+        border-color 0.5s ease;
+    animation-play-state: running;
+}
+
+/* Stagger entrance via nth-child */
+.modern-badges .elementor-element-a9defb2>.elementor-widget-image:nth-child(1),
+.modern-badges .bd-grid>.elementor-widget-image:nth-child(1) {
+    animation-delay: 0s, 0s;
+    transition-delay: 0.05s;
+}
+
+.modern-badges .elementor-element-a9defb2>.elementor-widget-image:nth-child(2),
+.modern-badges .bd-grid>.elementor-widget-image:nth-child(2) {
+    animation-delay: 0s, 0.5s;
+    transition-delay: 0.15s;
+}
+
+.modern-badges .elementor-element-a9defb2>.elementor-widget-image:nth-child(3),
+.modern-badges .bd-grid>.elementor-widget-image:nth-child(3) {
+    animation-delay: 0s, 1s;
+    transition-delay: 0.25s;
+}
+
+.modern-badges .elementor-element-a9defb2>.elementor-widget-image:nth-child(4),
+.modern-badges .bd-grid>.elementor-widget-image:nth-child(4) {
+    animation-delay: 0s, 1.5s;
+    transition-delay: 0.35s;
+}
+
+.modern-badges .elementor-element-a9defb2>.elementor-widget-image:nth-child(5),
+.modern-badges .bd-grid>.elementor-widget-image:nth-child(5) {
+    animation-delay: 0s, 2s;
+    transition-delay: 0.45s;
+}
+
+.modern-badges .elementor-element-a9defb2>.elementor-widget-image:nth-child(6),
+.modern-badges .bd-grid>.elementor-widget-image:nth-child(6) {
+    animation-delay: 0s, 2.5s;
+    transition-delay: 0.55s;
+}
+
+@keyframes modernBadgesFloat {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-8px) rotate(0.4deg);
+    }
+}
+
+/* Conic glow ring */
+.modern-badges .elementor-widget-image::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: conic-gradient(from var(--bd-angle, 0deg),
+            transparent 0%,
+            rgba(99, 102, 241, 0.6) 15%,
+            rgba(56, 189, 248, 0.6) 35%,
+            transparent 50%,
+            transparent 100%);
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.5s ease;
+    animation: modernBadgesRingSpin 6s linear infinite;
+    /* Animating a custom property repaints every frame; the ring is
+       invisible until hover, so only spin it then. */
+    animation-play-state: paused;
+}
+
+@property --bd-angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+
+@keyframes modernBadgesRingSpin {
+    to {
+        --bd-angle: 360deg;
+    }
+}
+
+/* Shimmer sweep */
+.modern-badges .elementor-widget-image::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(115deg,
+            transparent 30%,
+            rgba(255, 255, 255, 0.55) 50%,
+            transparent 70%);
+    transform: skewX(-20deg);
+    pointer-events: none;
+    transition: left 0.9s ease;
+    z-index: 2;
+}
+
+/* Hover state */
+.modern-badges .elementor-widget-image:hover {
+    transform: translateY(-12px) scale(1.04);
+    border-color: rgba(99, 102, 241, 0.5);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.7));
+    box-shadow:
+        0 25px 60px rgba(99, 102, 241, 0.28),
+        0 0 40px rgba(56, 189, 248, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
+    animation-play-state: paused;
+}
+
+.modern-badges .elementor-widget-image:hover::before {
+    opacity: 1;
+    animation-play-state: running;
+}
+
+.modern-badges .elementor-widget-image:hover::after {
+    left: 120%;
+}
+
+/* Image styling */
+.modern-badges .elementor-widget-image img {
+    width: 100%;
+    height: auto;
+    max-width: 200px;
+    display: block;
+    margin: 0 auto;
+    filter: drop-shadow(0 8px 16px rgba(30, 41, 59, 0.18));
+    transition: filter 0.5s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transform-style: preserve-3d;
+    will-change: transform;
+    position: relative;
+    z-index: 1;
+}
+
+.modern-badges .elementor-widget-image:hover img {
+    filter:
+        drop-shadow(0 14px 28px rgba(99, 102, 241, 0.4)) drop-shadow(0 0 18px rgba(56, 189, 248, 0.3));
+    transform: scale(1.06) translateZ(30px);
+}
+
+/* Cursor-follow spotlight */
+.modern-badges .elementor-widget-image .bd-spotlight {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle 220px at var(--bd-x, 50%) var(--bd-y, 50%),
+            rgba(99, 102, 241, 0.22),
+            transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.modern-badges .elementor-widget-image:hover .bd-spotlight {
+    opacity: 1;
+}
+
+/* Particle burst container */
+.modern-badges .bd-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: inherit;
+    z-index: 0;
+}
+
+.modern-badges .bd-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(165, 180, 252, 0.9);
+    box-shadow: 0 0 8px rgba(165, 180, 252, 0.8);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .modern-badges {
+        padding: 50px 16px !important;
+    }
+
+    .modern-badges .elementor-element-a9defb2,
+    .modern-badges .bd-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px !important;
+    }
+
+    .modern-badges .elementor-widget-image {
+        padding: 18px 12px !important;
+    }
+
+    .modern-badges .bd-heading {
+        margin-bottom: 32px;
+    }
+}
+
+@media (max-width: 420px) {
+
+    .modern-badges .elementor-element-a9defb2,
+    .modern-badges .bd-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Section scrolled out of view (class toggled by JS): freeze the
+   looping animations so they stop costing frames nobody can see. */
+.modern-badges.bd-paused::before,
+.modern-badges.bd-paused .bd-orb,
+.modern-badges.bd-paused .elementor-widget-image,
+.modern-badges.bd-paused .elementor-widget-image::before {
+    animation-play-state: paused !important;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .modern-badges .elementor-widget-image,
+    .modern-badges::before,
+    .modern-badges .bd-orb {
+        animation: none !important;
+    }
+
+    .modern-badges .elementor-widget-image {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+}
+
+.home-five-solutions.elementor-widget-image img {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18), 0 4px 10px rgba(0, 0, 0, 0.10);
+}
+
+.home-five-solutions .wp-caption-text:empty {
+    display: none;
+}
+
+/* ============================================================
+   Portfolio Section — Light Refresh (matches reference screenshot)
+   Scope: everything is namespaced under .cyberhawk-portfolio
+   so styles cannot leak into other Elementor sections.
+   ============================================================ */
+
+/* ---------- Section background ---------- */
+.cyberhawk-portfolio .about7.sp {
+    position: relative;
+    background: #ffffff;
+    padding: 90px 0 40px;
+    overflow: hidden;
+}
+
+/* Soft blue dot field, top-left */
+.cyberhawk-portfolio .about7.sp::before {
+    content: "";
+    position: absolute;
+    top: 50px;
+    left: 40px;
+    width: 190px;
+    height: 140px;
+    background-image: radial-gradient(rgba(37, 99, 235, 0.28) 1.3px, transparent 1.6px);
+    background-size: 14px 14px;
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Soft circular wash behind the laptop */
+.cyberhawk-portfolio .about7.sp::after {
+    content: "";
+    position: absolute;
+    top: 80px;
+    left: 6%;
+    width: 540px;
+    height: 540px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%, #e8efff 0%, #f3f7ff 55%, transparent 75%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.cyberhawk-portfolio .about7.sp .container {
+    position: relative;
+    z-index: 1;
+}
+
+.cyberhawk-portfolio .about7.sp .row {
+    align-items: center;
+}
+
+/* ---------- Left: image with decorative orbital rings ---------- */
+.cyberhawk-portfolio .about7.sp .images-all {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 10px;
+}
+
+.cyberhawk-portfolio .about7.sp .images-all .image {
+    position: relative;
+    z-index: 2;
+    max-width: 100%;
+}
+
+.cyberhawk-portfolio .about7.sp .images-all .image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 30px 60px rgba(15, 42, 92, 0.18));
+}
+
+.cyberhawk-portfolio .about7.sp .images-all::before,
+.cyberhawk-portfolio .about7.sp .images-all::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.cyberhawk-portfolio .about7.sp .images-all::before {
+    width: 112%;
+    height: 112%;
+    border: 1px dashed rgba(37, 99, 235, 0.22);
+    transform: translate(-50%, -50%) rotate(-18deg);
+}
+
+.cyberhawk-portfolio .about7.sp .images-all::after {
+    width: 94%;
+    height: 94%;
+    border: 1px solid rgba(37, 99, 235, 0.14);
+    transform: translate(-50%, -50%) rotate(20deg);
+}
+
+/* ---------- Right: heading block ---------- */
+.cyberhawk-portfolio .about7.sp .heading7 {
+    padding-left: 20px;
+    position: relative;
+}
+
+/* Brand badge above the heading (injected by JS) */
+.cyberhawk-portfolio .about7.sp .heading7 .ph-brand-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px 9px 14px;
+    margin: 0 0 26px;
+    background: #f3f7ff;
+    border: 1px solid rgba(37, 99, 235, 0.18);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2.4px;
+    color: #0f2a5c;
+    text-transform: uppercase;
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.08);
+}
+
+.cyberhawk-portfolio .about7.sp .heading7 .ph-brand-badge .ph-brand-icon {
+    display: inline-flex;
+    width: 22px;
+    height: 22px;
+    align-items: center;
+    justify-content: center;
+    color: #2563eb;
+}
+
+/* Heading: first line dark, span (Cybersecurity Solutions) in blue */
+.cyberhawk-portfolio .about7.sp .heading7 .tg-element-title {
+    font-size: 46px;
+    line-height: 1.1;
+    font-weight: 700;
+    color: #0b1736;
+    margin: 0 0 10px;
+    letter-spacing: -0.5px;
+}
+
+.cyberhawk-portfolio .about7.sp .heading7 .tg-element-title span {
+    display: block;
+    background: linear-gradient(90deg, #1d4ed8, #3b82f6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Short accent bar below the heading (injected by JS) */
+.cyberhawk-portfolio .about7.sp .heading7 .ph-title-accent {
+    display: block;
+    width: 84px;
+    height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #1d4ed8, #60a5fa);
+    margin: 14px 0 22px;
+}
+
+/* Paragraph */
+.cyberhawk-portfolio .about7.sp .heading7 p {
+    font-size: 18px;
+    line-height: 1.75;
+    color: #5b6883;
+    max-width: 560px;
+    margin: 0;
+}
+
+/* Spacer divs from the existing markup */
+.cyberhawk-portfolio .about7.sp .space16 {
+    height: 4px;
+}
+
+.cyberhawk-portfolio .about7.sp .space30 {
+    height: 24px;
+}
+
+/* ============================================================
+   Discover More button — pill with right-side circular chip
+   ============================================================ */
+.cyberhawk-portfolio .about7.sp .heading7 .button {
+    display: inline-block;
+}
+
+.cyberhawk-portfolio .about7.sp .heading7 .theme-btn13 {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 8px 8px 28px;
+    background-image: linear-gradient(135deg, #1e40af, #2563eb);
+    color: #ffffff !important;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 999px;
+    text-decoration: none !important;
+    box-shadow: 0 14px 28px rgba(29, 78, 216, 0.32);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    line-height: 1;
+}
+
+.cyberhawk-portfolio .about7.sp .heading7 .theme-btn13:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 36px rgba(29, 78, 216, 0.42);
+}
+
+.cyberhawk-portfolio .about7.sp .heading7 .theme-btn13 .text {
+    display: inline-block;
+    line-height: 1;
+    padding: 4px 0;
+    transform: translateY(0px);
+}
+
+/* White circular chip on the right side of the button */
+.cyberhawk-portfolio .about7.sp .heading7 .theme-btn13 .arrows {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    background: #ffffff;
+    border-radius: 50%;
+    overflow: hidden;
+    flex: 0 0 auto;
+}
+
+/* Hide the original FA icons; we draw a clean arrow via ::before */
+.cyberhawk-portfolio .about7.sp .heading7 .theme-btn13 .arrows .arrow1,
+.cyberhawk-portfolio .about7.sp .heading7 .theme-btn13 .arrows .arrow2 {
+    display: none !important;
+}
+
+.cyberhawk-portfolio .about7.sp .heading7 .theme-btn13 .arrows::before,
+.cyberhawk-portfolio .about7.sp .heading7 .theme-btn13 .arrows::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14px 14px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231d4ed8' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'><path d='M7 17L17 7'/><path d='M9 7h8v8'/></svg>");
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cyberhawk-portfolio .about7.sp .heading7 .theme-btn13 .arrows::after {
+    transform: translate(-110%, 110%);
+}
+
+.cyberhawk-portfolio .about7.sp .heading7 .theme-btn13:hover .arrows::before {
+    transform: translate(110%, -110%);
+}
+
+.cyberhawk-portfolio .about7.sp .heading7 .theme-btn13:hover .arrows::after {
+    transform: translate(0, 0);
+}
+
+/* ============================================================
+   Feature cards row (Protect / Detect / Response)
+   Vertical layout — icon centered top, then title, then text
+   ============================================================ */
+
+.cyberhawk-portfolio .e-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 22px !important;
+    padding: 0 60px 90px !important;
+    max-width: 1400px;
+    margin: 0 auto;
+    background: transparent !important;
+}
+
+.cyberhawk-portfolio .child-card {
+    position: relative;
+    background: #ffffff !important;
+    border: 1px solid #eef1f7 !important;
+    border-radius: 16px !important;
+    padding: 30px 24px 28px !important;
+    box-shadow: 0 4px 14px rgba(15, 42, 92, 0.04);
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Subtle blue glow that grows on hover (top-left of card) */
+.cyberhawk-portfolio .child-card::before {
+    content: "";
+    position: absolute;
+    top: -60px;
+    left: -60px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.10), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+}
+
+.cyberhawk-portfolio .child-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 26px 50px rgba(29, 78, 216, 0.18);
+    border-color: rgba(37, 99, 235, 0.35) !important;
+}
+
+.cyberhawk-portfolio .child-card:hover::before {
+    opacity: 1;
+    transform: scale(1.15);
+}
+
+/* Vertical, centered content */
+.cyberhawk-portfolio .child-card .elementor-icon-box-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    gap: 16px !important;
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+}
+
+/* ---------- Icon: circular gradient chip wrapped in a dotted ring ---------- */
+.cyberhawk-portfolio .child-card .elementor-icon-box-icon {
+    position: relative;
+    flex: 0 0 auto;
+    margin: 0 auto !important;
+    width: 96px;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center !important;
+    text-align: center;
+}
+
+/* Outer dotted ring (rotates on hover) */
+.cyberhawk-portfolio .child-card .elementor-icon-box-icon::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1.5px dotted rgba(37, 99, 235, 0.45);
+    transition: border-color 0.35s ease;
+}
+
+.cyberhawk-portfolio .child-card:hover .elementor-icon-box-icon::before {
+    border-color: rgba(37, 99, 235, 0.85);
+    animation: cyberhawkRingSpin 8s linear infinite;
+}
+
+/* Soft gradient circle behind the icon */
+.cyberhawk-portfolio .child-card .elementor-icon-box-icon::after {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e9f0ff 0%, #f4f7ff 70%, #ffffff 100%);
+    box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.9),
+        0 8px 18px rgba(37, 99, 235, 0.12);
+    transition: box-shadow 0.35s ease;
+}
+
+.cyberhawk-portfolio .child-card:hover .elementor-icon-box-icon::after {
+    box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.9),
+        0 14px 28px rgba(37, 99, 235, 0.22);
+}
+
+.cyberhawk-portfolio .child-card .elementor-icon {
+    position: relative;
+    z-index: 1;
+    width: 46px !important;
+    height: 46px !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    background: transparent !important;
+    padding: 0 !important;
+    border: 0 !important;
+}
+
+.cyberhawk-portfolio .child-card .elementor-icon svg {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+    color: #1d4ed8;
+    transition: color 0.35s ease, transform 0.35s ease;
+}
+
+.cyberhawk-portfolio .child-card:hover .elementor-icon svg {
+    color: #1e40af;
+    transform: scale(1.08);
+}
+
+/* Legacy icon fills (original .cls-1 paths) */
+.cyberhawk-portfolio .child-card .elementor-icon svg .cls-1 {
+    fill: #1d4ed8 !important;
+    transition: fill 0.35s ease;
+}
+
+.cyberhawk-portfolio .child-card:hover .elementor-icon svg .cls-1 {
+    fill: #1e40af !important;
+}
+
+/* ---------- Card text ---------- */
+.cyberhawk-portfolio .child-card .elementor-icon-box-content {
+    flex: 0 1 auto;
+    min-width: 0;
+    width: 100%;
+    text-align: center;
+    align-self: center !important;
+}
+
+.cyberhawk-portfolio .child-card .elementor-icon-box-title {
+    position: relative;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: #0b1736 !important;
+    margin: 0 auto 12px !important;
+    line-height: 1.2 !important;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.cyberhawk-portfolio .child-card:hover .elementor-icon-box-title,
+.cyberhawk-portfolio .child-card:hover .elementor-icon-box-title span {
+    color: #0b1736 !important;
+}
+
+.cyberhawk-portfolio .child-card .elementor-icon-box-title span {
+    color: inherit !important;
+}
+
+/* Short blue underline under each card title (centered) */
+.cyberhawk-portfolio .child-card .elementor-icon-box-title::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 36px;
+    height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #1d4ed8, #60a5fa);
+    transform: translateX(-50%);
+}
+
+.cyberhawk-portfolio .child-card .elementor-icon-box-description {
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    color: #5b6883 !important;
+    margin: 0 !important;
+}
+
+.cyberhawk-portfolio .child-card:hover .elementor-icon-box-description {
+    color: #5b6883 !important;
+}
+
+/* ---------- Animations ---------- */
+@keyframes cyberhawkRingSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 992px) {
+    .cyberhawk-portfolio .about7.sp {
+        padding: 60px 0 30px;
+    }
+
+    .cyberhawk-portfolio .about7.sp .heading7 {
+        padding-left: 0;
+        margin-top: 30px;
+    }
+
+    .cyberhawk-portfolio .about7.sp .heading7 .tg-element-title {
+        font-size: 36px;
+    }
+
+    .cyberhawk-portfolio .about7.sp::after {
+        width: 380px;
+        height: 380px;
+    }
+
+    .cyberhawk-portfolio .e-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+        padding: 10px 32px 60px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .cyberhawk-portfolio .about7.sp .heading7 .tg-element-title {
+        font-size: 30px;
+    }
+
+    .cyberhawk-portfolio .about7.sp .heading7 p {
+        font-size: 15px;
+    }
+
+    .cyberhawk-portfolio .about7.sp::before {
+        left: 12px;
+        top: 24px;
+        width: 130px;
+        height: 90px;
+    }
+
+    .cyberhawk-portfolio .e-grid {
+        padding: 10px 18px 60px !important;
+    }
+
+    .cyberhawk-portfolio .child-card {
+        padding: 26px 20px !important;
+    }
+
+    .cyberhawk-portfolio .child-card .elementor-icon-box-icon {
+        width: 84px;
+        height: 84px;
+    }
+
+    .cyberhawk-portfolio .child-card .elementor-icon {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .cyberhawk-portfolio .child-card .elementor-icon-box-title {
+        font-size: 18px !important;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .cyberhawk-portfolio .child-card .elementor-icon-box-icon::before {
+        animation: none !important;
+    }
+
+    .cyberhawk-portfolio .about7.sp .heading7 .theme-btn13,
+    .cyberhawk-portfolio .child-card,
+    .cyberhawk-portfolio .child-card .elementor-icon svg {
+        transition-duration: 0.15s !important;
+    }
+}
