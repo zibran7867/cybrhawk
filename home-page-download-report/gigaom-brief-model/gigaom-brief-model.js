@@ -12,9 +12,10 @@
      (data-cybrhawk-cta="gigaom_brief") — or on any other element with
      [data-gigaom-brief] / href="#gigaom-brief" — opens a modal on the
      same page instead of downloading or navigating away.
-   - The modal collects the SAME details as the FortiBleed report form
-     on /download-report/ (first name, last name, business email,
-     company, phone, terms), with the SAME validation rules.
+   - The modal collects the same details as the FortiBleed report form
+     on /download-report/ (first name, last name, email, company, phone,
+     terms) with the same validation rules — except that ANY email is
+     accepted (Gmail, Outlook, etc.). Only throwaway inboxes are blocked.
    - On a valid submit it: sends the lead to CF7 (emails the team),
      starts the PDF download, and shows a success state with a manual
      download link — exactly like the FortiBleed flow.
@@ -60,12 +61,9 @@
     var PRIVACY_URL = "https://cybrhawk.com/privacy-policy/";
 
     /* ---- Validation (mirrors the FortiBleed /download-report/ form) ---- */
+    // Personal email (Gmail, Yahoo, Outlook…) IS allowed here — unlike the
+    // FortiBleed form. Only disposable / throwaway inboxes are rejected.
     var BLOCKED_EMAIL_DOMAINS = [
-        "gmail.com", "googlemail.com", "yahoo.com", "yahoo.co.in", "yahoo.co.uk",
-        "ymail.com", "rocketmail.com", "hotmail.com", "hotmail.co.uk", "outlook.com",
-        "live.com", "msn.com", "aol.com", "icloud.com", "me.com", "mac.com",
-        "gmx.com", "gmx.net", "mail.com", "zoho.com", "yandex.com", "yandex.ru",
-        "protonmail.com", "proton.me", "pm.me", "tutanota.com", "hey.com",
         "yopmail.com", "yopmail.fr", "mailinator.com", "guerrillamail.com",
         "guerrillamail.info", "sharklasers.com", "10minutemail.com", "temp-mail.org",
         "tempmail.com", "getnada.com", "trashmail.com", "dispostable.com",
@@ -91,7 +89,8 @@
     var FIELDS = [
         { name: "first_name", label: "First Name", type: "text", auto: "given-name" },
         { name: "last_name", label: "Last Name", type: "text", auto: "family-name" },
-        { name: "business_email", label: "Business Email", type: "email", auto: "email" },
+        // name stays "business_email" so it matches CF7 form 18769
+        { name: "business_email", label: "Email", type: "email", auto: "email" },
         { name: "company", label: "Company Name", type: "text", auto: "organization" },
         { name: "phone", label: "Phone Number", type: "tel", auto: "tel" }
     ];
@@ -333,7 +332,7 @@
                 return "Enter a valid email address.";
             }
             if (BLOCKED_EMAIL_DOMAINS.indexOf(val.split("@").pop().toLowerCase()) !== -1) {
-                return "Please use your business email address.";
+                return "Please use a permanent email address (not a temporary inbox).";
             }
             return "";
         }

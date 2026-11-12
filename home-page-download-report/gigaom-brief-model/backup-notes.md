@@ -7,7 +7,7 @@ Date: 12 Nov 2026 · Site: cybrhawk.com (live)
 Clicking **Download GigaOm Brief** in the homepage corner popup now opens a modal on the same page, with no redirect and no instant download. The modal asks for the same details as the FortiBleed form on /download-report/:
 
 - First name and last name (letters only, 2–50 characters)
-- Business email (Gmail, Yahoo, Outlook, temp-mail and similar addresses are blocked)
+- Email: any address is accepted, including Gmail, Yahoo and Outlook. Only throwaway inboxes like mailinator or yopmail are rejected. This is the one rule that differs from the FortiBleed form, which requires a business email. The field is still named `business_email` internally to match CF7 form 18769.
 - Company name
 - Phone (digits only, 7–15)
 - Terms checkbox
@@ -28,7 +28,7 @@ When the visitor submits, it does what the FortiBleed form does:
 
 Settings for #1 and #2: Linking = Internal, Where in site = Frontend, Priority = 5. The CSS goes in the header and the JS in the footer.
 
-CF7 form #3 is a duplicate of "Download Report" (17361). It has the same fields and the same two recipients, but the subject is **"New GigaOm brief download — CybrHawk"** and the email heading is **"New GigaOm Brief Download Request"**, so the team can tell the two downloads apart. It doesn't need to be embedded on any page because the modal posts to it through the CF7 REST API.
+CF7 form #3 is a duplicate of "Download Report" (17361). It has the same fields and the same two recipients, but the subject is **"New GigaOm brief download — CybrHawk"** and the email heading is **"New GigaOm Brief Download Request"**, so the team can tell the two downloads apart. The email row is labelled "Email" instead of "Business Email". It doesn't need to be embedded on any page because the modal posts to it through the CF7 REST API.
 
 Local copies (byte-identical to what is live):
 
