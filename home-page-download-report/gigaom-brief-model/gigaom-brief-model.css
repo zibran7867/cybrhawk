@@ -1,0 +1,570 @@
+/* =====================================================================
+   GigaOm Brief — lead-capture modal styles
+   ---------------------------------------------------------------------
+   Plugin:   Simple Custom CSS and JS  →  "GigaOm Brief Modal" (CSS)
+   Markup is injected by the "GigaOm Brief Modal" (JS) snippet into a
+   ".cybrhawk-gm-portal" element on <body>. Every rule is scoped under
+   that portal so nothing leaks into the rest of the site.
+   Look & feel mirrors the FortiBleed form on /download-report/ and the
+   homepage popup (same tokens, fonts and field style).
+   ===================================================================== */
+
+.cybrhawk-gm-portal {
+    --gm-accent: #2f6dff;
+    --gm-accent-2: #7089ff;
+    --gm-accent-hover: #245bdd;
+    --gm-accent-soft: rgba(47, 109, 255, 0.14);
+    --gm-heading: #ffffff;
+    --gm-text: #aeb8d2;
+    --gm-muted: #6f7da6;
+    --gm-card-bg: #0f1730;
+    --gm-border: rgba(120, 150, 255, 0.16);
+    --gm-field-border: rgba(120, 150, 255, 0.28);
+    --gm-error: #ff6b6b;
+    --gm-display: "Barlow Condensed", "Oswald", "Arial Narrow", sans-serif;
+
+    position: fixed;
+    inset: 0;
+    z-index: 2147483600;
+    /* above the homepage corner popup (2147483000) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    box-sizing: border-box;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+    font-family: inherit;
+}
+
+.cybrhawk-gm-portal[hidden] {
+    display: none !important;
+}
+
+.cybrhawk-gm-portal.is-open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s ease, visibility 0s;
+}
+
+.cybrhawk-gm-portal *,
+.cybrhawk-gm-portal *::before,
+.cybrhawk-gm-portal *::after {
+    box-sizing: border-box;
+}
+
+html.cybrhawk-gm-lock,
+html.cybrhawk-gm-lock body {
+    overflow: hidden !important;
+}
+
+/* ---- Backdrop + dialog ---------------------------------------------- */
+.cybrhawk-gm-portal .cybrhawk-gm__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(3, 7, 18, 0.72);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__dialog {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    max-height: calc(100vh - 48px);
+    max-height: calc(100dvh - 48px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--gm-border);
+    border-radius: 16px;
+    background:
+        linear-gradient(180deg, rgba(120, 150, 255, 0.05), rgba(120, 150, 255, 0)),
+        var(--gm-card-bg);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+    color: var(--gm-text);
+    transform: translateY(14px) scale(0.98);
+    transition: transform 0.22s ease;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(120, 150, 255, 0.3) transparent;
+}
+
+.cybrhawk-gm-portal.is-open .cybrhawk-gm__dialog {
+    transform: none;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__body {
+    padding: 40px;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--gm-border);
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--gm-text);
+    cursor: pointer;
+    box-shadow: none;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.22);
+    color: #fff;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__close:focus-visible {
+    outline: 2px solid var(--gm-accent-2);
+    outline-offset: 2px;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__close svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* ---- Heading -------------------------------------------------------- */
+.cybrhawk-gm-portal .cybrhawk-gm__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 14px;
+    font-family: var(--gm-display);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: var(--gm-accent);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__eyebrow-line {
+    display: inline-block;
+    width: 34px;
+    height: 2px;
+    background: var(--gm-accent);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__title {
+    margin: 0 0 10px;
+    padding-right: 36px;
+    font-family: var(--gm-display);
+    font-size: clamp(28px, 4.2vw, 38px);
+    font-style: italic;
+    font-weight: 900;
+    line-height: 1.02;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    color: var(--gm-heading);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__title-accent {
+    color: var(--gm-accent-2);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__intro {
+    margin: 0 0 28px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--gm-text);
+}
+
+/* ---- Fields (floating labels, underline — same as FortiBleed form) --- */
+.cybrhawk-gm-portal .cybrhawk-gm__form {
+    margin: 0;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 26px 24px;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__field {
+    position: relative;
+    margin: 0;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__control {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 22px 0 9px;
+    border: 0;
+    border-bottom: 1px solid var(--gm-field-border);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    color: var(--gm-heading);
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.2;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: border-color 0.18s ease;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__control:focus {
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+    border-bottom-color: var(--gm-accent);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__control::placeholder {
+    color: transparent;
+    opacity: 0;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__control:-webkit-autofill,
+.cybrhawk-gm-portal .cybrhawk-gm__control:-webkit-autofill:focus {
+    -webkit-text-fill-color: #fff;
+    -webkit-box-shadow: 0 0 0 1000px var(--gm-card-bg) inset;
+    caret-color: #fff;
+    transition: background-color 9999s ease-out 0s;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__label {
+    position: absolute;
+    left: 0;
+    top: 20px;
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: #fff;
+    pointer-events: none;
+    transform-origin: left top;
+    transition: transform 0.16s ease, color 0.16s ease, font-size 0.16s ease;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__field.is-focused .cybrhawk-gm__label,
+.cybrhawk-gm-portal .cybrhawk-gm__field.is-filled .cybrhawk-gm__label,
+.cybrhawk-gm-portal .cybrhawk-gm__control:-webkit-autofill+.cybrhawk-gm__label {
+    transform: translateY(-18px);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gm-accent);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__req {
+    color: var(--gm-accent);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__field.is-focused .cybrhawk-gm__req,
+.cybrhawk-gm-portal .cybrhawk-gm__field.is-filled .cybrhawk-gm__req {
+    display: none;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__error {
+    display: none;
+    margin-top: 6px;
+    font-size: 12.5px;
+    line-height: 1.4;
+    color: var(--gm-error);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__field.is-error .cybrhawk-gm__control {
+    border-bottom-color: var(--gm-error);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__field.is-error .cybrhawk-gm__label {
+    color: var(--gm-error);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__field.is-error .cybrhawk-gm__error {
+    display: block;
+}
+
+/* ---- Consent + terms ------------------------------------------------ */
+.cybrhawk-gm-portal .cybrhawk-gm__consent {
+    margin: 28px 0 20px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--gm-muted);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__consent a,
+.cybrhawk-gm-portal .cybrhawk-gm__terms-text a {
+    color: var(--gm-accent);
+    text-decoration: underline;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__consent a:hover,
+.cybrhawk-gm-portal .cybrhawk-gm__terms-text a:hover {
+    color: var(--gm-accent-2);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__terms {
+    position: relative;
+    margin: 0 0 24px;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__terms-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    margin: 0;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--gm-text);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__terms-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__terms-box {
+    flex: 0 0 auto;
+    width: 20px;
+    height: 20px;
+    margin-top: 1px;
+    border: 1.5px solid var(--gm-field-border);
+    border-radius: 5px;
+    background: transparent;
+    transition: border-color 0.18s ease, background 0.18s ease;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__terms-box::after {
+    content: "";
+    display: block;
+    width: 5px;
+    height: 10px;
+    margin: 2px auto 0;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0);
+    transition: transform 0.15s ease;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__terms-input:checked+.cybrhawk-gm__terms-box {
+    border-color: var(--gm-accent);
+    background: var(--gm-accent);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__terms-input:checked+.cybrhawk-gm__terms-box::after {
+    transform: rotate(45deg) scale(1);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__terms-input:focus-visible+.cybrhawk-gm__terms-box {
+    outline: 2px solid var(--gm-accent-2);
+    outline-offset: 2px;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__terms.is-error .cybrhawk-gm__terms-box {
+    border-color: var(--gm-error);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__terms.is-error .cybrhawk-gm__error {
+    display: block;
+}
+
+/* ---- Submit --------------------------------------------------------- */
+.cybrhawk-gm-portal .cybrhawk-gm__actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 15px 30px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--gm-accent);
+    box-shadow: none;
+    color: #fff;
+    font-family: var(--gm-display);
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.08s ease;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__submit:hover {
+    background: var(--gm-accent-hover);
+    color: #fff;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__submit:active {
+    transform: translateY(1px);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__submit:focus-visible {
+    outline: 2px solid var(--gm-accent-2);
+    outline-offset: 2px;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__submit-arrow {
+    display: inline-flex;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__submit-arrow svg {
+    width: 18px;
+    height: 18px;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__submit-spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: cybrhawk-gm-spin 0.7s linear infinite;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__submit.is-loading {
+    cursor: wait;
+    opacity: 0.92;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__submit.is-loading .cybrhawk-gm__submit-arrow {
+    display: none;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__submit.is-loading .cybrhawk-gm__submit-spinner {
+    display: inline-block;
+}
+
+@keyframes cybrhawk-gm-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ---- Success state -------------------------------------------------- */
+.cybrhawk-gm-portal .cybrhawk-gm__dialog.is-done .cybrhawk-gm__form,
+.cybrhawk-gm-portal .cybrhawk-gm__dialog.is-done .cybrhawk-gm__intro {
+    display: none;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__success[hidden] {
+    display: none;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__success {
+    padding: 18px 8px 6px;
+    text-align: center;
+    outline: none;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__success-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    background: var(--gm-accent-soft);
+    color: var(--gm-accent);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__success-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__success-title {
+    margin: 0 0 10px;
+    font-family: var(--gm-display);
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--gm-heading);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__success-text {
+    max-width: 360px;
+    margin: 0 auto;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--gm-text);
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__success-link {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gm-accent);
+    text-decoration: underline;
+}
+
+.cybrhawk-gm-portal .cybrhawk-gm__success-link:hover {
+    color: var(--gm-accent-2);
+}
+
+/* ---- Mobile --------------------------------------------------------- */
+@media (max-width: 600px) {
+    .cybrhawk-gm-portal {
+        padding: 12px;
+        align-items: flex-end;
+    }
+
+    .cybrhawk-gm-portal .cybrhawk-gm__dialog {
+        max-height: calc(100vh - 24px);
+        max-height: calc(100dvh - 24px);
+        border-radius: 14px;
+    }
+
+    .cybrhawk-gm-portal .cybrhawk-gm__body {
+        padding: 28px 22px 24px;
+    }
+
+    .cybrhawk-gm-portal .cybrhawk-gm__grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+
+    .cybrhawk-gm-portal .cybrhawk-gm__actions {
+        justify-content: stretch;
+    }
+
+    .cybrhawk-gm-portal .cybrhawk-gm__submit {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .cybrhawk-gm-portal,
+    .cybrhawk-gm-portal .cybrhawk-gm__dialog {
+        transition: none;
+    }
+}
