@@ -1,0 +1,541 @@
+.download-form-page {
+
+    --rf-accent: #2f6dff;
+    --rf-accent-2: #7089ff;
+    --rf-accent-hover: #245bdd;
+    --rf-accent-soft: rgba(47, 109, 255, 0.14);
+    --rf-bg: #070d1f;
+    --rf-heading: #ffffff;
+    --rf-text: #aeb8d2;
+    --rf-muted: #3e4f7e;
+    --rf-card-bg: #0f1730;
+    --rf-border: rgba(120, 150, 255, 0.14);
+    --rf-field-border: rgba(120, 150, 255, 0.28);
+    --rf-error: #ff6b6b;
+
+    --rf-display: "Barlow Condensed", "Oswald", "Arial Narrow", sans-serif;
+
+    background-color: var(--rf-bg);
+    background-image:
+        radial-gradient(58% 45% at 85% 0%, rgba(47, 109, 255, 0.14), transparent 70%),
+        linear-gradient(rgba(140, 160, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(140, 160, 255, 0.045) 1px, transparent 1px);
+    background-size: 100% 100%, 46px 46px, 46px 46px;
+}
+
+.download-form-page .report-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    align-items: start;
+    gap: 64px;
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 35px 0;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.download-form-page .report-form * {
+    box-sizing: border-box;
+}
+
+.download-form-page .report-form__copy {
+    padding-top: 6px;
+}
+
+.download-form-page .report-form__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 20px;
+    font-family: var(--rf-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--rf-accent);
+}
+
+.download-form-page .report-form__eyebrow-line {
+    width: 30px;
+    height: 2px;
+    background: var(--rf-accent);
+}
+
+.download-form-page .report-form__title {
+    margin: 0 0 22px;
+    font-family: var(--rf-display);
+    font-style: italic;
+    font-weight: 800;
+    font-size: clamp(30px, 3.8vw, 46px);
+    line-height: 1.04;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: var(--rf-heading);
+}
+
+.download-form-page .report-form__title-accent {
+    color: var(--rf-accent-2);
+}
+
+.download-form-page .report-form__intro {
+    margin: 0 0 30px;
+    max-width: 520px;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--rf-text);
+}
+
+.download-form-page .report-form__stats {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.download-form-page .report-form__stat {
+    position: relative;
+    padding-left: 24px;
+    font-size: 16.5px;
+    line-height: 1.55;
+    color: var(--rf-text);
+}
+
+.download-form-page .report-form__stat::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--rf-accent);
+    box-shadow: 0 0 8px rgba(47, 109, 255, 0.5);
+}
+
+.download-form-page .report-form__stat-num {
+    font-weight: 700;
+    color: var(--rf-heading);
+}
+
+.download-form-page .report-form__card {
+    position: relative;
+    padding: 40px;
+    border: 1px solid var(--rf-border);
+    border-radius: 16px;
+    background:
+        linear-gradient(180deg, rgba(120, 150, 255, 0.05), rgba(120, 150, 255, 0)),
+        var(--rf-card-bg);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4);
+}
+
+.download-form-page .report-form__form-title {
+    margin: 0 0 30px;
+    font-family: var(--rf-display);
+    font-weight: 800;
+    font-size: clamp(26px, 3vw, 34px);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--rf-accent);
+}
+
+.download-form-page .report-form__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 26px 24px;
+}
+
+.download-form-page .report-form__field {
+    position: relative;
+}
+
+.download-form-page .report-form__control {
+    width: 100%;
+    padding: 22px 0 9px;
+    border: 0;
+    border-bottom: 1px solid var(--rf-field-border);
+    background: transparent;
+    color: var(--rf-heading);
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.2;
+    border-radius: 0;
+    transition: border-color 0.18s ease;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.download-form-page .report-form__control:focus {
+    outline: none;
+    border-bottom-color: var(--rf-accent);
+}
+
+.download-form-page .report-form__control::placeholder {
+    color: #ffffff;
+    opacity: 1;
+}
+
+.download-form-page .report-form__label {
+    position: absolute;
+    left: 0;
+    top: 20px;
+    font-size: 15px;
+    color: #ffffff;
+    pointer-events: none;
+    transition: transform 0.16s ease, color 0.16s ease, font-size 0.16s ease;
+    transform-origin: left top;
+}
+
+.download-form-page .report-form__field.is-focused .report-form__label,
+.download-form-page .report-form__field.is-filled .report-form__label {
+    transform: translateY(-18px);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--rf-accent);
+}
+
+.download-form-page .report-form__field.is-focused .report-form__req,
+.download-form-page .report-form__field.is-filled .report-form__req {
+    display: none;
+}
+
+.download-form-page .report-form__req {
+    color: var(--rf-accent);
+}
+
+.download-form-page .report-form__control:-webkit-autofill,
+.download-form-page .report-form__control:-webkit-autofill:hover,
+.download-form-page .report-form__control:-webkit-autofill:focus,
+.download-form-page .report-form__control:-webkit-autofill:active {
+    -webkit-text-fill-color: var(--rf-heading);
+    caret-color: var(--rf-heading);
+    -webkit-box-shadow: 0 0 0 1000px var(--rf-card-bg) inset;
+    box-shadow: 0 0 0 1000px var(--rf-card-bg) inset;
+    transition: background-color 100000s ease 0s;
+}
+
+.download-form-page .report-form__field--select {
+    position: relative;
+}
+
+.download-form-page select.report-form__control {
+    padding-right: 24px;
+    cursor: pointer;
+    color: var(--rf-heading);
+}
+
+.download-form-page .report-form__field--select:not(.is-filled) select.report-form__control {
+    color: transparent;
+}
+
+.download-form-page .report-form__control option {
+    color: #111;
+}
+
+.download-form-page .report-form__chevron {
+    position: absolute;
+    right: 2px;
+    top: 24px;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--rf-muted);
+    border-bottom: 2px solid var(--rf-muted);
+    transform: rotate(45deg);
+    pointer-events: none;
+}
+
+.download-form-page .report-form__error {
+    display: none;
+    margin-top: 6px;
+    font-size: 12.5px;
+    line-height: 1.4;
+    color: var(--rf-error);
+}
+
+.download-form-page .report-form__field.is-error .report-form__control {
+    border-bottom-color: var(--rf-error);
+}
+
+.download-form-page .report-form__field.is-error .report-form__label {
+    color: var(--rf-error);
+}
+
+.download-form-page .report-form__field.is-error .report-form__error {
+    display: block;
+}
+
+.download-form-page .report-form__consent {
+    margin: 28px 0 24px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--rf-muted);
+}
+
+.download-form-page .report-form__consent a {
+    color: var(--rf-accent);
+    text-decoration: underline;
+}
+
+.download-form-page .report-form__terms {
+    margin: 0 0 24px;
+}
+
+.download-form-page .report-form__terms-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--rf-text);
+}
+
+.download-form-page .report-form__terms-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.download-form-page .report-form__terms-box {
+    flex: 0 0 auto;
+    width: 20px;
+    height: 20px;
+    margin-top: 1px;
+    border: 1.5px solid var(--rf-field-border);
+    border-radius: 5px;
+    background: transparent;
+    transition: border-color 0.18s ease, background 0.18s ease;
+}
+
+.download-form-page .report-form__terms-box::after {
+    content: "";
+    display: block;
+    width: 5px;
+    height: 10px;
+    margin: 2px auto 0;
+    border: solid #ffffff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0);
+    transition: transform 0.15s ease;
+}
+
+.download-form-page .report-form__terms-input:checked+.report-form__terms-box {
+    border-color: var(--rf-accent);
+    background: var(--rf-accent);
+}
+
+.download-form-page .report-form__terms-input:checked+.report-form__terms-box::after {
+    transform: rotate(45deg) scale(1);
+}
+
+.download-form-page .report-form__terms-input:focus-visible+.report-form__terms-box {
+    outline: 2px solid var(--rf-accent-2);
+    outline-offset: 2px;
+}
+
+.download-form-page .report-form__terms-text a {
+    color: var(--rf-accent);
+    text-decoration: underline;
+}
+
+.download-form-page .report-form__terms .report-form__req {
+    color: var(--rf-accent);
+}
+
+.download-form-page .report-form__terms.is-error .report-form__terms-box {
+    border-color: var(--rf-error);
+}
+
+.download-form-page .report-form__terms.is-error .report-form__error {
+    display: block;
+}
+
+.download-form-page .report-form__actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.download-form-page .report-form__submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 30px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--rf-accent);
+    color: #ffffff;
+    font-family: var(--rf-display);
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.08s ease;
+}
+
+.download-form-page .report-form__submit:hover {
+    background: var(--rf-accent-hover);
+}
+
+.download-form-page .report-form__submit:active {
+    transform: translateY(1px);
+}
+
+.download-form-page .report-form__submit-arrow {
+    display: inline-flex;
+    transition: transform 0.2s ease;
+}
+
+.download-form-page .report-form__submit-arrow svg {
+    width: 18px;
+    height: 18px;
+}
+
+.download-form-page .report-form__submit:hover .report-form__submit-arrow {
+    transform: translateX(4px);
+}
+
+.download-form-page .report-form__submit-spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #ffffff;
+    animation: report-form-spin 0.7s linear infinite;
+}
+
+.download-form-page .report-form__submit.is-loading {
+    cursor: wait;
+    opacity: 0.92;
+}
+
+.download-form-page .report-form__submit.is-loading:hover {
+    background: var(--rf-accent);
+}
+
+.download-form-page .report-form__submit.is-loading .report-form__submit-arrow {
+    display: none;
+}
+
+.download-form-page .report-form__submit.is-loading .report-form__submit-spinner {
+    display: inline-flex;
+}
+
+.download-form-page .report-form__submit:disabled {
+    cursor: not-allowed;
+}
+
+@keyframes report-form-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .download-form-page .report-form__submit-spinner {
+        animation-duration: 1.4s;
+    }
+}
+
+.download-form-page .report-form__card.is-done .report-form__form {
+    display: none;
+}
+
+.download-form-page .report-form__success {
+    text-align: center;
+    padding: 24px 8px;
+    outline: none;
+}
+
+.download-form-page .report-form__success-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    background: var(--rf-accent-soft);
+    color: var(--rf-accent);
+}
+
+.download-form-page .report-form__success-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.download-form-page .report-form__success-title {
+    margin: 0 0 10px;
+    font-family: var(--rf-display);
+    font-weight: 800;
+    font-size: 30px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--rf-heading);
+}
+
+.download-form-page .report-form__success-text {
+    margin: 0 auto;
+    max-width: 340px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--rf-text);
+}
+
+.download-form-page .report-form__success-link {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--rf-accent);
+    text-decoration: underline;
+}
+
+.download-form-page .report-form__success-link:hover {
+    color: var(--rf-accent-2);
+}
+
+@media (max-width: 960px) {
+    .download-form-page .report-form {
+        grid-template-columns: 1fr;
+        gap: 44px;
+        padding: 64px 0;
+    }
+
+    .download-form-page .report-form__intro {
+        max-width: 640px;
+    }
+}
+
+@media (max-width: 600px) {
+    .download-form-page .report-form {
+        padding: 52px 0;
+    }
+
+    .download-form-page .report-form__card {
+        padding: 28px 22px;
+    }
+
+    .download-form-page .report-form__grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+
+    .download-form-page .report-form__actions {
+        justify-content: stretch;
+    }
+
+    .download-form-page .report-form__submit {
+        width: 100%;
+        justify-content: center;
+    }
+}
