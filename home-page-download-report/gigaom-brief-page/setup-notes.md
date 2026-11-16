@@ -51,9 +51,15 @@ Steps 5 and 7 matter. While the old modal JS (18771) is still loading, it catche
 - A valid submit starts the PDF download, shows the success card, and the team gets the "New GigaOm brief download — CybrHawk" email.
 - Check at phone width. The form stacks under the copy and the button is full width.
 
-## Copy to check
+## Page copy
 
-The left column was written without reading the PDF, which is copy-protected. The four "What's inside" bullets are general. Check them against the brief and edit them in the HTML widget if anything doesn't match. "10 pages" is taken from the PDF's page count.
+The left column comes from the brief itself, "Five Alerts, One Attack: The Cost of a Fragmented SOC" by Chris Ray, GigaOm:
+
+- **Title and intro:** the brief's title, and its opening framing (one operation, five queues; a vendor-neutral way to evaluate platforms).
+- **Stats:** 79% / 36% AI in SOCs and 16% full OT coverage (SANS 2026 SOC Survey), and 31% of breaches starting with vulnerability exploitation (Verizon 2026 DBIR), each as cited in the brief.
+- **Inside the brief:** the four main sections, which are the definition, the five vendor questions, the shortlist requirements and "Where CybrHawk Fits".
+- **Quote:** Chris Ray's closing line, word for word.
+- **"Commissioned by CybrHawk":** stated on the cover and in the methodology. Keep it, because the brief discloses it.
 
 ## Analytics
 

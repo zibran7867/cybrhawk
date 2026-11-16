@@ -87,7 +87,9 @@
     color: var(--bf-heading);
 }
 
+/* subtitle ("The Cost of a Fragmented SOC") always starts on its own line */
 .gigaom-brief-page .brief-form__title-accent {
+    display: block;
     color: var(--bf-accent-2);
 }
 
@@ -99,35 +101,100 @@
     color: var(--bf-text);
 }
 
-/* "What's inside" list — same dot bullets as the report page's stats */
+/* Stat cards (figures cited in the brief, with their source) */
+.gigaom-brief-page .brief-form__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0 0 34px;
+    padding: 0;
+    list-style: none;
+}
+
+.gigaom-brief-page .brief-form__stat {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 16px 16px 14px;
+    border: 1px solid var(--bf-border);
+    border-top: 2px solid var(--bf-accent);
+    border-radius: 10px;
+    background: rgba(120, 150, 255, 0.04);
+}
+
+.gigaom-brief-page .brief-form__stat-num {
+    margin-bottom: 6px;
+    font-family: var(--bf-display);
+    font-size: 38px;
+    font-style: italic;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--bf-heading);
+}
+
+.gigaom-brief-page .brief-form__stat-text {
+    flex: 1 1 auto;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--bf-text);
+}
+
+.gigaom-brief-page .brief-form__stat-source {
+    margin-top: 10px;
+    font-size: 11px;
+    letter-spacing: 0.4px;
+    line-height: 1.3;
+    color: var(--bf-muted);
+}
+
+/* "Inside the brief" numbered list */
+.gigaom-brief-page .brief-form__label-heading {
+    margin: 0 0 16px;
+    font-family: var(--bf-display);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--bf-accent-2);
+}
+
 .gigaom-brief-page .brief-form__points {
     margin: 0;
     padding: 0;
     list-style: none;
+    counter-reset: brief-point;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
 }
 
 .gigaom-brief-page .brief-form__point {
     position: relative;
     margin: 0;
-    padding-left: 24px;
-    font-size: 16.5px;
+    padding-left: 44px;
+    font-size: 16px;
     line-height: 1.55;
     color: var(--bf-text);
+    counter-increment: brief-point;
 }
 
 .gigaom-brief-page .brief-form__point::before {
-    content: "";
+    content: counter(brief-point, decimal-leading-zero);
     position: absolute;
     left: 0;
-    top: 9px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--bf-accent);
-    box-shadow: 0 0 8px rgba(47, 109, 255, 0.5);
+    top: 1px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 24px;
+    border-radius: 6px;
+    background: var(--bf-accent-soft);
+    font-family: var(--bf-display);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--bf-accent-2);
 }
 
 .gigaom-brief-page .brief-form__point-title {
@@ -135,12 +202,85 @@
     color: var(--bf-heading);
 }
 
-/* PDF · 10 pages · Free download */
+/* Analyst quote card (div/p markup — the theme restyles blockquote/figure) */
+.gigaom-brief-page .brief-form__quote {
+    position: relative;
+    margin: 34px 0 0;
+    padding: 24px 26px 22px 64px;
+    border: 1px solid var(--bf-border);
+    border-left: 3px solid var(--bf-accent);
+    border-radius: 0 12px 12px 0;
+    background:
+        linear-gradient(90deg, rgba(47, 109, 255, 0.10), rgba(47, 109, 255, 0) 70%),
+        rgba(120, 150, 255, 0.03);
+}
+
+.gigaom-brief-page .brief-form__quote-mark {
+    position: absolute;
+    left: 20px;
+    top: 14px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--bf-accent);
+    pointer-events: none;
+}
+
+.gigaom-brief-page .brief-form__quote-text {
+    margin: 0 0 16px;
+    padding: 0;
+    font-size: 17px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--bf-heading);
+}
+
+.gigaom-brief-page .brief-form__quote-author {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+    margin: 0;
+    padding: 0;
+    font-size: 13.5px;
+    line-height: 1.4;
+}
+
+.gigaom-brief-page .brief-form__quote-name {
+    font-family: var(--bf-display);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--bf-heading);
+}
+
+.gigaom-brief-page .brief-form__quote-role {
+    position: relative;
+    padding-left: 12px;
+    color: var(--bf-text);
+}
+
+.gigaom-brief-page .brief-form__quote-role::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 4px;
+    height: 4px;
+    margin-top: -2px;
+    border-radius: 50%;
+    background: var(--bf-accent);
+}
+
+/* PDF · 10 pages · Commissioned by CybrHawk */
 .gigaom-brief-page .brief-form__meta {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin: 34px 0 0;
+    margin: 28px 0 0;
     padding: 0;
     list-style: none;
 }
@@ -519,6 +659,15 @@
     color: var(--bf-accent-2);
 }
 
+/* Desktop: the copy column is taller than the form, so keep the form in
+   view while the visitor reads (top offset clears the sticky site header). */
+@media (min-width: 961px) {
+    .gigaom-brief-page .brief-form__card {
+        position: sticky;
+        top: 110px;
+    }
+}
+
 @media (max-width: 960px) {
     .gigaom-brief-page .brief-form {
         grid-template-columns: 1fr;
@@ -538,6 +687,27 @@
 
     .gigaom-brief-page .brief-form__card {
         padding: 28px 22px;
+    }
+
+    .gigaom-brief-page .brief-form__stats {
+        grid-template-columns: 1fr;
+    }
+
+    .gigaom-brief-page .brief-form__stat-num {
+        font-size: 34px;
+    }
+
+    .gigaom-brief-page .brief-form__quote {
+        padding: 20px 18px 18px 52px;
+    }
+
+    .gigaom-brief-page .brief-form__quote-mark {
+        left: 14px;
+        font-size: 54px;
+    }
+
+    .gigaom-brief-page .brief-form__quote-text {
+        font-size: 16px;
     }
 
     .gigaom-brief-page .brief-form__grid {
