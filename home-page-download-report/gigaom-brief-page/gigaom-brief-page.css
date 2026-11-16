@@ -1,0 +1,556 @@
+/* =====================================================================
+   GigaOm Brief page — /gigaom-brief/
+   ---------------------------------------------------------------------
+   Plugin:   Simple Custom CSS and JS  →  "GigaOm Brief Page" (CSS)
+   Same look as the FortiBleed /download-report/ page ("Download Report
+   Page" CSS 17032), re-namespaced so the two pages never clash:
+     .download-form-page → .gigaom-brief-page
+     .report-form__*     → .brief-form__*
+     --rf-*              → --bf-*
+   ===================================================================== */
+
+.gigaom-brief-page {
+
+    --bf-accent: #2f6dff;
+    --bf-accent-2: #7089ff;
+    --bf-accent-hover: #245bdd;
+    --bf-accent-soft: rgba(47, 109, 255, 0.14);
+    --bf-bg: #070d1f;
+    --bf-heading: #ffffff;
+    --bf-text: #aeb8d2;
+    /* lighter than the report page's #3e4f7e so the consent text is readable */
+    --bf-muted: #6f7da6;
+    --bf-card-bg: #0f1730;
+    --bf-border: rgba(120, 150, 255, 0.14);
+    --bf-field-border: rgba(120, 150, 255, 0.28);
+    --bf-error: #ff6b6b;
+
+    --bf-display: "Barlow Condensed", "Oswald", "Arial Narrow", sans-serif;
+
+    background-color: var(--bf-bg);
+    background-image:
+        radial-gradient(58% 45% at 85% 0%, rgba(47, 109, 255, 0.14), transparent 70%),
+        linear-gradient(rgba(140, 160, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(140, 160, 255, 0.045) 1px, transparent 1px);
+    background-size: 100% 100%, 46px 46px, 46px 46px;
+}
+
+.gigaom-brief-page .brief-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    align-items: start;
+    gap: 64px;
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 35px 0;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.gigaom-brief-page .brief-form * {
+    box-sizing: border-box;
+}
+
+.gigaom-brief-page .brief-form__copy {
+    padding-top: 6px;
+}
+
+.gigaom-brief-page .brief-form__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 20px;
+    font-family: var(--bf-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--bf-accent);
+}
+
+.gigaom-brief-page .brief-form__eyebrow-line {
+    width: 30px;
+    height: 2px;
+    background: var(--bf-accent);
+}
+
+.gigaom-brief-page .brief-form__title {
+    margin: 0 0 22px;
+    font-family: var(--bf-display);
+    font-style: italic;
+    font-weight: 800;
+    font-size: clamp(30px, 3.8vw, 46px);
+    line-height: 1.04;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: var(--bf-heading);
+}
+
+.gigaom-brief-page .brief-form__title-accent {
+    color: var(--bf-accent-2);
+}
+
+.gigaom-brief-page .brief-form__intro {
+    margin: 0 0 30px;
+    max-width: 520px;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--bf-text);
+}
+
+/* "What's inside" list — same dot bullets as the report page's stats */
+.gigaom-brief-page .brief-form__points {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.gigaom-brief-page .brief-form__point {
+    position: relative;
+    margin: 0;
+    padding-left: 24px;
+    font-size: 16.5px;
+    line-height: 1.55;
+    color: var(--bf-text);
+}
+
+.gigaom-brief-page .brief-form__point::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bf-accent);
+    box-shadow: 0 0 8px rgba(47, 109, 255, 0.5);
+}
+
+.gigaom-brief-page .brief-form__point-title {
+    font-weight: 700;
+    color: var(--bf-heading);
+}
+
+/* PDF · 10 pages · Free download */
+.gigaom-brief-page .brief-form__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 34px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.gigaom-brief-page .brief-form__meta-item {
+    margin: 0;
+    padding: 7px 14px;
+    border: 1px solid var(--bf-border);
+    border-radius: 999px;
+    background: rgba(120, 150, 255, 0.06);
+    font-family: var(--bf-display);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: var(--bf-text);
+}
+
+.gigaom-brief-page .brief-form__meta-item:first-child {
+    border-color: rgba(47, 109, 255, 0.45);
+    background: var(--bf-accent-soft);
+    color: var(--bf-heading);
+}
+
+.gigaom-brief-page .brief-form__card {
+    position: relative;
+    padding: 40px;
+    border: 1px solid var(--bf-border);
+    border-radius: 16px;
+    background:
+        linear-gradient(180deg, rgba(120, 150, 255, 0.05), rgba(120, 150, 255, 0)),
+        var(--bf-card-bg);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4);
+}
+
+.gigaom-brief-page .brief-form__form-title {
+    margin: 0 0 30px;
+    font-family: var(--bf-display);
+    font-weight: 800;
+    font-size: clamp(26px, 3vw, 34px);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--bf-accent);
+}
+
+.gigaom-brief-page .brief-form__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 26px 24px;
+}
+
+.gigaom-brief-page .brief-form__field {
+    position: relative;
+}
+
+.gigaom-brief-page .brief-form__control {
+    width: 100%;
+    padding: 22px 0 9px;
+    border: 0;
+    border-bottom: 1px solid var(--bf-field-border);
+    background: transparent;
+    color: var(--bf-heading);
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.2;
+    border-radius: 0;
+    transition: border-color 0.18s ease;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.gigaom-brief-page .brief-form__control:focus {
+    outline: none;
+    border-bottom-color: var(--bf-accent);
+}
+
+.gigaom-brief-page .brief-form__control::placeholder {
+    color: #ffffff;
+    opacity: 1;
+}
+
+.gigaom-brief-page .brief-form__label {
+    position: absolute;
+    left: 0;
+    top: 20px;
+    font-size: 15px;
+    color: #ffffff;
+    pointer-events: none;
+    transition: transform 0.16s ease, color 0.16s ease, font-size 0.16s ease;
+    transform-origin: left top;
+}
+
+.gigaom-brief-page .brief-form__field.is-focused .brief-form__label,
+.gigaom-brief-page .brief-form__field.is-filled .brief-form__label {
+    transform: translateY(-18px);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--bf-accent);
+}
+
+.gigaom-brief-page .brief-form__field.is-focused .brief-form__req,
+.gigaom-brief-page .brief-form__field.is-filled .brief-form__req {
+    display: none;
+}
+
+.gigaom-brief-page .brief-form__req {
+    color: var(--bf-accent);
+}
+
+.gigaom-brief-page .brief-form__control:-webkit-autofill,
+.gigaom-brief-page .brief-form__control:-webkit-autofill:hover,
+.gigaom-brief-page .brief-form__control:-webkit-autofill:focus,
+.gigaom-brief-page .brief-form__control:-webkit-autofill:active {
+    -webkit-text-fill-color: var(--bf-heading);
+    caret-color: var(--bf-heading);
+    -webkit-box-shadow: 0 0 0 1000px var(--bf-card-bg) inset;
+    box-shadow: 0 0 0 1000px var(--bf-card-bg) inset;
+    transition: background-color 100000s ease 0s;
+}
+
+.gigaom-brief-page .brief-form__error {
+    display: none;
+    margin-top: 6px;
+    font-size: 12.5px;
+    line-height: 1.4;
+    color: var(--bf-error);
+}
+
+.gigaom-brief-page .brief-form__field.is-error .brief-form__control {
+    border-bottom-color: var(--bf-error);
+}
+
+.gigaom-brief-page .brief-form__field.is-error .brief-form__label {
+    color: var(--bf-error);
+}
+
+.gigaom-brief-page .brief-form__field.is-error .brief-form__error {
+    display: block;
+}
+
+.gigaom-brief-page .brief-form__consent {
+    margin: 28px 0 24px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--bf-muted);
+}
+
+.gigaom-brief-page .brief-form__consent a {
+    color: var(--bf-accent);
+    text-decoration: underline;
+}
+
+.gigaom-brief-page .brief-form__terms {
+    margin: 0 0 24px;
+}
+
+.gigaom-brief-page .brief-form__terms-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--bf-text);
+}
+
+.gigaom-brief-page .brief-form__terms-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.gigaom-brief-page .brief-form__terms-box {
+    flex: 0 0 auto;
+    width: 20px;
+    height: 20px;
+    margin-top: 1px;
+    border: 1.5px solid var(--bf-field-border);
+    border-radius: 5px;
+    background: transparent;
+    transition: border-color 0.18s ease, background 0.18s ease;
+}
+
+.gigaom-brief-page .brief-form__terms-box::after {
+    content: "";
+    display: block;
+    width: 5px;
+    height: 10px;
+    margin: 2px auto 0;
+    border: solid #ffffff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0);
+    transition: transform 0.15s ease;
+}
+
+.gigaom-brief-page .brief-form__terms-input:checked+.brief-form__terms-box {
+    border-color: var(--bf-accent);
+    background: var(--bf-accent);
+}
+
+.gigaom-brief-page .brief-form__terms-input:checked+.brief-form__terms-box::after {
+    transform: rotate(45deg) scale(1);
+}
+
+.gigaom-brief-page .brief-form__terms-input:focus-visible+.brief-form__terms-box {
+    outline: 2px solid var(--bf-accent-2);
+    outline-offset: 2px;
+}
+
+.gigaom-brief-page .brief-form__terms-text a {
+    color: var(--bf-accent);
+    text-decoration: underline;
+}
+
+.gigaom-brief-page .brief-form__terms .brief-form__req {
+    color: var(--bf-accent);
+}
+
+.gigaom-brief-page .brief-form__terms.is-error .brief-form__terms-box {
+    border-color: var(--bf-error);
+}
+
+.gigaom-brief-page .brief-form__terms.is-error .brief-form__error {
+    display: block;
+}
+
+.gigaom-brief-page .brief-form__actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.gigaom-brief-page .brief-form__submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 30px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--bf-accent);
+    color: #ffffff;
+    font-family: var(--bf-display);
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.08s ease;
+}
+
+.gigaom-brief-page .brief-form__submit:hover {
+    background: var(--bf-accent-hover);
+}
+
+.gigaom-brief-page .brief-form__submit:active {
+    transform: translateY(1px);
+}
+
+.gigaom-brief-page .brief-form__submit-arrow {
+    display: inline-flex;
+    transition: transform 0.2s ease;
+}
+
+.gigaom-brief-page .brief-form__submit-arrow svg {
+    width: 18px;
+    height: 18px;
+}
+
+.gigaom-brief-page .brief-form__submit:hover .brief-form__submit-arrow {
+    transform: translateX(4px);
+}
+
+.gigaom-brief-page .brief-form__submit-spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #ffffff;
+    animation: brief-form-spin 0.7s linear infinite;
+}
+
+.gigaom-brief-page .brief-form__submit.is-loading {
+    cursor: wait;
+    opacity: 0.92;
+}
+
+.gigaom-brief-page .brief-form__submit.is-loading:hover {
+    background: var(--bf-accent);
+}
+
+.gigaom-brief-page .brief-form__submit.is-loading .brief-form__submit-arrow {
+    display: none;
+}
+
+.gigaom-brief-page .brief-form__submit.is-loading .brief-form__submit-spinner {
+    display: inline-flex;
+}
+
+.gigaom-brief-page .brief-form__submit:disabled {
+    cursor: not-allowed;
+}
+
+@keyframes brief-form-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .gigaom-brief-page .brief-form__submit-spinner {
+        animation-duration: 1.4s;
+    }
+}
+
+.gigaom-brief-page .brief-form__card.is-done .brief-form__form {
+    display: none;
+}
+
+.gigaom-brief-page .brief-form__success {
+    text-align: center;
+    padding: 24px 8px;
+    outline: none;
+}
+
+.gigaom-brief-page .brief-form__success-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    background: var(--bf-accent-soft);
+    color: var(--bf-accent);
+}
+
+.gigaom-brief-page .brief-form__success-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.gigaom-brief-page .brief-form__success-title {
+    margin: 0 0 10px;
+    font-family: var(--bf-display);
+    font-weight: 800;
+    font-size: 30px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--bf-heading);
+}
+
+.gigaom-brief-page .brief-form__success-text {
+    margin: 0 auto;
+    max-width: 340px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--bf-text);
+}
+
+.gigaom-brief-page .brief-form__success-link {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--bf-accent);
+    text-decoration: underline;
+}
+
+.gigaom-brief-page .brief-form__success-link:hover {
+    color: var(--bf-accent-2);
+}
+
+@media (max-width: 960px) {
+    .gigaom-brief-page .brief-form {
+        grid-template-columns: 1fr;
+        gap: 44px;
+        padding: 64px 0;
+    }
+
+    .gigaom-brief-page .brief-form__intro {
+        max-width: 640px;
+    }
+}
+
+@media (max-width: 600px) {
+    .gigaom-brief-page .brief-form {
+        padding: 52px 0;
+    }
+
+    .gigaom-brief-page .brief-form__card {
+        padding: 28px 22px;
+    }
+
+    .gigaom-brief-page .brief-form__grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+
+    .gigaom-brief-page .brief-form__actions {
+        justify-content: stretch;
+    }
+
+    .gigaom-brief-page .brief-form__submit {
+        width: 100%;
+        justify-content: center;
+    }
+}

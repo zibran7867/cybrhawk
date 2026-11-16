@@ -16,6 +16,7 @@
  *   'front'   = the homepage
  *   123       = a page/post ID
  *   '/path/'  = any URL starting with that path (e.g. '/blog/')
+ *   'none'    = nowhere (retired snippets that are still active in the plugin)
  * A snippet listed under several targets loads on all of them.
  * A snippet that is NOT listed anywhere keeps loading on every page (safe default,
  * so new snippets work until you add them here).
@@ -43,7 +44,11 @@ if ( ! function_exists( 'cybrhawk_ccj_rules' ) ) {
 			'front' => array(
 				18772, 18773, // Home Page (CSS + JS)
 				17420, 17421, // CybrHawk Homepage Popup
-				18770, 18771, // GigaOm Brief Modal (opened from the homepage popup)
+			),
+
+			// Retired: never load, even if left active in the plugin.
+			'none' => array(
+				18770, 18771, // GigaOm Brief Modal — replaced by the /gigaom-brief/ page
 			),
 
 			18412 => array( 18517, 18518 ), // /hawkint/              — New HawkINT
@@ -55,6 +60,8 @@ if ( ! function_exists( 'cybrhawk_ccj_rules' ) ) {
 			17258 => array( 17385, 17386 ), // /live-threat-map/      — Live Threat Map
 			17408 => array( 17409, 17410 ), // /soc-analyst/          — Soc Analyst Sections
 			17019 => array( 17032, 17033 ), // /download-report/      — Download Report Page
+			// TODO: uncomment once the "GigaOm Brief Page" CSS + JS snippets exist (fill in their IDs).
+			// '/gigaom-brief/' => array( CSS_ID, JS_ID ), // /gigaom-brief/  — GigaOm Brief Page
 
 			// /enterprise-operations-intelligence/ (HawkOps)
 			17618 => array(
@@ -97,6 +104,10 @@ if ( ! function_exists( 'cybrhawk_ccj_target_matches' ) ) {
 	 * @return bool
 	 */
 	function cybrhawk_ccj_target_matches( $target ) {
+		if ( 'none' === $target ) {
+			return false;
+		}
+
 		if ( 'front' === $target ) {
 			return is_front_page();
 		}

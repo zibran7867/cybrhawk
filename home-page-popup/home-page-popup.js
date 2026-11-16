@@ -44,10 +44,10 @@
     var CTA = { label: "SOC Analyst", href: "https://cybrhawk.com/soc-analyst/" };
     var DOWNLOAD_REPORT = { label: "Download Fortibleed Report", href: "https://cybrhawk.com/download-report/" };
 
-    // GigaOm brief button. Links straight to the PDF; because href ends in
-    // .pdf, the link automatically gets download + target="_blank" +
-    // rel="noopener" (see pdfAttrs()).
-    var BRIEF = { label: "Download GigaOm Brief", href: "https://cybrhawk.com/wp-content/uploads/2026/11/CybrHawk-Perspective-Brief.pdf" };
+    // GigaOm brief button. Sends the visitor to the /gigaom-brief/ lead form
+    // page (same pattern as the FortiBleed report). If href is ever pointed
+    // straight at a .pdf again, pdfAttrs() adds download + target="_blank".
+    var BRIEF = { label: "Download GigaOm Brief", href: "https://cybrhawk.com/gigaom-brief/" };
 
     var DISMISS_LABEL = "Maybe later";
 
@@ -147,7 +147,9 @@
             "</a>" +
             '<a class="cybrhawk-pop__cta cybrhawk-pop__cta--ghost" href="' +
             esc(BRIEF.href) + '"' + pdfAttrs(BRIEF.href) +
-            ' data-cybrhawk-cta="gigaom_brief">' +
+            // Not "gigaom_brief": the retired GigaOm Brief Modal (18771)
+            // hijacks clicks on that value and blocks the redirect.
+            ' data-cybrhawk-cta="gigaom_brief_page">' +
             '<span class="cybrhawk-pop__cta-label">' + esc(BRIEF.label) +
             "</span>" +
             "</a>" +
@@ -198,7 +200,7 @@
 
         // Analytics: push a GTM / GA4 event when the brief button is clicked.
         // Harmless if no tag manager is loaded.
-        var briefBtn = card.querySelector('[data-cybrhawk-cta="gigaom_brief"]');
+        var briefBtn = card.querySelector('[data-cybrhawk-cta="gigaom_brief_page"]');
         if (briefBtn) briefBtn.addEventListener("click", function () {
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({
