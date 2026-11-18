@@ -369,6 +369,7 @@
         padding: 16px 18px;
     }
 }
+
 /* =====================================================================
    CybrHawk — "Five solutions" cards styles
    (markup injected by five-solution-cards.js)
@@ -1979,5 +1980,770 @@
     .cyberhawk-portfolio .child-card,
     .cyberhawk-portfolio .child-card .elementor-icon svg {
         transition-duration: 0.15s !important;
+    }
+}
+
+
+/* =====================================================================
+   CybrHawk — "Industry Recognition & Market Validation" styles
+   (markup injected by industry-recognition.js; both ship inside
+   home-page.css / home-page.js)
+   All rules are scoped under .industry-recognition.
+   Light theme and type match the other homepage sections: the site
+   font (Figtree) is inherited, nothing extra is loaded.
+   ===================================================================== */
+
+.industry-recognition {
+    /* Tweak to rebrand */
+    --ir-accent: #3b52f6;
+    --ir-accent-2: #2b40e0;
+    /* hover */
+    --ir-accent-soft: #eef1ff;
+    --ir-bg: #f8f9fd;
+    --ir-heading: #0d1330;
+    /* near-black navy */
+    --ir-text: #5b6478;
+    /* body grey */
+    --ir-meta: #677086;
+    /* small labels (4.8:1 on white) */
+    --ir-card-bg: #ffffff;
+    --ir-border: #e8ebf3;
+    --ir-rule: #dde2ee;
+    /* dashed ledger lines */
+    --ir-shadow: 0 1px 2px rgba(13, 19, 48, 0.03),
+        0 10px 30px rgba(13, 19, 48, 0.04);
+    --ir-shadow-hover: 0 2px 4px rgba(13, 19, 48, 0.05),
+        0 22px 46px rgba(13, 19, 48, 0.11);
+    --ir-seal: 260px;
+    --ir-sticky-top: 120px;
+    /* clears the sticky site header */
+    --ir-rail: 36px;
+    /* room for the chain on the left */
+    --ir-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+    /* The Elementor container adds no padding of its own; .ir sets it. */
+    --padding-top: 0;
+    --padding-right: 0;
+    --padding-bottom: 0;
+    --padding-left: 0;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    overflow: clip;
+    /* unlike hidden, keeps sticky working */
+    color: var(--ir-text);
+    background-color: var(--ir-bg);
+    background-image:
+        radial-gradient(40% 34% at 20% 14%, rgba(59, 82, 246, 0.07), transparent 70%),
+        repeating-linear-gradient(0deg, rgba(13, 19, 48, 0.035) 0 1px, transparent 1px 56px),
+        repeating-linear-gradient(90deg, rgba(13, 19, 48, 0.035) 0 1px, transparent 1px 56px);
+}
+
+/* position: sticky stops working inside any ancestor with overflow
+   hidden/auto, and the Elementor parent container is set to Overflow:
+   Hidden. Clip hides overflow the same way but keeps sticky working. */
+.e-con:has(.industry-recognition) {
+    overflow: clip;
+}
+
+/* The page's outer Elementor container puts a 20px gap between its
+   sections. Here it shows as a plain grey strip between "Our
+   Capabilities" and this section's grid, so pull the section up over it.
+   (If that container's Gaps setting changes, change 20px to match.) */
+.e-con.e-child:has(.industry-recognition) {
+    margin-top: -20px;
+}
+
+/* Hold roughly the built height until the script runs (no layout shift). */
+.industry-recognition:not([data-ir-ready]) {
+    min-height: 2500px;
+}
+
+/* ---- Slow scan line -------------------------------------------------- */
+.industry-recognition .ir-fx,
+.industry-recognition .ir-fx>span {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.industry-recognition .ir-fx__scan {
+    transform: translateY(-100%);
+    background: linear-gradient(180deg, transparent calc(100% - 160px),
+            rgba(59, 82, 246, 0.035) calc(100% - 1px), rgba(59, 82, 246, 0.18) 100%);
+    animation: ir-scan 12s linear infinite paused;
+}
+
+/* ---- Shell ----------------------------------------------------------- */
+.industry-recognition .ir {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 64px 16px;
+    font-family: inherit;
+}
+
+.industry-recognition .ir,
+.industry-recognition .ir *,
+.industry-recognition .ir *::before,
+.industry-recognition .ir *::after {
+    box-sizing: border-box;
+}
+
+/* Same weight as the component rules below, so they win by order. */
+.industry-recognition .ir :where(ul, li, p) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.industry-recognition .ir-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.industry-recognition .ir__grid {
+    display: grid;
+    gap: 48px;
+}
+
+/* ---- Small uppercase labels (record header, ledger, status) ---------- */
+.industry-recognition .ir__ledger,
+.industry-recognition .ir__strip,
+.industry-recognition .ir__status,
+.industry-recognition .ir__idx,
+.industry-recognition .ir__chip {
+    font-family: inherit;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* ---- Intro (matches the homepage section headers) -------------------- */
+.industry-recognition .ir__eyebrow {
+    margin-bottom: 14px;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--ir-accent);
+}
+
+.industry-recognition .ir__title {
+    margin: 0 0 18px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: clamp(30px, 4vw, 48px);
+    line-height: 1.12;
+    letter-spacing: -1.2px;
+    color: var(--ir-heading);
+}
+
+.industry-recognition .ir__title em {
+    position: relative;
+    display: inline-block;
+    font-style: normal;
+    color: var(--ir-accent);
+}
+
+.industry-recognition .ir__title em::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.04em;
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--ir-accent), rgba(59, 82, 246, 0.25));
+    transform-origin: left;
+}
+
+.industry-recognition .ir__sub {
+    max-width: 30em;
+    font-size: clamp(16px, 1.35vw, 18px);
+    line-height: 1.62;
+    color: var(--ir-text);
+}
+
+.industry-recognition .ir__ledger {
+    margin-top: 28px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--ir-rule);
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--ir-meta);
+}
+
+.industry-recognition .ir__ledger b {
+    font-weight: 700;
+    white-space: nowrap;
+    color: var(--ir-heading);
+}
+
+/* ---- Group headings -------------------------------------------------- */
+.industry-recognition .ir__group-title {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin: 0 0 24px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ir-heading);
+}
+
+.industry-recognition .ir__idx {
+    flex: none;
+    white-space: nowrap;
+    font-size: 12px;
+    color: var(--ir-accent);
+}
+
+/* ---- Records: the chain ---------------------------------------------- */
+.industry-recognition .ir__chain {
+    position: relative;
+    display: grid;
+    gap: 20px;
+    padding-left: var(--ir-rail);
+}
+
+.industry-recognition .ir__chain::before {
+    /* the chain line */
+    content: "";
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    left: calc(var(--ir-rail) / 4);
+    width: 2px;
+    margin-left: -0.5px;
+    background: linear-gradient(180deg, var(--ir-accent), rgba(59, 82, 246, 0.12));
+    transform-origin: top;
+}
+
+.industry-recognition .ir__item {
+    position: relative;
+}
+
+.industry-recognition .ir__item::before,
+/* node */
+.industry-recognition .ir__item::after {
+    /* node glow (hover) */
+    content: "";
+    position: absolute;
+    top: 26px;
+    left: calc(var(--ir-rail) / -4 * 3 - 5px);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.industry-recognition .ir__item::before {
+    border: 2px solid var(--ir-accent);
+    background: #fff;
+}
+
+.industry-recognition .ir__item::after {
+    background: var(--ir-accent);
+    box-shadow: 0 0 0 4px rgba(59, 82, 246, 0.16), 0 0 14px 2px rgba(59, 82, 246, 0.45);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.industry-recognition .ir__rec {
+    position: relative;
+    overflow: hidden;
+    padding: 20px 18px 10px;
+    border-radius: 16px;
+    background: var(--ir-card-bg);
+    box-shadow: inset 0 0 0 1px var(--ir-border), var(--ir-shadow);
+    transition: transform 0.3s var(--ir-ease), box-shadow 0.3s ease;
+}
+
+.industry-recognition .ir__rec::after {
+    /* scan sweep (entrance) */
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(90deg, transparent 40%, rgba(59, 82, 246, 0.08) 49%,
+            rgba(59, 82, 246, 0.35) 50%, transparent 51%);
+}
+
+.industry-recognition .ir__item:hover .ir__rec,
+.industry-recognition .ir__item:focus-within .ir__rec {
+    transform: translateY(-2px);
+    box-shadow: inset 0 0 0 1px rgba(59, 82, 246, 0.45), var(--ir-shadow-hover);
+}
+
+.industry-recognition .ir__item:hover::after,
+.industry-recognition .ir__item:focus-within::after {
+    opacity: 1;
+}
+
+.industry-recognition .ir__strip {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 16px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--ir-rule);
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--ir-meta);
+}
+
+.industry-recognition .ir__strip>span:first-child {
+    color: var(--ir-accent);
+}
+
+.industry-recognition .ir__sum {
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0.04em;
+}
+
+.industry-recognition .ir__logo {
+    display: block;
+    width: auto;
+    max-width: 160px;
+    height: 28px;
+    margin-bottom: 12px;
+    object-fit: contain;
+}
+
+.industry-recognition .ir__name {
+    margin: 0 0 8px;
+    font-family: inherit;
+    font-size: clamp(17px, 1.35vw, 19px);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.3px;
+    text-transform: none;
+    color: var(--ir-heading);
+}
+
+.industry-recognition .ir__text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ir-text);
+}
+
+.industry-recognition .ir__text strong {
+    font-weight: 700;
+    color: var(--ir-heading);
+}
+
+.industry-recognition .ir__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 16px;
+    margin-top: 6px;
+}
+
+.industry-recognition .ir__status {
+    font-size: 11px;
+    white-space: pre;
+    color: var(--ir-accent);
+}
+
+/* ---- Links ----------------------------------------------------------- */
+.industry-recognition .ir__cta,
+.industry-recognition .ir__cta:visited {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ir-accent);
+    text-decoration: none;
+}
+
+.industry-recognition .ir__cta>span:first-child {
+    text-decoration: underline;
+    text-decoration-color: rgba(59, 82, 246, 0.35);
+    text-underline-offset: 4px;
+}
+
+.industry-recognition .ir__cta:hover,
+.industry-recognition .ir__cta:focus {
+    color: var(--ir-accent-2);
+}
+
+.industry-recognition .ir__cta:focus-visible {
+    outline: 3px solid rgba(59, 82, 246, 0.45);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+.industry-recognition .ir__cta svg {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    transition: transform 0.25s var(--ir-ease);
+}
+
+.industry-recognition .ir__cta:hover>svg {
+    transform: translateX(3px);
+}
+
+.industry-recognition .ir__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 7px;
+    border-radius: 6px;
+    background: var(--ir-accent-soft);
+    font-size: 10.5px;
+    color: var(--ir-accent);
+}
+
+.industry-recognition .ir__chip svg {
+    width: 12px;
+    height: 12px;
+}
+
+/* ---- Awards: the seals ----------------------------------------------- */
+.industry-recognition .ir__awards {
+    margin-top: 72px;
+}
+
+/* As many seals per row as fit at full size; the rest wrap. */
+.industry-recognition .ir__seals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--ir-seal), 1fr));
+    gap: 48px 40px;
+}
+
+.industry-recognition .ir__seal-item {
+    min-width: 0;
+    text-align: center;
+}
+
+.industry-recognition .ir__award {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.industry-recognition .ir__seal {
+    position: relative;
+    width: var(--ir-seal);
+    height: var(--ir-seal);
+    margin-bottom: 24px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 30%, #ffffff, var(--ir-accent-soft) 68%, #e2e8ff);
+    box-shadow: 0 0 0 1px rgba(59, 82, 246, 0.2), 0 0 0 10px #fff,
+        0 0 0 11px var(--ir-border), 0 24px 50px -22px rgba(13, 19, 48, 0.28);
+}
+
+.industry-recognition .ir__rim {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    animation: ir-spin 60s linear infinite paused;
+}
+
+.industry-recognition .ir__rim text {
+    font-family: inherit;
+    font-weight: 600;
+    fill: var(--ir-accent);
+}
+
+.industry-recognition .ir__ring {
+    fill: none;
+    stroke: rgba(59, 82, 246, 0.25);
+}
+
+.industry-recognition .ir__ring--dash {
+    stroke: rgba(59, 82, 246, 0.45);
+    stroke-dasharray: 1 5;
+}
+
+.industry-recognition .ir__foil {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at var(--mx, 34%) var(--my, 28%), rgba(255, 255, 255, 0.9), transparent 40%),
+        conic-gradient(from 200deg at var(--mx, 34%) var(--my, 28%), transparent,
+            rgba(110, 231, 255, 0.5), rgba(214, 140, 255, 0.45), rgba(255, 214, 120, 0.45), transparent);
+    mix-blend-mode: multiply;
+    opacity: 0.18;
+    transition: opacity 0.4s;
+}
+
+.industry-recognition .ir__award:hover .ir__foil {
+    opacity: 0.4;
+}
+
+.industry-recognition .ir__core {
+    position: absolute;
+    inset: 22%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+}
+
+.industry-recognition .ir__core-logo {
+    max-width: 80%;
+    max-height: 28%;
+}
+
+.industry-recognition .ir__core-year {
+    font-weight: 700;
+    font-size: calc(var(--ir-seal) * 0.046);
+    line-height: 1;
+    letter-spacing: 0.24em;
+    color: var(--ir-accent);
+}
+
+.industry-recognition .ir__core-honour {
+    font-weight: 700;
+    font-size: calc(var(--ir-seal) * 0.076);
+    line-height: 1.12;
+    letter-spacing: -0.3px;
+    color: var(--ir-heading);
+}
+
+.industry-recognition .ir__award .ir__text {
+    max-width: 30em;
+}
+
+/* ---- Motion -----------------------------------------------------------
+   Entrance animations sit paused on their first frame under .is-anim
+   (added by the script) and play once .is-in arrives. Only transform
+   and opacity move.
+   --------------------------------------------------------------------- */
+.industry-recognition.is-anim .ir__intro,
+.industry-recognition.is-anim .ir__group-title {
+    animation: ir-rise 0.8s var(--ir-ease) both paused;
+}
+
+.industry-recognition.is-anim .ir__group .ir__group-title {
+    animation-delay: 0.25s;
+}
+
+.industry-recognition.is-anim .ir__title em::after {
+    animation: ir-grow-x 0.7s var(--ir-ease) 0.7s both paused;
+}
+
+.industry-recognition.is-anim .ir__chain::before {
+    animation: ir-grow-y calc(var(--n) * 120ms + 700ms) var(--ir-ease) 0.3s both paused;
+}
+
+.industry-recognition.is-anim .ir__item {
+    animation: ir-rise 0.7s var(--ir-ease) calc(450ms + var(--i) * 120ms) both paused;
+}
+
+.industry-recognition.is-anim .ir__rec::after {
+    animation: ir-sweep 0.8s ease-out calc(750ms + var(--i) * 120ms) both paused;
+}
+
+.industry-recognition.is-anim .ir__status span {
+    animation: ir-on 1ms calc(1000ms + var(--i) * 120ms + var(--c) * 40ms) both paused;
+}
+
+.industry-recognition.is-anim .ir__awards .ir__group-title {
+    animation-delay: calc(900ms + var(--n) * 120ms);
+}
+
+.industry-recognition.is-anim .ir__seal-item {
+    animation: ir-mint 0.9s var(--ir-ease) calc(1100ms + var(--n) * 120ms + var(--i) * 150ms) both paused;
+}
+
+.industry-recognition.is-in .ir__intro,
+.industry-recognition.is-in .ir__group-title,
+.industry-recognition.is-in .ir__title em::after,
+.industry-recognition.is-in .ir__chain::before,
+.industry-recognition.is-in .ir__item,
+.industry-recognition.is-in .ir__rec::after,
+.industry-recognition.is-in .ir__status span,
+.industry-recognition.is-in .ir__seal-item,
+.industry-recognition.is-live .ir__rim,
+.industry-recognition.is-live .ir-fx__scan {
+    animation-play-state: running;
+}
+
+.industry-recognition.is-anim.is-in:not(.is-done) .ir__item,
+.industry-recognition.is-anim.is-in:not(.is-done) .ir__seal-item {
+    will-change: transform, opacity;
+}
+
+@keyframes ir-rise {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+}
+
+@keyframes ir-grow-x {
+    from {
+        transform: scaleX(0);
+    }
+}
+
+@keyframes ir-grow-y {
+    from {
+        transform: scaleY(0);
+    }
+}
+
+@keyframes ir-sweep {
+    0% {
+        opacity: 0;
+        transform: translateX(-60%);
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(60%);
+    }
+}
+
+@keyframes ir-on {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes ir-mint {
+    from {
+        opacity: 0;
+        transform: scale(0.9) rotate(-8deg);
+    }
+}
+
+@keyframes ir-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes ir-scan {
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Reduced motion (and print): everything static, complete and visible. */
+@media print,
+(prefers-reduced-motion: reduce) {
+
+    .industry-recognition *,
+    .industry-recognition *::before,
+    .industry-recognition *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .industry-recognition .ir-fx__scan,
+    .industry-recognition .ir__foil,
+    .industry-recognition .ir__rec::after {
+        display: none;
+    }
+}
+
+/* ---- Responsive ------------------------------------------------------ */
+@media (max-width: 767px) {
+    .industry-recognition {
+        --ir-seal: 220px;
+        --ir-rail: 26px;
+    }
+}
+
+@media (min-width: 768px) {
+    .industry-recognition:not([data-ir-ready]) {
+        min-height: 1700px;
+    }
+
+    .industry-recognition .ir {
+        padding: clamp(56px, 7vw, 92px) 32px;
+    }
+
+    .industry-recognition .ir__intro {
+        max-width: 760px;
+    }
+
+    .industry-recognition .ir__rec {
+        padding: 22px 26px 12px;
+    }
+
+    .industry-recognition .ir__awards {
+        margin-top: 96px;
+    }
+}
+
+/* Two columns from 1024px: the intro on the left stays pinned while the
+   records scroll past on the right, and lets go after the last record
+   (sticky is bounded by .ir__grid, so it ends with REC-03). */
+@media (min-width: 1024px) {
+    .industry-recognition .ir__grid {
+        grid-template-columns: minmax(0, 38fr) minmax(0, 62fr);
+        gap: 56px;
+    }
+
+    .industry-recognition .ir__intro {
+        position: sticky;
+        top: var(--ir-sticky-top);
+        align-self: start;
+    }
+}
+
+@media (min-width: 1200px) {
+    .industry-recognition:not([data-ir-ready]) {
+        min-height: 1400px;
+    }
+
+    .industry-recognition .ir__grid,
+    .industry-recognition .ir__awards {
+        grid-template-columns: minmax(0, 38fr) minmax(0, 62fr);
+        gap: 72px;
+    }
+
+    /* The seals sit on the dashed rule and break out of it. */
+    .industry-recognition .ir__awards {
+        display: grid;
+        border-top: 1px dashed var(--ir-rule);
+    }
+
+    .industry-recognition .ir__awards .ir__group-title {
+        padding-top: 40px;
+    }
+
+    .industry-recognition .ir__seals {
+        margin-top: calc(var(--ir-seal) * -0.2);
     }
 }
